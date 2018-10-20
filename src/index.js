@@ -11,8 +11,7 @@ import './css/style.scss';
 import App from './components/app';
 import Template from './components/template';
 
-import FirebaseStore from './orkan/firebase-store';
-import OrkanProvider from './orkan/orkan-provider';
+import {OrkanProvider, FirebaseStore} from './orkan';
 
 const config = {
 	apiKey: "AIzaSyDyI8G7yNDCYb7qNUORm7sw6iXoIHkS5qQ",
