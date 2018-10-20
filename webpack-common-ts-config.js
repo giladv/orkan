@@ -10,7 +10,7 @@ module.exports = {
 		publicPath: '/', // this maked the bundle.js to be served at root in dev-derver
 		filename: '[name].js'
 	},
-	target: 'node',
+	// target: 'node',
 	module: {
 		rules: [
 			{
