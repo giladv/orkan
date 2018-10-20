@@ -186,13 +186,18 @@ export default class OrkanStore{
 		this.clearSettingsPath();
 	}
 
+	clearSettingsPath(){
+		this.settingsFormStore.reset();
+		this.settingsPath = null;
+	}
+
 	getSettingsByPath(path){
 		const schema = this.getSchema();
 		const schemaSettings = this.getSchemaSettings();
 
 		const schemaPath = toSchemaPath(schema, path);
 
-		if(schemaPath === settingsPath){
+		if(schemaPath === this.settingsPath){
 			return this.settingsFormStore.toJS();
 		}else if(schemaSettings){
 			return schemaGet(schemaSettings, schemaPath);

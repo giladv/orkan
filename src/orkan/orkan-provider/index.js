@@ -40,8 +40,11 @@ export default class OrkanProvider extends Component{
 		const {store} = this.props;
 		return {[REACT_CONTEXT_NAME]: {
 			getValue: path => this.orkanStore?this.orkanStore.getValue(path):store.getValue(path),
+			setActivePath: path => this.orkanStore.setActivePath(path),
 			store: this.props.store,
-			isEditMode: () => false
+			isEditMode: () => true,
+			isActive: () => this.obState.isActive,
+			isAdmin: () => this.orkanStore.isAdmin()
 
 		}};
 	}
