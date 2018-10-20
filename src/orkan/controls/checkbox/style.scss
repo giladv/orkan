@@ -1,0 +1,30 @@
+@import '../../globals';
+
+.Checkbox{
+	display: inline-flex;
+	> span{
+		display: inline-flex;
+		width: 19px;
+		height: 19px;
+		@include inputLike();
+		border-radius: 3px;
+		align-items: center;
+		justify-content: center;
+		.OrkanIcon{
+			opacity: 0;
+			font-size: 7px;
+			color: $grey6;
+		}
+	}
+
+	&.Checkbox-checked{
+		.OrkanIcon{
+			opacity: 1;
+		}
+	}
+
+	&.Checkbox-disabled{
+		opacity: 0.5;
+		cursor: default;
+	}
+}

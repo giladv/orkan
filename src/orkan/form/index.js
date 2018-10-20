@@ -1,0 +1,222 @@
+import React, {Component, cloneElement} from 'react';
+import PropTypes from 'prop-types';
+import classNames from 'classnames';
+import {observer} from 'mobx-react';
+import {observable, action} from 'mobx';
+import autobind from 'autobind-decorator';
+
+import FormStore from './form-store';
+
+import './style.scss';
+
+
+@observer
+export default class Form extends Component {
+	static propTypes = {
+		store: PropTypes.instanceOf(FormStore).isRequired,
+		onSubmit: PropTypes.func
+	};
+
+	static childContextTypes = {
+		form: PropTypes.object
+	};
+
+	static contextTypes = {
+		form: PropTypes.object
+	};
+
+	@observable state = {
+		activeFields: []
+	};
+
+	registerField(name){
+		let {activeFields} = this.state;
+		if(activeFields.indexOf(name) < 0){
+			this.state.activeFields.push(name);
+		}
+	}
+
+	deregisterField(name){
+		this.state.activeFields.remove(name);
+	}
+
+	isValid(){
+		var {store} = this.props;
+		return !this.state.activeFields.find(field => !store.isFieldValid(field));
+	}
+
+	getChildContext(){
+		return {form: this};
+	}
+
+	get(key){
+		var {store} = this.props;
+		return store.get(key);
+	}
+
+	set(key, value, ignoreChange){
+		var {store} = this.props;
+		return store.set(key, value, ignoreChange);
+	}
+
+	getError(key){
+		const {store} = this.props;
+		return store.errors.get(key) || null;
+	}
+
+	@action
+	submit(){
+		const {onSubmit, store} = this.props;
+
+		store.clearAllErrors();
+		store.validateFields(this.state.activeFields);
+		this.isValid() && onSubmit(store.data);
+	}
+
+	@autobind
+	handleSubmit(e){
+		this.submit();
+		e.preventDefault();
+		e.stopPropagation();
+	}
+
+	render(){
+		const {className, children, onSubmit, store} = this.props;
+		const newClassName = classNames('Form', className);
+
+		return (
+			<form className={newClassName} action='/' onSubmit={this.handleSubmit}>
+				{children}
+				{/*this to allow submit on return*/}
+				<input type="submit" style={{display: 'none'}}/>
+			</form>
+		);
+	}
+}
+
+
+export function formInput(mapProps){
+
+	return DecoratedComponent => {
+		class FormInput extends Component {
+			static propTypes = {
+				name: PropTypes.string,
+				onChange: PropTypes.func
+			};
+
+			static defaultProps = {
+				onChange: () => null
+			};
+
+			static contextTypes = {
+				form: PropTypes.object
+			};
+
+			componentWillMount(){
+				const {form} = this.context;
+				const {name} = this.props;
+				name && form.registerField(name);
+			}
+
+			componentWillUnmount(){
+				const {form} = this.context;
+				const {name} = this.props;
+				name && form.deregisterField(name);
+			}
+
+
+			mapProps({value, onChange, error}){
+				return {value, onChange, error: !!error};
+			}
+
+			@autobind
+			onChange(value, ignoreChange = false){
+				const {form} = this.context;
+				const {name} = this.props;
+
+				form.set(name, value, ignoreChange);
+				this.props.onChange(value);
+			}
+
+			render(){
+				const {form} = this.context;
+				const {name} = this.props;
+				let mappedProps;
+
+				if(name){
+					const value = form.get(name);
+					const error = form.getError(name);
+					mappedProps = (mapProps || this.mapProps)({value, onChange: this.onChange, error});
+				}else{
+					mappedProps = {};
+				}
+
+				return <DecoratedComponent {...this.props} {...mappedProps} />;
+			}
+		}
+
+		return observer(FormInput);
+	}
+}
+
+export const formSubmit = DecoratedComponent =>
+	class FormSubmit extends Component {
+		static contextTypes = {
+			form: PropTypes.object
+		};
+
+		render(){
+			const {className} = this.props;
+			const {form} = this.context;
+			const newClassName = classNames('FormSubmit', className);
+
+			return <DecoratedComponent {...this.props} className={newClassName} onClick={e => form.submit()}/>;
+		}
+	};
+
+
+@formInput()
+export class FormField extends Component {
+
+	static propTypes = {
+		name: PropTypes.string,
+		label: PropTypes.string,
+		error: PropTypes.string,
+		centered: PropTypes.bool,
+		compact: PropTypes.bool,
+		onSettings: PropTypes.func
+	};
+
+
+	static defaultProps = {
+	};
+
+
+	render(){
+		const {name, label, className, error, children, centered, compact, onSettings, ...otherProps} = this.props;
+
+		const newClassName = classNames('FormField', className, {
+			'FormField-error': error,
+			'FormField-small': true,
+			'FormField-centered': centered,
+			'FormField-compact': compact,
+		});
+
+		return (
+			<div {...otherProps} className={newClassName}>
+				{onSettings && <a onClick={onSettings} className="FormField-settings">Settings</a>}
+				<label className="FormField-label" htmlFor={name}>{label}</label>
+
+				{children &&
+				<div className="FormField-input">
+					{cloneElement(children, {name})}
+				</div>
+				}
+				{error &&
+				<div className='FormField-error'>{error}</div>
+				}
+			</div>
+
+		);
+	}
+}

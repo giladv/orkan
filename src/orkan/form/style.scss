@@ -1,0 +1,177 @@
+@import '../globals';
+
+
+.Form{
+	margin: 0;
+	padding: 0;
+
+}
+
+.FormField{
+	width: 100%;
+	position: relative;
+	&:hover{
+		.FormField-settings{
+			opacity: 1;
+		}
+	}
+	.FormField-settings{
+		cursor: pointer;
+		font-size: 10px;
+		color: #A6AAB6;
+		position: absolute;
+		top: 6px;
+		right: 0;
+		opacity: 0;
+		transition: opacity .2s ease-in-out;
+		&:hover{
+			text-decoration: underline;
+		}
+	}
+	.FormField-label{
+		margin: 0;
+		font-family: roboto;
+		font-weight: 300;
+		transition: color .2s linear;
+		vertical-align: top;
+		color: #71778A;
+		font-size: 1.5rem;
+	}
+
+	.FormField-input{
+		position: relative;
+		vertical-align: top;
+		line-height: initial;
+		> *{
+			width: 100%;
+			//display: flex;
+		}
+	}
+
+	&:first-child{
+		margin-top: 0;
+	}
+
+	&.FormField-error{
+		.FormField-label{
+			color: #f6003a !important;
+		}
+
+		.FormField-input{
+
+		}
+	}
+
+	&.FormField-centered{
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+
+	&.FormField-compact{
+		width: 100%;
+		display: block;
+		.FormField-label{
+			display: block;
+			width: 100% !important;
+		}
+
+		.FormField-input{
+			display: block;
+			width: 100%;
+		}
+	}
+
+
+
+	@mixin size($labelWidth, $labelHeight, $labelFontSize){
+
+		.FormField-label{
+			width: $labelWidth;
+			min-width: $labelWidth;
+			font-size: $labelFontSize;
+			line-height: $labelHeight;
+		}
+
+		&.FormField-negative{
+			margin-top: 15px !important; // to override :first-child
+			.FormField-input{
+				padding: 0 15px;
+				margin-top: 15px;
+			}
+			.FormField-label{
+				background: $gray3;
+				color: #ffffff;
+				padding: 0 15px;
+				// border-bottom: 1px solid lighten($gray, 10%);
+				line-height: 3.2rem;
+			}
+
+			&:first-child{
+				margin-top: 0 !important;
+			}
+		}
+	}
+
+	@mixin width($width){
+		width: $width;
+	}
+
+	&.FormField-small{
+		@include size($fieldLabelWidthSmall, $controlHeightSmall, $fieldFontSizeSmall);
+	}
+
+	&.FormField-medium{
+		@include size($fieldLabelWidthMedium, $controlHeightMedium, $fieldFontSizeMedium);
+
+	}
+
+	&.FormField-large{
+		@include size($fieldLabelWidthLarge, $controlHeightLarge, $fieldFontSizeLarge);
+
+	}
+
+
+
+	&.FormField-short{
+		@include width($fieldWidthSmall);
+	}
+
+	&.FormField-long{
+		@include width($fieldWidthMedium);
+
+	}
+
+	&.FormField-longer{
+		@include width($fieldWidthLarge);
+
+	}
+
+	&.FormField-longest{
+		@include width($fieldWidthLarger);
+
+	}
+
+
+
+}
+
+
+
+
+//
+//// LOW LEVEL INPUTS STYLES
+//textarea{
+//	border: 1px solid #eae6e3;
+//	font-size: 1.5rem;
+//	line-height: 3.3rem;
+//	padding: 0 10px;
+//	border-radius: 3px;
+//	resize: none;
+//	transition: border-color linear .2s;
+//	width: 100%;
+//	box-shadow: inset 0px 3px 0px 0px darken($lightGray, 1%);
+//	&:focus{
+//		border-color: #51e3c6;
+//	}
+//}

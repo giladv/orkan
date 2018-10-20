@@ -1,0 +1,50 @@
+@import '../../css/globals';
+
+.App{
+	height: 100%;
+	padding: 20px 20px;
+	font-family: "Roboto";
+	.hero{
+		height: 300px;
+		display: flex;
+		justify-content: center;
+		flex-direction: column;
+		align-items: center;
+		background: #00d0ff;
+		h2{
+			font-size: 3rem;
+			font-weight: 400;
+			margin: 0;
+		}
+		a{
+			margin-top: 40px;
+			font-size: 2rem;
+			color: black;
+			background: white;
+			padding: 15px 20px;
+			font-weight: 300;
+		}
+	}
+	> h2{
+		font-size: 2.4rem;
+		text-align: center;
+		font-weight: 400;
+		margin-top: 60px;
+	}
+	.Collection{
+		margin-top: 20px;
+		> div{
+			background: #eaeff3;
+			padding: 20px 30px;
+			margin-bottom: 20px;
+			h3{
+				font-size: 2.3rem;
+				font-weight: 400;
+			}
+			p{
+				font-size: 2rem;
+				font-weight: 300;
+			}
+		}
+	}
+}

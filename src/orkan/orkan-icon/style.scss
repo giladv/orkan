@@ -1,0 +1,26 @@
+@import './icons.css';
+
+.OrkanIcon{
+	display: inline-block;
+	vertical-align: middle;
+
+	&:before{ // this fixes weird vertical offset from icomoon
+		vertical-align: middle;
+	}
+
+	&.OrkanIcon-small{
+		font-size: 1rem;
+	}
+
+	&.OrkanIcon-medium{
+		font-size: 1.3rem;
+	}
+
+	&.OrkanIcon-large{
+		font-size: 1.5rem;
+	}
+
+	&.OrkanIcon-huge{
+		font-size: 2rem;
+	}
+}

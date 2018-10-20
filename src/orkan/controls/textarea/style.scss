@@ -1,0 +1,70 @@
+@import '../../globals';
+
+.Textarea{
+	position: relative;
+	display: inline-block;
+	vertical-align: middle;
+	.Textarea-input{
+		height: auto;
+		min-height: auto;
+		display: block;
+		width: 100%;
+		margin: 0;
+		border: 1px solid $lightGray2;
+		border-radius: 3px;
+		resize: none;
+		transition: border-color linear .2s;
+		box-shadow: inset 0px 3px 0px 0px darken($lightGray, 1%);
+		color: $gray;
+		&:focus{
+			border-color: $aqua;
+			box-shadow: inset 0px 4px 0px 0px $aqua-1;
+		}
+		&.pre-padding{
+			padding-left: 35px;
+		}
+
+		&.post-padding{
+			padding-right: 35px;
+		}
+	}
+
+	&.Textarea-negative{
+		$specialGray: darken($gray1, 2%);
+		.Textarea-input{
+			background: $gray1;
+			border-color: $specialGray;
+			box-shadow: inset 0px 4px 0px 0px $specialGray;
+			color: $gray-2;
+			&:focus{
+				border-color: $gray3;
+				color: lighten($gray-2, 10%);
+				box-shadow: inset 0px 4px 0px 0px $specialGray;
+			}
+		}
+	}
+
+	@mixin size($height, $fontSize){
+
+		// borders compensation
+		$height: $height - 2px;
+
+		.Textarea-input{
+			line-height: 1.3;
+			font-size: $fontSize;
+			padding: 5px ($height - $fontSize) / 2;
+		}
+	}
+
+	&.Textarea-small{
+		@include size($controlHeightSmall, $controlFontSizeSmall);
+	}
+
+	&.Textarea-medium{
+		@include size($controlHeightMedium, $controlFontSizeMedium);
+	}
+
+	&.Textarea-large{
+		@include size($controlHeightLarge, $controlFontSizeLarge);
+	}
+}

@@ -1,0 +1,101 @@
+@import '../globals';
+
+
+
+.DropdownContainer{
+	position: relative;
+	-webkit-user-select: none;
+
+	.DropdownContainer-options{
+		margin: 2px 0 0 0;
+		background-color: #ffffff;
+		position: absolute;
+		border-radius: 3px;
+		overflow: {
+			x: hidden;
+			y: scroll;
+		}
+		min-width: 100%;
+		z-index: 1000000;
+		box-shadow: 0 3px 0 0 $lightGray1,
+						0 3px 0 1px $lightGray3,
+						0 0 0 1px $grey4;
+		li{
+			@include smallListItemAnimation();
+			cursor: pointer;
+			&.DropdownContainer-options-empty{
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-size: 14px;
+				padding: 0 10px;
+				color: $gray;
+			}
+
+			&.DropdownContainer-options-selected{
+				background: $grey1;
+			}
+		}
+	}
+
+	&.DropdownContainer-negative{
+		$specialGray: darken($gray1, 2.5%);
+		.DropdownContainer-options{
+			background-color: $gray1;
+			box-shadow: 0 3px 0 0 $gray2,
+							0 3px 0 1px $gray4,
+							0 1px 0 1px $gray4;
+		}
+	}
+
+	@mixin size($config){
+		.DropdownContainer-options{
+			max-height: map-get($config, controlHeight) * map-get($config, maxDropdownItems);
+			li.DropdownContainer-options-empty{
+				height: map-get($config, controlHeight);
+			}
+		}
+	}
+
+	&.DropdownContainer-small{
+		@include size($smallConfig);
+	}
+
+	&.DropdownContainer-medium{
+		@include size($mediumConfig);
+	}
+
+	&.DropdownContainer-large{
+		@include size($largeConfig);
+	}
+}
+
+
+.DropdownOption{
+	border-bottom: 1px solid $grey2;
+	font-weight: 400;
+	color: $gray;
+	display: flex;
+	align-items: center;
+	padding: 0 10px;
+	&:hover, &.Select-option-selected{
+		background-color: $grey0;
+	}
+
+	@mixin size($config){
+		height: map-get($config, controlHeight);
+		font-size: map-get($config, controlFontSize);
+	}
+
+	&.DropdownOption-small{
+		@include size($smallConfig);
+	}
+
+	&.DropdownOption-medium{
+		@include size($mediumConfig);
+	}
+
+	&.DropdownOption-large{
+		@include size($largeConfig);
+	}
+}

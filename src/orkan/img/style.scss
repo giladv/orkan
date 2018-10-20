@@ -1,0 +1,30 @@
+@import '../globals';
+
+.Img{
+	display: inline-block;
+	vertical-align: middle;
+	overflow: hidden;
+	> div{
+		width: 100%;
+		height: 100%;
+		background-size: 100%;
+		background-repeat: no-repeat;
+		opacity: 0;
+		transition: opacity .3s;
+	}
+	&.Img-cover{
+		> div{
+			background-size: cover !important;
+		}
+	}
+	&.Img-contain{
+		> div{
+			background-size: contain !important;
+		}
+	}
+	&.Img-loaded{
+		> div{
+			opacity: 1;
+		}
+	}
+}

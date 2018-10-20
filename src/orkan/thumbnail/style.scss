@@ -1,0 +1,83 @@
+@import '../globals';
+
+.Thumbnail{
+	position: relative;
+	display: inline-block;
+	background: #ffffff;
+	.Img{
+	}
+
+	.Thumbnail-content{
+		.Thumbnail-right-label{
+			float: right
+		}
+
+		.Thumbnail-left-label{
+			float: left;
+		}
+	}
+
+	.Thumbnail-actions{
+		display: none;
+		position: absolute;
+		background: rgba(#000000, 0.7);
+	}
+
+	&:hover{
+		.Thumbnail-actions{
+			display: block;
+		}
+	}
+
+	@mixin size($imgWidth, $imgHeight, $padding, $fontSize){
+		padding: $padding $padding $padding + 5px $padding;
+		border-radius: 5px;
+		box-shadow: inset 0 -1px 0 1px $lightGray2,
+						inset 0 -4px 0 1px $lightGray1;
+
+		.Img{
+			height: $imgHeight;
+			width: $imgWidth;
+		}
+
+		.Thumbnail-content{
+			font-size: $fontSize;
+			margin-top: $padding;
+		}
+
+		.Thumbnail-actions{
+			height: $imgHeight;
+			width: $imgWidth;
+			padding: $padding;
+			i{
+				font-size: $fontSize * 1.2;
+			}
+		}
+
+		&.Thumbnail-selected{
+			box-shadow: inset 0 -1px 0 1px $aqua,
+							inset 0 -4px 0 1px $lightGray1;
+		}
+
+		&.Thumbnail-placeholder{
+			box-shadow: none;
+			background: $lightGray1;
+			*{
+				visibility: hidden;
+			}
+		}
+	}
+
+
+	&.Thumbnail-small{
+		@include size(150px, 90px, 8px, $controlFontSizeSmall);
+	}
+
+	&.Thumbnail-medium{
+		@include size(180px, 108px, 10px, $controlFontSizeMedium);
+	}
+
+	&.Thumbnail-large{
+		@include size(200px, 120px, 12px, $controlFontSizeLarge);
+	}
+}

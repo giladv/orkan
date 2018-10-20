@@ -1,0 +1,19 @@
+@import '../globals';
+
+$pink: #FA2949;
+$orkanHeaderHeight: 46px;
+
+
+.OrkanDataForm {
+	padding: 0 15px;
+	margin: 0;
+	.FormField{
+		margin-top: 10px;
+	}
+	.OrkanDataForm-actions {
+		margin-top: 20px;
+		text-align: right;
+		.Button{
+		}
+	}
+}

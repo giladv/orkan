@@ -1,0 +1,285 @@
+$headerSize: 46px;
+
+$inputBorderColor: rgba(43, 83, 113, 0.275);
+
+$toolbarHeight: 50px;
+
+$smallConfig: (
+	playButtonSize: 25px,
+	controlHeight: 26px,
+	controlFontSize: 11.5px,
+	controlIconSize: 5px,
+	maxDropdownItems: 3,
+	fieldFontSize: 13px
+);
+
+$mediumConfig: (
+	controlHeight: 29px,
+	controlFontSize: 13px,
+	controlIconSize: 10px,
+	maxDropdownItems: 4,
+	fieldFontSize: 14px
+);
+
+$largeConfig: (
+	controlHeight: 33px,
+	controlFontSize: 14px,
+	controlIconSize: 7px,
+	maxDropdownItems: 5,
+	fieldFontSize: 1 5px
+);
+
+// FIELDS CONFIG
+$fieldWidthSmall: 230px;
+$fieldLabelWidthSmall: 150px;
+$fieldFontSizeSmall: 13px;
+
+$fieldWidthMedium: 400px;
+$fieldLabelWidthMedium: 150px;
+$fieldFontSizeMedium: 14px;
+
+$fieldWidthLarge: 500px;
+$fieldLabelWidthLarge: 150px;
+$fieldFontSizeLarge: 15px;
+
+$fieldWidthLarger: 1000px;
+
+// CONTROLS CONFIG
+$controlHeightSmall: 26px;
+$controlFontSizeSmall: 11.5px;
+
+$controlHeightMedium: 29px;
+$controlFontSizeMedium: 13px;
+
+$controlHeightLarge: 33px;
+$controlFontSizeLarge: 14px;
+
+// COLORS
+$grey0: #FAFBFC;
+$grey1: #f5f6f9;
+$grey2: #EAEFF3;
+$grey3: #D1D4DE;
+$grey4: #B9C0CE;
+$grey5: #B7BBC7;
+$grey6: #71778A;
+$grey7: #2b2b38;
+$grey8: #1D1D25;
+$grey9: #13131B;
+$grey10: #0B0B0F;
+
+$primary: #72ecd9;
+$primary1: #54aea0;
+
+$pink: #FA2949;
+$pink-1: lighten($pink, 15%);
+$pink-2: lighten($pink, 55%);
+$pink1: darken($pink, 12%);
+$pink2: darken($pink, 18%);
+$pink3: darken($pink, 20%);
+$pink4: darken($pink, 30%);
+
+$aqua: #3ce5cb;
+$aqua-1: lighten($aqua, 35%);
+$aqua1: darken($aqua, 12%);
+$aqua2: darken($aqua, 18%);
+$aqua3: darken($aqua, 20%);
+$aqua4: darken($aqua, 30%);
+
+$lightGray-1: #f5f6f9;
+$lightGray: #fafafa;
+$lightGray1: #EAEFF3;
+$lightGray2: #cdd3e0;
+$lightGray3: #a5abb8;
+$lightGray4: #535864;
+
+$gray: #575757;
+$gray-2: lighten($gray, 35%);
+$gray1: darken($gray, 5%);
+$gray2: darken($gray, 8%);
+$gray3: darken($gray, 10%);
+$gray4: darken($gray, 15%);
+$gray5: darken($gray, 20%);
+
+// MIXINS
+@mixin triangleBase($direction, $color, $width, $height) {
+	content: ' ';
+	width: 0;
+	height: 0;
+	display: inline-block;
+	@if $direction == 'up' {
+
+		border: {
+			bottom: $height solid $color;
+			right: $width/2 solid transparent;
+			left: $width/2 solid transparent;
+		}
+
+	} @else if $direction == 'down' {
+
+		border: {
+			top: $height solid $color;
+			right: $width/2 solid transparent;
+			left: $width/2 solid transparent;
+		}
+	} @else if $direction == 'right' {
+
+		border: {
+			top: $width/2 solid transparent;
+			bottom: $width/2 solid transparent;
+			left: $height solid $color;
+		}
+	} @else if $direction == 'left' {
+
+		border: {
+			top: $width/2 solid transparent;
+			bottom: $width/2 solid transparent;
+			right: $height solid $color;
+		}
+	}
+}
+
+@mixin triangle($direction, $color, $width, $height) {
+	&:after {
+		position: absolute;
+		top: 0;
+		z-index: 1;
+		@include triangleBase($direction, $color, $width, $height);
+	}
+	&:before {
+		position: absolute;
+		top: 0px;
+		left: -2px;
+		@include triangleBase($direction, rgba(0, 0, 0, .1), $width + 1, $height + 1);
+	}
+}
+
+@mixin container3D($baseColor, $lightShadow, $darkShadow, $depth) {
+	// overflow: scroll;
+	// box-shadow: 0 ($depth - 1) 0 0 $lightShadow,
+	// 				0 $depth 0 0 $darkShadow;
+	// margin-bottom: $depth;
+	// background-color: $baseColor;
+}
+
+@mixin notSelectable() {
+	-webkit-user-select: none; /* Chrome/Safari */
+	-moz-user-select: none; /* Firefox */
+	-ms-user-select: none; /* IE10+ */
+
+	/* Rules below not implemented in browsers yet */
+	-o-user-select: none;
+	user-select: none;
+}
+
+$invisibleShadowRgba: rgba(0, 0, 0, 0.06);
+
+@mixin listAnimationDelay($value, $count, $offset: 0) {
+	@for $i from 1 through $count {
+		&:nth-of-type(#{$i}) {
+			animation-delay: #{($value * $i) + $offset}ms;
+		}
+	}
+}
+
+@keyframes listItemAnimation {
+	0% {
+		//opacity: .1;
+		transform: translateX(-10px);
+	}
+	99% {
+		transform: translateX(0);
+		opacity: 1;
+	}
+	100% {
+		transform: none;
+	}
+}
+
+@keyframes smallListItemAnimation {
+	from {
+		opacity: 0;
+		transform: translateX(-5px);
+	}
+	to {
+		transform: translateX(0);
+		opacity: 1;
+	}
+}
+
+@keyframes modalAnimation {
+	from {
+		opacity: 0;
+		transform: translateY(-50%);
+	}
+	to {
+		transform: translateY(0);
+		opacity: 1;
+	}
+}
+
+@keyframes orkanTopUiAnimation {
+	from {
+		transform: translate3d(0, -100%, 0);
+	}
+	to {
+		transform: translate3d(0, 0, 0);
+	}
+}
+
+@keyframes orkanAuthAnimation {
+	from {
+		transform: translate3d(-50%, -100%, 0);
+	}
+	to {
+		transform: translate3d(-50%, 0, 0);
+	}
+}
+
+
+@mixin smallListItemAnimation($includeDelay: true) {
+	animation: smallListItemAnimation;
+	animation-duration: .3s;
+	opacity: 0;
+	transform: translateX(-5px);
+	animation-fill-mode: forwards;
+	animation-timing-function: ease;
+	@if $includeDelay {
+		@include listAnimationDelay(50, 12, 0);
+	}
+}
+
+@mixin listItemAnimation($includeDelay: true) {
+	animation: listItemAnimation;
+	animation-duration: .3s;
+	//opacity: 0;
+	//transform: translateX(-10px);
+	animation-fill-mode: forwards;
+	animation-timing-function: ease;
+	@if $includeDelay {
+		@include listAnimationDelay(50, 12, 0);
+	}
+}
+
+@mixin modalAnimation() {
+	animation: modalAnimation;
+	animation-duration: .3s;
+	animation-fill-mode: forwards;
+	animation-timing-function: ease;
+}
+
+@mixin inputLike() {
+	background: white;
+	border: 1px solid $grey3;
+	transition: border-color linear .2s;
+	box-shadow: inset 0 3px 0 0 $grey1;
+}
+
+@mixin stripesBackground($color1, $color2, $stripeSize: 20px) {
+	background: repeating-linear-gradient(
+			45deg,
+			$color1,
+			$color1 $stripeSize,
+			$color2 $stripeSize,
+			$color2 $stripeSize * 2
+	);
+}

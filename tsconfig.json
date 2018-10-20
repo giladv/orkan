@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist/",
+//    "strict": true,
+    "sourceMap": true,
+    "noImplicitAny": false,
+    "module": "es6",
+    "target": "es5",
+    "allowSyntheticDefaultImports": true,
+    "allowJs": true,
+    "experimentalDecorators": true,
+    "jsx": "react",
+//    "typeRoots": [
+//      "node_modules/@types"
+//    ],
+    "moduleResolution": "node",
+    "lib": ["DOM", "ES6", "DOM.Iterable", "ScriptHost", "ES2017"]
+  },
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "node_modules/**/*",
+    "dist"
+  ]
+
+
+}

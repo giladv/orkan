@@ -1,0 +1,138 @@
+@import '../globals';
+
+
+.ButtonGroup{
+	text-align: center;
+	.Button{
+		border-radius: 0;
+		margin-right: -1px;
+		&:first-child{
+			border-top-left-radius: 3px;
+			border-bottom-left-radius: 3px;
+		}
+		&:last-child{
+			border-top-right-radius: 3px;
+			border-bottom-right-radius: 3px;
+			margin-right: 0;
+		}
+	}
+}
+
+.Button{
+	display: inline-flex;
+	border-radius: 3px;
+	text-transform: uppercase;
+	font-family: 'Roboto', sans-serif;
+	font-weight: 400;
+	position: relative;
+	overflow: hidden;
+	border: 0;
+	cursor: pointer;
+	align-items: center;
+	justify-content: center;
+
+	letter-spacing: 0.05rem;
+	vertical-align: middle;
+	text-align: center;
+	&:hover{
+		.Button-label{
+			transform: scale3d(0.98, 0.98, 1);
+		}
+	}
+
+	&.Button-disabled{
+		opacity: 0.5;
+		cursor: default;
+	}
+
+	.Button-spinner{
+		transition: all .2s ease;
+		position: absolute;
+		//transform: translate3d(0, 0, 0);
+		&.Button-spinner-hidden{
+			transform: translate3d(0, -50%, 0);
+			opacity: 0;
+		}
+	}
+
+	.Button-label{
+		transition: all .2s ease;
+		&.Button-label-hidden{
+			transform: translate3d(0, 100%, 0);
+			opacity: 0;
+		}
+		.OrkanIcon{
+			vertical-align: middle;
+		}
+		span{
+			vertical-align: middle;
+		}
+	}
+
+	@mixin size($height, $fontSize){
+		font-size: $fontSize;
+		height: $height;
+
+		.Button-label{
+			$sidePadding: ($height - $fontSize) / 1.1;
+			padding: 0 $sidePadding;
+			display: flex;
+			font-size: $fontSize;
+			.OrkanIcon{
+				font-size: $fontSize * 1.1;
+			}
+		}
+
+		&.Button-square{
+			width: $height !important;
+			height: $height;
+			letter-spacing: normal !important;
+			.Button-label{
+				padding: 0;
+			}
+		}
+	}
+
+	@mixin buttonStyle($baseColor, $textColor){
+		background: $baseColor;
+		color: $textColor;
+		&.Button-negative{
+			background-color: $grey7;
+			color: $baseColor;
+			.Button-label > .OrkanIcon{
+				color: $baseColor;
+			}
+			.Button-spinner{
+				color: $baseColor;
+			}
+		}
+	}
+
+	&.Button-small{
+		@include size($controlHeightSmall, $controlFontSizeSmall);
+	}
+
+	&.Button-medium{
+		@include size($controlHeightMedium, $controlFontSizeMedium);
+	}
+
+	&.Button-large{
+		@include size($controlHeightLarge, $controlFontSizeLarge);
+	}
+
+	// styles
+	&.Button-secondary{
+		@include buttonStyle($grey1, $gray);
+	}
+
+	&.Button-important{
+		@include buttonStyle($pink, #ffffff);
+	}
+
+	&.Button-primary{
+		@include buttonStyle(#343A4D, #ffffff);
+	}
+
+
+
+}
