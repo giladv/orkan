@@ -1,0 +1,49 @@
+@import '../globals';
+
+
+.OrkanIndicator{
+	z-index: 99999999999999;
+	//animation: orkanTopUiAnimation;
+	//animation-timing-function: ease-in-out;
+	//animation-duration: .2s;
+	background-repeat: repeat;
+	width: 100%;
+	height: 5px;
+	position: fixed;
+	top: 0;
+	left: 0;
+	&:after{
+		animation-timing-function: linear !important;
+		animation: OrkanIndicatorBusyAnimation;
+		animation-duration: 1s;
+		animation-iteration-count: infinite;
+		animation-fill-mode: both;
+		transform: translate3d(0, 0, 0);
+		transition: transform 3s ease-in-out;
+		content: '';
+		position: absolute;
+		left: -68px;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		@include stripesBackground($pink, $pink-1);
+	}
+	&.OrkanIndicator-busy:after{
+			animation-play-state: running;
+	}
+
+	&.OrkanIndicator-not-busy:after{
+		animation-play-state: paused;
+	}
+}
+
+
+@keyframes OrkanIndicatorBusyAnimation {
+	from{
+		transform: translate3d(0, 0, 0);
+	}
+
+	to{
+		transform: translate3d(58px, 0, 0);
+	}
+}

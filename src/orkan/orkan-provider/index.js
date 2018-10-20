@@ -8,6 +8,8 @@ import autobind from 'autobind-decorator';
 import {ACTIVATION_EVENT_KEY, REACT_CONTEXT_NAME,} from '../constants';
 import {keyboard} from '../utils/keyboard-utils';
 import FirebaseStore from '../firebase-store';
+import OrkanIndicator from '../orkan-indicator';
+import OrkanStore from '../orkan-store';
 
 
 let OrkanAdmin;
@@ -44,29 +46,37 @@ export default class OrkanProvider extends Component{
 	}
 
 	componentWillMount(){
+		const {store, auth} = this.props;
 
 		keyboard.bind('hold:1000:' + ACTIVATION_EVENT_KEY, async () => {
 			this.obState.isBusy = true;
 			try{
 				OrkanAdmin = (await import(/* webpackChunkName: "orkan-admin" */'../orkan-admin')).default;
+				this.orkanStore = new OrkanStore(store, auth);
 				this.obState.isActive = true;
 			}catch(err){
 				console.error(err);
 			}
-			this.obState.isBusy = false;
+
+			setTimeout(() => {
+				this.obState.isBusy = false;
+
+			}, 500)
 		});
 	}
 
 	render() {
-		const {children, store, auth} = this.props;
-		const {isActive} = this.obState;
+		const {children} = this.props;
+		const {isActive, isBusy} = this.obState;
 
 		return [
 			children,
-			isActive && ReactDOM.createPortal(<OrkanAdmin store={store} auth={auth} />, document.body)
+			(isActive || isBusy) && ReactDOM.createPortal(<OrkanIndicator isBusy={isBusy} />, document.body),
+			isActive && ReactDOM.createPortal(<OrkanAdmin store={this.orkanStore} />, document.body)
 		];
 	}
 }
+
 
 
 /*
