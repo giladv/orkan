@@ -12,6 +12,7 @@ module.exports = {
 		library: 'Orkan',
 		libraryTarget: 'umd'
 	},
+	target: 'node',
 	module: {
 		rules: [
 			{
@@ -19,9 +20,9 @@ module.exports = {
 				// use: 'awesome-typescript-loader',
 				use: [
 					{
-						loader: 'ts-loader',
+						loader: 'babel-loader',
 						options: {
-							transpileOnly: true
+							// transpileOnly: true
 						}
 					}
 				],

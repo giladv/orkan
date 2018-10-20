@@ -9,7 +9,6 @@ import './fonts.css';
 import './main.css';
 import './vendor.css';
 import {Collection, Value, WithValue} from '../../orkan';
-import {StyledFirebaseAuth} from 'react-firebaseui';
 
 @withRouter
 export default class Template extends Component{
@@ -38,7 +37,6 @@ export default class Template extends Component{
 		return (
 			<div className="Template">
 				{/*<DevTools/>*/}
-				{/*<StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()}/>*/}
 				<header className="s-header">
 
 					<div className="header-logo">

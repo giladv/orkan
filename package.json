@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "webpack-dev-server --mode development --config webpack-config.js --content-base ./dist",
     "dev-ts": "webpack-dev-server --mode development --config webpack-development-ts-config.js",
-    "build": "webpack --mode development --config webpack-production-ts-config.js"
+    "build": "webpack --mode production --config webpack-production-ts-config.js"
   },
   "files": [
     "dist"

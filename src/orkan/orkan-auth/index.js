@@ -5,7 +5,6 @@ import {observable} from 'mobx';
 import autobind from 'autobind-decorator';
 import classNames from 'classnames';
 import firebase from 'firebase';
-import {StyledFirebaseAuth} from 'react-firebaseui';
 import * as firebaseui from 'firebaseui'
 
 import 'firebaseui/dist/firebaseui.css';

@@ -2,8 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {Router, Route, browserHistory, hashHistory} from 'react-router';
 import firebase from 'firebase';
-import {StyledFirebaseAuth, } from 'react-firebaseui';
-import firebaseui from 'firebaseui';
 
 require("firebase/database");
 require("firebase/auth");
