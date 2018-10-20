@@ -1,4 +1,4 @@
-/******/ (function(modules) { // webpackBootstrap
+(function(e, a) { for(var i in a) e[i] = a[i]; }(exports, /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 /******/
@@ -1337,4 +1337,4 @@ eval("module.exports = require(\"react-spinners\");\n\n//# sourceURL=webpack:///
 
 /***/ })
 
-/******/ });
+/******/ })));

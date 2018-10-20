@@ -8,9 +8,11 @@ module.exports = {
 	output: {
 		path: path.resolve(__dirname, 'dist'),
 		publicPath: '/', // this maked the bundle.js to be served at root in dev-derver
-		filename: '[name].js'
+		filename: '[name].js',
+		library: '',
+		libraryTarget: 'commonjs'
 	},
-	// target: 'node',
+	target: 'web',
 	module: {
 		rules: [
 			{
@@ -24,7 +26,6 @@ module.exports = {
 						}
 					}
 				],
-				// include: path.resolve(__dirname, "src"),
 				exclude: /node_modules/
 			},
 			{
@@ -46,7 +47,5 @@ module.exports = {
 	},
 	resolve: {
 		extensions: ['.ts', '.tsx', '.js', '.json', '.scss', '.css']
-	},
-	externals: [
-	]
+	}
 };
