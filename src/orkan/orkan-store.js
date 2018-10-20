@@ -27,6 +27,7 @@ export default class OrkanStore{
 	@observable settingsPath;
 
 	@observable isLoadingActivePath = false;
+	@observable isInitiating = false;
 
 	@observable.ref user;
 
@@ -36,7 +37,7 @@ export default class OrkanStore{
 	}
 
 	init(){
-
+		this.isInitiating = true;
 		this.authStore.onAuthStateChanged(async user => {
 			if(user){
 				let userPermissions;
@@ -55,6 +56,7 @@ export default class OrkanStore{
 			}else{
 				this.user = null;
 			}
+			this.isInitiating = false;
 		});
 	}
 

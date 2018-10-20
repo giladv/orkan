@@ -411,65 +411,65 @@ export default class OrkanProvider extends Component{
 
 		return (
 			<div className={newClassName}>
-				{!store.isAdmin() && <OrkanAuth auth={store.authStore}/>}
+				{!store.isInitiating && !store.isAdmin() && <OrkanAuth auth={store.authStore}/>}
 				{store.isAdmin() && store.activePath &&
-				<Sidebar
-					side='left'
-					initialSize={300}
-					className='Orkan-ui'
-					onResizeStart={() => this.obState.isResizing = true}
-					onResizeEnd={() => this.obState.isResizing = false}
-					onResize={size => document.body.style.paddingLeft = size + 'px'}>
+					<Sidebar
+						side='left'
+						initialSize={300}
+						className='Orkan-ui'
+						onResizeStart={() => this.obState.isResizing = true}
+						onResizeEnd={() => this.obState.isResizing = false}
+						onResize={size => document.body.style.paddingLeft = size + 'px'}>
 
-					<OrkanUsersRequests onApprove={uid => store.approveUserRequest(uid)} onDecline={uid => store.declineUserRequest(uid)}/>
+						<OrkanUsersRequests onApprove={uid => store.approveUserRequest(uid)} onDecline={uid => store.declineUserRequest(uid)}/>
 
-					<OrkanHeader primary title={headerTitle} onClose={this.clearActivePath}/>
+						<OrkanHeader primary title={headerTitle} onClose={this.clearActivePath}/>
 
-					{isLoading && <OrkanSpinner/>}
+						{isLoading && <OrkanSpinner/>}
 
-					{store.settingsPath &&
-						<OrkanSettingsPanel
-							getCollectionPaths={() => getSchemaCollectionPaths(schema)}
-							getPrimitives={path => store.getPrimitiveKeysByPath(path + '/_')}
-							onClose={() => this.obState.settingsPath = null}
-							onSubmit={() => store.submitSettings()}
-							editPath={store.settingsPath}
-							formStore={store.settingsFormStore}
-							schema={store.getSchemaByPath(store.settingsPath)} />
-					}
-					<div className='Orkan-ui-scroll'>
-						{!isLoading &&
-						<OrkanDataForm
-							getData={path => store.getValue(path)}
-							getFieldSettings={store.getSettingsByPath}
-							onSubmit={() => store.submitData()}
-							onCancel={() => store.clearActivePath()}
-							editPath={store.activePath}
-							schema={store.getSchemaByPath(store.activePath)}
-							onSettings={path => store.setSettingsPath(path)}
-							formStore={store.dataFormStore} />
+						{store.settingsPath &&
+							<OrkanSettingsPanel
+								getCollectionPaths={() => getSchemaCollectionPaths(schema)}
+								getPrimitives={path => store.getPrimitiveKeysByPath(path + '/_')}
+								onClose={() => this.obState.settingsPath = null}
+								onSubmit={() => store.submitSettings()}
+								editPath={store.settingsPath}
+								formStore={store.settingsFormStore}
+								schema={store.getSchemaByPath(store.settingsPath)} />
 						}
+						<div className='Orkan-ui-scroll'>
+							{!isLoading &&
+							<OrkanDataForm
+								getData={path => store.getValue(path)}
+								getFieldSettings={store.getSettingsByPath}
+								onSubmit={() => store.submitData()}
+								onCancel={() => store.clearActivePath()}
+								editPath={store.activePath}
+								schema={store.getSchemaByPath(store.activePath)}
+								onSettings={path => store.setSettingsPath(path)}
+								formStore={store.dataFormStore} />
+							}
 
-						{!isLoading &&
-							<OrkanPaths
-								isCollection={isActivePathCollection}
-								path={isActivePathCollection && store.activePath}
-								keys={store.geNonPrimitiveKeysByPath(store.activePath)}
-								onCreate={isActivePathCollection && (key => store.createCollectionItem(key))}
-								onRemove={isActivePathCollection && (key => store.removeCollectionItem(key))}
-								onSelect={key => store.setActivePath(store.activePath + '/' + key)}
-								showHeader={!isActivePathCollection && store.getPrimitiveKeysByPath(store.activePath).length > 0} />
-						}
-					</div>
-					<div className="Orkan-ui-footer">
-						<div className="Orkan-ui-footer-auth">
-							<Img src={store.user.photoURL}/>
-							<span onClick={() => store.authStore.signOut()}>Logout</span>
+							{!isLoading &&
+								<OrkanPaths
+									isCollection={isActivePathCollection}
+									path={isActivePathCollection && store.activePath}
+									keys={store.geNonPrimitiveKeysByPath(store.activePath)}
+									onCreate={isActivePathCollection && (key => store.createCollectionItem(key))}
+									onRemove={isActivePathCollection && (key => store.removeCollectionItem(key))}
+									onSelect={key => store.setActivePath(store.activePath + '/' + key)}
+									showHeader={!isActivePathCollection && store.getPrimitiveKeysByPath(store.activePath).length > 0} />
+							}
 						</div>
-						<span/>
-					</div>
+						<div className="Orkan-ui-footer">
+							<div className="Orkan-ui-footer-auth">
+								<Img src={store.user.photoURL}/>
+								<span onClick={() => store.authStore.signOut()}>Logout</span>
+							</div>
+							<span/>
+						</div>
 
-				</Sidebar>
+					</Sidebar>
 				}
 			</div>
 		);

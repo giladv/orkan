@@ -37,8 +37,9 @@ export default class OrkanProvider extends Component{
 	};
 
 	getChildContext() {
+		const {store} = this.props;
 		return {[REACT_CONTEXT_NAME]: {
-			getValue: () => null,
+			getValue: path => this.orkanStore?this.orkanStore.getValue(path):store.getValue(path),
 			store: this.props.store,
 			isEditMode: () => false
 
@@ -71,7 +72,7 @@ export default class OrkanProvider extends Component{
 
 		return [
 			children,
-			(isActive || isBusy) && ReactDOM.createPortal(<OrkanIndicator isBusy={isBusy} />, document.body),
+			(isActive || isBusy) && ReactDOM.createPortal(<OrkanIndicator isBusy={isBusy || (this.orkanStore && this.orkanStore.isInitiating)} />, document.body),
 			isActive && ReactDOM.createPortal(<OrkanAdmin store={this.orkanStore} />, document.body)
 		];
 	}
