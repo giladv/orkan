@@ -9,10 +9,9 @@ module.exports = {
 		path: path.resolve(__dirname, 'dist'),
 		publicPath: '/', // this maked the bundle.js to be served at root in dev-derver
 		filename: '[name].js',
-		library: '',
-		libraryTarget: 'commonjs'
+		library: 'Orkan',
+		libraryTarget: 'umd'
 	},
-	target: 'web',
 	module: {
 		rules: [
 			{
