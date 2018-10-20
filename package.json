@@ -14,7 +14,6 @@
     "autobind-decorator": "^1.4.3",
     "classnames": "^2.2.5",
     "dateformat": "^3.0.3",
-    "firebase": "5.0.0",
     "firebaseui": "^3.4.1",
     "humaninput": "^1.1.15",
     "lodash": "^4.17.5",
@@ -30,6 +29,7 @@
     "react-dom": "^16.2.0"
   },
   "devDependencies": {
+    "firebase": "5.0.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "babel-core": "6.26.0",
