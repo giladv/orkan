@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {observer} from 'mobx-react';
-import {mapValues, values} from 'lodash';
+import mapValues from 'lodash/mapValues';
+import values from 'lodash/values';
 
 import {REACT_CONTEXT_NAME} from './constants';
 

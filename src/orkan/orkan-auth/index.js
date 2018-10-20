@@ -9,7 +9,7 @@ import * as firebaseui from 'firebaseui'
 
 import 'firebaseui/dist/firebaseui.css';
 import './style.scss';
-import {uniqueId} from 'lodash';
+import uniqueId from 'lodash/uniqueId';
 import OrkanSpinner from '../orkan-spinner';
 
 window.uiInst = null;

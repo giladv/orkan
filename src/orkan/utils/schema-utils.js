@@ -1,4 +1,5 @@
-import {forEach, isObject} from 'lodash';
+import forEach from 'lodash/forEach';
+import isObject from 'lodash/isObject';
 
 export const schemaGet = (schema, path) => {
 	let pathParts = path.split('/').filter(it => !!it);

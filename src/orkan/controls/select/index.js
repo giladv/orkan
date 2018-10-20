@@ -4,7 +4,7 @@ import autobind from 'autobind-decorator';
 import classNames from 'classnames';
 import {observer} from 'mobx-react';
 import {observable} from 'mobx';
-import {map} from 'lodash';
+import map from 'lodash/map';
 
 import {formInput} from '../../form';
 import DropdownContainer from '../../dropdown-container';

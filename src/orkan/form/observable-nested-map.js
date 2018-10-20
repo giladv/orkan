@@ -1,5 +1,7 @@
 import {toJS, ObservableMap, action, isObservableMap, isObservableArray, isObservableObject, observable} from 'mobx';
-import {isNumber, isPlainObject, isArray, forEach, isObject} from 'lodash';
+import isPlainObject from 'lodash/isPlainObject';
+import isObject from 'lodash/isObject';
+import isArray from 'lodash/isArray';
 
 const KEY_SPLIT_REGEX = /\.|\[|\]\.|\]/;
 

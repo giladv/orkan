@@ -1,5 +1,6 @@
 import {observable, reaction, computed, action, toJS, isObservable, extendObservable} from 'mobx';
-import {forEach, find} from 'lodash';
+import forEach from 'lodash/forEach';
+import find from 'lodash/find';
 
 import {ObservableNestedMap} from './observable-nested-map';
 

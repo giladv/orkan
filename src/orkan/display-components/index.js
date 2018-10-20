@@ -1,6 +1,6 @@
 import React, {Component, cloneElement} from 'react';
 import PropTypes from 'prop-types';
-import {map} from 'lodash';
+import map from 'lodash/map';
 import autobind from 'autobind-decorator';
 import {observer} from 'mobx-react';
 import classNames from 'classnames';
