@@ -14,6 +14,7 @@
   "dependencies": {
     "autobind-decorator": "^1.4.3",
     "classnames": "^2.2.5",
+    "dateformat": "^3.0.3",
     "firebase": "5.0.0",
     "firebaseui": "^3.4.1",
     "humaninput": "^1.1.15",
@@ -30,9 +31,8 @@
     "react-dom": "^16.2.0"
   },
   "devDependencies": {
-    "history": "^4.7.2",
-    "react-router": "^3.2.1",
-    "react-router-dom": "^4.2.2",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
     "babel-core": "6.26.0",
     "babel-loader": "7.1.4",
     "babel-plugin-syntax-decorators": "^6.13.0",
@@ -48,9 +48,12 @@
     "copy-webpack-plugin": "^4.3.1",
     "css-loader": "^0.28.1",
     "file-loader": "1.1.11",
+    "history": "^4.7.2",
     "mobx-react-devtools": "^4.2.3",
     "node-sass": "^4.7.2",
     "react-addons-perf": "^15.3.0",
+    "react-router": "^3.2.1",
+    "react-router-dom": "^4.2.2",
     "sass-loader": "^6.0.7",
     "style-loader": "^0.13.2",
     "ts-loader": "^5.2.2",
