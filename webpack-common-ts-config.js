@@ -3,16 +3,17 @@ const path = require('path');
 module.exports = {
 	entry: {
 		app: './src/index.js',
-		orkan: './src/orkan/index.js'
+		orkan: './src/orkan/index.js',
+		// orkanAdmin: './src/orkan/orkan-admin/index.js',
 	},
 	output: {
 		path: path.resolve(__dirname, 'dist'),
 		publicPath: '/', // this maked the bundle.js to be served at root in dev-derver
 		filename: '[name].js',
-		library: 'Orkan',
-		libraryTarget: 'umd'
+		chunkFilename: '[name].js',
+		// library: 'Orkan',
+		// libraryTarget: 'umd'
 	},
-	target: 'node',
 	module: {
 		rules: [
 			{
