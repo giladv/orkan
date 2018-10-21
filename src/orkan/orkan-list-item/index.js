@@ -22,6 +22,11 @@ export default class OrkanListItem extends Component{
 		buttons: []
 	};
 
+	handleButtonClick(e, button){
+		e.stopPropagation();
+		button.onClick(e);
+	}
+
 	render(){
 		const {className, buttons, children, ...otherProps} = this.props;
 
@@ -31,7 +36,7 @@ export default class OrkanListItem extends Component{
 			<div {...otherProps} className={newClassName}>
 				<div className="OrkanListItem-label">{children}</div>
 				{buttons.filter(it => !!it).map(button => (
-					<OrkanIcon type={button.icon} onClick={button.onClick}/>
+					<OrkanIcon type={button.icon} onClick={e => this.handleButtonClick(e, button)}/>
 				))}
 			</div>
 		);

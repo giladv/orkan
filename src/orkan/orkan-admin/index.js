@@ -43,10 +43,7 @@ export default class OrkanProvider extends Component{
 		window.b = store;
 
 
-		keyboard.bind('escape', () => {
-			store.activePath && store.clearActivePath();
-			document.body.style.paddingLeft = '';
-		});
+		keyboard.bind('escape', this.handleClose);
 
 		onDoublePress('shift', () => {
 			!store.activePath && store.setActivePath('.');
@@ -55,6 +52,35 @@ export default class OrkanProvider extends Component{
 		window.lo = () => auth.signOut();
 
 
+	}
+
+	@autobind
+	handleClose(){
+		const {store} = this.props;
+		store.activePath && store.clearActivePath();
+		document.body.style.paddingLeft = '';
+	}
+
+	@autobind
+	handleDeclineUserRequest(uid){
+		const {store} = this.props;
+
+		if(!confirm('are you sure?')){
+			return;
+		}
+
+		store.declineUserRequest(uid);
+	}
+
+	@autobind
+	handleRemoveCollectionItem(key){
+		const {store} = this.props;
+
+		if(!confirm('are you sure?')){
+			return;
+		}
+
+		store.removeCollectionItem(key);
 	}
 
 	render() {
@@ -102,9 +128,9 @@ export default class OrkanProvider extends Component{
 						onResizeEnd={() => this.obState.isResizing = false}
 						onResize={size => document.body.style.paddingLeft = size + 'px'}>
 
-						<OrkanUsersRequests onApprove={uid => store.approveUserRequest(uid)} onDecline={uid => store.declineUserRequest(uid)}/>
+						<OrkanUsersRequests onApprove={uid => store.approveUserRequest(uid)} onDecline={this.handleDeclineUserRequest}/>
 
-						<OrkanHeader primary title={headerTitle} onClose={this.clearActivePath}/>
+						<OrkanHeader primary title={headerTitle} onClose={this.handleClose}/>
 
 						{store.isLoadingActivePath && <OrkanSpinner/>}
 
@@ -137,7 +163,7 @@ export default class OrkanProvider extends Component{
 									path={isActivePathCollection && store.activePath}
 									keys={store.geNonPrimitiveKeysByPath(store.activePath)}
 									onCreate={isActivePathCollection && (key => store.createCollectionItem(key))}
-									onRemove={isActivePathCollection && (key => store.removeCollectionItem(key))}
+									onRemove={isActivePathCollection && this.handleRemoveCollectionItem}
 									onSelect={key => store.setActivePath(store.activePath + '/' + key)}
 									showHeader={!isActivePathCollection && store.getPrimitiveKeysByPath(store.activePath).length > 0} />
 							}
@@ -145,7 +171,7 @@ export default class OrkanProvider extends Component{
 						<div className="Orkan-ui-footer">
 							<div className="Orkan-ui-footer-auth">
 								<Img src={store.user.photoURL}/>
-								<span onClick={() => store.authStore.signOut()}>Logout</span>
+								<span onClick={() => store.logout()}>Logout</span>
 							</div>
 							<span/>
 						</div>

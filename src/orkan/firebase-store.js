@@ -69,4 +69,10 @@ export default class FirebaseStore{
 	remove(path){
 		return this.database.ref(this.toAbsolutePath(path)).remove();
 	}
+
+
+	clearCache(path){
+		const dotPath = path.split('/').join('.');
+		this.map.set(dotPath, null);
+	}
 }

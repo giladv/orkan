@@ -51,13 +51,20 @@ export default class OrkanStore{
 					this.dataStore.listen(SCHEMA_SETTINGS_KEY_NAME);
 				}else{
 					await this.createUserRequest(user);
-					auth.signOut();
+					this.logout()
 				}
 			}else{
 				this.user = null;
 			}
 			this.isInitiating = false;
 		});
+	}
+
+	logout(){
+		this.dataStore.clearCache(USERS_KEY_NAME);
+		this.dataStore.clearCache(SCHEMA_SETTINGS_KEY_NAME);
+		this.dataStore.clearCache(SCHEMA_KEY_NAME);
+		return this.authStore.signOut();
 	}
 
 	isAdmin(){

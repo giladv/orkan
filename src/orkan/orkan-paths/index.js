@@ -13,7 +13,6 @@ import OrkanListItem from '../orkan-list-item';
 import './style.scss';
 
 @orkanInject(({path}) => {
-
 	return path?{value: path}:{};
 
 }, {liveEditedData: false})
@@ -52,7 +51,7 @@ export default class OrkanPaths extends Component{
 	}
 
 	render(){
-		const {onSelect, readOnly, keys, showHeader, onCreate, onRemove} = this.props;
+		const {onSelect, keys, showHeader, onCreate, onRemove} = this.props;
 		const {newKey} = this.obState;
 
 		if(!keys.length){
