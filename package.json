@@ -21,17 +21,16 @@
     "mobx-react": "^5.0.0",
     "prop-types": "^15.6.0",
     "rc-slider": "^8.6.3",
+    "react-color": "^2.14.1",
     "react-day-picker": "^7.2.4",
-    "react-spinners": "^0.4.6"
+    "react-spinners": "^0.4.6",
+    "react-switch": "^3.0.4"
   },
   "peerDependencies": {
     "react": "^16.2.0",
     "react-dom": "^16.2.0"
   },
   "devDependencies": {
-    "firebase": "5.0.0",
-    "react": "^16.2.0",
-    "react-dom": "^16.2.0",
     "babel-core": "6.26.0",
     "babel-loader": "7.1.4",
     "babel-plugin-syntax-decorators": "^6.13.0",
@@ -47,10 +46,13 @@
     "copy-webpack-plugin": "^4.3.1",
     "css-loader": "^0.28.1",
     "file-loader": "1.1.11",
+    "firebase": "5.0.0",
     "history": "^4.7.2",
     "mobx-react-devtools": "^4.2.3",
     "node-sass": "^4.7.2",
+    "react": "^16.2.0",
     "react-addons-perf": "^15.3.0",
+    "react-dom": "^16.2.0",
     "react-router": "^3.2.1",
     "react-router-dom": "^4.2.2",
     "sass-loader": "^6.0.7",

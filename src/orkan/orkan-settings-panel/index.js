@@ -123,9 +123,11 @@ const typeOptions = [
 	{label: 'Textarea', value: 'textarea'},
 	{label: 'Date Time', value: 'datetime'},
 	{label: 'Checkbox', value: 'checkbox'},
+	{label: 'Switch', value: 'switch'},
 	{label: 'Select', value: 'select'},
-	{label: 'Radio', value: 'radio'},
+	// {label: 'Radio', value: 'radio'},
 	{label: 'Media', value: 'media'},
+	{label: 'Color', value: 'color'},
 ];
 
 const dataSourceOptions = [

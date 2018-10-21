@@ -138,7 +138,7 @@ export default class OrkanProvider extends Component{
 							<OrkanSettingsPanel
 								getCollectionPaths={() => getSchemaCollectionPaths(schema)}
 								getPrimitives={path => store.getPrimitiveKeysByPath(path + '/_')}
-								onClose={() => this.obState.settingsPath = null}
+								onClose={() => store.clearSettingsPath()}
 								onSubmit={() => store.submitSettings()}
 								editPath={store.settingsPath}
 								formStore={store.settingsFormStore}

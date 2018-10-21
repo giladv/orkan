@@ -9,15 +9,16 @@ import classNames from 'classnames';
 import Form, {FormField} from '../form/index';
 import FormStore from '../form/form-store';
 import {InputControl} from '../controls/input/index';
-
 import {SubmitButton} from '../button';
 import {TextareaControl} from '../controls/textarea';
 import {DatePickerControl} from '../controls/date-picker';
 import {DynamicSelectControl, SelectControl} from '../controls/select';
 import {CheckboxControl} from '../controls/checkbox';
+import {ColorPickerControl} from '../controls/color-picker';
+import {MediaSingleControl} from '../controls/media-single';
+import {SwitchControl} from '../controls/switch';
 
 import './style.scss';
-import {MediaSingleControl} from '../controls/media-single';
 
 
 @observer
@@ -86,6 +87,8 @@ export default class OrkanDataForm extends Component{
 				return <DatePickerControl/>;
 			case 'checkbox':
 				return <CheckboxControl/>;
+			case 'switch':
+				return <SwitchControl/>;
 			case 'select':
 				if(dataSource === 'static'){
 					return <SelectControl options={dataSourceOptions}/>;
@@ -95,7 +98,9 @@ export default class OrkanDataForm extends Component{
 					return null;
 				}
 			case 'media':
-				return <MediaSingleControl/>
+				return <MediaSingleControl/>;
+			case 'color':
+				return <ColorPickerControl/>
 
 		}
 	}

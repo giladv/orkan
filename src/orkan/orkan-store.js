@@ -298,13 +298,13 @@ const orkanSchemaSettings = {
 	usersPermissions: {
 		_: {
 			editData: {
-				uiType: 'checkbox'
+				uiType: 'switch'
 			},
 			editPermissions: {
-				uiType: 'checkbox'
+				uiType: 'switch'
 			},
 			editSchema: {
-				uiType: 'checkbox'
+				uiType: 'switch'
 			}
 		}
 	}
