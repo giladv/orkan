@@ -32,6 +32,7 @@ export default class OrkanProvider extends Component{
 	};
 
 	@observable.shallow obState = {
+		isInlineEditMode: false,
 		isActive: false,
 		isBusy: false,
 	};
@@ -42,7 +43,7 @@ export default class OrkanProvider extends Component{
 			getValue: path => this.orkanStore?this.orkanStore.getValue(path):store.getValue(path),
 			setActivePath: path => this.orkanStore.setActivePath(path),
 			store: this.props.store,
-			isEditMode: () => true,
+			isEditMode: () => this.obState.isInlineEditMode,
 			isActive: () => this.obState.isActive,
 			isAdmin: () => this.orkanStore.isAdmin()
 
@@ -67,6 +68,32 @@ export default class OrkanProvider extends Component{
 
 			}, 500)
 		});
+
+		document.addEventListener('keydown', this.handleKeyDown);
+		document.addEventListener('keyup', this.handleKeyUp);
+
+		// does not fire with normal api
+		document.body.onblur = this.handleBlur;
+	}
+
+	@autobind
+	handleBlur(e){
+		this.obState.isInlineEditMode = false;
+	}
+
+
+	@autobind
+	handleKeyDown(e){
+		if(e.key === 'Meta'){
+			this.obState.isInlineEditMode = true;
+		}
+	}
+
+	@autobind
+	handleKeyUp(e){
+		if(e.key === 'Meta'){
+			this.obState.isInlineEditMode = false;
+		}
 	}
 
 	render() {

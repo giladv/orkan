@@ -42,11 +42,6 @@ export default class OrkanProvider extends Component{
 		store.init();
 		window.b = store;
 
-		document.addEventListener('keydown', this.handleKeyDown);
-		document.addEventListener('keyup', this.handleKeyUp);
-
-		// does not fire with normal api
-		document.body.onblur = this.handleBlur;
 
 		keyboard.bind('escape', () => {
 			store.activePath && store.clearActivePath();
@@ -60,42 +55,6 @@ export default class OrkanProvider extends Component{
 		window.lo = () => auth.signOut();
 
 
-	}
-
-	@autobind
-	isEditMode(){
-		return this.obState.isEditMode;
-	}
-
-	@autobind
-	isAdmin(){
-		return !!this.user;
-	}
-
-	@autobind
-	isActive(){
-		return this.obState.isActive;
-	}
-
-
-	@autobind
-	handleBlur(e){
-		this.obState.isEditMode = false;
-	}
-
-
-	@autobind
-	handleKeyDown(e){
-		if(e.key === 'Meta'){
-			this.obState.isEditMode = true;
-		}
-	}
-
-	@autobind
-	handleKeyUp(e){
-		if(e.key === 'Meta'){
-			this.obState.isEditMode = false;
-		}
 	}
 
 	render() {
