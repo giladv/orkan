@@ -1,4 +1,4 @@
-import {observable, isObservable, toJS, computed, extendObservable} from 'mobx';
+import {observable, isObservable, toJS} from 'mobx';
 import nodePath from 'path';
 
 import {ObservableNestedMap} from './form/observable-nested-map';
