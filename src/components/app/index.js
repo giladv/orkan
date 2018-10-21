@@ -17,6 +17,14 @@ export default class App extends Component{
 			<div className="App">
 				{children}
 
+				{/*<WithValue path='home/hero' render={({background, title, cta}) =>*/}
+					{/*<div className="hero">*/}
+						{/*<Img mode='cover' src={background}/>*/}
+						{/*<h2>{title}</h2>*/}
+						{/*<a href={cta.link}>{cta.label}</a>*/}
+					{/*</div>*/}
+				{/*}/>*/}
+
 				<div className="hero">
 					<WithValue path='home/hero/background' render={value => <Img mode='cover' src={value}/>}/>
 

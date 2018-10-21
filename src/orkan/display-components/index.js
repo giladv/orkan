@@ -23,7 +23,7 @@ export class Value extends Component{
 	@autobind
 	handleClick(e){
 		const {onClick, path, orkan} = this.props;
-		if(orkan.isEditMode() && orkan.isActive() && orkan.isAdmin()){
+		if(orkan.isEditMode()){
 			orkan.setActivePath(path);
 			e.preventDefault();
 			e.stopPropagation();
@@ -35,7 +35,7 @@ export class Value extends Component{
 	render(){
 		const {className, value, children, orkan} = this.props;
 		const newClassName = classNames('Value', className, {
-			'Orkan-edit-mode': orkan.isEditMode() && orkan.isActive() && orkan.isAdmin()
+			'Orkan-edit-mode': orkan.isEditMode()
 		});
 
 		return <span className={newClassName} onClick={this.handleClick}>{value || children}</span>;
@@ -60,7 +60,7 @@ export class WithValue extends Component{
 	@autobind
 	handleClick(e){
 		const {onClick, path, orkan} = this.props;
-		if(orkan.isEditMode() && orkan.isActive() && orkan.isAdmin()){
+		if(orkan.isEditMode()){
 			orkan.setActivePath(path);
 			e.preventDefault();
 			e.stopPropagation();
@@ -79,7 +79,7 @@ export class WithValue extends Component{
 		const renderedValue = render(value);
 
 		const newClassName = classNames('WithValue', className, renderedValue.props.className, {
-			'Orkan-edit-mode': orkan.isEditMode() && orkan.isActive() && orkan.isAdmin(),
+			'Orkan-edit-mode': orkan.isEditMode(),
 		});
 
 		return cloneElement(renderedValue, {className: newClassName, onClick: this.handleClick});
@@ -109,7 +109,7 @@ export class Collection extends Component{
 	handleClick(e, key){
 		const {onClick, path, orkan} = this.props;
 
-		if(orkan.isEditMode() && orkan.isActive() && orkan.isAdmin()){
+		if(orkan.isEditMode()){
 			orkan.setActivePath(`${path}/${key}`);
 			e.preventDefault();
 			e.stopPropagation();
@@ -121,10 +121,10 @@ export class Collection extends Component{
 	render(){
 		const {className, renderItem, collection, orkan} = this.props;
 		const newClassName = classNames('Collection', className, {
-			'Orkan-edit-mode': orkan.isEditMode() && orkan.isActive() && orkan.isAdmin()
+			'Orkan-edit-mode': orkan.isEditMode()
 		});
 		const itemClassName = classNames('Collection-item', {
-			'Orkan-edit-mode': orkan.isEditMode() && orkan.isActive() && orkan.isAdmin()
+			'Orkan-edit-mode': orkan.isEditMode()
 		});
 		return (
 			<div className={newClassName}>

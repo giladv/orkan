@@ -283,6 +283,7 @@ export default class OrkanStore{
 
 
 const orkanSchema = {
+	schema: {},
 	usersPermissions: {
 		_: {
 			editData: 'string',
@@ -313,3 +314,12 @@ const orkanSchemaSettings = {
 const defaultUserPermissions = {
 	editData: true
 };
+
+
+// {
+// 	blog:{
+// 		posts: {
+// 			_: {title, body, date, image}
+// 		}
+// 	}
+// }

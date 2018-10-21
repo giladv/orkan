@@ -32,7 +32,7 @@ export default class OrkanProvider extends Component{
 	};
 
 	@observable.shallow obState = {
-		isInlineEditMode: false,
+		isModifierKeyDown: false,
 		isActive: false,
 		isBusy: false,
 	};
@@ -40,13 +40,13 @@ export default class OrkanProvider extends Component{
 	getChildContext() {
 		const {store} = this.props;
 		return {[REACT_CONTEXT_NAME]: {
+			store: this.props.store,
 			getValue: path => this.orkanStore?this.orkanStore.getValue(path):store.getValue(path),
 			setActivePath: path => this.orkanStore.setActivePath(path),
-			store: this.props.store,
-			isEditMode: () => this.obState.isInlineEditMode,
-			isActive: () => this.obState.isActive,
-			isAdmin: () => this.orkanStore.isAdmin()
-
+			isEditMode: () => {
+				const {isActive, isModifierKeyDown} = this.obState;
+				return isActive && this.orkanStore.isAdmin() && isModifierKeyDown
+			}
 		}};
 	}
 
@@ -78,21 +78,21 @@ export default class OrkanProvider extends Component{
 
 	@autobind
 	handleBlur(e){
-		this.obState.isInlineEditMode = false;
+		this.obState.isModifierKeyDown = false;
 	}
 
 
 	@autobind
 	handleKeyDown(e){
 		if(e.key === 'Meta'){
-			this.obState.isInlineEditMode = true;
+			this.obState.isModifierKeyDown = true;
 		}
 	}
 
 	@autobind
 	handleKeyUp(e){
 		if(e.key === 'Meta'){
-			this.obState.isInlineEditMode = false;
+			this.obState.isModifierKeyDown = false;
 		}
 	}
 
