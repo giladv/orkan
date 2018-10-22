@@ -33,7 +33,9 @@
 
 	letter-spacing: 0.05rem;
 	vertical-align: middle;
-	text-align: center;
+	&:focus{
+		outline: none;
+	}
 	&:hover{
 		.Button-label{
 			transform: scale3d(0.98, 0.98, 1);

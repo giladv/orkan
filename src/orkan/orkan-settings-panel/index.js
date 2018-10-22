@@ -119,15 +119,16 @@ export default class OrkanSettingsPanel extends Component{
 
 
 const typeOptions = [
-	{label: 'Text', value: 'text'},
-	{label: 'Textarea', value: 'textarea'},
-	{label: 'Date Time', value: 'datetime'},
 	{label: 'Checkbox', value: 'checkbox'},
+	{label: 'Color Picker', value: 'color'},
+	{label: 'Date Time', value: 'datetime'},
+	{label: 'Media', value: 'media'},
 	{label: 'Switch', value: 'switch'},
 	{label: 'Select', value: 'select'},
+	{label: 'Text', value: 'text'},
+	{label: 'Textarea', value: 'textarea'},
+	{label: 'Textarea', value: 'textarea'},
 	// {label: 'Radio', value: 'radio'},
-	{label: 'Media', value: 'media'},
-	{label: 'Color', value: 'color'},
 ];
 
 const dataSourceOptions = [

@@ -20,11 +20,13 @@ export default class MediaSingle extends Component {
 	static propTypes = {
 		value: PropTypes.any,
 		onChange: PropTypes.func,
+		preview: PropTypes.bool,
 	};
 
 
 	static defaultProps = {
 		onChange: () => null,
+		preview: true
 	};
 
 	@observable obState = {
@@ -72,7 +74,7 @@ export default class MediaSingle extends Component {
 	}
 
 	render(){
-		const {className, value} = this.props;
+		const {className, value, preview} = this.props;
 		const {isBusy} = this.obState;
 
 		const newClassName = classNames('MediaSingle', className, {
@@ -87,7 +89,7 @@ export default class MediaSingle extends Component {
 			<div className={newClassName}>
 				<input style={{display: 'none'}} ref={ref => this.input = ref} type="file" onChange={this.handleUpload}/>
 				{!value && <Button primary onClick={() => this.input.click()}>upload</Button>}
-				{this.renderItem()}
+				{preview && this.renderItem()}
 			</div>
 		);
 	}

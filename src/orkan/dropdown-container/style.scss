@@ -5,6 +5,9 @@
 .DropdownContainer{
 	position: relative;
 	-webkit-user-select: none;
+	&:focus{
+		outline: none;
+	}
 
 	.DropdownContainer-options{
 		margin: 2px 0 0 0;
@@ -22,6 +25,7 @@
 						0 0 0 1px $grey4;
 		li{
 			@include smallListItemAnimation();
+			@include globalFont;
 			cursor: pointer;
 			&.DropdownContainer-options-empty{
 				display: flex;
@@ -50,8 +54,8 @@
 
 	@mixin size($config){
 		.DropdownContainer-options{
-			max-height: map-get($config, controlHeight) * map-get($config, maxDropdownItems);
-			li.DropdownContainer-options-empty{
+			height: map-get($config, controlHeight) * map-get($config, maxDropdownItems);
+			li{
 				height: map-get($config, controlHeight);
 			}
 		}

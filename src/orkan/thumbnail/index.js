@@ -2,10 +2,11 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import autobind from 'autobind-decorator';
 import classNames from 'classnames';
+import path from 'path';
 
-import Button from '../button';
 import Img from '../img';
-import Icon from '../orkan-icon';
+import OrkanActionButton from '../orkan-action-button';
+import Video from '../video';
 
 import './style';
 
@@ -20,13 +21,30 @@ export default class Thumbnail extends Component {
 		leftLabel: PropTypes.string,
 		rightLabel: PropTypes.string,
 		onRemove: PropTypes.func,
+		onSelect: PropTypes.func,
 	};
 
 	static defaultProps = {
 	};
 
+	getFileType(){
+		const {imageSrc} = this.props;
+
+		switch (path.extname(imageSrc).split('?')[0].slice(1)){
+			case 'gif':
+			case 'jpg':
+			case 'svg':
+			case 'png':
+				return 'image';
+			case 'mp4':
+			case 'mov':
+			case 'ogg':
+				return 'video';
+		}
+	}
+
 	render(){
-		const {className, imageSrc, imageAlt, leftLabel, rightLabel, isSelected, isPlaceHolder, onRemove, ...otherProps} = this.props;
+		const {className, imageSrc, imageAlt, leftLabel, rightLabel, isSelected, isPlaceHolder, onRemove, onSelect, ...otherProps} = this.props;
 
 		const newClassName = classNames('Thumbnail', className, {
 			'Thumbnail-medium': true,
@@ -34,13 +52,18 @@ export default class Thumbnail extends Component {
 			'Thumbnail-placeholder': isPlaceHolder
 		});
 
+		const fileType = this.getFileType();
+
 		return (
 			<div {...otherProps} className={newClassName}>
-				<div className="Thumbnail-actions">
-					<Button important square onClick={onRemove}><Icon
-						type="trash"/></Button>
+				<div className="Thumbnail-actions-container">
+					<div className="Thumbnail-actions">
+						{onSelect && <OrkanActionButton icon='v' onClick={onSelect}/>}
+						{onRemove && <OrkanActionButton icon='trash' onClick={onRemove}/>}
+					</div>
+					{fileType === 'image' && <Img mode='cover' src={imageSrc} alt={imageAlt} ratio={60}/>}
+					{fileType === 'video' && <Video src={imageSrc} ratio={60}/>}
 				</div>
-				<Img mode='cover' src={imageSrc} alt={imageAlt}/>
 				{(leftLabel || rightLabel) &&
 					<div className="Thumbnail-content">
 						<div className="Thumbnail-left-label">{leftLabel}</div>

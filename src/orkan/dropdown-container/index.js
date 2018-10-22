@@ -130,7 +130,7 @@ export default class DropdownContainer extends Component {
 
 		const newClassName = classNames('DropdownContainer', className, {
 			'DropdownContainer-open': isOpen,
-			'DropdownContainer-small': true
+			'DropdownContainer-medium': true
 		});
 
 		return (

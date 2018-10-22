@@ -19,6 +19,7 @@ import OrkanUsersRequests from '../orkan-users-requests';
 import OrkanStore from '../orkan-store';
 
 import './style.scss';
+import OrkanMediaGallery from '../orkan-media-gallery';
 
 
 
@@ -51,7 +52,7 @@ export default class OrkanProvider extends Component{
 
 		window.lo = () => auth.signOut();
 
-
+		store.openModal(OrkanMediaGallery);
 	}
 
 	@autobind
@@ -118,7 +119,6 @@ export default class OrkanProvider extends Component{
 
 		return (
 			<div className={newClassName}>
-				{!store.isInitiating && !store.isAdmin() && <OrkanAuth auth={store.authStore}/>}
 				{store.isAdmin() && store.activePath &&
 					<Sidebar
 						side='left'
@@ -134,16 +134,7 @@ export default class OrkanProvider extends Component{
 
 						{store.isLoadingActivePath && <OrkanSpinner/>}
 
-						{store.settingsPath &&
-							<OrkanSettingsPanel
-								getCollectionPaths={() => getSchemaCollectionPaths(schema)}
-								getPrimitives={path => store.getPrimitiveKeysByPath(path + '/_')}
-								onClose={() => store.clearSettingsPath()}
-								onSubmit={() => store.submitSettings()}
-								editPath={store.settingsPath}
-								formStore={store.settingsFormStore}
-								schema={store.getSchemaByPath(store.settingsPath)} />
-						}
+
 						<div className='Orkan-ui-scroll'>
 							{!store.isLoadingActivePath &&
 							<OrkanDataForm
@@ -178,6 +169,19 @@ export default class OrkanProvider extends Component{
 
 					</Sidebar>
 				}
+
+				{store.settingsPath &&
+					<OrkanSettingsPanel
+						getCollectionPaths={() => getSchemaCollectionPaths(schema)}
+						getPrimitives={path => store.getPrimitiveKeysByPath(path + '/_')}
+						onClose={() => store.clearSettingsPath()}
+						onSubmit={() => store.submitSettings()}
+						editPath={store.settingsPath}
+						formStore={store.settingsFormStore}
+						schema={store.getSchemaByPath(store.settingsPath)} />
+				}
+				{!store.isInitiating && !store.isAdmin() && <OrkanAuth auth={store.authStore}/>}
+				{store.modal && <store.modal.Component {...store.modal.props}/>}
 			</div>
 		);
 	}

@@ -5,9 +5,9 @@
 	position: fixed;
 	left: 0;
 	right: 0;
-	top: 0;
+	top: 5px;
 	bottom: 0;
-	z-index: 9999999999999999;
+	z-index: 999999999;
 	pointer-events: none;
 	display: flex;
 	flex-direction: row;
@@ -22,14 +22,19 @@
 		user-select: none;
 	}
 	.OrkanAuth{
-		position: absolute;
-		left: 50%;
-		top: 0;
-		transform: translate3d(-50%, 0, 0);
-		animation: orkanAuthAnimation;
+		align-self: flex-start;
+		margin: 0 auto;
+		animation: orkanTopUiAnimation;
 		animation-duration: .2s;
 		animation-timing-function: ease-in-out;
 
+	}
+
+	.OrkanMediaGallery{
+		animation: orkanTopUiAnimation;
+		animation-duration: .2s;
+		animation-timing-function: ease-in-out;
+		margin: 0 auto;
 	}
 	.Orkan-ui {
 		@include listItemAnimation(false);
@@ -46,11 +51,9 @@
 			-ms-text-size-adjust: 100%;
 			-webkit-text-size-adjust: 100%;
 			font-family: 'Roboto', sans-serif;
+
 		}
 		.Sidebar-content{
-			position: fixed;
-			bottom: 0;
-			left: 0;
 			display: flex;
 			flex-direction: column;
 			flex: 1;
@@ -119,15 +122,15 @@
 				}
 			}
 
-			.OrkanSettingsPanel{
-				@include listItemAnimation(false);
-				position: absolute;
-				left: 100%;
-				width: 300px;
-				height: 100%;
-				top: 0;
-				z-index: -1; // so it always be under the main panel for animations
-			}
 		}
+	}
+	.OrkanSettingsPanel{
+		@include listItemAnimation(false);
+		//position: absolute;
+		//left: 100%;
+		width: 300px;
+		//height: 100%;
+		//top: 0;
+		z-index: -1; // so it always be under the main panel for animations
 	}
 }

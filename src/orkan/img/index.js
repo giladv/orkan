@@ -10,6 +10,7 @@ import './style';
 export default class Img extends Component {
     static propTypes = {
         src: PropTypes.string,
+        ratio: PropTypes.number,
         alt: PropTypes.string,
         mode: PropTypes.oneOf(['cover', 'contain']),
         align: PropTypes.string,
@@ -19,6 +20,7 @@ export default class Img extends Component {
     };
 
     static defaultProps = {
+        ratio: 0,
         mode: 'contain',
         align: 'center center',
         onLoad: () => null,
@@ -70,7 +72,7 @@ export default class Img extends Component {
     }
 
     render() {
-        const {className, simple, src, alt, mode, align, ...otherProps} = this.props;
+        const {className, simple, src, alt, mode, align, ratio, ...otherProps} = this.props;
         const {isLoading} = this.state;
 
         const newClassName = classNames('Img', className, {
@@ -90,7 +92,7 @@ export default class Img extends Component {
                 backgroundPosition: align
 			};
 			return (
-                <div {...otherProps} className={newClassName}>
+                <div {...otherProps} className={newClassName} style={{paddingTop: ratio + '%'}}>
                     <div alt={alt} style={style}/>
                 </div>
             );

@@ -2,25 +2,48 @@
 
 .Thumbnail{
 	position: relative;
-	display: inline-block;
 	background: #ffffff;
-	.Img{
-	}
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+
 
 	.Thumbnail-content{
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		overflow: hidden;
+		word-break: break-all;
 		.Thumbnail-right-label{
-			float: right
+			overflow: hidden;
+			text-overflow: ellipsis;
+			line-height: 1;
 		}
 
 		.Thumbnail-left-label{
-			float: left;
+			line-height: 1;
+			overflow: hidden;
+			text-overflow: ellipsis;
 		}
 	}
-
-	.Thumbnail-actions{
-		display: none;
-		position: absolute;
-		background: rgba(#000000, 0.7);
+	.Thumbnail-actions-container{
+		position: relative;
+		.Img{
+			width: 100%;
+		}
+		.Thumbnail-actions{
+			display: none;
+			position: absolute;
+			background: rgba(#000000, 0.7);
+			z-index: 1;
+			left: 0;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			> * {
+				display: flex;
+			}
+		}
 	}
 
 	&:hover{
@@ -29,34 +52,73 @@
 		}
 	}
 
-	@mixin size($imgWidth, $imgHeight, $padding, $fontSize){
-		padding: $padding $padding $padding + 5px $padding;
+	//@mixin size($imgWidth, $imgHeight, $padding, $fontSize){
+	//	padding: $padding $padding $padding + 5px $padding;
+	//	border-radius: 5px;
+	//	box-shadow: inset 0 -1px 0 1px $lightGray2,
+	//					inset 0 -4px 0 1px $lightGray1;
+	//
+	//	.Img{
+	//		height: $imgHeight;
+	//		width: $imgWidth;
+	//	}
+	//
+	//	.Thumbnail-content{
+	//		font-size: $fontSize;
+	//		margin-top: $padding;
+	//	}
+	//
+	//	.Thumbnail-actions{
+	//		height: $imgHeight;
+	//		width: $imgWidth;
+	//		padding: $padding;
+	//	}
+	//
+	//	&.Thumbnail-selected{
+	//		box-shadow: inset 0 -1px 0 1px $aqua,
+	//						inset 0 -4px 0 1px $lightGray1;
+	//	}
+	//
+	//	&.Thumbnail-placeholder{
+	//		box-shadow: none;
+	//		background: $lightGray1;
+	//		*{
+	//			visibility: hidden;
+	//		}
+	//	}
+	//}
+
+
+
+
+
+
+
+	@mixin size($size: 1){
+		padding: 10px * $size 10px * $size (10px * $size) + (3px * $size) 10px * $size;
 		border-radius: 5px;
 		box-shadow: inset 0 -1px 0 1px $lightGray2,
-						inset 0 -4px 0 1px $lightGray1;
+		inset 0 -4px 0 1px $lightGray1;
 
 		.Img{
-			height: $imgHeight;
-			width: $imgWidth;
 		}
 
 		.Thumbnail-content{
-			font-size: $fontSize;
-			margin-top: $padding;
+			font-size: 13px * $size;
+			margin-top: 10px * $size;
+			height: 13px * $size;
 		}
 
 		.Thumbnail-actions{
-			height: $imgHeight;
-			width: $imgWidth;
-			padding: $padding;
-			i{
-				font-size: $fontSize * 1.2;
+			padding: 10px * $size;
+			.OrkanActionButton{
+				margin-bottom: 5px * $size;
 			}
 		}
 
 		&.Thumbnail-selected{
 			box-shadow: inset 0 -1px 0 1px $aqua,
-							inset 0 -4px 0 1px $lightGray1;
+			inset 0 -4px 0 1px $lightGray1;
 		}
 
 		&.Thumbnail-placeholder{
@@ -70,14 +132,14 @@
 
 
 	&.Thumbnail-small{
-		@include size(150px, 90px, 8px, $controlFontSizeSmall);
+		@include size(0.8);
 	}
 
 	&.Thumbnail-medium{
-		@include size(180px, 108px, 10px, $controlFontSizeMedium);
+		@include size(1);
 	}
 
 	&.Thumbnail-large{
-		@include size(200px, 120px, 12px, $controlFontSizeLarge);
+		@include size(1.2);
 	}
 }

@@ -5,7 +5,7 @@ import {observable} from 'mobx';
 import autobind from 'autobind-decorator';
 import classNames from 'classnames';
 
-import OrkanIcon from '../orkan-icon';
+import OrkanActionButton from '../orkan-action-button';
 
 import './style.scss';
 
@@ -36,7 +36,7 @@ export default class OrkanListItem extends Component{
 			<div {...otherProps} className={newClassName}>
 				<div className="OrkanListItem-label">{children}</div>
 				{buttons.filter(it => !!it).map(button => (
-					<OrkanIcon type={button.icon} onClick={e => this.handleButtonClick(e, button)}/>
+					<OrkanActionButton icon={button.icon} onClick={e => this.handleButtonClick(e, button)} />
 				))}
 			</div>
 		);

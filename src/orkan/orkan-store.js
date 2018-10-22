@@ -31,6 +31,8 @@ export default class OrkanStore{
 
 	@observable.ref user;
 
+	@observable.ref modal;
+
 	constructor(dataStore, authStore){
 		this.dataStore = dataStore;
 		this.authStore = authStore;
@@ -276,6 +278,25 @@ export default class OrkanStore{
 
 	declineUserRequest(uid){
 		return this.dataStore.remove(USER_REQUESTS_KEY_NAME + '/'	+ uid);
+	}
+
+	openModal(Component, props = {}){
+		return new Promise((resolve, reject) => {
+			this.modal = {
+				Component,
+				props: {
+					...props,
+					resolve: (...args) => {
+						this.modal = null;
+						resolve(...args);
+					},
+					reject: (...args) => {
+						this.modal = null;
+						reject(...args);
+					}
+				}
+			};
+		});
 	}
 }
 

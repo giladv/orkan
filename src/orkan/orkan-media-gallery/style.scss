@@ -1,0 +1,42 @@
+@import '../globals';
+
+
+.OrkanMediaGallery{
+	width: 690px;
+	height: 500px;
+	display: flex;
+	flex-direction: column;
+	background: #ffffff;
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+	box-shadow: 0 12px 40px rgba(0,0,0,.3);
+	@include globalFont;
+	.OrkanHeader{
+		flex: 0 0 auto;
+	}
+	.OrkanMediaGallery-actions{
+		flex: 0 0 auto;
+		height: $headerSize;
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+		padding: 0 15px;
+		//border-bottom: 1px solid #d1d4de;
+		background: #f2f4f7;
+	}
+}
+
+
+.OrkanMediaList{
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	overflow-y: auto;
+	.Thumbnail{
+		margin: 15px;
+		flex: 0 200px;
+	}
+}
+
+

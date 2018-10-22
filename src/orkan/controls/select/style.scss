@@ -8,6 +8,7 @@
 	-webkit-user-select: none;
 	min-width: 100px;
 	cursor: default;
+	@include globalFont;
 	&.Select-open{
 		.Select-selected-item{
 			border-color: $aqua;
