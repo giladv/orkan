@@ -82,6 +82,18 @@ export default class OrkanSettingsPanel extends Component{
 						</FormField>
 					}
 
+					{formStore.get('uiType') === 'slider' &&
+						<FormField compact name='fromValue' label='From value'>
+							<InputControl type='number' defaultValue={1} />
+						</FormField>
+					}
+
+					{formStore.get('uiType') === 'slider' &&
+						<FormField compact name='toValue' label='To value'>
+							<InputControl type='number' defaultValue={10}  />
+						</FormField>
+					}
+
 
 					{['select', 'radio'].includes(formStore.get('uiType')) &&
 						<FormField compact name='dataSource' label='Data Source'>
@@ -123,12 +135,12 @@ const typeOptions = [
 	{label: 'Color Picker', value: 'color'},
 	{label: 'Date Time', value: 'datetime'},
 	{label: 'Media', value: 'media'},
+	{label: 'Number', value: 'number'},
 	{label: 'Switch', value: 'switch'},
 	{label: 'Select', value: 'select'},
+	{label: 'Slider', value: 'slider'},
 	{label: 'Text', value: 'text'},
 	{label: 'Textarea', value: 'textarea'},
-	{label: 'Textarea', value: 'textarea'},
-	// {label: 'Radio', value: 'radio'},
 ];
 
 const dataSourceOptions = [

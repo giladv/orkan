@@ -46,34 +46,39 @@ export default class OrkanProvider extends Component{
 			isEditMode: () => {
 				const {isActive, isModifierKeyDown} = this.obState;
 				return isActive && this.orkanStore.isAdmin() && isModifierKeyDown
-			}
+			},
+			openModal: (...props) => this.orkanStore && this.orkanStore.openModal(...props)
 		}};
 	}
 
 	componentWillMount(){
-		const {store, auth} = this.props;
-
-		keyboard.bind('hold:1000:' + ACTIVATION_EVENT_KEY, async () => {
-			this.obState.isBusy = true;
-			try{
-				OrkanAdmin = (await import(/* webpackChunkName: "orkan-admin" */'../orkan-admin')).default;
-				this.orkanStore = new OrkanStore(store, auth);
-				this.obState.isActive = true;
-			}catch(err){
-				console.error(err);
-			}
-
-			setTimeout(() => {
-				this.obState.isBusy = false;
-
-			}, 500)
-		});
+		this.activate();
+		keyboard.bind('hold:1000:' + ACTIVATION_EVENT_KEY, this.activate);
 
 		document.addEventListener('keydown', this.handleKeyDown);
 		document.addEventListener('keyup', this.handleKeyUp);
 
 		// does not fire with normal api
 		document.body.onblur = this.handleBlur;
+	}
+
+	@autobind
+	async activate(){
+		const {store, auth} = this.props;
+
+		this.obState.isBusy = true;
+		try{
+			OrkanAdmin = (await import(/* webpackChunkName: "orkan-admin" */'../orkan-admin')).default;
+			this.orkanStore = new OrkanStore(store, auth);
+			this.obState.isActive = true;
+		}catch(err){
+			console.error(err);
+		}
+
+		setTimeout(() => {
+			this.obState.isBusy = false;
+
+		}, 500)
 	}
 
 	@autobind

@@ -252,10 +252,10 @@ export default class OrkanStore{
 		return this.dataStore.remove(this.activePath + '/' + key);
 	}
 
-	getSchema(){
+	getSchema(includeNativeSchema = true){
 		return {
 			...this.dataStore.getValue(SCHEMA_KEY_NAME),
-			...orkanSchema
+			...includeNativeSchema?orkanSchema:{}
 		};
 	}
 

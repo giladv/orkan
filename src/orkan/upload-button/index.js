@@ -51,9 +51,11 @@ export default class UploadButton extends Component {
 
 		const newClassName = classNames('UploadButton', className);
 
-		return [
-			<Button className={newClassName} isBusy={isBusy} primary onClick={() => this.input.click()}>upload</Button>,
-			<input style={{display: 'none'}} ref={ref => this.input = ref} type="file" onChange={this.handleUpload}/>
-		];
+		return (
+			<Button className={newClassName} isBusy={isBusy} primary onClick={() => this.input.click()}>
+				<input style={{display: 'none'}} ref={ref => this.input = ref} type="file" onChange={this.handleUpload}/>
+				upload
+			</Button>
+		);
 	}
 }

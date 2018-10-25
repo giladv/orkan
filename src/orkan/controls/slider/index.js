@@ -20,13 +20,15 @@ export default class Slider extends Component {
 
 
 	render(){
-		const {className, error, ...otherProps} = this.props;
+		const {className, error, value, min, ...otherProps} = this.props;
 
 		const newClassName = classNames('Slider', className, {
 			'Slider-error': error,
 		});
 
-		return <OriginalSlider {...otherProps} className={newClassName}/>;
+		const safeValue = isNaN(value)?0:value;
+
+		return <OriginalSlider {...otherProps} className={newClassName} value={safeValue} min={parseFloat(min)}/>;
 	}
 
 

@@ -125,13 +125,15 @@ export class OrkanMediaList extends Component{
 
 		const media = {...image, ...video, ...audio};
 
-console.log(media)
 		const newClassName = classNames('OrkanMediaList', className);
 
 		return (
 			<div className={newClassName}>
 				{map(media, (item, key) => (
-					<Thumbnail key={key} imageSrc={item.url} leftLabel={item.name} onRemove={() => onRemove(key, item)} onSelect={() => onSelect(item)}/>
+					<Thumbnail key={key} src={item.url} leftLabel={item.name} buttons={[
+							{icon: 'v', onClick: () => onSelect(item)},
+							{icon: 'trash', onClick: () => onRemove(key, item)},
+						]}/>
 				))}
 			</div>
 		);

@@ -93,6 +93,9 @@
 				.OrkanDataForm {
 					margin: 0 0 20px 0;
 				}
+				.OrkanSchemaEditor{
+					margin-top: 15px;
+				}
 			}
 
 			> .Orkan-ui-footer{
@@ -132,5 +135,36 @@
 		//height: 100%;
 		//top: 0;
 		z-index: -1; // so it always be under the main panel for animations
+	}
+}
+
+
+
+.OrkanSchemaEditor{
+	font-size: 13px;
+	padding: 0 15px;
+	.OrkanSchemaEditor-field{
+		> .OrkanSchemaEditor-field-label{
+			height: 25px;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			> .OrkanSchemaEditor-field-actions{
+				display: none;
+				.OrkanActionButton{
+					margin-left: 5px;
+				}
+			}
+			&:hover{
+				color: $pink;
+				> .OrkanSchemaEditor-field-actions{
+					display: flex;
+				}
+			}
+		}
+		> .OrkanSchemaEditor-field-children{
+			padding-left: 15px;
+			border-left: 1px dotted #d0d2d6;
+		}
 	}
 }

@@ -4,6 +4,10 @@ import {observer} from 'mobx-react';
 import {observable} from 'mobx';
 import autobind from 'autobind-decorator';
 import classNames from 'classnames';
+import map from 'lodash/map';
+import isObject from 'lodash/isObject';
+import set from 'lodash/set';
+import cloneDeep from 'lodash/cloneDeep';
 
 import Sidebar from '../sidebar';
 import OrkanDataForm from '../orkan-data-form';
@@ -20,6 +24,9 @@ import OrkanStore from '../orkan-store';
 
 import './style.scss';
 import OrkanMediaGallery from '../orkan-media-gallery';
+import OrkanActionButton from '../orkan-action-button';
+import Input from '../controls/input';
+import {SCHEMA_KEY_NAME} from '../constants';
 
 
 
@@ -52,7 +59,7 @@ export default class OrkanProvider extends Component{
 
 		window.lo = () => auth.signOut();
 
-		store.openModal(OrkanMediaGallery);
+		// store.openModal(OrkanMediaGallery);
 	}
 
 	@autobind
@@ -158,6 +165,9 @@ export default class OrkanProvider extends Component{
 									onSelect={key => store.setActivePath(store.activePath + '/' + key)}
 									showHeader={!isActivePathCollection && store.getPrimitiveKeysByPath(store.activePath).length > 0} />
 							}
+							{store.activePath === './' + SCHEMA_KEY_NAME &&
+								<OrkanSchemaEditor value={store.getSchema(false)} onChange={value => store.dataStore.setValue(SCHEMA_KEY_NAME, value)}/>
+							}
 						</div>
 						<div className="Orkan-ui-footer">
 							<div className="Orkan-ui-footer-auth">
@@ -182,6 +192,101 @@ export default class OrkanProvider extends Component{
 				}
 				{!store.isInitiating && !store.isAdmin() && <OrkanAuth auth={store.authStore}/>}
 				{store.modal && <store.modal.Component {...store.modal.props}/>}
+			</div>
+		);
+	}
+}
+
+
+
+
+
+
+
+
+
+@observer
+export class OrkanSchemaEditor extends Component{
+	static propTypes = {
+		value: PropTypes.object
+	};
+
+	@observable obState = {
+		createPath: null,
+		createValue: null
+	};
+
+	@autobind
+	handleKeyPress(e){
+		const {onChange, value} = this.props;
+		const {createPath, createValue} = this.obState;
+		console.log('!?', {...e})
+
+		if(e.key === 'Enter'){
+			const clone = cloneDeep(value);
+			console.log(clone, createPath + '.' + createValue)
+			set(clone, createPath + '.' + createValue, 'string')
+			onChange(clone);
+			this.obState.createPath = null;
+			this.obState.createValue = null;
+		}else if(e.key === 'Esc'){
+			this.obState.createPath = null;
+			this.obState.createValue = null;
+		}
+	}
+
+	@autobind
+	handleBlur(){
+		this.obState.createPath = null;
+		this.obState.createValue = null;
+	}
+
+
+
+	@autobind
+	handleRemoveField(path){
+		const {onChange, value} = this.props;
+		if(!confirm('are you sure?')){
+			return;
+		}
+		const clone = cloneDeep(value);
+		set(clone, path, null)
+		onChange(clone);
+		this.obState.createPath = null;
+		this.obState.createValue = null;
+	}
+
+	renderField(key, field, parentPath){
+		const {createPath, createValue} = this.obState;
+
+		const currentPath = [parentPath, key].filter(it => !!it).join('.');
+		return (
+			<div key={key} className='OrkanSchemaEditor-field'>
+				<div className='OrkanSchemaEditor-field-label'>
+					{key || 'Root'}
+					<div className="OrkanSchemaEditor-field-actions">
+						{currentPath &&
+							<OrkanActionButton icon='trash' onClick={() => this.handleRemoveField(currentPath)}/>
+						}
+						<OrkanActionButton icon='plus' onClick={() => this.obState.createPath = currentPath}/>
+					</div>
+				</div>
+				<div className='OrkanSchemaEditor-field-children'>
+					{createPath === currentPath &&
+						<div><Input autoFocus value={createValue} onChange={value => this.obState.createValue = value} onKeyPress={this.handleKeyPress} onBlur={this.handleBlur}/></div>
+					}
+					{isObject(field) && map(field, (value, key) => this.renderField(key, value, currentPath))}
+				</div>
+			</div>
+		);
+	}
+	render(){
+		const {className, value} = this.props;
+
+		const newClassName = classNames('OrkanSchemaEditor', className);
+		return (
+			<div className={newClassName}>
+				{this.renderField(null, value, null)}
 			</div>
 		);
 	}

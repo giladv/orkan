@@ -15,10 +15,11 @@ import {DatePickerControl} from '../controls/date-picker';
 import {DynamicSelectControl, SelectControl} from '../controls/select';
 import {CheckboxControl} from '../controls/checkbox';
 import {ColorPickerControl} from '../controls/color-picker';
-import {MediaSingleControl} from '../controls/media-single';
+import {MediaControl} from '../controls/media';
 import {SwitchControl} from '../controls/switch';
 
 import './style.scss';
+import {SliderControl} from '../controls/slider';
 
 
 @observer
@@ -76,19 +77,23 @@ export default class OrkanDataForm extends Component{
 	renderControl(path){
 		const {getFieldSettings} = this.props;
 
-		const {uiType, uiSize, dataSource, dataSourcePath, dataSourceLabel, dataSourceValue, dataSourceOptions} = getFieldSettings(path) || {};
+		const {uiType, uiSize, dataSource, dataSourcePath, dataSourceLabel, dataSourceValue, dataSourceOptions, fromValue, toValue} = getFieldSettings(path) || {};
 
 		switch(uiType){
 			default:
 				return <InputControl/>;
 			case 'textarea':
 				return <TextareaControl rows={uiSize || 3}/>;
+			case 'number':
+				return <InputControl type='number'/>;
 			case 'datetime':
 				return <DatePickerControl/>;
 			case 'checkbox':
 				return <CheckboxControl/>;
 			case 'switch':
 				return <SwitchControl/>;
+			case 'slider':
+				return <SliderControl min={fromValue || 0} max={toValue || 10}/>;
 			case 'select':
 				if(dataSource === 'static'){
 					return <SelectControl options={dataSourceOptions}/>;
@@ -98,7 +103,7 @@ export default class OrkanDataForm extends Component{
 					return null;
 				}
 			case 'media':
-				return <MediaSingleControl/>;
+				return <MediaControl/>;
 			case 'color':
 				return <ColorPickerControl/>
 

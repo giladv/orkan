@@ -115,19 +115,6 @@
 				margin-bottom: 5px * $size;
 			}
 		}
-
-		&.Thumbnail-selected{
-			box-shadow: inset 0 -1px 0 1px $aqua,
-			inset 0 -4px 0 1px $lightGray1;
-		}
-
-		&.Thumbnail-placeholder{
-			box-shadow: none;
-			background: $lightGray1;
-			*{
-				visibility: hidden;
-			}
-		}
 	}
 
 

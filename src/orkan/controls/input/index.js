@@ -13,7 +13,9 @@ import './style';
 export default class Input extends Component {
 	static PropTypes = {
 		value: PropTypes.string,
+		type: PropTypes.oneOf(['text', 'number', 'password']),
 		placeholder: PropTypes.string,
+		defaultValue: PropTypes.any,
 		preIcon: PropTypes.string,
 		postIcon: PropTypes.string,
 		onChange: PropTypes.func,
@@ -24,6 +26,7 @@ export default class Input extends Component {
 	};
 
 	static defaultProps = {
+		type: 'text',
 		onChange: () => null,
 	};
 
@@ -33,7 +36,7 @@ export default class Input extends Component {
 	}
 
 	componentDidUpdate(){
-		this.selection && this.refs.input.setSelectionRange(this.selection.start, this.selection.end);
+		this.props.type !== 'number' && this.selection && this.refs.input.setSelectionRange(this.selection.start, this.selection.end);
 	}
 
 	handleChange(e){
@@ -49,7 +52,7 @@ export default class Input extends Component {
 	}
 
 	render(){
-		const {className, preIcon, postIcon, value, onChange, placeholder, disabled, error, important, ...otherProps} = this.props;
+		const {className, preIcon, postIcon, value, onChange, placeholder, disabled, error, important, type, defaultValue, ...otherProps} = this.props;
 
 		const inputClassName = classNames('Input-input', {
 			'Input-input-pre-padding': !!preIcon,
@@ -65,14 +68,14 @@ export default class Input extends Component {
 		return (
 			<div {...otherProps} className={newClassName}>
 				<input
-					type="text"
+					type={type}
 					ref="input"
+					defaultValue={defaultValue}
 					disabled={disabled}
 					className={inputClassName}
 					placeholder={placeholder}
 					onChange={this.handleChange}
-					value={value || ''}
-					onKeyDown={this.handleKeyDown}/>
+					value={value || ''}/>
 
 				{preIcon && <Icon className='Input-pre-icon' type={preIcon}/>}
 				{postIcon && <Icon className='Input-post-icon' type={preIcon}/>}
