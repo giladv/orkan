@@ -1,18 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {Router, Route, browserHistory, hashHistory} from 'react-router';
-import firebase from 'firebase';
+import firebase from 'firebase/app';
 
-require("firebase/database");
-require("firebase/auth");
+import 'firebase/database';
+import 'firebase/auth'
 
-
-import './css/style.scss';
 import App from './components/app';
 import Template from './components/template';
 
+import './css/style.scss';
+
 import {OrkanProvider, FirebaseStore} from './orkan';
 
+
+// Firebase setup
 const config = {
 	apiKey: "AIzaSyDyI8G7yNDCYb7qNUORm7sw6iXoIHkS5qQ",
 	authDomain: "my-proj-5cbb6.firebaseapp.com",
@@ -23,10 +25,8 @@ const config = {
 };
 
 const firebaseApp = firebase.initializeApp(config);
-firebase.auth();
-
 const database = firebaseApp.database();
-
+// end of Firebase setup
 
 const firebaseStore = new FirebaseStore(database, 'test');
 

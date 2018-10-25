@@ -37,7 +37,9 @@ export default class App extends Component{
 				<h2>Blog</h2>
 				<Collection path='blog/posts' limit={10} renderItem={(post, i) =>
 					<div key={i}>
+						<img src={post.image} alt=""/>
 						<h3>{post.title}</h3>
+						<span>{post.date}</span>
 						<p>{post.body}</p>
 					</div>
 				}/>

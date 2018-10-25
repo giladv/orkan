@@ -48,13 +48,21 @@
 			background: #eaeff3;
 			padding: 20px 30px;
 			margin-bottom: 20px;
+			img{
+				width: 200px;
+			}
+			> span{
+				font-size: 1.5rem;
+			}
 			h3{
 				font-size: 2.3rem;
 				font-weight: 400;
+				margin: 10px 0 0 0;
 			}
 			p{
 				font-size: 2rem;
 				font-weight: 300;
+				white-space: pre;
 			}
 		}
 	}
