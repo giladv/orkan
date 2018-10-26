@@ -16,7 +16,7 @@ import './style';
 
 @observer
 export default class DatePicker extends Component {
-	static PropTypes = {
+	static propTypes = {
 		value: PropTypes.string,
 		placeholder: PropTypes.string,
 		onChange: PropTypes.func,

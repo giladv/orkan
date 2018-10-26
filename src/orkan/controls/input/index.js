@@ -11,7 +11,7 @@ import './style';
 
 @autobind
 export default class Input extends Component {
-	static PropTypes = {
+	static propTypes = {
 		value: PropTypes.string,
 		type: PropTypes.oneOf(['text', 'number', 'password']),
 		placeholder: PropTypes.string,

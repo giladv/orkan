@@ -10,7 +10,7 @@ import './style';
 @autobind
 export default class Textarea extends Component {
 
-	static PropTypes = {
+	static propTypes = {
 		value: PropTypes.string,
 		rows: PropTypes.number,
 		placeholder: PropTypes.string,

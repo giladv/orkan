@@ -37,6 +37,8 @@ export default class OrkanProvider extends Component{
 		isBusy: false,
 	};
 
+	@observable.ref orkanStore;
+
 	getChildContext() {
 		const {store} = this.props;
 		return {[REACT_CONTEXT_NAME]: {
@@ -52,7 +54,8 @@ export default class OrkanProvider extends Component{
 	}
 
 	componentWillMount(){
-		this.activate();
+
+		// this.activate();
 		keyboard.bind('hold:1000:' + ACTIVATION_EVENT_KEY, this.activate);
 
 		document.addEventListener('keydown', this.handleKeyDown);
@@ -79,6 +82,8 @@ export default class OrkanProvider extends Component{
 			this.obState.isBusy = false;
 
 		}, 500)
+
+		window.a = this.orkanStore;
 	}
 
 	@autobind

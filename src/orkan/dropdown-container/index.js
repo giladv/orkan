@@ -139,7 +139,7 @@ export default class DropdownContainer extends Component {
 				{isOpen &&
 					<ul className="DropdownContainer-options" onMouseDown={e => e.preventDefault()}>
 						{options.map((option, i) => (
-							<li ref={'option' + i} className={classNames({'DropdownContainer-options-selected': selectedOptionIndex === i})} onMouseDown={() => this.selectOption(option)}>{this.renderOption(option)}</li>
+							<li key={i} ref={'option' + i} className={classNames({'DropdownContainer-options-selected': selectedOptionIndex === i})} onMouseDown={() => this.selectOption(option)}>{this.renderOption(option)}</li>
 						))}
 						{!options.length &&
 							<li className="DropdownContainer-options-empty">No options available</li>

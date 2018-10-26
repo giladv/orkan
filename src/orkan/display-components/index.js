@@ -33,10 +33,14 @@ export class Value extends Component{
 	}
 
 	render(){
-		const {className, value, children, orkan} = this.props;
+		const {className, value, children, orkan, isPathLoading} = this.props;
 		const newClassName = classNames('Value', className, {
 			'Orkan-edit-mode': orkan.isEditMode()
 		});
+
+		if(isPathLoading.value){
+			return '...';
+		}
 
 		return <span className={newClassName} onClick={this.handleClick}>{value || children}</span>;
 	}

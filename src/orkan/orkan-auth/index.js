@@ -33,7 +33,6 @@ export default class OrkanAuth extends Component{
 	@autobind
 	handleSuccess(user){
 		this.obState.isBusy = true;
-		console.log(user)
 	}
 
 	render(){

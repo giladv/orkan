@@ -63,8 +63,8 @@ export default class Thumbnail extends Component {
 				<div className="Thumbnail-actions-container">
 					{cleanButtons.length > 0 &&
 						<div className="Thumbnail-actions">
-							{cleanButtons.map(button => (
-								<OrkanActionButton icon={button.icon} onClick={button.onClick}/>
+							{cleanButtons.map((button, i) => (
+								<OrkanActionButton key={i} icon={button.icon} onClick={button.onClick}/>
 							))}
 						</div>
 					}

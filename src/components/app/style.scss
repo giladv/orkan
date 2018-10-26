@@ -1,15 +1,48 @@
-
+$darkColor: #121e20;
 .App{
 	height: 100%;
-	padding: 20px 20px;
+	//padding: 20px 20px;
 	font-family: "Roboto";
+	*{
+		box-sizing: border-box;
+	}
+	a{
+		text-decoration: none;
+	}
+	h2, h3{
+		margin: 0;
+	}
+	header{
+		position: fixed;
+		height: 55px;
+		z-index: 100;
+		width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-bottom: 1px solid #c3d7da;
+		padding: 0 20px;
+		background: #ffffff;
+		> div{
+			display: flex;
+			align-items: center;
+			width: 1000px;
+			a{
+				color: $darkColor;
+				font-size: 17px;
+				font-weight: 100;
+				span{
+					font-weight: 400;
+				}
+			}
+		}
+	}
 	.hero{
-		height: 300px;
+		height: 500px;
 		display: flex;
 		justify-content: center;
 		flex-direction: column;
 		align-items: center;
-		//background: #00d0ff;
 		position: relative;
 		.Img{
 			position: absolute !important;
@@ -20,50 +53,156 @@
 			z-index: 1;
 		}
 		h2{
-			font-size: 3rem;
-			font-weight: 400;
+			font-size: 35px;
+			font-weight: 300;
 			margin: 0;
 			z-index: 2;
+			background: #ffffff;
+			padding: 10px 20px;
 		}
 		a{
 			margin-top: 40px;
-			font-size: 2rem;
-			color: black;
-			background: white;
-			padding: 15px 20px;
-			font-weight: 300;
+			font-size: 20px;
+			color: white;
+			background: $darkColor;
+			padding: 15px 25px;
+			font-weight: 100;
 			z-index: 2;
+			border-radius: 5px;
+			transition: all .2s ease-out;
+			//box-shadow: 0 0 0 0 rgba(18, 30, 32, 0.2);
+			&:hover{
+				transform: scale(1.02);
+				box-shadow: 0 0 0 3px rgba(18, 30, 32, 0.2);
+			}
+		}
+	}
 
+
+	.portfolio{
+		overflow: hidden;
+		display: flex;
+		flex-direction: column;
+		background: #121e20;
+		align-items: center;
+		padding: 60px 0;
+		> h2{
+			font-size: 35px;
+			text-align: center;
+			font-weight: 300;
+			color: #ffffff;
+		}
+		.Collection{
+			display: flex;
+			margin-top: 40px;
+			width: 900px;
+			> div{
+				width: 300px;
+				height: 300px;
+				position: relative;
+				overflow: hidden;
+				&:hover{
+					.info{
+						opacity: 1;
+						transform: translate3d(0,0,0);
+					}
+					.Img{
+						transform: scale(1.05);
+					}
+				}
+				.Img{
+					transition: transform .2s ease-out;
+					position: absolute;
+					left: 0;
+					top: 0;
+					right: 0;
+					bottom: 0;
+				}
+				.info{
+					z-index: 1;
+					opacity: 0;
+					transition: all .2s ease-out;
+					transform: translate3d(0,100%,0);
+					background: rgba(18, 30, 32, 0.58);
+					position: absolute;
+					bottom: 0;
+					left: 0;
+					right: 0;
+					padding: 15px;
+					color: rgba(255, 255, 255, 0.53);
+					font-weight: 100;
+					h3{
+						font-size: 20px;
+						font-weight: 300;
+						color: #ffffff;
+						margin-bottom: 3px;
+					}
+				}
+			}
 		}
 	}
-	> h2{
-		font-size: 2.4rem;
-		text-align: center;
-		font-weight: 400;
-		margin-top: 60px;
-	}
-	.Collection{
-		margin-top: 20px;
-		> div{
-			background: #eaeff3;
-			padding: 20px 30px;
-			margin-bottom: 20px;
-			img{
-				width: 200px;
-			}
-			> span{
-				font-size: 1.5rem;
-			}
-			h3{
-				font-size: 2.3rem;
-				font-weight: 400;
-				margin: 10px 0 0 0;
-			}
-			p{
-				font-size: 2rem;
-				font-weight: 300;
-				white-space: pre;
+
+
+
+	.team{
+		overflow: hidden;
+		display: flex;
+		flex-direction: column;
+		background: #ffffff;
+		align-items: center;
+		padding: 60px 0;
+		> h2{
+			font-size: 35px;
+			text-align: center;
+			font-weight: 300;
+			color: #000000;
+		}
+		.Collection{
+			display: flex;
+			justify-content: center;
+			margin-top: 40px;
+			width: 900px;
+			flex-wrap: wrap;
+			> div{
+				margin: 40px;
+				display: flex;
+				align-items: center;
+				.image{
+					background-repeat: no-repeat;
+					background-size: cover;
+					background-position: center center;
+					width: 100px;
+					height: 100px;
+					border-radius: 50%;
+				}
+				.info{
+					z-index: 1;
+					h3{
+						font-size: 20px;
+						font-weight: 300;
+						color: #ffffff;
+						padding: 5px 15px;
+						background: $darkColor;
+						margin-left: -10px;
+					}
+					div{
+						padding: 0 0 0 10px;
+						font-size: 15px;
+						margin-top: 5px;
+					}
+				}
+				//> div{
+				//	background: rgba(18, 30, 32, 0.58);
+				//	color: rgba(255, 255, 255, 0.53);
+				//	font-weight: 200;
+				//}
 			}
 		}
+	}
+
+	footer{
+		border-top: 1px solid #c3d7da;
+		background: #f1fbfc;
+		height: 100px;
 	}
 }

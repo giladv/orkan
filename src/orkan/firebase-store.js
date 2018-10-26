@@ -6,7 +6,8 @@ import {ObservableNestedMap} from './form/observable-nested-map';
 export default class FirebaseStore{
 	database;
 	rootPath;
-	@observable data = [];
+
+	pathsStatus = observable.map({});
 
 	map = new ObservableNestedMap({});
 
@@ -45,8 +46,10 @@ export default class FirebaseStore{
 			}else{
 				this.map.set(dotPath, null);
 			}
+			this.setPathIsLoading(path, false);
 		};
 
+		this.setPathIsLoading(path, true);
 		this.database.ref(this.toAbsolutePath(path)).on('value', valueHandler);
 
 		return () => {
@@ -58,11 +61,13 @@ export default class FirebaseStore{
 
 
 	async load(path){
+		this.setPathIsLoading(path, true);
 		const snapshot = await this.database.ref(this.toAbsolutePath(path)).once('value');
 		const snapshotVal = snapshot.exportVal();
 		const dotPath = path.split('/').join('.');
 
 		this.map.set(dotPath, snapshotVal);
+		this.setPathIsLoading(path, false);
 		return snapshotVal;
 	}
 
@@ -74,5 +79,22 @@ export default class FirebaseStore{
 	clearCache(path){
 		const dotPath = path.split('/').join('.');
 		this.map.set(dotPath, null);
+	}
+
+	setPathStatus(path, status){
+		const currentStatus = this.pathsStatus.get(path) || {};
+		this.pathsStatus.set(path, {...currentStatus, ...status});
+	}
+
+	setPathIsLoading(path, state){
+		const currentStatus = this.pathsStatus.get(path);
+		if(!currentStatus || !state){
+			this.setPathStatus(path, {isLoading: state});
+		}
+	}
+
+	isPathLoading(path){
+		const currentStatus = this.pathsStatus.get(path);
+		return currentStatus && currentStatus.isLoading;
 	}
 }

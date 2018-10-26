@@ -1,12 +1,13 @@
 @import './icons.css';
 
 .OrkanIcon{
-	display: inline-block;
-	vertical-align: middle;
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
 
-	&:before{ // this fixes weird vertical offset from icomoon
-		vertical-align: middle;
-	}
+	//&:before{ // this fixes weird vertical offset from icomoon
+	//	vertical-align: middle;
+	//}
 
 	&.OrkanIcon-small{
 		font-size: 1rem;

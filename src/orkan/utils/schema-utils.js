@@ -58,7 +58,7 @@ export const getSchemaCollectionPaths = (schema) => {
 	return collectionPaths;
 };
 
-export const schemaWalk = (schema, cb, path = []) => {
+export const schemaWalk = (schema, cb, path = ['.']) => {
 	forEach(schema, (value, key) => {
 		cb(value, [...path, key]);
 		if(isObject(value)){

@@ -1,11 +1,13 @@
 import {observable} from 'mobx';
 import autobind from 'autobind-decorator';
 import isObject from 'lodash/isObject';
+import invariant from 'invariant';
 
 import FormStore from './form/form-store';
 import {SCHEMA_KEY_NAME, SCHEMA_SETTINGS_KEY_NAME, USER_REQUESTS_KEY_NAME, USERS_KEY_NAME} from './constants';
 import {getSchemaPrimitiveKeysByPath, schemaGet, toSchemaPath} from './utils/schema-utils';
 
+const validPathInvariant = path => invariant(path.startsWith('.'), 'Invalid path structure. paths must start with `.`');
 
 const toAbsolutePath = path => {
 	let pathParts = path.split('/');
@@ -81,9 +83,9 @@ export default class OrkanStore{
 		});
 	}
 
-	getValue(path){
+	getValue(nonAbsolutePath){
 		// to enable components use relative paths (e.g something vs ./something)
-		path = toAbsolutePath(path);
+		const path = toAbsolutePath(nonAbsolutePath);
 
 		if(this.isLoadingActivePath){
 			return this.dataStore.getValue(path);
@@ -117,9 +119,9 @@ export default class OrkanStore{
 
 	}
 
-	async setActivePath(path){
+	async setActivePath(nonAbsolutePath){
 		// to enable components use relative paths (e.g something vs ./something)
-		path = toAbsolutePath(path);
+		const path = toAbsolutePath(nonAbsolutePath);
 
 		this.activePath = path;
 		this.dataFormStore.reset();
@@ -163,22 +165,26 @@ export default class OrkanStore{
 
 
 	getSchemaByPath(path){
+		validPathInvariant(path);
 		const schema = this.getSchema();
 		return schemaGet(schema, path);
 	}
 
 	isSchemaPathPrimitive(path){
+		validPathInvariant(path);
 		const pathSchema = this.getSchemaByPath(path);
 		return !isObject(pathSchema);
 
 	}
 
 	getPrimitiveKeysByPath(path){
+		validPathInvariant(path);
 		const schema = this.getSchema();
 		return getSchemaPrimitiveKeysByPath(schema, path);
 	}
 
 	geNonPrimitiveKeysByPath(path){
+		validPathInvariant(path);
 		const pathSchema = this.getSchemaByPath(path);
 
 		if(pathSchema._){
@@ -201,6 +207,7 @@ export default class OrkanStore{
 	}
 
 	getSettingsByPath(path){
+		validPathInvariant(path);
 		const schema = this.getSchema();
 		const schemaSettings = this.getSchemaSettings();
 
@@ -223,6 +230,7 @@ export default class OrkanStore{
 
 
 	setSettingsPath(path){
+		validPathInvariant(path);
 		const schema = this.getSchema();
 		const schemaSettings = this.getSchemaSettings();
 

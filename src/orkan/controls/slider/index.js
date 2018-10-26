@@ -11,7 +11,7 @@ import './style';
 
 @autobind
 export default class Slider extends Component {
-	static PropTypes = {
+	static propTypes = {
 		...OriginalSlider.propTypes
 	};
 

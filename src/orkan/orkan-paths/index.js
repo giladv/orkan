@@ -9,8 +9,10 @@ import OrkanHeader from '../orkan-header';
 import Input from '../controls/input';
 import orkanInject from '../orkan-inject';
 import OrkanListItem from '../orkan-list-item';
+import {typeOrFalse} from '../utils/prop-types-utils';
 
 import './style.scss';
+
 
 @orkanInject(({path}) => {
 	return path?{value: path}:{};
@@ -21,11 +23,11 @@ export default class OrkanPaths extends Component{
 
 	static propTypes = {
 		keys: PropTypes.arrayOf(PropTypes.string).isRequired,
-		onCreate: PropTypes.func,
-		onSelect: PropTypes.func,
-		onRemove: PropTypes.func,
+		onCreate: typeOrFalse(PropTypes.func),
+		onSelect: typeOrFalse(PropTypes.func),
+		onRemove: typeOrFalse(PropTypes.func),
 		showHeader: PropTypes.bool,
-		path: PropTypes.string
+		path: typeOrFalse(PropTypes.string)
 	};
 
 	static defaultProps = {
@@ -55,12 +57,12 @@ export default class OrkanPaths extends Component{
 		const {newKey} = this.obState;
 
 		if(!keys.length){
-			return null;
+			// return null;
 		}
 
 		return (
 			<div className='OrkanPaths'>
-				{showHeader &&
+				{keys.length > 0 && showHeader &&
 					<OrkanHeader title='Other Paths'/>
 				}
 				{onCreate &&

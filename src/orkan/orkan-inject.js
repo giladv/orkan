@@ -22,7 +22,7 @@ export default function orkanInject(mapPathsToProps = () => ({}), config) {
 			componentWillMount(){
 				const {store} = this.getContext();
 
-				const paths = values(mapPathsToProps(this.props));
+				const paths = values(mapPathsToProps(this.props)).filter(it => !!it);
 				this.disposables = paths.map(path => store.listen(path));
 			}
 
@@ -42,10 +42,18 @@ export default function orkanInject(mapPathsToProps = () => ({}), config) {
 				const {injectedProps = []} = this.props;
 				let mappedPaths;
 				let mappedValues = {};
+				let mappedStatuses = {};
 				try {
 					const {getValue} = this.getContext();
 					mappedPaths = mapPathsToProps(this.props);
-					mappedValues = mapValues(mappedPaths, path => options.liveEditedData?getValue(path):store.getValue(path));
+					mappedValues = mapValues(mappedPaths, path => {
+						if(!path){
+							return;
+						}
+
+						return options.liveEditedData?getValue(path):store.getValue(path)
+					});
+					mappedStatuses = mapValues(mappedPaths, path => store.isPathLoading(path))
 				} catch (err) {
 					//React 14+ reports the error in "inject" with a wrong stack trace. It will write something about
 					//failing to reconcile a different component that was already unmounted.
@@ -59,6 +67,7 @@ export default function orkanInject(mapPathsToProps = () => ({}), config) {
 					<DecoratedComponent
 						{...this.props}
 						{...mappedValues}
+						isPathLoading={mappedStatuses}
 						injectedProps={[...injectedProps, ...Object.keys(mappedPaths)]}
 						orkan={this.getContext()}/>
 				);

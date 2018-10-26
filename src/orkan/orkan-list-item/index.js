@@ -6,16 +6,17 @@ import autobind from 'autobind-decorator';
 import classNames from 'classnames';
 
 import OrkanActionButton from '../orkan-action-button';
+import {typeOrFalse} from '../utils/prop-types-utils';
 
 import './style.scss';
 
 @observer
 export default class OrkanListItem extends Component{
 	static propTypes = {
-		buttons: PropTypes.arrayOf(PropTypes.shape({
+		buttons: PropTypes.arrayOf(typeOrFalse(PropTypes.shape({
 			icon: PropTypes.string,
 			onClick: PropTypes.func
-		}))
+		})))
 	};
 
 	static defaultProps = {
@@ -35,8 +36,8 @@ export default class OrkanListItem extends Component{
 		return (
 			<div {...otherProps} className={newClassName}>
 				<div className="OrkanListItem-label">{children}</div>
-				{buttons.filter(it => !!it).map(button => (
-					<OrkanActionButton icon={button.icon} onClick={e => this.handleButtonClick(e, button)} />
+				{buttons.filter(it => !!it).map((button, i) => (
+					<OrkanActionButton key={i} icon={button.icon} onClick={e => this.handleButtonClick(e, button)} />
 				))}
 			</div>
 		);

@@ -15,35 +15,49 @@ export default class App extends Component{
 		// return null;
 		return (
 			<div className="App">
-				{children}
-
-				{/*<WithValue path='home/hero' render={({background, title, cta}) =>*/}
-					{/*<div className="hero">*/}
-						{/*<Img mode='cover' src={background}/>*/}
-						{/*<h2>{title}</h2>*/}
-						{/*<a href={cta.link}>{cta.label}</a>*/}
-					{/*</div>*/}
-				{/*}/>*/}
-
+				<header>
+					<div>
+						<a href="#"><span>Holistic</span>Art</a>
+					</div>
+				</header>
 				<div className="hero">
 					<WithValue path='home/hero/background' render={value => <Img mode='cover' src={value}/>}/>
 
-					<h2><Value path='home/hero/title'/></h2>
+						<h2><Value path='home/hero/title'/></h2>
 
 					<WithValue path='home/hero/cta' render={cta => (
 						<a href={cta.link}>{cta.label}</a>
 					)}/>
 				</div>
-				<h2>Blog</h2>
-				<Collection path='blog/posts' limit={10} renderItem={(post, i) =>
-					<div key={i}>
-						<img src={post.image} alt=""/>
-						<h3>{post.title}</h3>
-						<span>{post.date}</span>
-						<p>{post.body}</p>
-					</div>
-				}/>
+				<div className='portfolio'>
+					<h2>Our Work</h2>
 
+					<Collection path='home/work' limit={10} renderItem={(item, i) =>
+						<div key={i}>
+							<Img mode='cover' src={item.image}/>
+							<div className='info'>
+								<h3>{item.title}</h3>
+								{item.body}
+							</div>
+						</div>
+					}/>
+				</div>
+
+				<div className="team">
+					<h2>Our Team</h2>
+
+					<Collection path='home/team' limit={10} renderItem={(item, i) =>
+						<div key={i}>
+							<Img mode='cover' className='image' src={item.image}/>
+							<div className='info'>
+								<h3>{item.name}</h3>
+								<div>{item.position}</div>
+							</div>
+						</div>
+					}/>
+				</div>
+				<footer>
+				</footer>
 			</div>
 		);
 	}
