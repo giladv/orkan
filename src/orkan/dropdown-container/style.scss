@@ -56,7 +56,7 @@
 
 	@mixin size($config){
 		.DropdownContainer-options{
-			height: map-get($config, controlHeight) * map-get($config, maxDropdownItems);
+			max-height: map-get($config, controlHeight) * map-get($config, maxDropdownItems);
 			li{
 				height: map-get($config, controlHeight);
 			}

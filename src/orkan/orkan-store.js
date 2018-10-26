@@ -187,7 +187,7 @@ export default class OrkanStore{
 		validPathInvariant(path);
 		const pathSchema = this.getSchemaByPath(path, includeNative);
 
-		if(pathSchema._){
+		if(this.isPathCollection(path)){
 			return Object.keys(this.dataStore.getValue(path) || {})
 		}else{
 			return Object.keys(pathSchema)
@@ -231,33 +231,44 @@ export default class OrkanStore{
 
 	setSettingsPath(path){
 		validPathInvariant(path);
+
 		const schema = this.getSchema();
 		const schemaSettings = this.getSchemaSettings();
 
 		const schemaPath = toSchemaPath(schema, path);
 		this.settingsPath = schemaPath;
 
-		const defaultSettings = {
-			uiType: 'text'
-		};
+		let defaultSettings;
 
-		this.settingsFormStore.reset(schemaGet(schemaSettings, schemaPath) || defaultSettings);
-	}
-
-	// todo: how do i create a premitive collection item?
-	async createCollectionItem(key){
-		if(key){
-			this.dataStore.setValue(this.activePath + '/' + key, {});
-			this.setActivePath(this.activePath + '/' + key);
+		if(this.isPathCollection(path)){
+			defaultSettings = {
+				collectionMainLabel: ''
+			};
 		}else{
-			const newKey = this.dataStore.push(this.activePath).key;
-			this.setActivePath(this.activePath + '/' + newKey);
+			defaultSettings = {
+				uiType: 'text'
+			};
 		}
+
+		this.settingsFormStore.reset({...defaultSettings, ...schemaGet(schemaSettings, schemaPath)});
+	}
+
+	isPathCollection(path){
+		return !!this.getSchemaByPath(path, true)._;
+	}
+
+	// todo: how do i create a primitive collection item?
+	async createCollectionItem(path, key){
+		validPathInvariant(path);
+
+		const finalKey = key || this.dataStore.push(this.activePath).key;
+		this.setActivePath(path + '/' + finalKey);
 	}
 
 
-	removeCollectionItem(key){
-		return this.dataStore.remove(this.activePath + '/' + key);
+	removeCollectionItem(path){
+		validPathInvariant(path);
+		return this.dataStore.remove(path);
 	}
 
 	getSchema(includeNative = false){

@@ -28,7 +28,7 @@ export default class DropdownContainer extends Component {
 	};
 
 	@observable state = {
-		selectedOptionIndex: 0
+		selectedOptionIndex: -1
 	};
 
 	componentWillMount(){
@@ -46,7 +46,8 @@ export default class DropdownContainer extends Component {
 	}
 
 	scrollIntoView(){
-		this.refs['option'+this.state.selectedOptionIndex].scrollIntoView(false);
+		const elem = this.refs['option'+this.state.selectedOptionIndex];
+		elem && elem.scrollIntoView(false);
 	}
 	bindKeyboardEvents(){
 		keyboard.bind('up', this.handleUp);

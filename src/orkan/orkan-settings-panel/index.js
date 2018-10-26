@@ -23,6 +23,7 @@ export default class OrkanSettingsPanel extends Component{
 	static propTypes = {
 		formStore: PropTypes.instanceOf(FormStore).isRequired,
 		editPath: PropTypes.string.isRequired,
+		isCollectionPath: PropTypes.bool,
 		onSubmit: PropTypes.func,
 		onClose: PropTypes.func,
 		getPrimitives: PropTypes.func,
@@ -50,79 +51,126 @@ export default class OrkanSettingsPanel extends Component{
 		}
 	}
 
-	render(){
-		const {className, onSubmit, formStore, onClose, editPath, getPrimitives, getCollectionPaths} = this.props;
+	renderCollectionSettings(){
+		const {formStore, editPath, getPrimitives} = this.props;
 		const {isBusy} = this.obState;
 
-		const newClassName = classNames('OrkanSettingsPanel', className);
+
+
+		let collectionMainLabelOption = getPrimitives(editPath).map(primitive => ({
+			label: primitive,
+			value: primitive
+		}));
+
+		collectionMainLabelOption.unshift({label: '$key', value: ''});
+
+		return (
+			<Form store={formStore} onSubmit={this.handleSubmit}>
+				<span/>
+
+				<FormField compact name='collectionMainLabel' label='Main label key'>
+					<SelectControl options={collectionMainLabelOption}/>
+				</FormField>
+
+				<FormField compact name='collectionImage' label='Image key'>
+					<SelectControl options={collectionMainLabelOption}/>
+				</FormField>
+
+				<div className="OrkanSettingsPanel-actions">
+					<SubmitButton primary disabled={!formStore.isDirty} isBusy={isBusy}>Save Changes</SubmitButton>
+				</div>
+			</Form>
+		);
+	}
+
+
+	renderFieldSettings(){
+		const {formStore, getPrimitives, getCollectionPaths} = this.props;
+		const {isBusy} = this.obState;
+
 
 		const collectionPathsOptions = getCollectionPaths().map(path => ({label: path, value: path}));
-		let primitivesOptions = [];
+		let dataSourcePrimitivesOptions = [];
 
 		if(formStore.get('dataSource') === 'dynamic'){
-			primitivesOptions = getPrimitives(formStore.get('dataSourcePath')).map(primitive => ({
+			dataSourcePrimitivesOptions = getPrimitives(formStore.get('dataSourcePath')).map(primitive => ({
 				label: primitive,
 				value: primitive
 			}));
 
-			primitivesOptions.unshift({label: '$key', value: '$key'});
+			dataSourcePrimitivesOptions.unshift({label: '$key', value: '$key'});
 		}
+
+		return (
+			<Form store={formStore} onSubmit={this.handleSubmit}>
+				<span/>
+
+				<FormField compact name='uiType' label='UI type'>
+					<SelectControl options={typeOptions}/>
+				</FormField>
+
+				{formStore.get('uiType') === 'textarea' &&
+				<FormField compact name='uiSize' label='Size'>
+					<SliderControl min={3} max={13} />
+				</FormField>
+				}
+
+				{formStore.get('uiType') === 'slider' &&
+				<FormField compact name='fromValue' label='From value'>
+					<InputControl type='number' defaultValue={1} />
+				</FormField>
+				}
+
+				{formStore.get('uiType') === 'slider' &&
+				<FormField compact name='toValue' label='To value'>
+					<InputControl type='number' defaultValue={10}  />
+				</FormField>
+				}
+
+
+				{isOptionsUiSelected &&
+				<FormField compact name='dataSource' label='Data Source'>
+					<SelectControl options={dataSourceOptions}/>
+				</FormField>
+				}
+
+				{isOptionsUiSelected && formStore.get('dataSource') === 'dynamic' &&
+				<FormField compact name='dataSourcePath' label='Data Source Path'>
+					<SelectControl options={collectionPathsOptions}/>
+				</FormField>
+				}
+
+				{isOptionsUiSelected && formStore.get('dataSource') === 'dynamic' &&
+				<FormField compact name='dataSourceLabel' label='Data Source Label'>
+					<SelectControl options={dataSourcePrimitivesOptions}/>
+				</FormField>
+				}
+
+				{isOptionsUiSelected && formStore.get('dataSource') === 'dynamic' &&
+				<FormField compact name='dataSourceValue' label='Data Source Value'>
+					<SelectControl options={dataSourcePrimitivesOptions}/>
+				</FormField>
+				}
+
+				<div className="OrkanSettingsPanel-actions">
+					<SubmitButton primary disabled={!formStore.isDirty} isBusy={isBusy}>Save Changes</SubmitButton>
+				</div>
+			</Form>
+		);
+	}
+
+	render(){
+		const {className, onClose, editPath, isCollectionPath} = this.props;
+
+		const newClassName = classNames('OrkanSettingsPanel', className);
+
 		return (
 			<div className={newClassName}>
 				<OrkanHeader title={['Settings', <span key={1}>{editPath}</span>]} onClose={onClose}/>
-				<Form store={formStore} onSubmit={this.handleSubmit}>
-					<span/>
-					<FormField compact name='uiType' label='UI Type'>
-						<SelectControl options={typeOptions}/>
-					</FormField>
-
-					{formStore.get('uiType') === 'textarea' &&
-						<FormField compact name='uiSize' label='Size'>
-							<SliderControl min={3} max={13} />
-						</FormField>
-					}
-
-					{formStore.get('uiType') === 'slider' &&
-						<FormField compact name='fromValue' label='From value'>
-							<InputControl type='number' defaultValue={1} />
-						</FormField>
-					}
-
-					{formStore.get('uiType') === 'slider' &&
-						<FormField compact name='toValue' label='To value'>
-							<InputControl type='number' defaultValue={10}  />
-						</FormField>
-					}
-
-
-					{['select', 'radio'].includes(formStore.get('uiType')) &&
-						<FormField compact name='dataSource' label='Data Source'>
-							<SelectControl options={dataSourceOptions}/>
-						</FormField>
-					}
-
-					{formStore.get('dataSource') === 'dynamic' &&
-						<FormField compact name='dataSourcePath' label='Data Source Path'>
-							<SelectControl options={collectionPathsOptions}/>
-						</FormField>
-					}
-
-					{formStore.get('dataSource') === 'dynamic' &&
-						<FormField compact name='dataSourceLabel' label='Data Source Label'>
-							<SelectControl options={primitivesOptions}/>
-						</FormField>
-					}
-
-					{formStore.get('dataSource') === 'dynamic' &&
-						<FormField compact name='dataSourceValue' label='Data Source Value'>
-							<SelectControl options={primitivesOptions}/>
-						</FormField>
-					}
-
-					<div className="OrkanSettingsPanel-actions">
-						<SubmitButton primary disabled={!formStore.isDirty} isBusy={isBusy}>Save Changes</SubmitButton>
-					</div>
-				</Form>
+				{isCollectionPath
+					?this.renderCollectionSettings()
+					:this.renderFieldSettings()
+				}
 			</div>
 		);
 	}

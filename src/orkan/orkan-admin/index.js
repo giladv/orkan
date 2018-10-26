@@ -124,7 +124,7 @@ export default class OrkanProvider extends Component{
 			'Orkan-disabled': isResizing
 		});
 
-		const isActivePathCollection = store.activePath && !!store.getSchemaByPath(store.activePath, true)._;
+		const isActivePathCollection = store.activePath && store.isPathCollection(store.activePath);
 
 		return (
 			<div className={newClassName}>
@@ -159,13 +159,14 @@ export default class OrkanProvider extends Component{
 
 							{!store.isLoadingActivePath &&
 								<OrkanPaths
-									isCollection={isActivePathCollection}
-									path={isActivePathCollection && store.activePath}
+									path={store.activePath}
+									store={store}
+									showHeader={!isActivePathCollection && store.getPrimitiveKeysByPath(store.activePath).length > 0}
+
 									keys={store.geNonPrimitiveKeysByPath(store.activePath, true)}
-									onCreate={isActivePathCollection && (key => store.createCollectionItem(key))}
+									onSettings={() => store.setSettingsPath(store.activePath)}
 									onRemove={isActivePathCollection && this.handleRemoveCollectionItem}
-									onSelect={key => store.setActivePath(store.activePath + '/' + key)}
-									showHeader={!isActivePathCollection && store.getPrimitiveKeysByPath(store.activePath).length > 0} />
+									onSelect={key => store.setActivePath(store.activePath + '/' + key)} />
 							}
 							{store.activePath === './' + SCHEMA_KEY_NAME &&
 								<OrkanSchemaEditor value={store.getSchema()} onChange={value => store.dataStore.setValue(SCHEMA_KEY_NAME, value)}/>
@@ -184,6 +185,7 @@ export default class OrkanProvider extends Component{
 
 				{store.settingsPath &&
 					<OrkanSettingsPanel
+						isCollectionPath={isActivePathCollection}
 						getCollectionPaths={() => getSchemaCollectionPaths(schema)}
 						getPrimitives={path => store.getPrimitiveKeysByPath(path + '/_')}
 						onClose={() => store.clearSettingsPath()}
