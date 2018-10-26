@@ -69,6 +69,10 @@ export default class OrkanProvider extends Component{
 	async activate(){
 		const {store, auth} = this.props;
 
+		if(this.obState.isActive){
+			return;
+		}
+
 		this.obState.isBusy = true;
 		try{
 			OrkanAdmin = (await import(/* webpackChunkName: "orkan-admin" */'../orkan-admin')).default;

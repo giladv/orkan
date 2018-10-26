@@ -152,7 +152,7 @@
 			}
 		}
 		> .OrkanSchemaEditor-field-label{
-			height: 25px;
+			height: 27px;
 			display: flex;
 			align-items: center;
 			//justify-content: space-between;
@@ -169,7 +169,7 @@
 				flex: 1;
 				color: #71778A;
 				animation: newItemAnimation;
-				animation-duration: 1.3s;
+				animation-duration: 2.3s;
 			}
 
 			> .OrkanSchemaEditor-field-actions{
@@ -190,6 +190,7 @@
 			}
 		}
 		> .OrkanSchemaEditor-field-children{
+			overflow: hidden;
 			padding-left: 15px;
 			border-left: 1px dotted #d0d2d6;
 		}

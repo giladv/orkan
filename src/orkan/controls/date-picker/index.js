@@ -9,7 +9,7 @@ import{observable} from 'mobx';
 import {default as ThirdPartyDatePicker} from '../../date-picker';
 import {formInput} from '../../form';
 import DropdownContainer from '../../dropdown-container';
-import {InputControl} from '../input';
+import Input from '../input';
 
 import './style';
 
@@ -37,11 +37,13 @@ export default class DatePicker extends Component {
 	}
 
 	formatDate(value){
+		if(isNaN(Date.parse(value))){
+			return '';
+		}
+
 		try{
 			return dateFormat(new Date(value), 'dd/mm/yyyy');
-		}catch(err){
-			return value;
-		}
+		}catch(err){}
 	}
 
 	render(){
@@ -61,7 +63,7 @@ export default class DatePicker extends Component {
 
 		return (
 			<DropdownContainer className={newClassName} renderOption={() => tooltip} options={[{label: 1, value: 1}]} isOpen={isOpen} onClose={() => this.obState.isOpen = false}>
-				<InputControl {...otherProps} className={newClassName} preIcon="calendar" value={this.formatDate(value)} onFocus={() => this.obState.isOpen = true}/>
+				<Input {...otherProps} className={newClassName} preIcon="calendar" value={this.formatDate(value)} onFocus={() => this.obState.isOpen = true}/>
 			</DropdownContainer>
 		);
 	}

@@ -110,7 +110,7 @@ export default class OrkanProvider extends Component{
 		if(store.activePath){
 			headerParts = store.activePath.split('/');
 
-			if(store.isSchemaPathPrimitive(store.activePath)){
+			if(store.isSchemaPathPrimitive(store.activePath, true)){
 				headerParts = headerParts.slice(0, -1);
 			}
 
@@ -124,7 +124,7 @@ export default class OrkanProvider extends Component{
 			'Orkan-disabled': isResizing
 		});
 
-		const isActivePathCollection = store.activePath && !!store.getSchemaByPath(store.activePath)._;
+		const isActivePathCollection = store.activePath && !!store.getSchemaByPath(store.activePath, true)._;
 
 		return (
 			<div className={newClassName}>
@@ -152,7 +152,7 @@ export default class OrkanProvider extends Component{
 								onSubmit={() => store.submitData()}
 								onCancel={() => store.clearActivePath()}
 								editPath={store.activePath}
-								schema={store.getSchemaByPath(store.activePath)}
+								schema={store.getSchemaByPath(store.activePath, true)}
 								onSettings={path => store.setSettingsPath(path)}
 								formStore={store.dataFormStore} />
 							}
@@ -161,14 +161,14 @@ export default class OrkanProvider extends Component{
 								<OrkanPaths
 									isCollection={isActivePathCollection}
 									path={isActivePathCollection && store.activePath}
-									keys={store.geNonPrimitiveKeysByPath(store.activePath)}
+									keys={store.geNonPrimitiveKeysByPath(store.activePath, true)}
 									onCreate={isActivePathCollection && (key => store.createCollectionItem(key))}
 									onRemove={isActivePathCollection && this.handleRemoveCollectionItem}
 									onSelect={key => store.setActivePath(store.activePath + '/' + key)}
 									showHeader={!isActivePathCollection && store.getPrimitiveKeysByPath(store.activePath).length > 0} />
 							}
 							{store.activePath === './' + SCHEMA_KEY_NAME &&
-								<OrkanSchemaEditor value={store.getSchema(false)} onChange={value => store.dataStore.setValue(SCHEMA_KEY_NAME, value)}/>
+								<OrkanSchemaEditor value={store.getSchema()} onChange={value => store.dataStore.setValue(SCHEMA_KEY_NAME, value)}/>
 							}
 						</div>
 						<div className="Orkan-ui-footer">
@@ -216,7 +216,7 @@ export class OrkanSchemaEditor extends Component{
 	@observable obState = {
 		createPath: null,
 		createValue: null,
-		openPaths: []
+		openPaths: ['']
 	};
 
 	@autobind
@@ -288,10 +288,13 @@ export class OrkanSchemaEditor extends Component{
 			'OrkanSchemaEditor-field-open': isPathOpen
 		});
 
+		const isFieldPrimitive = !isObject(field);
+
 		return (
 			<div key={key} className={className}>
 				<div className='OrkanSchemaEditor-field-label'>
-					<OrkanIcon type='arr' onClick={() => this.togglePath(currentPath)}/>
+
+					{!isFieldPrimitive && <OrkanIcon type='arr' onClick={() => this.togglePath(currentPath)}/>}
 
 					<div className="OrkanSchemaEditor-field-name" onClick={() => this.togglePath(currentPath)}>
 						{key || 'Root'}
@@ -307,11 +310,11 @@ export class OrkanSchemaEditor extends Component{
 						}}/>
 					</div>
 				</div>
-				<div className='OrkanSchemaEditor-field-children'>
+				<div className='OrkanSchemaEditor-field-children' style={{height: isPathOpen?'auto':0}}>
 					{createPath === currentPath &&
 						<div><Input autoFocus value={createValue} onChange={value => this.obState.createValue = value} onKeyPress={this.handleKeyPress} onBlur={this.handleBlur}/></div>
 					}
-					{isPathOpen && isObject(field) && map(field, (value, key) => this.renderField(key, value, currentPath))}
+					{!isFieldPrimitive && map(field, (value, key) => this.renderField(key, value, currentPath))}
 				</div>
 			</div>
 		);

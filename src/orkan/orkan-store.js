@@ -5,7 +5,7 @@ import invariant from 'invariant';
 
 import FormStore from './form/form-store';
 import {SCHEMA_KEY_NAME, SCHEMA_SETTINGS_KEY_NAME, USER_REQUESTS_KEY_NAME, USERS_KEY_NAME} from './constants';
-import {getSchemaPrimitiveKeysByPath, schemaGet, toSchemaPath} from './utils/schema-utils';
+import {getSchemaCollectionPaths, getSchemaPrimitiveKeysByPath, schemaGet, toSchemaPath} from './utils/schema-utils';
 
 const validPathInvariant = path => invariant(path.startsWith('.'), 'Invalid path structure. paths must start with `.`');
 
@@ -164,15 +164,15 @@ export default class OrkanStore{
 	}
 
 
-	getSchemaByPath(path){
+	getSchemaByPath(path, includeNative){
 		validPathInvariant(path);
-		const schema = this.getSchema();
+		const schema = this.getSchema(includeNative);
 		return schemaGet(schema, path);
 	}
 
-	isSchemaPathPrimitive(path){
+	isSchemaPathPrimitive(path, includeNative){
 		validPathInvariant(path);
-		const pathSchema = this.getSchemaByPath(path);
+		const pathSchema = this.getSchemaByPath(path, includeNative);
 		return !isObject(pathSchema);
 
 	}
@@ -183,9 +183,9 @@ export default class OrkanStore{
 		return getSchemaPrimitiveKeysByPath(schema, path);
 	}
 
-	geNonPrimitiveKeysByPath(path){
+	geNonPrimitiveKeysByPath(path, includeNative){
 		validPathInvariant(path);
-		const pathSchema = this.getSchemaByPath(path);
+		const pathSchema = this.getSchemaByPath(path, includeNative);
 
 		if(pathSchema._){
 			return Object.keys(this.dataStore.getValue(path) || {})
@@ -260,10 +260,10 @@ export default class OrkanStore{
 		return this.dataStore.remove(this.activePath + '/' + key);
 	}
 
-	getSchema(includeNativeSchema = true){
+	getSchema(includeNative = false){
 		return {
 			...this.dataStore.getValue(SCHEMA_KEY_NAME),
-			...includeNativeSchema?orkanSchema:{}
+			...includeNative?orkanSchema:{}
 		};
 	}
 
@@ -276,6 +276,10 @@ export default class OrkanStore{
 
 	getUserPermissions(){
 		return this.dataStore.getValue(USERS_KEY_NAME + '/' + this.user.uid);
+	}
+
+	getCollectionsPaths(includeNative){
+		return getSchemaCollectionPaths(this.getSchema(includeNative));
 	}
 
 	async approveUserRequest(uid){
