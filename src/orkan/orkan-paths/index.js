@@ -68,6 +68,7 @@ export default class OrkanPaths extends Component{
 	@autobind
 	handleSelectOption(option){
 		const {store, path} = this.props;
+		this.obState.isOptionsOpen = false;
 		switch(option.value){
 			case 'settings':
 				store.setSettingsPath(path);
@@ -116,7 +117,10 @@ export default class OrkanPaths extends Component{
 		const {store, path, showHeader} = this.props;
 		const {newKey, isOptionsOpen} = this.obState;
 
-		const options = [{label: 'Settings', value: 'settings'}];
+		const options = [
+			{label: 'Settings', value: 'settings'},
+			{label: 'Clear collection', value: 'clear'},
+		];
 
 		return (
 			<div className='OrkanPaths'>

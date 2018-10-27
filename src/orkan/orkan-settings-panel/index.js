@@ -101,6 +101,8 @@ export default class OrkanSettingsPanel extends Component{
 			dataSourcePrimitivesOptions.unshift({label: '$key', value: '$key'});
 		}
 
+		const isOptionsUiSelected = ['select', 'radio'].includes(formStore.get('uiType'));
+
 		return (
 			<Form store={formStore} onSubmit={this.handleSubmit}>
 				<span/>

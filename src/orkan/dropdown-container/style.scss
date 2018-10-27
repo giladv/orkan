@@ -29,6 +29,7 @@
 			@include smallListItemAnimation();
 			@include globalFont;
 			cursor: pointer;
+			white-space: nowrap;
 			&.DropdownContainer-options-empty{
 				display: flex;
 				align-items: center;

@@ -340,6 +340,7 @@ const orkanSchema = {
 
 const orkanSchemaSettings = {
 	usersPermissions: {
+		// mainCollectionLabel: 'email',
 		_: {
 			editData: {
 				uiType: 'switch'

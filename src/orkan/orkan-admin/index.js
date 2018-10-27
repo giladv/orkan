@@ -185,7 +185,7 @@ export default class OrkanProvider extends Component{
 
 				{store.settingsPath &&
 					<OrkanSettingsPanel
-						isCollectionPath={isActivePathCollection}
+						isCollectionPath={store.isPathCollection(store.settingsPath)}
 						getCollectionPaths={() => getSchemaCollectionPaths(schema)}
 						getPrimitives={path => store.getPrimitiveKeysByPath(path + '/_')}
 						onClose={() => store.clearSettingsPath()}
