@@ -48,5 +48,8 @@ module.exports = {
 	},
 	resolve: {
 		extensions: ['.ts', '.tsx', '.js', '.json', '.scss', '.css']
+	},
+	optimization: {
+		minimize: false
 	}
 };
