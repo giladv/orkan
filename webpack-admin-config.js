@@ -69,6 +69,7 @@ module.exports = {
 		mobx: 'mobx',
 		'prop-types': 'PropTypes',
 		'classnames': 'classNames',
-		'autobind-decorator': 'autobind'
+		'autobind-decorator': 'autobind',
+		'firebase/app': 'firebase',
 	}
 };

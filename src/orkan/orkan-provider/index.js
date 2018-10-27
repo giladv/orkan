@@ -12,7 +12,10 @@ import FirebaseStore from '../firebase-store';
 import OrkanIndicator from '../orkan-indicator';
 import OrkanStore from '../orkan-store';
 import * as mobx from 'mobx';
+import firebase from 'firebase/app';
 
+import 'firebase/database';
+import 'firebase/auth'
 
 let OrkanAdmin;
 
@@ -22,6 +25,7 @@ window.ReactDOM = ReactDOM;
 window.PropTypes = PropTypes;
 window.classNames = classNames;
 window.autobind = autobind;
+window.firebase = firebase;
 
 
 @observer

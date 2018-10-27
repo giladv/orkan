@@ -190,6 +190,15 @@
 			}
 		}
 		> .OrkanSchemaEditor-field-children{
+			> .OrkanSchemaEditor-field-create{
+				@include smallListItemAnimation(false);
+				height: 35px;
+				display: flex;
+				align-items: center;
+				.Input{
+					flex: 1;
+				}
+			}
 			overflow: hidden;
 			padding-left: 15px;
 			border-left: 1px dotted #d0d2d6;

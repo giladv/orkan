@@ -4,7 +4,10 @@ import isObject from 'lodash/isObject';
 import invariant from 'invariant';
 
 import FormStore from './form/form-store';
-import {SCHEMA_KEY_NAME, SCHEMA_SETTINGS_KEY_NAME, USER_REQUESTS_KEY_NAME, USERS_KEY_NAME} from './constants';
+import {
+	COLLECTION_KEY, SCHEMA_KEY_NAME, SCHEMA_SETTINGS_KEY_NAME, USER_REQUESTS_KEY_NAME,
+	USERS_KEY_NAME
+} from './constants';
 import {getSchemaCollectionPaths, getSchemaPrimitiveKeysByPath, schemaGet, toSchemaPath} from './utils/schema-utils';
 
 const validPathInvariant = path => invariant(path.startsWith('.'), 'Invalid path structure. paths must start with `.`');
@@ -253,7 +256,7 @@ export default class OrkanStore{
 	}
 
 	isPathCollection(path){
-		return !!this.getSchemaByPath(path, true)._;
+		return !!this.getSchemaByPath(path, true)[COLLECTION_KEY];
 	}
 
 	// todo: how do i create a primitive collection item?
@@ -293,8 +296,9 @@ export default class OrkanStore{
 	}
 
 	async approveUserRequest(uid){
+		const userRequest = this.dataStore.getValue(USER_REQUESTS_KEY_NAME + '/'	+ uid);
 		await this.dataStore.remove(USER_REQUESTS_KEY_NAME + '/'	+ uid);
-		await this.dataStore.setValue(USERS_KEY_NAME + '/'	+ uid, defaultUserPermissions);
+		await this.dataStore.setValue(USERS_KEY_NAME + '/'	+ uid, {...userRequest, ...defaultUserPermissions});
 	}
 
 
@@ -339,7 +343,8 @@ const orkanSchema = {
 
 const orkanSchemaSettings = {
 	[USERS_KEY_NAME]: {
-		// mainCollectionLabel: 'email',
+		collectionMainLabel: 'email',
+		collectionImage: 'avatarUrl',
 		_: {
 			editData: {
 				uiType: 'switch'

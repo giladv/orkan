@@ -27,7 +27,7 @@ import './style.scss';
 import OrkanMediaGallery from '../orkan-media-gallery';
 import OrkanActionButton from '../orkan-action-button';
 import Input from '../controls/input';
-import {SCHEMA_KEY_NAME} from '../constants';
+import {COLLECTION_KEY, SCHEMA_KEY_NAME} from '../constants';
 import OrkanIcon from '../orkan-icon';
 
 
@@ -253,9 +253,9 @@ export class OrkanSchemaEditor extends Component{
 		const {value} = this.props;
 		const {openPaths} = this.obState;
 
-		if(path && !isObject(get(value, path))){
-			return;
-		}
+		// if(path && !isObject(get(value, path))){
+		// 	return;
+		// }
 		if(this.isPathOpen(path)){
 			openPaths.remove(path);
 		}else{
@@ -295,15 +295,24 @@ export class OrkanSchemaEditor extends Component{
 						{currentPath &&
 							<OrkanActionButton icon='trash' onClick={() => this.handleRemoveField(currentPath)}/>
 						}
-						<OrkanActionButton icon='plus' onClick={() => {
+						{!field[COLLECTION_KEY] &&
+							<OrkanActionButton icon='plus' onClick={() =>{
 								this.obState.createPath = currentPath;
 								!this.isPathOpen(currentPath) && this.togglePath(currentPath);
-						}}/>
+							}}/>
+						}
 					</div>
 				</div>
 				<div className='OrkanSchemaEditor-field-children' style={{height: isPathOpen?'auto':0}}>
 					{createPath === currentPath &&
-						<div><Input autoFocus value={createValue} onChange={value => this.obState.createValue = value} onKeyPress={this.handleKeyPress} onBlur={this.handleBlur}/></div>
+						<div className='OrkanSchemaEditor-field-create'>
+							<Input autoFocus
+							   placeholder='Field name'
+							   value={createValue}
+							   onChange={value => this.obState.createValue = value}
+							   onKeyPress={this.handleKeyPress}
+							   onBlur={this.handleBlur}/>
+						</div>
 					}
 					{!isFieldPrimitive && map(field, (value, key) => this.renderField(key, value, currentPath))}
 				</div>

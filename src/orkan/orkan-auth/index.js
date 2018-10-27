@@ -83,7 +83,7 @@ export class FirebaseAuth extends Component{
 			callbacks: {
 				signInSuccessWithAuthResult: (e) => {
 					// without this the ui will disappear after any successful login
-					onSuccess(e.user);
+					// onSuccess(e.user);
 					if(!this.isUnmounted){
 						this.ui.reset();
 						this.ui.start('#' + this.domId, this.uiConfig);

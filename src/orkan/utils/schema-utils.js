@@ -1,5 +1,6 @@
 import forEach from 'lodash/forEach';
 import isObject from 'lodash/isObject';
+import {COLLECTION_KEY} from '../constants';
 
 export const schemaGet = (schema, path) => {
 	let pathParts = path.split('/').filter(it => !!it);
@@ -9,7 +10,7 @@ export const schemaGet = (schema, path) => {
 
 	while(returnValue && pathParts.length){
 		const part = pathParts.shift();
-		returnValue = returnValue[part] || returnValue._;
+		returnValue = returnValue[part] || returnValue[COLLECTION_KEY];
 	}
 
 	return returnValue;
@@ -26,13 +27,13 @@ export const toSchemaPath = (schema, path) => {
 		const part = pathParts.shift();
 		if(subSchema[part]){
 			schemaPathParts.push(part);
-		}else if(subSchema._){
+		}else if(subSchema[COLLECTION_KEY]){
 			schemaPathParts.push('_');
 		}else{
 			return;
 		}
 
-		subSchema = subSchema[part] || subSchema._;
+		subSchema = subSchema[part] || subSchema[COLLECTION_KEY];
 	}
 
 	return schemaPathParts.join('/');

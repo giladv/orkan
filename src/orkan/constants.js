@@ -12,3 +12,5 @@ export const MEDIA_KEY_NAME = 'media';
 
 
 export const ACTIVATION_EVENT_KEY = 'o';
+
+export const COLLECTION_KEY = '_';
