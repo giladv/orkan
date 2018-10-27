@@ -20,6 +20,7 @@
     "lodash": "^4.17.5",
     "mobx": "^4.1.0",
     "mobx-react": "^5.0.0",
+    "orkan": "https://github.com/giladv/orkan",
     "prop-types": "^15.6.0",
     "rc-slider": "^8.6.3",
     "react-color": "^2.14.1",

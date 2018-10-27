@@ -11,8 +11,9 @@ module.exports = {
 		publicPath: '/', // this maked the bundle.js to be served at root in dev-derver
 		filename: '[name].js',
 		chunkFilename: '[name].js',
-		// library: 'Orkan',
-		libraryTarget: 'commonjs2'
+		library: 'orkan',
+		libraryTarget: 'umd',
+		umdNamedDefine: true
 	},
 	module: {
 		rules: [
@@ -23,7 +24,7 @@ module.exports = {
 					{
 						loader: 'ts-loader',
 						options: {
-							transpileOnly: true
+							// transpileOnly: true
 						}
 					}
 				],
