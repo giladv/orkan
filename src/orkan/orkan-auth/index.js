@@ -4,7 +4,7 @@ import {observer} from 'mobx-react';
 import {observable} from 'mobx';
 import autobind from 'autobind-decorator';
 import classNames from 'classnames';
-import firebase from 'firebase';
+import firebase from 'firebase/app';
 import * as firebaseui from 'firebaseui'
 
 import 'firebaseui/dist/firebaseui.css';

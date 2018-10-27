@@ -5,7 +5,7 @@ import {observable} from 'mobx';
 import autobind from 'autobind-decorator';
 import classNames from 'classnames';
 import map from 'lodash/map';
-import firebase from 'firebase';
+import firebase from 'firebase/app';
 
 import OrkanSpinner from '../orkan-spinner';
 import OrkanHeader from '../orkan-header';

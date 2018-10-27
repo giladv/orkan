@@ -3,13 +3,9 @@ import PropTypes from 'prop-types';
 import autobind from 'autobind-decorator';
 import classNames from 'classnames';
 import {observer} from 'mobx-react';
-import {observable} from 'mobx';
-import firebase from 'firebase';
 
-import Button from '../../button';
 import Thumbnail from '../../thumbnail';
 import {formInput} from '../../form';
-import OrkanSpinner from '../../orkan-spinner';
 import orkanInject from '../../orkan-inject';
 
 import './style.scss';

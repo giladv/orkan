@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {observer} from 'mobx-react';
-import {observable} from 'mobx';
+import {configure, observable} from 'mobx';
 import autobind from 'autobind-decorator';
 import classNames from 'classnames';
 import map from 'lodash/map';
@@ -29,9 +29,6 @@ import OrkanActionButton from '../orkan-action-button';
 import Input from '../controls/input';
 import {SCHEMA_KEY_NAME} from '../constants';
 import OrkanIcon from '../orkan-icon';
-
-console.log('!??!?')
-
 
 
 @observer
@@ -124,8 +121,6 @@ export default class OrkanProvider extends Component{
 			'Orkan-disabled': isResizing
 		});
 
-		const isActivePathCollection = store.activePath && store.isPathCollection(store.activePath);
-
 		return (
 			<div className={newClassName}>
 				{store.isAdmin() && store.activePath &&
@@ -160,13 +155,7 @@ export default class OrkanProvider extends Component{
 							{!store.isLoadingActivePath &&
 								<OrkanPaths
 									path={store.activePath}
-									store={store}
-									showHeader={!isActivePathCollection && store.getPrimitiveKeysByPath(store.activePath).length > 0}
-
-									keys={store.geNonPrimitiveKeysByPath(store.activePath, true)}
-									onSettings={() => store.setSettingsPath(store.activePath)}
-									onRemove={isActivePathCollection && this.handleRemoveCollectionItem}
-									onSelect={key => store.setActivePath(store.activePath + '/' + key)} />
+									store={store} />
 							}
 							{store.activePath === './' + SCHEMA_KEY_NAME &&
 								<OrkanSchemaEditor value={store.getSchema()} onChange={value => store.dataStore.setValue(SCHEMA_KEY_NAME, value)}/>
@@ -332,3 +321,10 @@ export class OrkanSchemaEditor extends Component{
 		);
 	}
 }
+
+
+
+
+
+
+window.or = OrkanProvider;

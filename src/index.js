@@ -11,8 +11,7 @@ import Template from './components/template';
 
 import './css/style.scss';
 
-// import {OrkanProvider, FirebaseStore} from './orkan';
-import {OrkanProvider, FirebaseStore} from 'orkan';
+import {OrkanProvider, FirebaseStore} from './orkan';
 
 
 // Firebase setup

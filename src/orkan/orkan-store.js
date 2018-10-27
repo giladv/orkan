@@ -183,7 +183,7 @@ export default class OrkanStore{
 		return getSchemaPrimitiveKeysByPath(schema, path);
 	}
 
-	geNonPrimitiveKeysByPath(path, includeNative){
+	getNonPrimitiveKeysByPath(path, includeNative){
 		validPathInvariant(path);
 		const pathSchema = this.getSchemaByPath(path, includeNative);
 
@@ -208,11 +208,10 @@ export default class OrkanStore{
 
 	getSettingsByPath(path){
 		validPathInvariant(path);
-		const schema = this.getSchema();
+		const schema = this.getSchema(true);
 		const schemaSettings = this.getSchemaSettings();
 
 		const schemaPath = toSchemaPath(schema, path);
-
 		if(schemaPath === this.settingsPath){
 			return this.settingsFormStore.toJS();
 		}else if(schemaSettings){
@@ -232,7 +231,7 @@ export default class OrkanStore{
 	setSettingsPath(path){
 		validPathInvariant(path);
 
-		const schema = this.getSchema();
+		const schema = this.getSchema(true);
 		const schemaSettings = this.getSchemaSettings();
 
 		const schemaPath = toSchemaPath(schema, path);
@@ -327,8 +326,8 @@ export default class OrkanStore{
 
 
 const orkanSchema = {
-	schema: {},
-	usersPermissions: {
+	[SCHEMA_KEY_NAME]: {},
+	[USERS_KEY_NAME]: {
 		_: {
 			editData: 'string',
 			editPermissions: 'string',
@@ -339,7 +338,7 @@ const orkanSchema = {
 
 
 const orkanSchemaSettings = {
-	usersPermissions: {
+	[USERS_KEY_NAME]: {
 		// mainCollectionLabel: 'email',
 		_: {
 			editData: {

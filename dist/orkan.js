@@ -1,51 +1,6 @@
-(function webpackUniversalModuleDefinition(root, factory) {
-	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory();
-	else if(typeof define === 'function' && define.amd)
-		define("orkan", [], factory);
-	else if(typeof exports === 'object')
-		exports["orkan"] = factory();
-	else
-		root["orkan"] = factory();
-})(window, function() {
-return /******/ (function(modules) { // webpackBootstrap
-/******/ 	// install a JSONP callback for chunk loading
-/******/ 	function webpackJsonpCallback(data) {
-/******/ 		var chunkIds = data[0];
-/******/ 		var moreModules = data[1]
-/******/
-/******/ 		// add "moreModules" to the modules object,
-/******/ 		// then flag all "chunkIds" as loaded and fire callback
-/******/ 		var moduleId, chunkId, i = 0, resolves = [];
-/******/ 		for(;i < chunkIds.length; i++) {
-/******/ 			chunkId = chunkIds[i];
-/******/ 			if(installedChunks[chunkId]) {
-/******/ 				resolves.push(installedChunks[chunkId][0]);
-/******/ 			}
-/******/ 			installedChunks[chunkId] = 0;
-/******/ 		}
-/******/ 		for(moduleId in moreModules) {
-/******/ 			if(Object.prototype.hasOwnProperty.call(moreModules, moduleId)) {
-/******/ 				modules[moduleId] = moreModules[moduleId];
-/******/ 			}
-/******/ 		}
-/******/ 		if(parentJsonpFunction) parentJsonpFunction(data);
-/******/ 		while(resolves.length) {
-/******/ 			resolves.shift()();
-/******/ 		}
-/******/
-/******/ 	};
-/******/
-/******/
+/******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
-/******/
-/******/ 	// object to store loaded and loading chunks
-/******/ 	var installedChunks = {
-/******/ 		1: 0
-/******/ 	};
-/******/
-/******/
 /******/
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
@@ -71,64 +26,6 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 		return module.exports;
 /******/ 	}
 /******/
-/******/ 	// This file contains only the entry chunk.
-/******/ 	// The chunk loading function for additional chunks
-/******/ 	__webpack_require__.e = function requireEnsure(chunkId) {
-/******/ 		var promises = [];
-/******/
-/******/
-/******/ 		// JSONP chunk loading for javascript
-/******/
-/******/ 		var installedChunkData = installedChunks[chunkId];
-/******/ 		if(installedChunkData !== 0) { // 0 means "already installed".
-/******/
-/******/ 			// a Promise means "currently loading".
-/******/ 			if(installedChunkData) {
-/******/ 				promises.push(installedChunkData[2]);
-/******/ 			} else {
-/******/ 				// setup Promise in chunk cache
-/******/ 				var promise = new Promise(function(resolve, reject) {
-/******/ 					installedChunkData = installedChunks[chunkId] = [resolve, reject];
-/******/ 				});
-/******/ 				promises.push(installedChunkData[2] = promise);
-/******/
-/******/ 				// start chunk loading
-/******/ 				var head = document.getElementsByTagName('head')[0];
-/******/ 				var script = document.createElement('script');
-/******/
-/******/ 				script.charset = 'utf-8';
-/******/ 				script.timeout = 120000;
-/******/
-/******/ 				if (__webpack_require__.nc) {
-/******/ 					script.setAttribute("nonce", __webpack_require__.nc);
-/******/ 				}
-/******/ 				script.src = __webpack_require__.p + "" + ({"0":"orkan-admin"}[chunkId]||chunkId) + ".js";
-/******/ 				var timeout = setTimeout(function(){
-/******/ 					onScriptComplete({ type: 'timeout', target: script });
-/******/ 				}, 120000);
-/******/ 				script.onerror = script.onload = onScriptComplete;
-/******/ 				function onScriptComplete(event) {
-/******/ 					// avoid mem leaks in IE.
-/******/ 					script.onerror = script.onload = null;
-/******/ 					clearTimeout(timeout);
-/******/ 					var chunk = installedChunks[chunkId];
-/******/ 					if(chunk !== 0) {
-/******/ 						if(chunk) {
-/******/ 							var errorType = event && (event.type === 'load' ? 'missing' : event.type);
-/******/ 							var realSrc = event && event.target && event.target.src;
-/******/ 							var error = new Error('Loading chunk ' + chunkId + ' failed.\n(' + errorType + ': ' + realSrc + ')');
-/******/ 							error.type = errorType;
-/******/ 							error.request = realSrc;
-/******/ 							chunk[1](error);
-/******/ 						}
-/******/ 						installedChunks[chunkId] = undefined;
-/******/ 					}
-/******/ 				};
-/******/ 				head.appendChild(script);
-/******/ 			}
-/******/ 		}
-/******/ 		return Promise.all(promises);
-/******/ 	};
 /******/
 /******/ 	// expose the modules object (__webpack_modules__)
 /******/ 	__webpack_require__.m = modules;
@@ -167,19 +64,9 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "/";
 /******/
-/******/ 	// on error function for async loading
-/******/ 	__webpack_require__.oe = function(err) { console.error(err); throw err; };
-/******/
-/******/ 	var jsonpArray = window["webpackJsonporkan"] = window["webpackJsonporkan"] || [];
-/******/ 	var oldJsonpFunction = jsonpArray.push.bind(jsonpArray);
-/******/ 	jsonpArray.push = webpackJsonpCallback;
-/******/ 	jsonpArray = jsonpArray.slice();
-/******/ 	for(var i = 0; i < jsonpArray.length; i++) webpackJsonpCallback(jsonpArray[i]);
-/******/ 	var parentJsonpFunction = oldJsonpFunction;
-/******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 10);
+/******/ 	return __webpack_require__(__webpack_require__.s = 7);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -196,133 +83,36 @@ module.exports = require("mobx");
 
 /***/ }),
 /* 2 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return REACT_CONTEXT_NAME; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return SCHEMA_KEY_NAME; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return SCHEMA_SETTINGS_KEY_NAME; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return USERS_KEY_NAME; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return USER_REQUESTS_KEY_NAME; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return MEDIA_KEY_NAME; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ACTIVATION_EVENT_KEY; });
-var REACT_CONTEXT_NAME = 'OrkanContext';
-var SCHEMA_KEY_NAME = 'schema';
-var SCHEMA_SETTINGS_KEY_NAME = 'schemaSettings';
-var USERS_KEY_NAME = 'usersPermissions';
-var USER_REQUESTS_KEY_NAME = 'usersRequests';
-var MEDIA_KEY_NAME = 'media';
-var ACTIVATION_EVENT_KEY = 'o';
-
-
-/***/ }),
-/* 3 */
 /***/ (function(module, exports) {
 
 module.exports = require("prop-types");
 
 /***/ }),
-/* 4 */
+/* 3 */
 /***/ (function(module, exports) {
 
 module.exports = require("lodash/isObject");
 
 /***/ }),
-/* 5 */
-/***/ (function(module, exports) {
-
-module.exports = require("mobx-react");
-
-/***/ }),
-/* 6 */
-/***/ (function(module, exports) {
-
-module.exports = require("autobind-decorator");
-
-/***/ }),
-/* 7 */
+/* 4 */
 /***/ (function(module, exports) {
 
 module.exports = require("classnames");
 
 /***/ }),
-/* 8 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return schemaGet; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return toSchemaPath; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return getSchemaPrimitiveKeysByPath; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return getSchemaCollectionPaths; });
-/* unused harmony export schemaWalk */
-/* harmony import */ var lodash_forEach__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(12);
-/* harmony import */ var lodash_forEach__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash_forEach__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var lodash_isObject__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
-/* harmony import */ var lodash_isObject__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash_isObject__WEBPACK_IMPORTED_MODULE_1__);
-
-
-var schemaGet = function (schema, path) {
-    var pathParts = path.split('/').filter(function (it) { return !!it; });
-    pathParts.shift();
-    var returnValue = schema;
-    while (returnValue && pathParts.length) {
-        var part = pathParts.shift();
-        returnValue = returnValue[part] || returnValue._;
-    }
-    return returnValue;
-};
-var toSchemaPath = function (schema, path) {
-    var pathParts = path.split('/').filter(function (it) { return !!it; });
-    var subSchema = schema;
-    var schemaPathParts = [pathParts.shift()];
-    while (subSchema && pathParts.length) {
-        var part = pathParts.shift();
-        if (subSchema[part]) {
-            schemaPathParts.push(part);
-        }
-        else if (subSchema._) {
-            schemaPathParts.push('_');
-        }
-        else {
-            return;
-        }
-        subSchema = subSchema[part] || subSchema._;
-    }
-    return schemaPathParts.join('/');
-};
-var getSchemaPrimitiveKeysByPath = function (schema, path) {
-    var pathSchema = schemaGet(schema, path);
-    return !pathSchema ? [] : Object.keys(pathSchema)
-        .filter(function (key) { return !lodash_isObject__WEBPACK_IMPORTED_MODULE_1___default()(pathSchema[key]); });
-};
-var getSchemaCollectionPaths = function (schema) {
-    var collectionPaths = [];
-    schemaWalk(schema, function (value, path) {
-        if (path[path.length - 1] === '_') {
-            collectionPaths.push(path.slice(0, -1).join('/'));
-        }
-    });
-    return collectionPaths;
-};
-var schemaWalk = function (schema, cb, path) {
-    if (path === void 0) { path = ['.']; }
-    lodash_forEach__WEBPACK_IMPORTED_MODULE_0___default()(schema, function (value, key) {
-        cb(value, path.concat([key]));
-        if (lodash_isObject__WEBPACK_IMPORTED_MODULE_1___default()(value)) {
-            schemaWalk(value, cb, path.concat([key]));
-        }
-    });
-};
-
-
-/***/ }),
-/* 9 */
+/* 5 */
 /***/ (function(module, exports) {
 
-module.exports = require("lodash/isPlainObject");
+module.exports = require("autobind-decorator");
 
 /***/ }),
-/* 10 */
+/* 6 */
+/***/ (function(module, exports) {
+
+module.exports = require("mobx-react");
+
+/***/ }),
+/* 7 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -333,35 +123,220 @@ var external_react_ = __webpack_require__(0);
 var external_react_default = /*#__PURE__*/__webpack_require__.n(external_react_);
 
 // EXTERNAL MODULE: external "react-dom"
-var external_react_dom_ = __webpack_require__(14);
+var external_react_dom_ = __webpack_require__(9);
 var external_react_dom_default = /*#__PURE__*/__webpack_require__.n(external_react_dom_);
 
 // EXTERNAL MODULE: external "prop-types"
-var external_prop_types_ = __webpack_require__(3);
+var external_prop_types_ = __webpack_require__(2);
 var external_prop_types_default = /*#__PURE__*/__webpack_require__.n(external_prop_types_);
 
 // EXTERNAL MODULE: external "mobx-react"
-var external_mobx_react_ = __webpack_require__(5);
+var external_mobx_react_ = __webpack_require__(6);
 
 // EXTERNAL MODULE: external "mobx"
 var external_mobx_ = __webpack_require__(1);
 
 // EXTERNAL MODULE: external "autobind-decorator"
-var external_autobind_decorator_ = __webpack_require__(6);
+var external_autobind_decorator_ = __webpack_require__(5);
 var external_autobind_decorator_default = /*#__PURE__*/__webpack_require__.n(external_autobind_decorator_);
 
-// EXTERNAL MODULE: ./src/orkan/constants.js
-var constants = __webpack_require__(2);
+// EXTERNAL MODULE: external "classnames"
+var external_classnames_ = __webpack_require__(4);
+var external_classnames_default = /*#__PURE__*/__webpack_require__.n(external_classnames_);
 
-// EXTERNAL MODULE: ./src/orkan/utils/keyboard-utils.js
-var keyboard_utils = __webpack_require__(23);
+// CONCATENATED MODULE: ./src/orkan/constants.js
+var REACT_CONTEXT_NAME = 'OrkanContext';
+var SCHEMA_KEY_NAME = 'schema';
+var SCHEMA_SETTINGS_KEY_NAME = 'schemaSettings';
+var USERS_KEY_NAME = 'usersPermissions';
+var USER_REQUESTS_KEY_NAME = 'usersRequests';
+var MEDIA_KEY_NAME = 'media';
+var ACTIVATION_EVENT_KEY = 'o';
+
+// EXTERNAL MODULE: external "humaninput/dist/humaninput-full.min"
+var humaninput_full_min_ = __webpack_require__(21);
+var humaninput_full_min_default = /*#__PURE__*/__webpack_require__.n(humaninput_full_min_);
+
+// CONCATENATED MODULE: ./src/orkan/utils/keyboard-utils.js
+
+var keyboard_utils_Keyboard = /** @class */ (function () {
+    function Keyboard() {
+        this.binder = new humaninput_full_min_default.a(window);
+        // this.binder.filter = e => true
+    }
+    Keyboard.prototype.bind = function (keys, handler) {
+        this.binder.on(keys, handler);
+    };
+    Keyboard.prototype.unbind = function (keys, handler) {
+        this.binder.off(keys, handler);
+    };
+    Keyboard.prototype.isDown = function (keys) {
+        return this.binder.state.down.indexOf(keys) > -1 && this.binder.state.down.length === 1;
+    };
+    return Keyboard;
+}());
+
+var keyboard_utils_keyboard = new keyboard_utils_Keyboard();
+var keyboard_utils_onDoublePress = function (key, handler) {
+    var count = 0;
+    var timeout;
+    var singleHandler = function (e) {
+        if (e.key.toLowerCase() !== key) {
+            return;
+        }
+        count++;
+        timeout && clearTimeout(timeout);
+        if (count === 2) {
+            handler(e);
+            count = 0;
+        }
+        else {
+            timeout = setTimeout(function () { return count = 0; }, 300);
+        }
+    };
+    keyboard_utils_keyboard.bind(key, singleHandler);
+    return function () { return keyboard_utils_keyboard.unbind(key, singleHandler); };
+};
 
 // EXTERNAL MODULE: ./node_modules/path-browserify/index.js
-var path_browserify = __webpack_require__(24);
+var path_browserify = __webpack_require__(20);
 var path_browserify_default = /*#__PURE__*/__webpack_require__.n(path_browserify);
 
-// EXTERNAL MODULE: ./src/orkan/form/observable-nested-map.js
-var observable_nested_map = __webpack_require__(13);
+// EXTERNAL MODULE: external "lodash/isPlainObject"
+var isPlainObject_ = __webpack_require__(8);
+var isPlainObject_default = /*#__PURE__*/__webpack_require__.n(isPlainObject_);
+
+// EXTERNAL MODULE: external "lodash/isObject"
+var isObject_ = __webpack_require__(3);
+var isObject_default = /*#__PURE__*/__webpack_require__.n(isObject_);
+
+// EXTERNAL MODULE: external "lodash/isArray"
+var isArray_ = __webpack_require__(11);
+var isArray_default = /*#__PURE__*/__webpack_require__.n(isArray_);
+
+// CONCATENATED MODULE: ./src/orkan/form/observable-nested-map.js
+var observable_nested_map_decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+
+
+
+var observable_nested_map_KEY_SPLIT_REGEX = /\.|\[|\]\.|\]/;
+var observable_nested_map_ObservableNestedMap = /** @class */ (function () {
+    function ObservableNestedMap(value) {
+        this.map = new external_mobx_["ObservableMap"]({});
+        this.merge(value);
+    }
+    ObservableNestedMap.prototype.get = function (key, ctx) {
+        if (ctx === void 0) { ctx = this.map; }
+        var parts = key.split(observable_nested_map_KEY_SPLIT_REGEX).filter(function (part) { return !!part; });
+        var part = parts.shift();
+        var value;
+        if (Object(external_mobx_["isObservableMap"])(ctx)) {
+            value = ctx.get(part);
+        }
+        else if (Object(external_mobx_["isObservableArray"])(ctx)) {
+            value = ctx[part];
+        }
+        if (parts.length && (Object(external_mobx_["isObservableMap"])(value) || Object(external_mobx_["isObservableArray"])(value))) {
+            return this.get(parts.join('.'), value);
+        }
+        else {
+            return value;
+        }
+    };
+    ObservableNestedMap.prototype.shallowSet = function (ctx, key, value) {
+        if (isPlainObject_default()(value) || Object(external_mobx_["isObservableObject"])(value)) {
+            value = observable_nested_map_nestedMapFromObj(value);
+        }
+        else if (isArray_default()(value) || Object(external_mobx_["isObservableArray"])(value)) {
+            value = observable_nested_map_nestedMapFromArray(value);
+        }
+        if (Object(external_mobx_["isObservableMap"])(ctx)) {
+            ctx.set(key, value);
+        }
+        else if (Object(external_mobx_["isObservableArray"])(ctx)) {
+            ctx[key] = value;
+        }
+    };
+    ObservableNestedMap.prototype.set = function (key, value, ctx) {
+        if (ctx === void 0) { ctx = this.map; }
+        var parts = key.split(observable_nested_map_KEY_SPLIT_REGEX).filter(function (part) { return !!part; });
+        var part = parts.shift();
+        if (!parts.length) {
+            return this.shallowSet(ctx, part, value);
+        }
+        var obj = this.get(part, ctx);
+        if (!obj) {
+            if (isNaN(parts[0])) {
+                this.shallowSet(ctx, part, new external_mobx_["ObservableMap"]({}));
+            }
+            else {
+                this.shallowSet(ctx, part, []);
+            }
+        }
+        obj = this.get(part, ctx);
+        return this.set(parts.join('.'), value, obj);
+    };
+    ObservableNestedMap.prototype.merge = function (value) {
+        this.map.merge(observable_nested_map_nestedMapFromObj(value));
+    };
+    ObservableNestedMap.prototype.clear = function () {
+        this.map.clear();
+    };
+    ObservableNestedMap.prototype.toJS = function () {
+        return Object(external_mobx_["toJS"])(this.map);
+    };
+    observable_nested_map_decorate([
+        external_mobx_["action"]
+    ], ObservableNestedMap.prototype, "shallowSet", null);
+    observable_nested_map_decorate([
+        external_mobx_["action"]
+    ], ObservableNestedMap.prototype, "set", null);
+    observable_nested_map_decorate([
+        external_mobx_["action"]
+    ], ObservableNestedMap.prototype, "merge", null);
+    observable_nested_map_decorate([
+        external_mobx_["action"]
+    ], ObservableNestedMap.prototype, "clear", null);
+    return ObservableNestedMap;
+}());
+
+function observable_nested_map_nestedMapFromObj(obj) {
+    var nestedMap = new external_mobx_["ObservableMap"](obj);
+    nestedMap.forEach(function (value, key) {
+        if (isPlainObject_default()(value) || Object(external_mobx_["isObservableObject"])(value)) {
+            nestedMap.set(key, observable_nested_map_nestedMapFromObj(value));
+        }
+        else if (isArray_default()(value) || Object(external_mobx_["isObservableArray"])(value)) {
+            nestedMap.set(key, observable_nested_map_nestedMapFromArray(value));
+        }
+        else if (isObject_default()(value) && !isPlainObject_default()(value)) {
+            nestedMap.set(key, value);
+        }
+    });
+    return nestedMap;
+}
+function observable_nested_map_nestedMapFromArray(arr) {
+    return arr.map(function (value) {
+        if (isPlainObject_default()(value) || Object(external_mobx_["isObservableObject"])(value)) {
+            return observable_nested_map_nestedMapFromObj(value);
+        }
+        else if (isArray_default()(value) || Object(external_mobx_["isObservableArray"])(value)) {
+            return observable_nested_map_nestedMapFromArray(value);
+        }
+        else if (isObject_default()(value) && !isPlainObject_default()(value)) {
+            return external_mobx_["observable"].ref(value);
+        }
+        else {
+            return value;
+        }
+    });
+}
 
 // CONCATENATED MODULE: ./src/orkan/firebase-store.js
 var firebase_store_assign = (undefined && undefined.__assign) || function () {
@@ -417,7 +392,7 @@ var firebase_store_FirebaseStore = /** @class */ (function () {
     function FirebaseStore(database, rootPath) {
         if (rootPath === void 0) { rootPath = 'orkan'; }
         this.pathsStatus = external_mobx_["observable"].map({});
-        this.map = new observable_nested_map["a" /* ObservableNestedMap */]({});
+        this.map = new observable_nested_map_ObservableNestedMap({});
         this.database = database;
         this.rootPath = rootPath;
     }
@@ -497,12 +472,8 @@ var firebase_store_FirebaseStore = /** @class */ (function () {
 }());
 /* harmony default export */ var firebase_store = (firebase_store_FirebaseStore);
 
-// EXTERNAL MODULE: external "classnames"
-var external_classnames_ = __webpack_require__(7);
-var external_classnames_default = /*#__PURE__*/__webpack_require__.n(external_classnames_);
-
 // EXTERNAL MODULE: ./src/orkan/orkan-indicator/style.scss
-var style = __webpack_require__(34);
+var style = __webpack_require__(25);
 
 // CONCATENATED MODULE: ./src/orkan/orkan-indicator/index.js
 var orkan_indicator_extends = (undefined && undefined.__extends) || (function () {
@@ -542,8 +513,712 @@ var orkan_indicator_OrkanIndicator = /** @class */ (function (_super) {
 }(external_react_["Component"]));
 /* harmony default export */ var orkan_indicator = (orkan_indicator_OrkanIndicator);
 
-// EXTERNAL MODULE: ./src/orkan/orkan-store.js
-var orkan_store = __webpack_require__(22);
+// EXTERNAL MODULE: external "invariant"
+var external_invariant_ = __webpack_require__(19);
+var external_invariant_default = /*#__PURE__*/__webpack_require__.n(external_invariant_);
+
+// EXTERNAL MODULE: external "lodash/forEach"
+var forEach_ = __webpack_require__(10);
+var forEach_default = /*#__PURE__*/__webpack_require__.n(forEach_);
+
+// EXTERNAL MODULE: external "lodash/find"
+var find_ = __webpack_require__(18);
+var find_default = /*#__PURE__*/__webpack_require__.n(find_);
+
+// CONCATENATED MODULE: ./src/orkan/form/form-store.js
+var form_store_decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+
+
+
+var form_store_FormStore = /** @class */ (function () {
+    function FormStore(data, validation) {
+        if (data === void 0) { data = {}; }
+        if (validation === void 0) { validation = {}; }
+        var _this = this;
+        this.isDirty = false;
+        this.errors = external_mobx_["observable"].map({});
+        this.dataMap = new observable_nested_map_ObservableNestedMap({});
+        this.validation = {};
+        this.dataMap.merge(data);
+        this.validation = validation;
+        // we use a delay of 1ms. otherwise reaction works syncronousely apparently.
+        // this is bad because we can get false positives on the isDirty flag
+        this.destroyReaction = Object(external_mobx_["reaction"])(function () { return _this.data; }, function () {
+            !_this.ignoreChange && _this.setDirty();
+            _this.ignoreChange = false;
+            var fields = Array.from(_this.errors.keys());
+            _this.clearAllErrors();
+            _this.validateFields(fields);
+        }, { name: 'FormStore dirty check', fireImmediately: false, delay: 1 });
+    }
+    Object.defineProperty(FormStore.prototype, "data", {
+        get: function () {
+            return this.toJS();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(FormStore.prototype, "isValid", {
+        get: function () {
+            var _this = this;
+            return !find_default()(this.validation, function (validation, key) { return !_this.isFieldValid(key); });
+        },
+        enumerable: true,
+        configurable: true
+    });
+    FormStore.prototype.getFieldError = function (key) {
+        var value = this.get(key);
+        var failedValidator = this.validation[key] && this.validation[key].find(function (validator) { return !validator.validate(value); });
+        return failedValidator && failedValidator.error;
+    };
+    FormStore.prototype.isFieldValid = function (key) {
+        var value = this.get(key);
+        var failedValidator = this.validation[key] && this.validation[key].find(function (validator) { return !validator.validate(value); });
+        return !failedValidator;
+    };
+    FormStore.prototype.validateFields = function (fields) {
+        var _this = this;
+        if (fields === void 0) { fields = []; }
+        fields.forEach(function (field) {
+            _this.errors.set(field, _this.getFieldError(field));
+        });
+    };
+    FormStore.prototype.clearFieldErrors = function (fields) {
+        var _this = this;
+        if (fields === void 0) { fields = []; }
+        forEach_default()(fields, function (field) {
+            _this.errors.delete(field);
+        });
+    };
+    FormStore.prototype.clearAllErrors = function () {
+        this.errors.clear();
+    };
+    FormStore.prototype.set = function (key, value, ignoreChange) {
+        if (ignoreChange === void 0) { ignoreChange = false; }
+        this.ignoreChange = ignoreChange;
+        return this.dataMap.set(key, value);
+    };
+    FormStore.prototype.get = function (key) {
+        var value = this.dataMap.get(key);
+        return Object(external_mobx_["isObservable"])(value) ? Object(external_mobx_["toJS"])(value) : value;
+    };
+    FormStore.prototype.setDirty = function () {
+        this.isDirty = true;
+    };
+    FormStore.prototype.setClean = function () {
+        this.isDirty = false;
+    };
+    FormStore.prototype.reset = function (value) {
+        this.ignoreChange = true;
+        this.dataMap.clear();
+        this.setClean();
+        value && this.dataMap.merge(value);
+    };
+    FormStore.prototype.destroy = function () {
+        this.destroyReaction();
+    };
+    FormStore.prototype.toJS = function () {
+        return this.dataMap.toJS();
+    };
+    form_store_decorate([
+        external_mobx_["observable"]
+    ], FormStore.prototype, "isDirty", void 0);
+    form_store_decorate([
+        external_mobx_["computed"]
+    ], FormStore.prototype, "data", null);
+    form_store_decorate([
+        external_mobx_["computed"]
+    ], FormStore.prototype, "isValid", null);
+    form_store_decorate([
+        external_mobx_["action"]
+    ], FormStore.prototype, "set", null);
+    form_store_decorate([
+        external_mobx_["action"]
+    ], FormStore.prototype, "setDirty", null);
+    form_store_decorate([
+        external_mobx_["action"]
+    ], FormStore.prototype, "setClean", null);
+    return FormStore;
+}());
+/* harmony default export */ var form_store = (form_store_FormStore);
+var form_store_FormValidators = /** @class */ (function () {
+    function FormValidators() {
+    }
+    FormValidators.required = function (_a) {
+        var _b = (_a === void 0 ? {} : _a).error, error = _b === void 0 ? 'This field is required' : _b;
+        return {
+            validate: function (value) { return !!value; },
+            error: error
+        };
+    };
+    FormValidators.notEmpty = function (_a) {
+        var _b = (_a === void 0 ? {} : _a).error, error = _b === void 0 ? 'This field is required' : _b;
+        return {
+            validate: function (value) { return !!value && !!value.trim(); },
+            error: error
+        };
+    };
+    FormValidators.emailValidation = function (_a) {
+        var _b = (_a === void 0 ? {} : _a).error, error = _b === void 0 ? 'Please enter a valid email address' : _b;
+        var emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return {
+            validate: function (value) { return emailRegex.test(value); },
+            error: error
+        };
+    };
+    FormValidators.passwordValidation = function (_a) {
+        var _b = (_a === void 0 ? {} : _a).error, error = _b === void 0 ? 'Your password must have at least 6 characters' : _b;
+        var passwordRegex = /^\S{6,}$/;
+        return {
+            validate: function (value) { return passwordRegex.test(value); },
+            error: error
+        };
+    };
+    FormValidators.editorRequired = function (_a) {
+        var _b = (_a === void 0 ? {} : _a).error, error = _b === void 0 ? 'This field is required' : _b;
+        return {
+            validate: function (value) { return value && value.getCurrentContent().hasText(); },
+            error: error
+        };
+    };
+    FormValidators.maxLength = function (_a) {
+        var _b = _a === void 0 ? {} : _a, maxLength = _b.maxLength, _c = _b.error, error = _c === void 0 ? 'Text too long' : _c;
+        return {
+            validate: function (value) { return !value || value.length <= maxLength; },
+            error: error
+        };
+    };
+    FormValidators.urlValidation = function (_a) {
+        var _b = (_a === void 0 ? {} : _a).error, error = _b === void 0 ? 'Url is not valid' : _b;
+        var urlRegex = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/;
+        return {
+            validate: function (value) { return urlRegex.test(value); },
+            error: error
+        };
+    };
+    FormValidators.allTagsMaxLength = function (_a) {
+        var _b = _a === void 0 ? {} : _a, _c = _b.limit, limit = _c === void 0 ? 25 : _c, _d = _b.error, error = _d === void 0 ? "Tag cannot exceed " + limit + " characters" : _d;
+        var validator = function (value) {
+            var tagsStrArray = value.split(",");
+            var result = false;
+            tagsStrArray.forEach(function (tagStr) {
+                tagStr = tagStr.trim();
+                if (tagStr.length < limit) {
+                    result = true;
+                }
+            });
+            return result;
+        };
+        return {
+            validate: validator,
+            error: error
+        };
+    };
+    return FormValidators;
+}());
+
+
+// CONCATENATED MODULE: ./src/orkan/utils/schema-utils.js
+
+
+var schema_utils_schemaGet = function (schema, path) {
+    var pathParts = path.split('/').filter(function (it) { return !!it; });
+    pathParts.shift();
+    var returnValue = schema;
+    while (returnValue && pathParts.length) {
+        var part = pathParts.shift();
+        returnValue = returnValue[part] || returnValue._;
+    }
+    return returnValue;
+};
+var schema_utils_toSchemaPath = function (schema, path) {
+    var pathParts = path.split('/').filter(function (it) { return !!it; });
+    var subSchema = schema;
+    var schemaPathParts = [pathParts.shift()];
+    while (subSchema && pathParts.length) {
+        var part = pathParts.shift();
+        if (subSchema[part]) {
+            schemaPathParts.push(part);
+        }
+        else if (subSchema._) {
+            schemaPathParts.push('_');
+        }
+        else {
+            return;
+        }
+        subSchema = subSchema[part] || subSchema._;
+    }
+    return schemaPathParts.join('/');
+};
+var schema_utils_getSchemaPrimitiveKeysByPath = function (schema, path) {
+    var pathSchema = schema_utils_schemaGet(schema, path);
+    return !pathSchema ? [] : Object.keys(pathSchema)
+        .filter(function (key) { return !isObject_default()(pathSchema[key]); });
+};
+var schema_utils_getSchemaCollectionPaths = function (schema) {
+    var collectionPaths = [];
+    schema_utils_schemaWalk(schema, function (value, path) {
+        if (path[path.length - 1] === '_') {
+            collectionPaths.push(path.slice(0, -1).join('/'));
+        }
+    });
+    return collectionPaths;
+};
+var schema_utils_schemaWalk = function (schema, cb, path) {
+    if (path === void 0) { path = ['.']; }
+    forEach_default()(schema, function (value, key) {
+        cb(value, path.concat([key]));
+        if (isObject_default()(value)) {
+            schema_utils_schemaWalk(value, cb, path.concat([key]));
+        }
+    });
+};
+
+// CONCATENATED MODULE: ./src/orkan/orkan-store.js
+var orkan_store_assign = (undefined && undefined.__assign) || function () {
+    orkan_store_assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return orkan_store_assign.apply(this, arguments);
+};
+var orkan_store_decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var orkan_store_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var orkan_store_generator = (undefined && undefined.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+
+
+
+
+
+
+var orkan_store_validPathInvariant = function (path) { return external_invariant_default()(path.startsWith('.'), 'Invalid path structure. paths must start with `.`'); };
+var orkan_store_toAbsolutePath = function (path) {
+    var pathParts = path.split('/');
+    if (pathParts[0] !== '.') {
+        pathParts.unshift('.');
+    }
+    return pathParts.join('/');
+};
+var orkan_store_OrkanStore = /** @class */ (function () {
+    function OrkanStore(dataStore, authStore) {
+        this.dataFormStore = new form_store({}, {});
+        this.settingsFormStore = new form_store({}, {});
+        this.isLoadingActivePath = false;
+        this.isInitiating = false;
+        this.dataStore = dataStore;
+        this.authStore = authStore;
+    }
+    OrkanStore.prototype.init = function () {
+        var _this = this;
+        this.isInitiating = true;
+        this.authStore.onAuthStateChanged(function (user) { return orkan_store_awaiter(_this, void 0, void 0, function () {
+            var userPermissions, err_1;
+            return orkan_store_generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (!user) return [3 /*break*/, 8];
+                        userPermissions = void 0;
+                        _a.label = 1;
+                    case 1:
+                        _a.trys.push([1, 3, , 4]);
+                        return [4 /*yield*/, this.dataStore.load(USERS_KEY_NAME + '/' + user.uid)];
+                    case 2:
+                        userPermissions = _a.sent();
+                        return [3 /*break*/, 4];
+                    case 3:
+                        err_1 = _a.sent();
+                        return [3 /*break*/, 4];
+                    case 4:
+                        if (!userPermissions) return [3 /*break*/, 5];
+                        this.user = user;
+                        this.dataStore.listen(SCHEMA_KEY_NAME);
+                        this.dataStore.listen(SCHEMA_SETTINGS_KEY_NAME);
+                        return [3 /*break*/, 7];
+                    case 5: return [4 /*yield*/, this.createUserRequest(user)];
+                    case 6:
+                        _a.sent();
+                        this.logout();
+                        _a.label = 7;
+                    case 7: return [3 /*break*/, 9];
+                    case 8:
+                        this.user = null;
+                        _a.label = 9;
+                    case 9:
+                        this.isInitiating = false;
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+    };
+    OrkanStore.prototype.logout = function () {
+        this.dataStore.clearCache(USERS_KEY_NAME);
+        this.dataStore.clearCache(SCHEMA_SETTINGS_KEY_NAME);
+        this.dataStore.clearCache(SCHEMA_KEY_NAME);
+        return this.authStore.signOut();
+    };
+    OrkanStore.prototype.isAdmin = function () {
+        return !!this.user;
+    };
+    OrkanStore.prototype.createUserRequest = function (user) {
+        return this.dataStore.setValue(USER_REQUESTS_KEY_NAME + '/' + user.uid, {
+            email: user.email,
+            avatarUrl: user.photoURL
+        });
+    };
+    OrkanStore.prototype.getValue = function (nonAbsolutePath) {
+        var _a;
+        // to enable components use relative paths (e.g something vs ./something)
+        var path = orkan_store_toAbsolutePath(nonAbsolutePath);
+        if (this.isLoadingActivePath) {
+            return this.dataStore.getValue(path);
+        }
+        if (this.activePath === path) {
+            return this.dataFormStore.get(this.activePath) || this.dataStore.getValue(path);
+        }
+        else if (this.activePath && this.activePath.indexOf(path) === 0) {
+            return orkan_store_assign({}, this.dataStore.getValue(path), (_a = {}, _a[this.activePath.replace(path + '/', '')] = this.dataFormStore.get(this.activePath) || this.dataStore.getValue(this.activePath), _a));
+        }
+        else if (!this.isSchemaPathPrimitive(path)) {
+            return this.dataStore.getValue(path);
+        }
+        else if (this.activePath && path.indexOf(this.activePath) === 0) {
+            var relativePath = path.replace(this.activePath, '');
+            var relativePathParts = relativePath.split('/');
+            relativePathParts.shift(); // removing the first item because its empty
+            if (relativePathParts.length === 1) {
+                var formValue = this.dataFormStore.get(this.activePath);
+                return formValue && formValue[relativePathParts[0]];
+            }
+            else {
+                return this.dataStore.getValue(path);
+            }
+        }
+        else {
+            return this.dataStore.getValue(path);
+        }
+    };
+    OrkanStore.prototype.setActivePath = function (nonAbsolutePath) {
+        return orkan_store_awaiter(this, void 0, void 0, function () {
+            var path, storeValue;
+            var _this = this;
+            return orkan_store_generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        path = orkan_store_toAbsolutePath(nonAbsolutePath);
+                        this.activePath = path;
+                        this.dataFormStore.reset();
+                        this.isLoadingActivePath = true;
+                        return [4 /*yield*/, this.loadRequiredFieldsByPath(path)];
+                    case 1:
+                        _a.sent();
+                        this.isLoadingActivePath = false;
+                        storeValue = this.dataStore.getValue(path) || {};
+                        if (!this.isSchemaPathPrimitive(path)) {
+                            this.getPrimitiveKeysByPath(path).forEach(function (key) {
+                                _this.dataFormStore.set(path + "." + key, storeValue[key]);
+                            });
+                        }
+                        else {
+                            this.dataFormStore.set(path, this.dataStore.getValue(path));
+                        }
+                        setTimeout(function () { return _this.dataFormStore.setClean(); }, 2);
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    OrkanStore.prototype.submitData = function () {
+        return orkan_store_awaiter(this, void 0, void 0, function () {
+            var newValue, currentValue;
+            var _this = this;
+            return orkan_store_generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        newValue = this.dataFormStore.get(this.activePath);
+                        currentValue = this.dataStore.getValue(this.activePath);
+                        if (!(isObject_default()(newValue) && isObject_default()(currentValue))) return [3 /*break*/, 2];
+                        return [4 /*yield*/, this.dataStore.setValue(this.activePath, orkan_store_assign({}, currentValue, newValue))];
+                    case 1:
+                        _a.sent();
+                        return [3 /*break*/, 4];
+                    case 2: return [4 /*yield*/, this.dataStore.setValue(this.activePath, newValue)];
+                    case 3:
+                        _a.sent();
+                        _a.label = 4;
+                    case 4:
+                        setTimeout(function () { return _this.dataFormStore.setClean(); }, 2);
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    OrkanStore.prototype.loadRequiredFieldsByPath = function (path) {
+        var _this = this;
+        return Promise.all(this.getPrimitiveKeysByPath(path)
+            .filter(function (key) { return _this.dataStore.getValue(path + '/' + key) === undefined; })
+            .map(function (key) { return _this.dataStore.load(path + '/' + key); }));
+    };
+    OrkanStore.prototype.getSchemaByPath = function (path, includeNative) {
+        orkan_store_validPathInvariant(path);
+        var schema = this.getSchema(includeNative);
+        return schema_utils_schemaGet(schema, path);
+    };
+    OrkanStore.prototype.isSchemaPathPrimitive = function (path, includeNative) {
+        orkan_store_validPathInvariant(path);
+        var pathSchema = this.getSchemaByPath(path, includeNative);
+        return !isObject_default()(pathSchema);
+    };
+    OrkanStore.prototype.getPrimitiveKeysByPath = function (path) {
+        orkan_store_validPathInvariant(path);
+        var schema = this.getSchema();
+        return schema_utils_getSchemaPrimitiveKeysByPath(schema, path);
+    };
+    OrkanStore.prototype.getNonPrimitiveKeysByPath = function (path, includeNative) {
+        orkan_store_validPathInvariant(path);
+        var pathSchema = this.getSchemaByPath(path, includeNative);
+        if (this.isPathCollection(path)) {
+            return Object.keys(this.dataStore.getValue(path) || {});
+        }
+        else {
+            return Object.keys(pathSchema)
+                .filter(function (key) { return isObject_default()(pathSchema[key]); });
+        }
+    };
+    OrkanStore.prototype.clearActivePath = function () {
+        this.activePath = null;
+        this.dataFormStore.reset();
+        this.clearSettingsPath();
+    };
+    OrkanStore.prototype.clearSettingsPath = function () {
+        this.settingsFormStore.reset();
+        this.settingsPath = null;
+    };
+    OrkanStore.prototype.getSettingsByPath = function (path) {
+        orkan_store_validPathInvariant(path);
+        var schema = this.getSchema();
+        var schemaSettings = this.getSchemaSettings();
+        var schemaPath = schema_utils_toSchemaPath(schema, path);
+        if (schemaPath === this.settingsPath) {
+            return this.settingsFormStore.toJS();
+        }
+        else if (schemaSettings) {
+            return schema_utils_schemaGet(schemaSettings, schemaPath);
+        }
+    };
+    OrkanStore.prototype.submitSettings = function () {
+        return orkan_store_awaiter(this, void 0, void 0, function () {
+            var newValue;
+            return orkan_store_generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        newValue = this.settingsFormStore.toJS();
+                        return [4 /*yield*/, this.dataStore.setValue(SCHEMA_SETTINGS_KEY_NAME + '/' + this.settingsPath, newValue)];
+                    case 1:
+                        _a.sent();
+                        this.clearSettingsPath();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    OrkanStore.prototype.setSettingsPath = function (path) {
+        orkan_store_validPathInvariant(path);
+        var schema = this.getSchema();
+        var schemaSettings = this.getSchemaSettings();
+        var schemaPath = schema_utils_toSchemaPath(schema, path);
+        this.settingsPath = schemaPath;
+        var defaultSettings;
+        if (this.isPathCollection(path)) {
+            defaultSettings = {
+                collectionMainLabel: ''
+            };
+        }
+        else {
+            defaultSettings = {
+                uiType: 'text'
+            };
+        }
+        this.settingsFormStore.reset(orkan_store_assign({}, defaultSettings, schema_utils_schemaGet(schemaSettings, schemaPath)));
+    };
+    OrkanStore.prototype.isPathCollection = function (path) {
+        return !!this.getSchemaByPath(path, true)._;
+    };
+    // todo: how do i create a primitive collection item?
+    OrkanStore.prototype.createCollectionItem = function (path, key) {
+        return orkan_store_awaiter(this, void 0, void 0, function () {
+            var finalKey;
+            return orkan_store_generator(this, function (_a) {
+                orkan_store_validPathInvariant(path);
+                finalKey = key || this.dataStore.push(this.activePath).key;
+                this.setActivePath(path + '/' + finalKey);
+                return [2 /*return*/];
+            });
+        });
+    };
+    OrkanStore.prototype.removeCollectionItem = function (path) {
+        orkan_store_validPathInvariant(path);
+        return this.dataStore.remove(path);
+    };
+    OrkanStore.prototype.getSchema = function (includeNative) {
+        if (includeNative === void 0) { includeNative = false; }
+        return orkan_store_assign({}, this.dataStore.getValue(SCHEMA_KEY_NAME), includeNative ? orkan_store_orkanSchema : {});
+    };
+    OrkanStore.prototype.getSchemaSettings = function () {
+        return orkan_store_assign({}, this.dataStore.getValue(SCHEMA_SETTINGS_KEY_NAME), orkan_store_orkanSchemaSettings);
+    };
+    OrkanStore.prototype.getUserPermissions = function () {
+        return this.dataStore.getValue(USERS_KEY_NAME + '/' + this.user.uid);
+    };
+    OrkanStore.prototype.getCollectionsPaths = function (includeNative) {
+        return schema_utils_getSchemaCollectionPaths(this.getSchema(includeNative));
+    };
+    OrkanStore.prototype.approveUserRequest = function (uid) {
+        return orkan_store_awaiter(this, void 0, void 0, function () {
+            return orkan_store_generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.dataStore.remove(USER_REQUESTS_KEY_NAME + '/' + uid)];
+                    case 1:
+                        _a.sent();
+                        return [4 /*yield*/, this.dataStore.setValue(USERS_KEY_NAME + '/' + uid, orkan_store_defaultUserPermissions)];
+                    case 2:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    OrkanStore.prototype.declineUserRequest = function (uid) {
+        return this.dataStore.remove(USER_REQUESTS_KEY_NAME + '/' + uid);
+    };
+    OrkanStore.prototype.openModal = function (Component, props) {
+        var _this = this;
+        if (props === void 0) { props = {}; }
+        return new Promise(function (resolve, reject) {
+            _this.modal = {
+                Component: Component,
+                props: orkan_store_assign({}, props, { resolve: function () {
+                        var args = [];
+                        for (var _i = 0; _i < arguments.length; _i++) {
+                            args[_i] = arguments[_i];
+                        }
+                        _this.modal = null;
+                        resolve.apply(void 0, args);
+                    }, reject: function () {
+                        var args = [];
+                        for (var _i = 0; _i < arguments.length; _i++) {
+                            args[_i] = arguments[_i];
+                        }
+                        _this.modal = null;
+                        reject.apply(void 0, args);
+                    } })
+            };
+        });
+    };
+    orkan_store_decorate([
+        external_mobx_["observable"]
+    ], OrkanStore.prototype, "activePath", void 0);
+    orkan_store_decorate([
+        external_mobx_["observable"]
+    ], OrkanStore.prototype, "settingsPath", void 0);
+    orkan_store_decorate([
+        external_mobx_["observable"]
+    ], OrkanStore.prototype, "isLoadingActivePath", void 0);
+    orkan_store_decorate([
+        external_mobx_["observable"]
+    ], OrkanStore.prototype, "isInitiating", void 0);
+    orkan_store_decorate([
+        external_mobx_["observable"].ref
+    ], OrkanStore.prototype, "user", void 0);
+    orkan_store_decorate([
+        external_mobx_["observable"].ref
+    ], OrkanStore.prototype, "modal", void 0);
+    return OrkanStore;
+}());
+/* harmony default export */ var orkan_store = (orkan_store_OrkanStore);
+var orkan_store_orkanSchema = {
+    schema: {},
+    usersPermissions: {
+        _: {
+            editData: 'string',
+            editPermissions: 'string',
+            editSchema: 'string',
+        }
+    }
+};
+var orkan_store_orkanSchemaSettings = {
+    usersPermissions: {
+        // mainCollectionLabel: 'email',
+        _: {
+            editData: {
+                uiType: 'switch'
+            },
+            editPermissions: {
+                uiType: 'switch'
+            },
+            editSchema: {
+                uiType: 'switch'
+            }
+        }
+    }
+};
+var orkan_store_defaultUserPermissions = {
+    editData: true
+};
+// {
+// 	blog:{
+// 		posts: {
+// 			_: {title, body, date, image}
+// 		}
+// 	}
+// }
 
 // CONCATENATED MODULE: ./src/orkan/orkan-provider/index.js
 var orkan_provider_extends = (undefined && undefined.__extends) || (function () {
@@ -612,7 +1287,15 @@ var orkan_provider_a, orkan_provider_b;
 
 
 
+
+
 var orkan_provider_OrkanAdmin;
+window.mobx = external_mobx_;
+window.React = external_react_default.a;
+window.ReactDOM = external_react_dom_default.a;
+window.PropTypes = external_prop_types_default.a;
+window.classNames = external_classnames_default.a;
+window.autobind = external_autobind_decorator_default.a;
 var orkan_provider_OrkanProvider = /** @class */ (function (_super) {
     orkan_provider_extends(OrkanProvider, _super);
     function OrkanProvider() {
@@ -628,7 +1311,7 @@ var orkan_provider_OrkanProvider = /** @class */ (function (_super) {
         var _this = this;
         var _a;
         var store = this.props.store;
-        return _a = {}, _a[constants["c" /* REACT_CONTEXT_NAME */]] = {
+        return _a = {}, _a[REACT_CONTEXT_NAME] = {
             store: this.props.store,
             getValue: function (path) { return _this.orkanStore ? _this.orkanStore.getValue(path) : store.getValue(path); },
             setActivePath: function (path) { return _this.orkanStore.setActivePath(path); },
@@ -648,7 +1331,7 @@ var orkan_provider_OrkanProvider = /** @class */ (function (_super) {
     };
     OrkanProvider.prototype.componentWillMount = function () {
         // this.activate();
-        keyboard_utils["a" /* keyboard */].bind('hold:1000:' + constants["a" /* ACTIVATION_EVENT_KEY */], this.activate);
+        keyboard_utils_keyboard.bind('hold:1000:' + ACTIVATION_EVENT_KEY, this.activate);
         document.addEventListener('keydown', this.handleKeyDown);
         document.addEventListener('keyup', this.handleKeyUp);
         // does not fire with normal api
@@ -656,30 +1339,36 @@ var orkan_provider_OrkanProvider = /** @class */ (function (_super) {
     };
     OrkanProvider.prototype.activate = function () {
         return orkan_provider_awaiter(this, void 0, void 0, function () {
-            var _a, store, auth, err_1;
+            var _a, store, auth, response, _b, err_1;
             var _this = this;
-            return orkan_provider_generator(this, function (_b) {
-                switch (_b.label) {
+            return orkan_provider_generator(this, function (_c) {
+                switch (_c.label) {
                     case 0:
                         _a = this.props, store = _a.store, auth = _a.auth;
                         if (this.obState.isActive) {
                             return [2 /*return*/];
                         }
                         this.obState.isBusy = true;
-                        _b.label = 1;
+                        _c.label = 1;
                     case 1:
-                        _b.trys.push([1, 3, , 4]);
-                        return [4 /*yield*/, __webpack_require__.e(/* import() | orkan-admin */ 0).then(__webpack_require__.bind(null, 134))];
+                        _c.trys.push([1, 4, , 5]);
+                        return [4 /*yield*/, fetch('orkan-admin.js')];
                     case 2:
-                        orkan_provider_OrkanAdmin = (_b.sent()).default;
-                        this.orkanStore = new orkan_store["a" /* default */](store, auth);
-                        this.obState.isActive = true;
-                        return [3 /*break*/, 4];
+                        response = _c.sent();
+                        _b = eval;
+                        return [4 /*yield*/, response.text()];
                     case 3:
-                        err_1 = _b.sent();
-                        console.error(err_1);
-                        return [3 /*break*/, 4];
+                        _b.apply(void 0, [_c.sent()]);
+                        orkan_provider_OrkanAdmin = __orkan__.default;
+                        delete window.__orkan__;
+                        this.orkanStore = new orkan_store(store, auth);
+                        this.obState.isActive = true;
+                        return [3 /*break*/, 5];
                     case 4:
+                        err_1 = _c.sent();
+                        console.error(err_1);
+                        return [3 /*break*/, 5];
+                    case 5:
                         setTimeout(function () {
                             _this.obState.isBusy = false;
                         }, 500);
@@ -716,10 +1405,10 @@ var orkan_provider_OrkanProvider = /** @class */ (function (_super) {
         auth: external_prop_types_default.a.object.isRequired
     };
     OrkanProvider.childContextTypes = (orkan_provider_a = {},
-        orkan_provider_a[constants["c" /* REACT_CONTEXT_NAME */]] = external_prop_types_default.a.object,
+        orkan_provider_a[REACT_CONTEXT_NAME] = external_prop_types_default.a.object,
         orkan_provider_a);
     OrkanProvider.contextTypes = (orkan_provider_b = {},
-        orkan_provider_b[constants["c" /* REACT_CONTEXT_NAME */]] = external_prop_types_default.a.object,
+        orkan_provider_b[REACT_CONTEXT_NAME] = external_prop_types_default.a.object,
         orkan_provider_b);
     orkan_provider_decorate([
         external_mobx_["observable"].shallow
@@ -764,14 +1453,115 @@ var orkan_provider_OrkanProvider = /** @class */ (function (_super) {
 */ 
 
 // EXTERNAL MODULE: external "lodash/map"
-var map_ = __webpack_require__(21);
+var map_ = __webpack_require__(17);
 var map_default = /*#__PURE__*/__webpack_require__.n(map_);
 
-// EXTERNAL MODULE: ./src/orkan/orkan-inject.js
-var orkan_inject = __webpack_require__(11);
+// EXTERNAL MODULE: external "lodash/mapValues"
+var mapValues_ = __webpack_require__(15);
+var mapValues_default = /*#__PURE__*/__webpack_require__.n(mapValues_);
+
+// EXTERNAL MODULE: external "lodash/values"
+var values_ = __webpack_require__(16);
+var values_default = /*#__PURE__*/__webpack_require__.n(values_);
+
+// CONCATENATED MODULE: ./src/orkan/orkan-inject.js
+var orkan_inject_extends = (undefined && undefined.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var orkan_inject_assign = (undefined && undefined.__assign) || function () {
+    orkan_inject_assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return orkan_inject_assign.apply(this, arguments);
+};
+var orkan_inject_decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+
+
+
+
+
+function orkan_inject_orkanInject(mapPathsToProps, config) {
+    if (mapPathsToProps === void 0) { mapPathsToProps = function () { return ({}); }; }
+    var options = orkan_inject_assign({ liveEditedData: true }, config);
+    return function (DecoratedComponent) {
+        var _a;
+        var OrkanInjector = /** @class */ (function (_super) {
+            orkan_inject_extends(OrkanInjector, _super);
+            function OrkanInjector() {
+                return _super !== null && _super.apply(this, arguments) || this;
+            }
+            OrkanInjector.prototype.componentWillMount = function () {
+                var store = this.getContext().store;
+                var paths = values_default()(mapPathsToProps(this.props)).filter(function (it) { return !!it; });
+                this.disposables = paths.map(function (path) { return store.listen(path); });
+            };
+            OrkanInjector.prototype.componentWillUnmount = function () {
+                this.disposables.forEach(function (dispose) { return dispose(); });
+            };
+            OrkanInjector.prototype.getContext = function () {
+                return this.context[REACT_CONTEXT_NAME];
+            };
+            OrkanInjector.prototype.render = function () {
+                var store = this.getContext().store;
+                var _a = this.props.injectedProps, injectedProps = _a === void 0 ? [] : _a;
+                var mappedPaths;
+                var mappedValues = {};
+                var mappedStatuses = {};
+                try {
+                    var getValue_1 = this.getContext().getValue;
+                    mappedPaths = mapPathsToProps(this.props);
+                    mappedValues = mapValues_default()(mappedPaths, function (path) {
+                        if (!path) {
+                            return;
+                        }
+                        return options.liveEditedData ? getValue_1(path) : store.getValue(path);
+                    });
+                    mappedStatuses = mapValues_default()(mappedPaths, function (path) { return store.isPathLoading(path); });
+                }
+                catch (err) {
+                    //React 14+ reports the error in "inject" with a wrong stack trace. It will write something about
+                    //failing to reconcile a different component that was already unmounted.
+                    // so we catch the error report it and rethrow here we still have the actual stack trace.
+                    console.error(err);
+                    throw err;
+                }
+                return (external_react_default.a.createElement(DecoratedComponent, orkan_inject_assign({}, this.props, mappedValues, { isPathLoading: mappedStatuses, injectedProps: injectedProps.concat(Object.keys(mappedPaths)), orkan: this.getContext() })));
+            };
+            OrkanInjector.contextTypes = (_a = {},
+                _a[REACT_CONTEXT_NAME] = external_prop_types_default.a.object,
+                _a);
+            OrkanInjector = orkan_inject_decorate([
+                external_mobx_react_["observer"]
+            ], OrkanInjector);
+            return OrkanInjector;
+        }(external_react_["Component"]));
+        return OrkanInjector;
+    };
+}
 
 // EXTERNAL MODULE: ./src/orkan/display-components/style.scss
-var display_components_style = __webpack_require__(32);
+var display_components_style = __webpack_require__(23);
 
 // CONCATENATED MODULE: ./src/orkan/display-components/index.js
 var display_components_extends = (undefined && undefined.__extends) || (function () {
@@ -834,7 +1624,7 @@ var display_components_Value = /** @class */ (function (_super) {
         external_autobind_decorator_default.a
     ], Value.prototype, "handleClick", null);
     Value = display_components_decorate([
-        Object(orkan_inject["a" /* default */])(function (props) {
+        orkan_inject_orkanInject(function (props) {
             return {
                 value: props.path
             };
@@ -879,7 +1669,7 @@ var display_components_WithValue = /** @class */ (function (_super) {
         external_autobind_decorator_default.a
     ], WithValue.prototype, "handleClick", null);
     WithValue = display_components_decorate([
-        Object(orkan_inject["a" /* default */])(function (props) {
+        orkan_inject_orkanInject(function (props) {
             return {
                 value: props.path
             };
@@ -927,7 +1717,7 @@ var display_components_Collection = /** @class */ (function (_super) {
         external_autobind_decorator_default.a
     ], Collection.prototype, "handleClick", null);
     Collection = display_components_decorate([
-        Object(orkan_inject["a" /* default */])(function (props) {
+        orkan_inject_orkanInject(function (props) {
             return {
                 collection: props.path
             };
@@ -951,359 +1741,32 @@ var display_components_Collection = /** @class */ (function (_super) {
 
 
 /***/ }),
-/* 11 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return orkanInject; });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3);
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var mobx_react__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
-/* harmony import */ var mobx_react__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(mobx_react__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var lodash_mapValues__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(20);
-/* harmony import */ var lodash_mapValues__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(lodash_mapValues__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var lodash_values__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(25);
-/* harmony import */ var lodash_values__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(lodash_values__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(2);
-var __extends = (undefined && undefined.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    }
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var __assign = (undefined && undefined.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
-var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-
-
-
-
-
-
-function orkanInject(mapPathsToProps, config) {
-    if (mapPathsToProps === void 0) { mapPathsToProps = function () { return ({}); }; }
-    var options = __assign({ liveEditedData: true }, config);
-    return function (DecoratedComponent) {
-        var _a;
-        var OrkanInjector = /** @class */ (function (_super) {
-            __extends(OrkanInjector, _super);
-            function OrkanInjector() {
-                return _super !== null && _super.apply(this, arguments) || this;
-            }
-            OrkanInjector.prototype.componentWillMount = function () {
-                var store = this.getContext().store;
-                var paths = lodash_values__WEBPACK_IMPORTED_MODULE_4___default()(mapPathsToProps(this.props)).filter(function (it) { return !!it; });
-                this.disposables = paths.map(function (path) { return store.listen(path); });
-            };
-            OrkanInjector.prototype.componentWillUnmount = function () {
-                this.disposables.forEach(function (dispose) { return dispose(); });
-            };
-            OrkanInjector.prototype.getContext = function () {
-                return this.context[_constants__WEBPACK_IMPORTED_MODULE_5__[/* REACT_CONTEXT_NAME */ "c"]];
-            };
-            OrkanInjector.prototype.render = function () {
-                var store = this.getContext().store;
-                var _a = this.props.injectedProps, injectedProps = _a === void 0 ? [] : _a;
-                var mappedPaths;
-                var mappedValues = {};
-                var mappedStatuses = {};
-                try {
-                    var getValue_1 = this.getContext().getValue;
-                    mappedPaths = mapPathsToProps(this.props);
-                    mappedValues = lodash_mapValues__WEBPACK_IMPORTED_MODULE_3___default()(mappedPaths, function (path) {
-                        if (!path) {
-                            return;
-                        }
-                        return options.liveEditedData ? getValue_1(path) : store.getValue(path);
-                    });
-                    mappedStatuses = lodash_mapValues__WEBPACK_IMPORTED_MODULE_3___default()(mappedPaths, function (path) { return store.isPathLoading(path); });
-                }
-                catch (err) {
-                    //React 14+ reports the error in "inject" with a wrong stack trace. It will write something about
-                    //failing to reconcile a different component that was already unmounted.
-                    // so we catch the error report it and rethrow here we still have the actual stack trace.
-                    console.error(err);
-                    throw err;
-                }
-                return (react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(DecoratedComponent, __assign({}, this.props, mappedValues, { isPathLoading: mappedStatuses, injectedProps: injectedProps.concat(Object.keys(mappedPaths)), orkan: this.getContext() })));
-            };
-            OrkanInjector.contextTypes = (_a = {},
-                _a[_constants__WEBPACK_IMPORTED_MODULE_5__[/* REACT_CONTEXT_NAME */ "c"]] = prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.object,
-                _a);
-            OrkanInjector = __decorate([
-                mobx_react__WEBPACK_IMPORTED_MODULE_2__["observer"]
-            ], OrkanInjector);
-            return OrkanInjector;
-        }(react__WEBPACK_IMPORTED_MODULE_0__["Component"]));
-        return OrkanInjector;
-    };
-}
-
-
-/***/ }),
-/* 12 */
+/* 8 */
 /***/ (function(module, exports) {
 
-module.exports = require("lodash/forEach");
+module.exports = require("lodash/isPlainObject");
 
 /***/ }),
-/* 13 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ObservableNestedMap; });
-/* harmony import */ var mobx__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
-/* harmony import */ var mobx__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(mobx__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var lodash_isPlainObject__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(9);
-/* harmony import */ var lodash_isPlainObject__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash_isPlainObject__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var lodash_isObject__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
-/* harmony import */ var lodash_isObject__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lodash_isObject__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var lodash_isArray__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(15);
-/* harmony import */ var lodash_isArray__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(lodash_isArray__WEBPACK_IMPORTED_MODULE_3__);
-var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-
-
-
-
-var KEY_SPLIT_REGEX = /\.|\[|\]\.|\]/;
-var ObservableNestedMap = /** @class */ (function () {
-    function ObservableNestedMap(value) {
-        this.map = new mobx__WEBPACK_IMPORTED_MODULE_0__["ObservableMap"]({});
-        this.merge(value);
-    }
-    ObservableNestedMap.prototype.get = function (key, ctx) {
-        if (ctx === void 0) { ctx = this.map; }
-        var parts = key.split(KEY_SPLIT_REGEX).filter(function (part) { return !!part; });
-        var part = parts.shift();
-        var value;
-        if (Object(mobx__WEBPACK_IMPORTED_MODULE_0__["isObservableMap"])(ctx)) {
-            value = ctx.get(part);
-        }
-        else if (Object(mobx__WEBPACK_IMPORTED_MODULE_0__["isObservableArray"])(ctx)) {
-            value = ctx[part];
-        }
-        if (parts.length && (Object(mobx__WEBPACK_IMPORTED_MODULE_0__["isObservableMap"])(value) || Object(mobx__WEBPACK_IMPORTED_MODULE_0__["isObservableArray"])(value))) {
-            return this.get(parts.join('.'), value);
-        }
-        else {
-            return value;
-        }
-    };
-    ObservableNestedMap.prototype.shallowSet = function (ctx, key, value) {
-        if (lodash_isPlainObject__WEBPACK_IMPORTED_MODULE_1___default()(value) || Object(mobx__WEBPACK_IMPORTED_MODULE_0__["isObservableObject"])(value)) {
-            value = nestedMapFromObj(value);
-        }
-        else if (lodash_isArray__WEBPACK_IMPORTED_MODULE_3___default()(value) || Object(mobx__WEBPACK_IMPORTED_MODULE_0__["isObservableArray"])(value)) {
-            value = nestedMapFromArray(value);
-        }
-        if (Object(mobx__WEBPACK_IMPORTED_MODULE_0__["isObservableMap"])(ctx)) {
-            ctx.set(key, value);
-        }
-        else if (Object(mobx__WEBPACK_IMPORTED_MODULE_0__["isObservableArray"])(ctx)) {
-            ctx[key] = value;
-        }
-    };
-    ObservableNestedMap.prototype.set = function (key, value, ctx) {
-        if (ctx === void 0) { ctx = this.map; }
-        var parts = key.split(KEY_SPLIT_REGEX).filter(function (part) { return !!part; });
-        var part = parts.shift();
-        if (!parts.length) {
-            return this.shallowSet(ctx, part, value);
-        }
-        var obj = this.get(part, ctx);
-        if (!obj) {
-            if (isNaN(parts[0])) {
-                this.shallowSet(ctx, part, new mobx__WEBPACK_IMPORTED_MODULE_0__["ObservableMap"]({}));
-            }
-            else {
-                this.shallowSet(ctx, part, []);
-            }
-        }
-        obj = this.get(part, ctx);
-        return this.set(parts.join('.'), value, obj);
-    };
-    ObservableNestedMap.prototype.merge = function (value) {
-        this.map.merge(nestedMapFromObj(value));
-    };
-    ObservableNestedMap.prototype.clear = function () {
-        this.map.clear();
-    };
-    ObservableNestedMap.prototype.toJS = function () {
-        return Object(mobx__WEBPACK_IMPORTED_MODULE_0__["toJS"])(this.map);
-    };
-    __decorate([
-        mobx__WEBPACK_IMPORTED_MODULE_0__["action"]
-    ], ObservableNestedMap.prototype, "shallowSet", null);
-    __decorate([
-        mobx__WEBPACK_IMPORTED_MODULE_0__["action"]
-    ], ObservableNestedMap.prototype, "set", null);
-    __decorate([
-        mobx__WEBPACK_IMPORTED_MODULE_0__["action"]
-    ], ObservableNestedMap.prototype, "merge", null);
-    __decorate([
-        mobx__WEBPACK_IMPORTED_MODULE_0__["action"]
-    ], ObservableNestedMap.prototype, "clear", null);
-    return ObservableNestedMap;
-}());
-
-function nestedMapFromObj(obj) {
-    var nestedMap = new mobx__WEBPACK_IMPORTED_MODULE_0__["ObservableMap"](obj);
-    nestedMap.forEach(function (value, key) {
-        if (lodash_isPlainObject__WEBPACK_IMPORTED_MODULE_1___default()(value) || Object(mobx__WEBPACK_IMPORTED_MODULE_0__["isObservableObject"])(value)) {
-            nestedMap.set(key, nestedMapFromObj(value));
-        }
-        else if (lodash_isArray__WEBPACK_IMPORTED_MODULE_3___default()(value) || Object(mobx__WEBPACK_IMPORTED_MODULE_0__["isObservableArray"])(value)) {
-            nestedMap.set(key, nestedMapFromArray(value));
-        }
-        else if (lodash_isObject__WEBPACK_IMPORTED_MODULE_2___default()(value) && !lodash_isPlainObject__WEBPACK_IMPORTED_MODULE_1___default()(value)) {
-            nestedMap.set(key, value);
-        }
-    });
-    return nestedMap;
-}
-function nestedMapFromArray(arr) {
-    return arr.map(function (value) {
-        if (lodash_isPlainObject__WEBPACK_IMPORTED_MODULE_1___default()(value) || Object(mobx__WEBPACK_IMPORTED_MODULE_0__["isObservableObject"])(value)) {
-            return nestedMapFromObj(value);
-        }
-        else if (lodash_isArray__WEBPACK_IMPORTED_MODULE_3___default()(value) || Object(mobx__WEBPACK_IMPORTED_MODULE_0__["isObservableArray"])(value)) {
-            return nestedMapFromArray(value);
-        }
-        else if (lodash_isObject__WEBPACK_IMPORTED_MODULE_2___default()(value) && !lodash_isPlainObject__WEBPACK_IMPORTED_MODULE_1___default()(value)) {
-            return mobx__WEBPACK_IMPORTED_MODULE_0__["observable"].ref(value);
-        }
-        else {
-            return value;
-        }
-    });
-}
-
-
-/***/ }),
-/* 14 */
+/* 9 */
 /***/ (function(module, exports) {
 
 module.exports = require("react-dom");
 
 /***/ }),
-/* 15 */
+/* 10 */
+/***/ (function(module, exports) {
+
+module.exports = require("lodash/forEach");
+
+/***/ }),
+/* 11 */
 /***/ (function(module, exports) {
 
 module.exports = require("lodash/isArray");
 
 /***/ }),
-/* 16 */,
-/* 17 */
-/***/ (function(module, exports) {
-
-/*
-	MIT License http://www.opensource.org/licenses/mit-license.php
-	Author Tobias Koppers @sokra
-*/
-// css base code, injected by the css-loader
-module.exports = function(useSourceMap) {
-	var list = [];
-
-	// return the list of modules as css string
-	list.toString = function toString() {
-		return this.map(function (item) {
-			var content = cssWithMappingToString(item, useSourceMap);
-			if(item[2]) {
-				return "@media " + item[2] + "{" + content + "}";
-			} else {
-				return content;
-			}
-		}).join("");
-	};
-
-	// import a list of modules into the list
-	list.i = function(modules, mediaQuery) {
-		if(typeof modules === "string")
-			modules = [[null, modules, ""]];
-		var alreadyImportedModules = {};
-		for(var i = 0; i < this.length; i++) {
-			var id = this[i][0];
-			if(typeof id === "number")
-				alreadyImportedModules[id] = true;
-		}
-		for(i = 0; i < modules.length; i++) {
-			var item = modules[i];
-			// skip already imported module
-			// this implementation is not 100% perfect for weird media query combinations
-			//  when a module is imported multiple times with different media queries.
-			//  I hope this will never occur (Hey this way we have smaller bundles)
-			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
-				if(mediaQuery && !item[2]) {
-					item[2] = mediaQuery;
-				} else if(mediaQuery) {
-					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
-				}
-				list.push(item);
-			}
-		}
-	};
-	return list;
-};
-
-function cssWithMappingToString(item, useSourceMap) {
-	var content = item[1] || '';
-	var cssMapping = item[3];
-	if (!cssMapping) {
-		return content;
-	}
-
-	if (useSourceMap && typeof btoa === 'function') {
-		var sourceMapping = toComment(cssMapping);
-		var sourceURLs = cssMapping.sources.map(function (source) {
-			return '/*# sourceURL=' + cssMapping.sourceRoot + source + ' */'
-		});
-
-		return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
-	}
-
-	return [content].join('\n');
-}
-
-// Adapted from convert-source-map (MIT)
-function toComment(sourceMap) {
-	// eslint-disable-next-line no-undef
-	var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap))));
-	var data = 'sourceMappingURL=data:application/json;charset=utf-8;base64,' + base64;
-
-	return '/*# ' + data + ' */';
-}
-
-
-/***/ }),
-/* 18 */
+/* 12 */,
+/* 13 */
 /***/ (function(module, exports) {
 
 /*
@@ -1555,736 +2018,119 @@ function updateLink(linkElement, obj) {
 
 
 /***/ }),
-/* 19 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/* 14 */
+/***/ (function(module, exports) {
 
-"use strict";
-/* unused harmony export FormValidators */
-/* harmony import */ var mobx__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
-/* harmony import */ var mobx__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(mobx__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var lodash_forEach__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(12);
-/* harmony import */ var lodash_forEach__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash_forEach__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var lodash_find__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(26);
-/* harmony import */ var lodash_find__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lodash_find__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _observable_nested_map__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(13);
-var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
+/*
+	MIT License http://www.opensource.org/licenses/mit-license.php
+	Author Tobias Koppers @sokra
+*/
+// css base code, injected by the css-loader
+module.exports = function(useSourceMap) {
+	var list = [];
+
+	// return the list of modules as css string
+	list.toString = function toString() {
+		return this.map(function (item) {
+			var content = cssWithMappingToString(item, useSourceMap);
+			if(item[2]) {
+				return "@media " + item[2] + "{" + content + "}";
+			} else {
+				return content;
+			}
+		}).join("");
+	};
+
+	// import a list of modules into the list
+	list.i = function(modules, mediaQuery) {
+		if(typeof modules === "string")
+			modules = [[null, modules, ""]];
+		var alreadyImportedModules = {};
+		for(var i = 0; i < this.length; i++) {
+			var id = this[i][0];
+			if(typeof id === "number")
+				alreadyImportedModules[id] = true;
+		}
+		for(i = 0; i < modules.length; i++) {
+			var item = modules[i];
+			// skip already imported module
+			// this implementation is not 100% perfect for weird media query combinations
+			//  when a module is imported multiple times with different media queries.
+			//  I hope this will never occur (Hey this way we have smaller bundles)
+			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+				if(mediaQuery && !item[2]) {
+					item[2] = mediaQuery;
+				} else if(mediaQuery) {
+					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
+				}
+				list.push(item);
+			}
+		}
+	};
+	return list;
 };
 
+function cssWithMappingToString(item, useSourceMap) {
+	var content = item[1] || '';
+	var cssMapping = item[3];
+	if (!cssMapping) {
+		return content;
+	}
 
+	if (useSourceMap && typeof btoa === 'function') {
+		var sourceMapping = toComment(cssMapping);
+		var sourceURLs = cssMapping.sources.map(function (source) {
+			return '/*# sourceURL=' + cssMapping.sourceRoot + source + ' */'
+		});
 
+		return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
+	}
 
-var FormStore = /** @class */ (function () {
-    function FormStore(data, validation) {
-        if (data === void 0) { data = {}; }
-        if (validation === void 0) { validation = {}; }
-        var _this = this;
-        this.isDirty = false;
-        this.errors = mobx__WEBPACK_IMPORTED_MODULE_0__["observable"].map({});
-        this.dataMap = new _observable_nested_map__WEBPACK_IMPORTED_MODULE_3__[/* ObservableNestedMap */ "a"]({});
-        this.validation = {};
-        this.dataMap.merge(data);
-        this.validation = validation;
-        // we use a delay of 1ms. otherwise reaction works syncronousely apparently.
-        // this is bad because we can get false positives on the isDirty flag
-        this.destroyReaction = Object(mobx__WEBPACK_IMPORTED_MODULE_0__["reaction"])(function () { return _this.data; }, function () {
-            !_this.ignoreChange && _this.setDirty();
-            _this.ignoreChange = false;
-            var fields = Array.from(_this.errors.keys());
-            _this.clearAllErrors();
-            _this.validateFields(fields);
-        }, { name: 'FormStore dirty check', fireImmediately: false, delay: 1 });
-    }
-    Object.defineProperty(FormStore.prototype, "data", {
-        get: function () {
-            return this.toJS();
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(FormStore.prototype, "isValid", {
-        get: function () {
-            var _this = this;
-            return !lodash_find__WEBPACK_IMPORTED_MODULE_2___default()(this.validation, function (validation, key) { return !_this.isFieldValid(key); });
-        },
-        enumerable: true,
-        configurable: true
-    });
-    FormStore.prototype.getFieldError = function (key) {
-        var value = this.get(key);
-        var failedValidator = this.validation[key] && this.validation[key].find(function (validator) { return !validator.validate(value); });
-        return failedValidator && failedValidator.error;
-    };
-    FormStore.prototype.isFieldValid = function (key) {
-        var value = this.get(key);
-        var failedValidator = this.validation[key] && this.validation[key].find(function (validator) { return !validator.validate(value); });
-        return !failedValidator;
-    };
-    FormStore.prototype.validateFields = function (fields) {
-        var _this = this;
-        if (fields === void 0) { fields = []; }
-        fields.forEach(function (field) {
-            _this.errors.set(field, _this.getFieldError(field));
-        });
-    };
-    FormStore.prototype.clearFieldErrors = function (fields) {
-        var _this = this;
-        if (fields === void 0) { fields = []; }
-        lodash_forEach__WEBPACK_IMPORTED_MODULE_1___default()(fields, function (field) {
-            _this.errors.delete(field);
-        });
-    };
-    FormStore.prototype.clearAllErrors = function () {
-        this.errors.clear();
-    };
-    FormStore.prototype.set = function (key, value, ignoreChange) {
-        if (ignoreChange === void 0) { ignoreChange = false; }
-        this.ignoreChange = ignoreChange;
-        return this.dataMap.set(key, value);
-    };
-    FormStore.prototype.get = function (key) {
-        var value = this.dataMap.get(key);
-        return Object(mobx__WEBPACK_IMPORTED_MODULE_0__["isObservable"])(value) ? Object(mobx__WEBPACK_IMPORTED_MODULE_0__["toJS"])(value) : value;
-    };
-    FormStore.prototype.setDirty = function () {
-        this.isDirty = true;
-    };
-    FormStore.prototype.setClean = function () {
-        this.isDirty = false;
-    };
-    FormStore.prototype.reset = function (value) {
-        this.ignoreChange = true;
-        this.dataMap.clear();
-        this.setClean();
-        value && this.dataMap.merge(value);
-    };
-    FormStore.prototype.destroy = function () {
-        this.destroyReaction();
-    };
-    FormStore.prototype.toJS = function () {
-        return this.dataMap.toJS();
-    };
-    __decorate([
-        mobx__WEBPACK_IMPORTED_MODULE_0__["observable"]
-    ], FormStore.prototype, "isDirty", void 0);
-    __decorate([
-        mobx__WEBPACK_IMPORTED_MODULE_0__["computed"]
-    ], FormStore.prototype, "data", null);
-    __decorate([
-        mobx__WEBPACK_IMPORTED_MODULE_0__["computed"]
-    ], FormStore.prototype, "isValid", null);
-    __decorate([
-        mobx__WEBPACK_IMPORTED_MODULE_0__["action"]
-    ], FormStore.prototype, "set", null);
-    __decorate([
-        mobx__WEBPACK_IMPORTED_MODULE_0__["action"]
-    ], FormStore.prototype, "setDirty", null);
-    __decorate([
-        mobx__WEBPACK_IMPORTED_MODULE_0__["action"]
-    ], FormStore.prototype, "setClean", null);
-    return FormStore;
-}());
-/* harmony default export */ __webpack_exports__["a"] = (FormStore);
-var FormValidators = /** @class */ (function () {
-    function FormValidators() {
-    }
-    FormValidators.required = function (_a) {
-        var _b = (_a === void 0 ? {} : _a).error, error = _b === void 0 ? 'This field is required' : _b;
-        return {
-            validate: function (value) { return !!value; },
-            error: error
-        };
-    };
-    FormValidators.notEmpty = function (_a) {
-        var _b = (_a === void 0 ? {} : _a).error, error = _b === void 0 ? 'This field is required' : _b;
-        return {
-            validate: function (value) { return !!value && !!value.trim(); },
-            error: error
-        };
-    };
-    FormValidators.emailValidation = function (_a) {
-        var _b = (_a === void 0 ? {} : _a).error, error = _b === void 0 ? 'Please enter a valid email address' : _b;
-        var emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        return {
-            validate: function (value) { return emailRegex.test(value); },
-            error: error
-        };
-    };
-    FormValidators.passwordValidation = function (_a) {
-        var _b = (_a === void 0 ? {} : _a).error, error = _b === void 0 ? 'Your password must have at least 6 characters' : _b;
-        var passwordRegex = /^\S{6,}$/;
-        return {
-            validate: function (value) { return passwordRegex.test(value); },
-            error: error
-        };
-    };
-    FormValidators.editorRequired = function (_a) {
-        var _b = (_a === void 0 ? {} : _a).error, error = _b === void 0 ? 'This field is required' : _b;
-        return {
-            validate: function (value) { return value && value.getCurrentContent().hasText(); },
-            error: error
-        };
-    };
-    FormValidators.maxLength = function (_a) {
-        var _b = _a === void 0 ? {} : _a, maxLength = _b.maxLength, _c = _b.error, error = _c === void 0 ? 'Text too long' : _c;
-        return {
-            validate: function (value) { return !value || value.length <= maxLength; },
-            error: error
-        };
-    };
-    FormValidators.urlValidation = function (_a) {
-        var _b = (_a === void 0 ? {} : _a).error, error = _b === void 0 ? 'Url is not valid' : _b;
-        var urlRegex = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/;
-        return {
-            validate: function (value) { return urlRegex.test(value); },
-            error: error
-        };
-    };
-    FormValidators.allTagsMaxLength = function (_a) {
-        var _b = _a === void 0 ? {} : _a, _c = _b.limit, limit = _c === void 0 ? 25 : _c, _d = _b.error, error = _d === void 0 ? "Tag cannot exceed " + limit + " characters" : _d;
-        var validator = function (value) {
-            var tagsStrArray = value.split(",");
-            var result = false;
-            tagsStrArray.forEach(function (tagStr) {
-                tagStr = tagStr.trim();
-                if (tagStr.length < limit) {
-                    result = true;
-                }
-            });
-            return result;
-        };
-        return {
-            validate: validator,
-            error: error
-        };
-    };
-    return FormValidators;
-}());
+	return [content].join('\n');
+}
 
+// Adapted from convert-source-map (MIT)
+function toComment(sourceMap) {
+	// eslint-disable-next-line no-undef
+	var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap))));
+	var data = 'sourceMappingURL=data:application/json;charset=utf-8;base64,' + base64;
+
+	return '/*# ' + data + ' */';
+}
 
 
 /***/ }),
-/* 20 */
+/* 15 */
 /***/ (function(module, exports) {
 
 module.exports = require("lodash/mapValues");
 
 /***/ }),
-/* 21 */
+/* 16 */
+/***/ (function(module, exports) {
+
+module.exports = require("lodash/values");
+
+/***/ }),
+/* 17 */
 /***/ (function(module, exports) {
 
 module.exports = require("lodash/map");
 
 /***/ }),
-/* 22 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/* 18 */
+/***/ (function(module, exports) {
 
-"use strict";
-/* harmony import */ var mobx__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
-/* harmony import */ var mobx__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(mobx__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var lodash_isObject__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
-/* harmony import */ var lodash_isObject__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash_isObject__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var invariant__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(27);
-/* harmony import */ var invariant__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(invariant__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _form_form_store__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(19);
-/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(2);
-/* harmony import */ var _utils_schema_utils__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(8);
-var __assign = (undefined && undefined.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
-var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-var __generator = (undefined && undefined.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-    }
-};
-
-
-
-
-
-
-var validPathInvariant = function (path) { return invariant__WEBPACK_IMPORTED_MODULE_2___default()(path.startsWith('.'), 'Invalid path structure. paths must start with `.`'); };
-var toAbsolutePath = function (path) {
-    var pathParts = path.split('/');
-    if (pathParts[0] !== '.') {
-        pathParts.unshift('.');
-    }
-    return pathParts.join('/');
-};
-var OrkanStore = /** @class */ (function () {
-    function OrkanStore(dataStore, authStore) {
-        this.dataFormStore = new _form_form_store__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"]({}, {});
-        this.settingsFormStore = new _form_form_store__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"]({}, {});
-        this.isLoadingActivePath = false;
-        this.isInitiating = false;
-        this.dataStore = dataStore;
-        this.authStore = authStore;
-    }
-    OrkanStore.prototype.init = function () {
-        var _this = this;
-        this.isInitiating = true;
-        this.authStore.onAuthStateChanged(function (user) { return __awaiter(_this, void 0, void 0, function () {
-            var userPermissions, err_1;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        if (!user) return [3 /*break*/, 8];
-                        userPermissions = void 0;
-                        _a.label = 1;
-                    case 1:
-                        _a.trys.push([1, 3, , 4]);
-                        return [4 /*yield*/, this.dataStore.load(_constants__WEBPACK_IMPORTED_MODULE_4__[/* USERS_KEY_NAME */ "f"] + '/' + user.uid)];
-                    case 2:
-                        userPermissions = _a.sent();
-                        return [3 /*break*/, 4];
-                    case 3:
-                        err_1 = _a.sent();
-                        return [3 /*break*/, 4];
-                    case 4:
-                        if (!userPermissions) return [3 /*break*/, 5];
-                        this.user = user;
-                        this.dataStore.listen(_constants__WEBPACK_IMPORTED_MODULE_4__[/* SCHEMA_KEY_NAME */ "d"]);
-                        this.dataStore.listen(_constants__WEBPACK_IMPORTED_MODULE_4__[/* SCHEMA_SETTINGS_KEY_NAME */ "e"]);
-                        return [3 /*break*/, 7];
-                    case 5: return [4 /*yield*/, this.createUserRequest(user)];
-                    case 6:
-                        _a.sent();
-                        this.logout();
-                        _a.label = 7;
-                    case 7: return [3 /*break*/, 9];
-                    case 8:
-                        this.user = null;
-                        _a.label = 9;
-                    case 9:
-                        this.isInitiating = false;
-                        return [2 /*return*/];
-                }
-            });
-        }); });
-    };
-    OrkanStore.prototype.logout = function () {
-        this.dataStore.clearCache(_constants__WEBPACK_IMPORTED_MODULE_4__[/* USERS_KEY_NAME */ "f"]);
-        this.dataStore.clearCache(_constants__WEBPACK_IMPORTED_MODULE_4__[/* SCHEMA_SETTINGS_KEY_NAME */ "e"]);
-        this.dataStore.clearCache(_constants__WEBPACK_IMPORTED_MODULE_4__[/* SCHEMA_KEY_NAME */ "d"]);
-        return this.authStore.signOut();
-    };
-    OrkanStore.prototype.isAdmin = function () {
-        return !!this.user;
-    };
-    OrkanStore.prototype.createUserRequest = function (user) {
-        return this.dataStore.setValue(_constants__WEBPACK_IMPORTED_MODULE_4__[/* USER_REQUESTS_KEY_NAME */ "g"] + '/' + user.uid, {
-            email: user.email,
-            avatarUrl: user.photoURL
-        });
-    };
-    OrkanStore.prototype.getValue = function (nonAbsolutePath) {
-        var _a;
-        // to enable components use relative paths (e.g something vs ./something)
-        var path = toAbsolutePath(nonAbsolutePath);
-        if (this.isLoadingActivePath) {
-            return this.dataStore.getValue(path);
-        }
-        if (this.activePath === path) {
-            return this.dataFormStore.get(this.activePath) || this.dataStore.getValue(path);
-        }
-        else if (this.activePath && this.activePath.indexOf(path) === 0) {
-            return __assign({}, this.dataStore.getValue(path), (_a = {}, _a[this.activePath.replace(path + '/', '')] = this.dataFormStore.get(this.activePath) || this.dataStore.getValue(this.activePath), _a));
-        }
-        else if (!this.isSchemaPathPrimitive(path)) {
-            return this.dataStore.getValue(path);
-        }
-        else if (this.activePath && path.indexOf(this.activePath) === 0) {
-            var relativePath = path.replace(this.activePath, '');
-            var relativePathParts = relativePath.split('/');
-            relativePathParts.shift(); // removing the first item because its empty
-            if (relativePathParts.length === 1) {
-                var formValue = this.dataFormStore.get(this.activePath);
-                return formValue && formValue[relativePathParts[0]];
-            }
-            else {
-                return this.dataStore.getValue(path);
-            }
-        }
-        else {
-            return this.dataStore.getValue(path);
-        }
-    };
-    OrkanStore.prototype.setActivePath = function (nonAbsolutePath) {
-        return __awaiter(this, void 0, void 0, function () {
-            var path, storeValue;
-            var _this = this;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        path = toAbsolutePath(nonAbsolutePath);
-                        this.activePath = path;
-                        this.dataFormStore.reset();
-                        this.isLoadingActivePath = true;
-                        return [4 /*yield*/, this.loadRequiredFieldsByPath(path)];
-                    case 1:
-                        _a.sent();
-                        this.isLoadingActivePath = false;
-                        storeValue = this.dataStore.getValue(path) || {};
-                        if (!this.isSchemaPathPrimitive(path)) {
-                            this.getPrimitiveKeysByPath(path).forEach(function (key) {
-                                _this.dataFormStore.set(path + "." + key, storeValue[key]);
-                            });
-                        }
-                        else {
-                            this.dataFormStore.set(path, this.dataStore.getValue(path));
-                        }
-                        setTimeout(function () { return _this.dataFormStore.setClean(); }, 2);
-                        return [2 /*return*/];
-                }
-            });
-        });
-    };
-    OrkanStore.prototype.submitData = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var newValue, currentValue;
-            var _this = this;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        newValue = this.dataFormStore.get(this.activePath);
-                        currentValue = this.dataStore.getValue(this.activePath);
-                        if (!(lodash_isObject__WEBPACK_IMPORTED_MODULE_1___default()(newValue) && lodash_isObject__WEBPACK_IMPORTED_MODULE_1___default()(currentValue))) return [3 /*break*/, 2];
-                        return [4 /*yield*/, this.dataStore.setValue(this.activePath, __assign({}, currentValue, newValue))];
-                    case 1:
-                        _a.sent();
-                        return [3 /*break*/, 4];
-                    case 2: return [4 /*yield*/, this.dataStore.setValue(this.activePath, newValue)];
-                    case 3:
-                        _a.sent();
-                        _a.label = 4;
-                    case 4:
-                        setTimeout(function () { return _this.dataFormStore.setClean(); }, 2);
-                        return [2 /*return*/];
-                }
-            });
-        });
-    };
-    OrkanStore.prototype.loadRequiredFieldsByPath = function (path) {
-        var _this = this;
-        return Promise.all(this.getPrimitiveKeysByPath(path)
-            .filter(function (key) { return _this.dataStore.getValue(path + '/' + key) === undefined; })
-            .map(function (key) { return _this.dataStore.load(path + '/' + key); }));
-    };
-    OrkanStore.prototype.getSchemaByPath = function (path, includeNative) {
-        validPathInvariant(path);
-        var schema = this.getSchema(includeNative);
-        return Object(_utils_schema_utils__WEBPACK_IMPORTED_MODULE_5__[/* schemaGet */ "c"])(schema, path);
-    };
-    OrkanStore.prototype.isSchemaPathPrimitive = function (path, includeNative) {
-        validPathInvariant(path);
-        var pathSchema = this.getSchemaByPath(path, includeNative);
-        return !lodash_isObject__WEBPACK_IMPORTED_MODULE_1___default()(pathSchema);
-    };
-    OrkanStore.prototype.getPrimitiveKeysByPath = function (path) {
-        validPathInvariant(path);
-        var schema = this.getSchema();
-        return Object(_utils_schema_utils__WEBPACK_IMPORTED_MODULE_5__[/* getSchemaPrimitiveKeysByPath */ "b"])(schema, path);
-    };
-    OrkanStore.prototype.geNonPrimitiveKeysByPath = function (path, includeNative) {
-        validPathInvariant(path);
-        var pathSchema = this.getSchemaByPath(path, includeNative);
-        if (this.isPathCollection(path)) {
-            return Object.keys(this.dataStore.getValue(path) || {});
-        }
-        else {
-            return Object.keys(pathSchema)
-                .filter(function (key) { return lodash_isObject__WEBPACK_IMPORTED_MODULE_1___default()(pathSchema[key]); });
-        }
-    };
-    OrkanStore.prototype.clearActivePath = function () {
-        this.activePath = null;
-        this.dataFormStore.reset();
-        this.clearSettingsPath();
-    };
-    OrkanStore.prototype.clearSettingsPath = function () {
-        this.settingsFormStore.reset();
-        this.settingsPath = null;
-    };
-    OrkanStore.prototype.getSettingsByPath = function (path) {
-        validPathInvariant(path);
-        var schema = this.getSchema();
-        var schemaSettings = this.getSchemaSettings();
-        var schemaPath = Object(_utils_schema_utils__WEBPACK_IMPORTED_MODULE_5__[/* toSchemaPath */ "d"])(schema, path);
-        if (schemaPath === this.settingsPath) {
-            return this.settingsFormStore.toJS();
-        }
-        else if (schemaSettings) {
-            return Object(_utils_schema_utils__WEBPACK_IMPORTED_MODULE_5__[/* schemaGet */ "c"])(schemaSettings, schemaPath);
-        }
-    };
-    OrkanStore.prototype.submitSettings = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var newValue;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        newValue = this.settingsFormStore.toJS();
-                        return [4 /*yield*/, this.dataStore.setValue(_constants__WEBPACK_IMPORTED_MODULE_4__[/* SCHEMA_SETTINGS_KEY_NAME */ "e"] + '/' + this.settingsPath, newValue)];
-                    case 1:
-                        _a.sent();
-                        this.clearSettingsPath();
-                        return [2 /*return*/];
-                }
-            });
-        });
-    };
-    OrkanStore.prototype.setSettingsPath = function (path) {
-        validPathInvariant(path);
-        var schema = this.getSchema();
-        var schemaSettings = this.getSchemaSettings();
-        var schemaPath = Object(_utils_schema_utils__WEBPACK_IMPORTED_MODULE_5__[/* toSchemaPath */ "d"])(schema, path);
-        this.settingsPath = schemaPath;
-        var defaultSettings;
-        if (this.isPathCollection(path)) {
-            defaultSettings = {
-                collectionMainLabel: ''
-            };
-        }
-        else {
-            defaultSettings = {
-                uiType: 'text'
-            };
-        }
-        this.settingsFormStore.reset(__assign({}, defaultSettings, Object(_utils_schema_utils__WEBPACK_IMPORTED_MODULE_5__[/* schemaGet */ "c"])(schemaSettings, schemaPath)));
-    };
-    OrkanStore.prototype.isPathCollection = function (path) {
-        return !!this.getSchemaByPath(path, true)._;
-    };
-    // todo: how do i create a primitive collection item?
-    OrkanStore.prototype.createCollectionItem = function (path, key) {
-        return __awaiter(this, void 0, void 0, function () {
-            var finalKey;
-            return __generator(this, function (_a) {
-                validPathInvariant(path);
-                finalKey = key || this.dataStore.push(this.activePath).key;
-                this.setActivePath(path + '/' + finalKey);
-                return [2 /*return*/];
-            });
-        });
-    };
-    OrkanStore.prototype.removeCollectionItem = function (path) {
-        validPathInvariant(path);
-        return this.dataStore.remove(path);
-    };
-    OrkanStore.prototype.getSchema = function (includeNative) {
-        if (includeNative === void 0) { includeNative = false; }
-        return __assign({}, this.dataStore.getValue(_constants__WEBPACK_IMPORTED_MODULE_4__[/* SCHEMA_KEY_NAME */ "d"]), includeNative ? orkanSchema : {});
-    };
-    OrkanStore.prototype.getSchemaSettings = function () {
-        return __assign({}, this.dataStore.getValue(_constants__WEBPACK_IMPORTED_MODULE_4__[/* SCHEMA_SETTINGS_KEY_NAME */ "e"]), orkanSchemaSettings);
-    };
-    OrkanStore.prototype.getUserPermissions = function () {
-        return this.dataStore.getValue(_constants__WEBPACK_IMPORTED_MODULE_4__[/* USERS_KEY_NAME */ "f"] + '/' + this.user.uid);
-    };
-    OrkanStore.prototype.getCollectionsPaths = function (includeNative) {
-        return Object(_utils_schema_utils__WEBPACK_IMPORTED_MODULE_5__[/* getSchemaCollectionPaths */ "a"])(this.getSchema(includeNative));
-    };
-    OrkanStore.prototype.approveUserRequest = function (uid) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.dataStore.remove(_constants__WEBPACK_IMPORTED_MODULE_4__[/* USER_REQUESTS_KEY_NAME */ "g"] + '/' + uid)];
-                    case 1:
-                        _a.sent();
-                        return [4 /*yield*/, this.dataStore.setValue(_constants__WEBPACK_IMPORTED_MODULE_4__[/* USERS_KEY_NAME */ "f"] + '/' + uid, defaultUserPermissions)];
-                    case 2:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
-            });
-        });
-    };
-    OrkanStore.prototype.declineUserRequest = function (uid) {
-        return this.dataStore.remove(_constants__WEBPACK_IMPORTED_MODULE_4__[/* USER_REQUESTS_KEY_NAME */ "g"] + '/' + uid);
-    };
-    OrkanStore.prototype.openModal = function (Component, props) {
-        var _this = this;
-        if (props === void 0) { props = {}; }
-        return new Promise(function (resolve, reject) {
-            _this.modal = {
-                Component: Component,
-                props: __assign({}, props, { resolve: function () {
-                        var args = [];
-                        for (var _i = 0; _i < arguments.length; _i++) {
-                            args[_i] = arguments[_i];
-                        }
-                        _this.modal = null;
-                        resolve.apply(void 0, args);
-                    }, reject: function () {
-                        var args = [];
-                        for (var _i = 0; _i < arguments.length; _i++) {
-                            args[_i] = arguments[_i];
-                        }
-                        _this.modal = null;
-                        reject.apply(void 0, args);
-                    } })
-            };
-        });
-    };
-    __decorate([
-        mobx__WEBPACK_IMPORTED_MODULE_0__["observable"]
-    ], OrkanStore.prototype, "activePath", void 0);
-    __decorate([
-        mobx__WEBPACK_IMPORTED_MODULE_0__["observable"]
-    ], OrkanStore.prototype, "settingsPath", void 0);
-    __decorate([
-        mobx__WEBPACK_IMPORTED_MODULE_0__["observable"]
-    ], OrkanStore.prototype, "isLoadingActivePath", void 0);
-    __decorate([
-        mobx__WEBPACK_IMPORTED_MODULE_0__["observable"]
-    ], OrkanStore.prototype, "isInitiating", void 0);
-    __decorate([
-        mobx__WEBPACK_IMPORTED_MODULE_0__["observable"].ref
-    ], OrkanStore.prototype, "user", void 0);
-    __decorate([
-        mobx__WEBPACK_IMPORTED_MODULE_0__["observable"].ref
-    ], OrkanStore.prototype, "modal", void 0);
-    return OrkanStore;
-}());
-/* harmony default export */ __webpack_exports__["a"] = (OrkanStore);
-var orkanSchema = {
-    schema: {},
-    usersPermissions: {
-        _: {
-            editData: 'string',
-            editPermissions: 'string',
-            editSchema: 'string',
-        }
-    }
-};
-var orkanSchemaSettings = {
-    usersPermissions: {
-        // mainCollectionLabel: 'email',
-        _: {
-            editData: {
-                uiType: 'switch'
-            },
-            editPermissions: {
-                uiType: 'switch'
-            },
-            editSchema: {
-                uiType: 'switch'
-            }
-        }
-    }
-};
-var defaultUserPermissions = {
-    editData: true
-};
-// {
-// 	blog:{
-// 		posts: {
-// 			_: {title, body, date, image}
-// 		}
-// 	}
-// }
-
+module.exports = require("lodash/find");
 
 /***/ }),
-/* 23 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/* 19 */
+/***/ (function(module, exports) {
 
-"use strict";
-/* unused harmony export Keyboard */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return keyboard; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return onDoublePress; });
-/* harmony import */ var humaninput_dist_humaninput_full_min__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(28);
-/* harmony import */ var humaninput_dist_humaninput_full_min__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(humaninput_dist_humaninput_full_min__WEBPACK_IMPORTED_MODULE_0__);
-
-var Keyboard = /** @class */ (function () {
-    function Keyboard() {
-        this.binder = new humaninput_dist_humaninput_full_min__WEBPACK_IMPORTED_MODULE_0___default.a(window);
-        // this.binder.filter = e => true
-    }
-    Keyboard.prototype.bind = function (keys, handler) {
-        this.binder.on(keys, handler);
-    };
-    Keyboard.prototype.unbind = function (keys, handler) {
-        this.binder.off(keys, handler);
-    };
-    Keyboard.prototype.isDown = function (keys) {
-        return this.binder.state.down.indexOf(keys) > -1 && this.binder.state.down.length === 1;
-    };
-    return Keyboard;
-}());
-
-var keyboard = new Keyboard();
-var onDoublePress = function (key, handler) {
-    var count = 0;
-    var timeout;
-    var singleHandler = function (e) {
-        if (e.key.toLowerCase() !== key) {
-            return;
-        }
-        count++;
-        timeout && clearTimeout(timeout);
-        if (count === 2) {
-            handler(e);
-            count = 0;
-        }
-        else {
-            timeout = setTimeout(function () { return count = 0; }, 300);
-        }
-    };
-    keyboard.bind(key, singleHandler);
-    return function () { return keyboard.unbind(key, singleHandler); };
-};
-
+module.exports = require("invariant");
 
 /***/ }),
-/* 24 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(process) {// Copyright Joyent, Inc. and other Node contributors.
@@ -2512,44 +2358,19 @@ var substr = 'ab'.substr(-1) === 'b'
     }
 ;
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(35)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(26)))
 
 /***/ }),
-/* 25 */
-/***/ (function(module, exports) {
-
-module.exports = require("lodash/values");
-
-/***/ }),
-/* 26 */
-/***/ (function(module, exports) {
-
-module.exports = require("lodash/find");
-
-/***/ }),
-/* 27 */
-/***/ (function(module, exports) {
-
-module.exports = require("invariant");
-
-/***/ }),
-/* 28 */
+/* 21 */
 /***/ (function(module, exports) {
 
 module.exports = require("humaninput/dist/humaninput-full.min");
 
 /***/ }),
-/* 29 */,
-/* 30 */
-/***/ (function(module, exports) {
-
-module.exports = require("firebase");
-
-/***/ }),
-/* 31 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(17)(false);
+exports = module.exports = __webpack_require__(14)(false);
 // imports
 
 
@@ -2560,25 +2381,25 @@ exports.push([module.i, "@keyframes listItemAnimation {\n  0% {\n    transform: 
 
 
 /***/ }),
-/* 32 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(31);
+var content = __webpack_require__(22);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
-var update = __webpack_require__(18)(content, {});
+var update = __webpack_require__(13)(content, {});
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {}
 
 /***/ }),
-/* 33 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(17)(false);
+exports = module.exports = __webpack_require__(14)(false);
 // imports
 
 
@@ -2589,22 +2410,22 @@ exports.push([module.i, "@keyframes listItemAnimation {\n  0% {\n    transform: 
 
 
 /***/ }),
-/* 34 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(33);
+var content = __webpack_require__(24);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
-var update = __webpack_require__(18)(content, {});
+var update = __webpack_require__(13)(content, {});
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {}
 
 /***/ }),
-/* 35 */
+/* 26 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -2793,94 +2614,5 @@ process.chdir = function (dir) {
 process.umask = function() { return 0; };
 
 
-/***/ }),
-/* 36 */,
-/* 37 */,
-/* 38 */
-/***/ (function(module, exports) {
-
-module.exports = require("firebaseui/dist/firebaseui.css");
-
-/***/ }),
-/* 39 */,
-/* 40 */,
-/* 41 */
-/***/ (function(module, exports) {
-
-module.exports = require("lodash/uniqueId");
-
-/***/ }),
-/* 42 */
-/***/ (function(module, exports) {
-
-module.exports = require("firebaseui");
-
-/***/ }),
-/* 43 */
-/***/ (function(module, exports) {
-
-module.exports = require("rc-slider/assets/index.css");
-
-/***/ }),
-/* 44 */
-/***/ (function(module, exports) {
-
-module.exports = require("rc-slider");
-
-/***/ }),
-/* 45 */
-/***/ (function(module, exports) {
-
-module.exports = require("react-switch");
-
-/***/ }),
-/* 46 */
-/***/ (function(module, exports) {
-
-module.exports = require("react-color");
-
-/***/ }),
-/* 47 */
-/***/ (function(module, exports) {
-
-module.exports = require("react-day-picker/lib/style.css");
-
-/***/ }),
-/* 48 */
-/***/ (function(module, exports) {
-
-module.exports = require("react-day-picker");
-
-/***/ }),
-/* 49 */
-/***/ (function(module, exports) {
-
-module.exports = require("dateformat");
-
-/***/ }),
-/* 50 */
-/***/ (function(module, exports) {
-
-module.exports = require("react-spinners");
-
-/***/ }),
-/* 51 */
-/***/ (function(module, exports) {
-
-module.exports = require("lodash/cloneDeep");
-
-/***/ }),
-/* 52 */
-/***/ (function(module, exports) {
-
-module.exports = require("lodash/get");
-
-/***/ }),
-/* 53 */
-/***/ (function(module, exports) {
-
-module.exports = require("lodash/set");
-
 /***/ })
 /******/ ]);
-});

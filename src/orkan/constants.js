@@ -1,3 +1,6 @@
+export const ORKAN_ADMIN_GLOBAL = '__orkan_admin__';
+
+
 
 export const REACT_CONTEXT_NAME = 'OrkanContext';
 

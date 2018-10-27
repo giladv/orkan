@@ -32,6 +32,7 @@ export default class OrkanPaths extends Component{
 	};
 
 	static defaultProps = {
+		showHeader: true
 	};
 
 	@observable obState = {
@@ -107,7 +108,7 @@ export default class OrkanPaths extends Component{
 				</OrkanListItem>
 			))
 		}else{
-			return store.geNonPrimitiveKeysByPath(path, true).map(key => (
+			return store.getNonPrimitiveKeysByPath(path, true).map(key => (
 				<OrkanListItem key={key} onClick={() => this.handleClickPath(key)}>/{key}</OrkanListItem>
 			));
 		}
@@ -122,12 +123,16 @@ export default class OrkanPaths extends Component{
 			{label: 'Clear collection', value: 'clear'},
 		];
 
+		const isPathCollection = store.isPathCollection(path);
+		const nonPrimitiveKeysExist = store.getNonPrimitiveKeysByPath(path, true).length > 0;
+		const primitiveKeysExist = store.getPrimitiveKeysByPath(path, true).length > 0;
+
 		return (
 			<div className='OrkanPaths'>
-				{showHeader &&
+				{showHeader && !isPathCollection && nonPrimitiveKeysExist && primitiveKeysExist &&
 					<OrkanHeader title='Other Paths'/>
 				}
-				{store.isPathCollection(path) &&
+				{isPathCollection &&
 					<div className='OrkanPaths-header'>
 						<DropdownContainer
 							options={options}

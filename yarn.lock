@@ -4956,26 +4956,6 @@ original@>=0.0.5:
   dependencies:
     url-parse "1.0.x"
 
-"orkan@https://github.com/giladv/orkan":
-  version "0.0.1"
-  resolved "https://github.com/giladv/orkan#98cc1411f0e0e5f87e7ab12c7a77d0dea43e20da"
-  dependencies:
-    autobind-decorator "^1.4.3"
-    classnames "^2.2.5"
-    dateformat "^3.0.3"
-    firebaseui "^3.4.1"
-    humaninput "^1.1.15"
-    invariant "^2.2.4"
-    lodash "^4.17.5"
-    mobx "^4.1.0"
-    mobx-react "^5.0.0"
-    prop-types "^15.6.0"
-    rc-slider "^8.6.3"
-    react-color "^2.14.1"
-    react-day-picker "^7.2.4"
-    react-spinners "^0.4.6"
-    react-switch "^3.0.4"
-
 os-browserify@^0.3.0:
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/os-browserify/-/os-browserify-0.3.0.tgz#854373c7f5c2315914fc9bfc6bd8238fdda1ec27"

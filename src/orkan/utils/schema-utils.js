@@ -19,7 +19,6 @@ export const schemaGet = (schema, path) => {
 export const toSchemaPath = (schema, path) => {
 	let pathParts = path.split('/').filter(it => !!it);
 
-
 	let subSchema = schema;
 	let schemaPathParts = [pathParts.shift()];
 

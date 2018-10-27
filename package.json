@@ -3,6 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
+    "dev-admin": "webpack-dev-server --mode development --config webpack-admin-config.js",
+    "build-admin": "webpack --mode production --config webpack-admin-config.js",
     "dev-ts": "webpack-dev-server --mode development --config webpack-development-ts-config.js",
     "build": "webpack --mode production --config webpack-production-ts-config.js"
   },
@@ -20,7 +22,6 @@
     "lodash": "^4.17.5",
     "mobx": "^4.1.0",
     "mobx-react": "^5.0.0",
-    "orkan": "https://github.com/giladv/orkan",
     "prop-types": "^15.6.0",
     "rc-slider": "^8.6.3",
     "react-color": "^2.14.1",

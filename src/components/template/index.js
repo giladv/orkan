@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import autobind from 'autobind-decorator';
 import DevTools from 'mobx-react-devtools';
 import {withRouter} from 'react-router';
-import firebase from 'firebase';
 
 // import './base.css';
 // import './fonts.css';

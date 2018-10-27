@@ -4,7 +4,7 @@ import autobind from 'autobind-decorator';
 import classNames from 'classnames';
 import {observer} from 'mobx-react';
 import {observable} from 'mobx';
-import firebase from 'firebase';
+import firebase from 'firebase/app';
 
 import Button from '../button';
 

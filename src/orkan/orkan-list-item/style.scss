@@ -25,7 +25,9 @@
 		flex: 1;
 		font-size: 13px;
 		color: #71778A;
-		display: flex;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
 	}
 
 	> .OrkanActionButton{

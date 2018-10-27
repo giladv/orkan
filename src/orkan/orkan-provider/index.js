@@ -4,15 +4,24 @@ import PropTypes from 'prop-types';
 import {observer} from 'mobx-react';
 import {observable} from 'mobx';
 import autobind from 'autobind-decorator';
+import classNames from 'classnames';
 
-import {ACTIVATION_EVENT_KEY, REACT_CONTEXT_NAME,} from '../constants';
+import {ACTIVATION_EVENT_KEY, ORKAN_ADMIN_GLOBAL, REACT_CONTEXT_NAME,} from '../constants';
 import {keyboard} from '../utils/keyboard-utils';
 import FirebaseStore from '../firebase-store';
 import OrkanIndicator from '../orkan-indicator';
 import OrkanStore from '../orkan-store';
+import * as mobx from 'mobx';
 
 
 let OrkanAdmin;
+
+window.mobx = mobx;
+window.React = React;
+window.ReactDOM = ReactDOM;
+window.PropTypes = PropTypes;
+window.classNames = classNames;
+window.autobind = autobind;
 
 
 @observer
@@ -75,7 +84,15 @@ export default class OrkanProvider extends Component{
 
 		this.obState.isBusy = true;
 		try{
-			OrkanAdmin = (await import(/* webpackChunkName: "orkan-admin" */'../orkan-admin')).default;
+			const fetchUrl = process.env.NODE_ENV === 'development'
+				?'http://localhost:8081/orkan-admin.js'
+				:'https://firebasestorage.googleapis.com/v0/b/my-proj-5cbb6.appspot.com/o/admin%2Forkan-admin.js?alt=media&token=c798a38c-9479-42b7-81f9-3a70a0d9d436';
+
+			const response = await fetch(fetchUrl);
+			eval(await response.text());
+			OrkanAdmin = window[ORKAN_ADMIN_GLOBAL].default;
+			delete window[ORKAN_ADMIN_GLOBAL];
+
 			this.orkanStore = new OrkanStore(store, auth);
 			this.obState.isActive = true;
 		}catch(err){

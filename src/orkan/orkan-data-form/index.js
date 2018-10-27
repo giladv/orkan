@@ -76,7 +76,6 @@ export default class OrkanDataForm extends Component{
 
 	renderControl(path){
 		const {getFieldSettings} = this.props;
-
 		const {uiType, uiSize, dataSource, dataSourcePath, dataSourceLabel, dataSourceValue, dataSourceOptions, fromValue, toValue} = getFieldSettings(path) || {};
 
 		switch(uiType){
