@@ -9,7 +9,7 @@
   "files": [
     "dist"
   ],
-  "main": "dist/orkan.js",
+  "main": "./dist/orkan.js",
   "dependencies": {
     "autobind-decorator": "^1.4.3",
     "classnames": "^2.2.5",

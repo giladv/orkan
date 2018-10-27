@@ -12,7 +12,7 @@ module.exports = {
 		filename: '[name].js',
 		chunkFilename: '[name].js',
 		// library: 'Orkan',
-		// libraryTarget: 'umd'
+		libraryTarget: 'commonjs2'
 	},
 	module: {
 		rules: [
