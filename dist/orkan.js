@@ -926,7 +926,7 @@ var orkan_store_OrkanStore = /** @class */ (function () {
         else if (this.activePath && this.activePath.indexOf(path) === 0) {
             return orkan_store_assign({}, this.dataStore.getValue(path), (_a = {}, _a[this.activePath.replace(path + '/', '')] = this.dataFormStore.get(this.activePath) || this.dataStore.getValue(this.activePath), _a));
         }
-        else if (!this.isSchemaPathPrimitive(path)) {
+        else if (!this.isPathPrimitive(path)) {
             return this.dataStore.getValue(path);
         }
         else if (this.activePath && path.indexOf(this.activePath) === 0) {
@@ -961,7 +961,7 @@ var orkan_store_OrkanStore = /** @class */ (function () {
                         _a.sent();
                         this.isLoadingActivePath = false;
                         storeValue = this.dataStore.getValue(path) || {};
-                        if (!this.isSchemaPathPrimitive(path)) {
+                        if (!this.isPathPrimitive(path)) {
                             this.getPrimitiveKeysByPath(path).forEach(function (key) {
                                 _this.dataFormStore.set(path + "." + key, storeValue[key]);
                             });
@@ -1011,7 +1011,7 @@ var orkan_store_OrkanStore = /** @class */ (function () {
         var schema = this.getSchema(includeNative);
         return schema_utils_schemaGet(schema, path);
     };
-    OrkanStore.prototype.isSchemaPathPrimitive = function (path, includeNative) {
+    OrkanStore.prototype.isPathPrimitive = function (path, includeNative) {
         orkan_store_validPathInvariant(path);
         var pathSchema = this.getSchemaByPath(path, includeNative);
         return !isObject_default()(pathSchema);

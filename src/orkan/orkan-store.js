@@ -101,7 +101,7 @@ export default class OrkanStore{
 				...this.dataStore.getValue(path),
 				[this.activePath.replace(path + '/', '')]: this.dataFormStore.get(this.activePath) || this.dataStore.getValue(this.activePath)
 			};
-		}else if(!this.isSchemaPathPrimitive(path)){
+		}else if(!this.isPathPrimitive(path)){
 			return this.dataStore.getValue(path);
 		}else if(this.activePath && path.indexOf(this.activePath) === 0){
 
@@ -134,7 +134,7 @@ export default class OrkanStore{
 		this.isLoadingActivePath = false;
 		const storeValue = this.dataStore.getValue(path) || {};
 
-		if(!this.isSchemaPathPrimitive(path)){
+		if(!this.isPathPrimitive(path)){
 			this.getPrimitiveKeysByPath(path).forEach(key => {
 				this.dataFormStore.set(`${path}.${key}`, storeValue[key]);
 			});
@@ -173,7 +173,7 @@ export default class OrkanStore{
 		return schemaGet(schema, path);
 	}
 
-	isSchemaPathPrimitive(path, includeNative){
+	isPathPrimitive(path, includeNative){
 		validPathInvariant(path);
 		const pathSchema = this.getSchemaByPath(path, includeNative);
 		return !isObject(pathSchema);

@@ -1,0 +1,19 @@
+@import '../../globals';
+
+.Wysiwyg{
+	display: flex;
+	flex-direction: column;
+	.ql-toolbar{
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.ql-container{
+		flex: 1;
+		display: flex;
+	}
+	.ql-tooltip{
+		z-index: 1;
+	}
+}

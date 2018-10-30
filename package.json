@@ -5,7 +5,7 @@
   "scripts": {
     "dev-admin": "webpack-dev-server --mode development --config webpack-admin-config.js",
     "build-admin": "webpack --mode production --config webpack-admin-config.js",
-    "dev-ts": "webpack-dev-server --mode development --config webpack-development-ts-config.js",
+    "dev": "webpack-dev-server --mode development --config webpack-development-ts-config.js",
     "build": "webpack --mode production --config webpack-production-ts-config.js"
   },
   "files": [
@@ -26,6 +26,7 @@
     "rc-slider": "^8.6.3",
     "react-color": "^2.14.1",
     "react-day-picker": "^7.2.4",
+    "react-quill": "^1.3.2",
     "react-spinners": "^0.4.6",
     "react-switch": "^3.0.4"
   },

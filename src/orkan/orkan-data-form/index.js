@@ -17,28 +17,21 @@ import {CheckboxControl} from '../controls/checkbox';
 import {ColorPickerControl} from '../controls/color-picker';
 import {MediaControl} from '../controls/media';
 import {SwitchControl} from '../controls/switch';
+import {SliderControl} from '../controls/slider';
+import {WysiwygControl} from '../controls/wysiwyg';
+import OrkanStore from '../orkan-store';
 
 import './style.scss';
-import {SliderControl} from '../controls/slider';
 
 
 @observer
 export default class OrkanDataForm extends Component{
 
 	static propTypes = {
-		formStore: PropTypes.instanceOf(FormStore).isRequired,
-		editPath: PropTypes.string.isRequired,
-		onSubmit: PropTypes.func,
-		onCancel: PropTypes.func,
-		getFieldSettings: PropTypes.func,
-		schema: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
-		getData: PropTypes.func
+		store: PropTypes.instanceOf(OrkanStore).isRequired,
 	};
 
 	static defaultProps = {
-		onSubmit: () => null,
-		onCancel: () => null,
-		getData: () => null
 	};
 
 	@observable obState = {
@@ -49,34 +42,19 @@ export default class OrkanDataForm extends Component{
 
 	}
 
-	getEditPathPrimitiveKeys(){
-		const {schema} = this.props;
-		return Object.keys(schema)
-			.filter(key => !isObject(schema[key]))
-	}
-
-	isSchemaPrimitive(){
-		const {schema} = this.props;
-		return !isObject(schema);
-
-	}
-
 	@autobind
-	async handleSubmit(...props){
-		const {onSubmit} = this.props;
+	async handleSubmit(){
+		const {store} = this.props;
 
-		const promise = onSubmit(...props);
-		if(promise.then){
-			this.obState.isBusy = true;
-			await promise;
-			this.obState.isBusy = false;
-		}
+		this.obState.isBusy = true;
+		await store.submitData();
+		this.obState.isBusy = false;
 	}
 
 
 	renderControl(path){
-		const {getFieldSettings} = this.props;
-		const {uiType, uiSize, dataSource, dataSourcePath, dataSourceLabel, dataSourceValue, dataSourceOptions, fromValue, toValue} = getFieldSettings(path) || {};
+		const {store} = this.props;
+		const {uiType, uiSize, dataSource, dataSourcePath, dataSourceLabel, dataSourceValue, dataSourceOptions, fromValue, toValue} = store.getSettingsByPath(path) || {};
 
 		switch(uiType){
 			default:
@@ -91,6 +69,8 @@ export default class OrkanDataForm extends Component{
 				return <CheckboxControl/>;
 			case 'switch':
 				return <SwitchControl/>;
+			case 'wysiwyg':
+				return <WysiwygControl style={{height: 42 + (uiSize || 3) * 15 + 'px'}}/>;
 			case 'slider':
 				return <SliderControl min={fromValue || 0} max={toValue || 10}/>;
 			case 'select':
@@ -110,20 +90,20 @@ export default class OrkanDataForm extends Component{
 	}
 
 	renderFormFields(){
-		const {editPath, onSettings} = this.props;
+		const {store} = this.props;
 
-		if(!this.isSchemaPrimitive()){
-			return this.getEditPathPrimitiveKeys()
+		if(!store.isPathPrimitive(store.activePath)){
+			return store.getPrimitiveKeysByPath(store.activePath)
 				.map((key, i) => (
-					<FormField compact key={key} label={'/' + key} name={`${editPath}.${key}`} onSettings={() => onSettings(`${editPath}/${key}`)}>
-						{this.renderControl(`${editPath}/${key}`)}
+					<FormField compact key={key} label={'/' + key} name={`${store.activePath}.${key}`} onSettings={() => store.setSettingsPath(`${store.activePath}/${key}`)}>
+						{this.renderControl(`${store.activePath}/${key}`)}
 					</FormField>
 				))
 		}else{
-			const editPathParts = editPath.split('/');
+			const activePathParts = store.activePath.split('/');
 			return (
-				<FormField compact key={editPath} label={'/' + editPathParts[editPathParts.length-1]} name={editPath} onSettings={() => onSettings(editPath)}>
-					{this.renderControl(editPath)}
+				<FormField compact key={store.activePath} label={'/' + activePathParts[activePathParts.length-1]} name={store.activePath} onSettings={() => store.setSettingsPath(store.activePath)}>
+					{this.renderControl(store.activePath)}
 				</FormField>
 			);
 		}
@@ -131,21 +111,21 @@ export default class OrkanDataForm extends Component{
 
 
 	render(){
-		const {className, formStore} = this.props;
+		const {className, store} = this.props;
 		const {isBusy} = this.obState;
 
-		if(!this.getEditPathPrimitiveKeys().length){
+		if(!store.getPrimitiveKeysByPath(store.activePath).length){
 			return null;
 		}
 
 		const newClassName = classNames('OrkanDataForm', className);
 
 		return (
-			<Form className={newClassName} store={formStore} onSubmit={this.handleSubmit}>
+			<Form className={newClassName} store={store.dataFormStore} onSubmit={this.handleSubmit}>
 				<span/>
 				{this.renderFormFields()}
 				<div className="OrkanDataForm-actions">
-					<SubmitButton primary disabled={!formStore.isDirty} isBusy={isBusy}>Save Changes</SubmitButton>
+					<SubmitButton primary disabled={!store.dataFormStore.isDirty} isBusy={isBusy}>Save Changes</SubmitButton>
 				</div>
 			</Form>
 		);

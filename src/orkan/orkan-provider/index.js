@@ -62,6 +62,7 @@ export default class OrkanProvider extends Component{
 				const {isActive, isModifierKeyDown} = this.obState;
 				return isActive && this.orkanStore.isAdmin() && isModifierKeyDown
 			},
+			// is this making any sense??
 			openModal: (...props) => this.orkanStore && this.orkanStore.openModal(...props)
 		}};
 	}
@@ -105,7 +106,6 @@ export default class OrkanProvider extends Component{
 
 		setTimeout(() => {
 			this.obState.isBusy = false;
-
 		}, 500)
 
 		window.a = this.orkanStore;

@@ -4,9 +4,6 @@ const commonConfig = require('./webpack-common-ts-config');
 
 module.exports = merge(commonConfig, {
 	devtool: "cheap-module-source-map",
-	plugins: [
-	],
-
 	devServer: {
 		watchOptions: {
 			watch: false

@@ -4,14 +4,15 @@ import autobind from 'autobind-decorator';
 import classNames from 'classnames';
 import {observable} from 'mobx';
 import {observer} from 'mobx-react';
-import OriginalSwitch from "react-switch";
+import ReactQuill from 'react-quill';
 
 import {formInput} from '../../form';
 
+import 'react-quill/dist/quill.snow.css';
 import './style';
 
 @observer
-export default class Switch extends Component {
+export default class Wysiwyg extends Component {
 
 	static propTypes = {
 		value: PropTypes.bool,
@@ -26,27 +27,18 @@ export default class Switch extends Component {
 	render(){
 		const {className, value, onChange, disabled, ...otherProps} = this.props;
 
-		const newClassName = classNames('Switch', className, {
-			'Switch-disabled': disabled
+		const newClassName = classNames('Wysiwyg', className, {
+			'Wysiwyg-disabled': disabled
 		});
 
 		return (
-			<OriginalSwitch
+			<ReactQuill
 				{...otherProps}
 				className={newClassName}
-				// onColor='#48e4c6'
-				// offColor='#cdd3df'
-				offHandleColor='#cdd3df'
-				onHandleColor='#fa2849'
-				handleDiameter={12}
-				height={22}
-				width={40}
-				uncheckedIcon={false}
-				checkedIcon={false}
 				onChange={onChange}
-				checked={value}/>
+				value={value}/>
 		);
 	}
 }
 
-export const SwitchControl = formInput()(Switch);
+export const WysiwygControl = formInput()(Wysiwyg);

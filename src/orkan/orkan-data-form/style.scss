@@ -9,6 +9,9 @@ $orkanHeaderHeight: 46px;
 	margin: 0;
 	.FormField{
 		margin-top: 10px;
+		.Media{
+			max-width: 300px;
+		}
 	}
 	.OrkanDataForm-actions {
 		margin-top: 20px;

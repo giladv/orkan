@@ -56,9 +56,17 @@ export default class App extends Component{
 						</div>
 					}/>
 				</div>
+
+				<div className="about">
+					<WithValue path='home/about/background' render={value => <Img mode='cover' src={value}/>}/>
+					<h2><Value path='home/about/title'/></h2>
+					<WithValue path='home/about/content' render={value => <div className='content' dangerouslySetInnerHTML={{__html: value}}/>}/>
+				</div>
 				<footer>
 				</footer>
 			</div>
 		);
 	}
 }
+
+

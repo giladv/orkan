@@ -111,22 +111,22 @@ export default class OrkanSettingsPanel extends Component{
 					<SelectControl options={typeOptions}/>
 				</FormField>
 
-				{formStore.get('uiType') === 'textarea' &&
-				<FormField compact name='uiSize' label='Size'>
-					<SliderControl min={3} max={13} />
-				</FormField>
+				{['textarea', 'wysiwyg'].includes(formStore.get('uiType')) &&
+					<FormField compact name='uiSize' label='Size'>
+						<SliderControl min={3} max={13} />
+					</FormField>
 				}
 
 				{formStore.get('uiType') === 'slider' &&
-				<FormField compact name='fromValue' label='From value'>
-					<InputControl type='number' defaultValue={1} />
-				</FormField>
+					<FormField compact name='fromValue' label='From value'>
+						<InputControl type='number' defaultValue={1} />
+					</FormField>
 				}
 
 				{formStore.get('uiType') === 'slider' &&
-				<FormField compact name='toValue' label='To value'>
-					<InputControl type='number' defaultValue={10}  />
-				</FormField>
+					<FormField compact name='toValue' label='To value'>
+						<InputControl type='number' defaultValue={10}  />
+					</FormField>
 				}
 
 
@@ -191,6 +191,7 @@ const typeOptions = [
 	{label: 'Slider', value: 'slider'},
 	{label: 'Text', value: 'text'},
 	{label: 'Textarea', value: 'textarea'},
+	{label: 'WYSIWYG', value: 'wysiwyg'},
 ];
 
 const dataSourceOptions = [

@@ -5,6 +5,7 @@ import firebase from 'firebase/app';
 
 import 'firebase/database';
 import 'firebase/auth'
+import 'firebase/storage'
 
 import App from './components/app';
 import Template from './components/template';
