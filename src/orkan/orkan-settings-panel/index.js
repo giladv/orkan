@@ -22,8 +22,6 @@ export default class OrkanSettingsPanel extends Component{
 
 	static propTypes = {
 		store: PropTypes.instanceOf(OrkanStore).isRequired,
-
-		onSubmit: PropTypes.func,
 	};
 
 	static defaultProps = {
