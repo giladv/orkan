@@ -164,14 +164,7 @@ export default class OrkanProvider extends Component{
 
 				{store.settingsPath &&
 					<OrkanSettingsPanel
-						isCollectionPath={store.isPathCollection(store.settingsPath)}
-						getCollectionPaths={() => getSchemaCollectionPaths(schema)}
-						getPrimitives={path => store.getPrimitiveKeysByPath(path + '/_')}
-						onClose={() => store.clearSettingsPath()}
-						onSubmit={() => store.submitSettings()}
-						editPath={store.settingsPath}
-						formStore={store.settingsFormStore}
-						schema={store.getSchemaByPath(store.settingsPath)} />
+						store={store}/>
 				}
 				{!store.isInitiating && !store.isAdmin() && <OrkanAuth auth={store.authStore}/>}
 				{store.modal && <store.modal.Component {...store.modal.props}/>}
