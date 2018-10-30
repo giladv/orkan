@@ -9,7 +9,6 @@ import Sidebar from '../sidebar';
 import OrkanDataForm from '../orkan-data-form';
 import OrkanSettingsPanel from '../orkan-settings-panel';
 import OrkanHeader from '../orkan-header';
-import {getSchemaCollectionPaths} from '../utils/schema-utils';
 import {keyboard, onDoublePress} from '../utils/keyboard-utils';
 import OrkanAuth from '../orkan-auth';
 import OrkanSpinner from '../orkan-spinner';
