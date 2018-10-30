@@ -91,7 +91,8 @@ export default class OrkanProvider extends Component{
 		try{
 			const fetchUrl = process.env.NODE_ENV === 'development'
 				?'http://localhost:8081/orkan-admin.js'
-				:'https://firebasestorage.googleapis.com/v0/b/my-proj-5cbb6.appspot.com/o/admin%2Forkan-admin.js?alt=media&token=c798a38c-9479-42b7-81f9-3a70a0d9d436';
+				:'orkan-admin.js';
+				// :'https://firebasestorage.googleapis.com/v0/b/my-proj-5cbb6.appspot.com/o/admin%2Forkan-admin.js?alt=media&token=c798a38c-9479-42b7-81f9-3a70a0d9d436';
 
 			const response = await fetch(fetchUrl);
 			eval(await response.text());

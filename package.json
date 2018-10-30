@@ -6,7 +6,8 @@
     "dev-admin": "webpack-dev-server --mode development --config webpack-admin-config.js",
     "build-admin": "webpack --mode production --config webpack-admin-config.js",
     "dev": "webpack-dev-server --mode development --config webpack-development-ts-config.js",
-    "build": "webpack --mode production --config webpack-production-ts-config.js"
+    "build": "webpack --mode production --config webpack-production-ts-config.js",
+    "build-app": "webpack --mode production --config webpack-app-config.js"
   },
   "files": [
     "dist"

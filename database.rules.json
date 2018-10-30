@@ -1,0 +1,45 @@
+{
+  "rules": {
+    	// Orkan start
+      "test": {
+        "usersPermissions": {
+  				".read": "auth.uid !== null 
+            					&& data.child(auth.uid).exists() 
+            					&& data.child(auth.uid).child('editPermissions').val() === true",            
+          ".write": "auth.uid !== null && data.child(auth.uid).exists() && data.child(auth.uid).child('editPermissions').val() === true",
+          "$uid": {
+          	".read": "auth.uid !== null 
+            					&& data.parent().child(auth.uid).exists() 
+            					&& (data.parent().child(auth.uid).child('editPermissions').val() === true || $uid === auth.uid)",            
+          }  
+        },
+        "schema": {
+          ".read": "auth.uid !== null && data.parent().child('usersPermissions').child(auth.uid).exists()",
+          ".write": "auth.uid !== null && data.parent().child('usersPermissions').child(auth.uid).exists() && data.parent().child('usersPermissions').child(auth.uid).child('editSchema').val() === true"
+        },
+        "schemaSettings": {
+          ".read": "auth.uid !== null && data.parent().child('usersPermissions').child(auth.uid).exists()",
+          ".write": "auth.uid !== null && data.parent().child('usersPermissions').child(auth.uid).exists() && data.parent().child('usersPermissions').child(auth.uid).child('editSchema').val() === true"
+        },
+        "usersRequests": {
+          ".read": "auth.uid !== null 
+                  && data.parent().child('usersPermissions').child(auth.uid).exists() 
+                  && data.parent().child('usersPermissions').child(auth.uid).child('editPermissions').val() === true",
+          "$uid": {
+            ".write": "(
+            			auth.uid !== null 
+                  && data.parent().parent().child('usersPermissions').child(auth.uid).exists() 
+                  && data.parent().parent().child('usersPermissions').child(auth.uid).child('editPermissions').val() === true
+            		) 
+              	|| (data.val() === null && auth.uid === $uid)"
+          }
+        }, 
+        "$others": {
+    			".read": true,
+        	".write": "auth.uid !== null && data.parent().child('usersPermissions').child(auth.uid).exists() && data.parent().child('usersPermissions').child(auth.uid).child('editData').val() === true"
+        }
+        
+      }
+    	// Orkan end
+  }
+}

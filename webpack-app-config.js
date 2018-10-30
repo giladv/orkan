@@ -1,17 +1,11 @@
 const path = require('path');
 
 module.exports = {
-	entry: {
-		app: './src/index.js',
-		orkan: './src/orkan/index.js',
-	},
+	entry: './src/index.js',
 	output: {
 		path: path.resolve(__dirname, 'dist'),
 		publicPath: '/', // this maked the bundle.js to be served at root in dev-derver
-		filename: '[name].js',
-		library: 'orkan',
-		libraryTarget: 'umd',
-		umdNamedDefine: true
+		filename: 'app.js',
 	},
 	module: {
 		rules: [
@@ -49,6 +43,24 @@ module.exports = {
 		extensions: ['.ts', '.tsx', '.js', '.json', '.scss', '.css']
 	},
 	optimization: {
-		// minimize: false
-	}
+		// minimize: false,
+		// namedModules: true,
+		// namedChunks: true
+	},
+	devtool: "cheap-module-source-map",
+	plugins: [
+	],
+
+	devServer: {
+		headers: {
+			'Access-Control-Allow-Origin': '*'
+		},
+		watchOptions: {
+			watch: false
+		},
+		contentBase: './dist',
+		compress: true,
+		historyApiFallback: {disableDotRule: true}
+	},
+	externals: {}
 };
