@@ -1,0 +1,13 @@
+@import '../globals';
+
+
+
+.root{
+	display: inline-block;
+	white-space: pre;
+}
+
+.editMode{
+	@include editableOverlay;
+}
+

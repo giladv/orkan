@@ -1,7 +1,7 @@
 @import '../normalize';
 @import '../globals';
 
-.Orkan {
+.root {
 	position: fixed;
 	left: 0;
 	right: 0;
@@ -63,9 +63,9 @@
 				margin-top: 40px;
 				text-align: center;
 			}
-			> .OrkanHeader{
+			> .Header{
 				flex: 0 0 auto;
-				.OrkanHeader-title{
+				.Header-title{
 					text-overflow: ellipsis;
 					white-space: nowrap;
 					overflow: hidden;
@@ -127,13 +127,12 @@
 
 		}
 	}
-	.OrkanSettingsPanel{
-		@include listItemAnimation(false);
-		//position: absolute;
-		//left: 100%;
-		width: 300px;
-		//height: 100%;
-		//top: 0;
-		z-index: -1; // so it always be under the main panel for animations
-	}
+}
+
+
+
+.settingsPanel{
+	@include listItemAnimation(false);
+	width: 300px;
+	z-index: -1; // so it always be under the main panel for animations
 }

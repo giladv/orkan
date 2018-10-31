@@ -9,7 +9,7 @@ import Form, {FormField} from '../form/index';
 import {SubmitButton} from '../button';
 import {SelectControl} from '../controls/select';
 import {InputControl} from '../controls/input';
-import OrkanHeader from '../orkan-header';
+import Header from '../header';
 import {SliderControl} from '../controls/slider';
 import OrkanStore from '../orkan-store';
 import {COLLECTION_KEY} from '../constants';
@@ -155,7 +155,7 @@ export default class OrkanSettingsPanel extends Component{
 
 		return (
 			<div className={newClassName}>
-				<OrkanHeader title={['Settings', <span key={1}>{store.settingsPath}</span>]} onClose={() => store.clearSettingsPath()}/>
+				<Header title={['Settings', <span key={1}>{store.settingsPath}</span>]} onClose={() => store.clearSettingsPath()}/>
 				{store.isPathCollection(store.settingsPath)
 					?this.renderCollectionSettings()
 					:this.renderFieldSettings()

@@ -1438,7 +1438,7 @@ over element that should close gallery
 
 /*
 Arrow buttons hit area
-(orkan-icon is added to :before pseudo-element)
+(icon is added to :before pseudo-element)
 */
 
 .pswp__button--arrow--left, .pswp__button--arrow--right {

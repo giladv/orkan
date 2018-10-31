@@ -1,23 +1,17 @@
-const path = require('path');
+const {isDev, getReadableCssClassName, getDistPath} = require('./utils');
 
 module.exports = {
-	entry: {
-		app: './src/index.js',
-		orkan: './src/orkan/index.js',
-	},
+	entry: './src/index.js',
 	output: {
-		path: path.resolve(__dirname, 'dist'),
+		path: getDistPath(),
 		publicPath: '/', // this maked the bundle.js to be served at root in dev-derver
-		filename: '[name].js',
-		library: 'orkan',
-		libraryTarget: 'umd',
-		umdNamedDefine: true
+		filename: 'app.js',
 	},
+
 	module: {
 		rules: [
 			{
 				test: /\.(js|ts|tsx)$/,
-				// use: 'awesome-typescript-loader',
 				use: [
 					{
 						loader: 'ts-loader',
@@ -31,7 +25,18 @@ module.exports = {
 			{
 				test: /\.scss$/,
 				exclude: /node_modules/,
-				use: ['style-loader', 'css-loader', 'sass-loader'],
+				use: [
+					'style-loader',
+					{
+						loader: 'css-loader',
+						options: {
+							modules: true,
+							localIdentName: '[hash:base64:5]',
+							getLocalIdent: isDev() && getReadableCssClassName
+						}
+					},
+					'sass-loader'
+				],
 			},
 			{
 				test: /\.css$/,
@@ -45,10 +50,23 @@ module.exports = {
 			}
 		]
 	},
+
 	resolve: {
 		extensions: ['.ts', '.tsx', '.js', '.json', '.scss', '.css']
 	},
-	optimization: {
-		// minimize: false
-	}
+
+	devtool: "cheap-module-source-map",
+
+	devServer: {
+		headers: {
+			'Access-Control-Allow-Origin': '*'
+		},
+		watchOptions: {
+			watch: false
+		},
+		contentBase: './dist',
+		compress: true,
+		historyApiFallback: {disableDotRule: true}
+	},
+	externals: {}
 };

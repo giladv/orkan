@@ -5,7 +5,7 @@ import classNames from 'classnames';
 
 import Button from '../button';
 import Img from '../img';
-import Icon from '../orkan-icon';
+import Icon from '../icon';
 
 import './style';
 import OrkanActionButton from '../orkan-action-button';

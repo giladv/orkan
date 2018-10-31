@@ -3,11 +3,13 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "dev-admin": "webpack-dev-server --mode development --config webpack-admin-config.js",
-    "build-admin": "webpack --mode production --config webpack-admin-config.js",
-    "dev": "webpack-dev-server --mode development --config webpack-development-ts-config.js",
-    "build": "webpack --mode production --config webpack-production-ts-config.js",
-    "build-app": "webpack --mode production --config webpack-app-config.js"
+    "deploy": "firebase deploy",
+    "dev-admin": "webpack-dev-server --mode development --config webpack/admin-config.js",
+    "build-admin": "webpack --mode production --config webpack/admin-config.js",
+    "dev-lib": "webpack-dev-server --mode development --config webpack/lib-config.js",
+    "buid-lib": "webpack --mode production --config webpack/lib-config.js",
+    "dev-app": "webpack-dev-server --mode development --config webpack/app-config.js",
+    "build-app": "webpack --mode production --config webpack/app-config.js"
   },
   "files": [
     "dist"
@@ -53,6 +55,7 @@
     "file-loader": "1.1.11",
     "firebase": "5.0.0",
     "history": "^4.7.2",
+    "loader-utils": "^1.1.0",
     "mobx-react-devtools": "^4.2.3",
     "node-sass": "^4.7.2",
     "react": "^16.2.0",
@@ -67,6 +70,7 @@
     "uglifyjs-webpack-plugin": "^1.2.3",
     "url-loader": "1.0.1",
     "webpack": "^4.1.1",
+    "webpack-bundle-analyzer": "^3.0.3",
     "webpack-cli": "^2.0.12",
     "webpack-dev-server": "^3.1.1",
     "webpack-merge": "^4.1.2",

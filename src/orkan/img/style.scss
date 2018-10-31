@@ -1,35 +1,40 @@
 @import '../globals';
 
-.Img{
+.root{
 	display: inline-block;
 	vertical-align: middle;
 	overflow: hidden;
 	padding-top: 100%; /* 1:1 Aspect Ratio */
 	position: relative; /* If you want text inside of it */
 	> div{
-		position: absolute;
-		top: 0;
-		left: 0;
-		bottom: 0;
-		right: 0;
-		background-size: 100%;
-		background-repeat: no-repeat;
-		opacity: 0;
-		transition: opacity .3s;
+
 	}
-	&.Img-cover{
-		> div{
+	&.cover{
+		.backgroundContainer{
 			background-size: cover !important;
 		}
 	}
-	&.Img-contain{
-		> div{
+	&.contain{
+		.backgroundContainer{
 			background-size: contain !important;
 		}
 	}
-	&.Img-loaded{
-		> div{
+	&.loaded{
+		.backgroundContainer{
 			opacity: 1;
 		}
 	}
+}
+
+
+.backgroundContainer{
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	background-size: 100%;
+	background-repeat: no-repeat;
+	opacity: 0;
+	transition: opacity .3s;
 }

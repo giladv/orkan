@@ -1,7 +1,7 @@
 @import '../normalize';
 @import '../globals';
 
-$orkanHeaderHeight: 46px;
+$HeaderHeight: 46px;
 
 
 .OrkanSettingsPanel{
@@ -20,7 +20,7 @@ $orkanHeaderHeight: 46px;
 			text-align: right;
 		}
 	}
-	.OrkanHeader-title{
+	.Header-title{
 		span{
 			font-size: 13px;
 			color: #71778A;

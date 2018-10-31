@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import autobind from 'autobind-decorator';
 import classNames from 'classnames';
-import Icon from '../../orkan-icon';
+import Icon from '../../icon';
 
 import {formInput} from '../../form';
 

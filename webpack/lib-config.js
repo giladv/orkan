@@ -1,11 +1,17 @@
-const path = require('path');
+const {isDev, getReadableCssClassName, getDistPath} = require('./utils');
+
 
 module.exports = {
-	entry: './src/index.js',
+	entry: {
+		orkan: './src/orkan/index.js',
+	},
 	output: {
-		path: path.resolve(__dirname, 'dist'),
+		path: getDistPath(),
 		publicPath: '/', // this maked the bundle.js to be served at root in dev-derver
-		filename: 'app.js',
+		filename: 'orkan.js',
+		library: 'orkan',
+		libraryTarget: 'umd',
+		umdNamedDefine: true
 	},
 	module: {
 		rules: [
@@ -25,7 +31,18 @@ module.exports = {
 			{
 				test: /\.scss$/,
 				exclude: /node_modules/,
-				use: ['style-loader', 'css-loader', 'sass-loader'],
+				use: [
+					'style-loader',
+					{
+						loader: 'css-loader',
+						options: {
+							modules: true,
+							localIdentName: '[hash:base64:5]',
+							getLocalIdent: isDev() && getReadableCssClassName
+						}
+					},
+					'sass-loader'
+				],
 			},
 			{
 				test: /\.css$/,
@@ -43,18 +60,12 @@ module.exports = {
 		extensions: ['.ts', '.tsx', '.js', '.json', '.scss', '.css']
 	},
 	optimization: {
-		// minimize: false,
-		// namedModules: true,
-		// namedChunks: true
+		// minimize: false
 	},
-	devtool: "cheap-module-source-map",
-	plugins: [
-	],
 
+
+	devtool: "cheap-module-source-map",
 	devServer: {
-		headers: {
-			'Access-Control-Allow-Origin': '*'
-		},
 		watchOptions: {
 			watch: false
 		},
@@ -62,5 +73,12 @@ module.exports = {
 		compress: true,
 		historyApiFallback: {disableDotRule: true}
 	},
-	externals: {}
+
+
+	externals: [nodeExternals()],
+	plugins: [
+		new webpack.DefinePlugin({
+			'process.env.NODE_ENV': JSON.stringify('production')
+		})
+	]
 };

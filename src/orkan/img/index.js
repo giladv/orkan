@@ -4,7 +4,8 @@ import classNames from 'classnames';
 import {observer} from 'mobx-react';
 import {observable} from 'mobx';
 
-import './style';
+import style from './style';
+import {createStyle} from '../utils/style-utils';
 
 @observer
 export default class Img extends Component {
@@ -72,19 +73,20 @@ export default class Img extends Component {
     }
 
     render() {
-        const {className, simple, src, alt, mode, align, ratio, ...otherProps} = this.props;
+        const {className, classes, simple, src, alt, mode, align, ratio, ...otherProps} = this.props;
         const {isLoading} = this.state;
 
-        const newClassName = classNames('Img', className, {
-            'Img-cover': mode === 'cover',
-			'Img-contain': mode === 'contain',
-            'Img-loaded': !isLoading
+        const s = createStyle(style, className, classes, {
+            root: {
+                cover: mode === 'cover',
+                contain: mode === 'contain',
+                loaded: !isLoading
+            }
         });
-
 
 		if(simple){
             return (
-                <img {...otherProps} src={src} crossOrigin="anonymous" className={newClassName} alt={alt}/>
+                <img {...otherProps} src={src} crossOrigin="anonymous" className={s.root} alt={alt}/>
             );
 		}else{
 			const style = {
@@ -92,8 +94,8 @@ export default class Img extends Component {
                 backgroundPosition: align
 			};
 			return (
-                <div {...otherProps} className={newClassName} style={{paddingTop: ratio + '%'}}>
-                    <div alt={alt} style={style}/>
+                <div {...otherProps} className={s.root} style={{paddingTop: ratio + '%'}}>
+                    <div alt={alt} style={style} className={s.backgroundContainer}/>
                 </div>
             );
         }

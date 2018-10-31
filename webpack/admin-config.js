@@ -1,9 +1,10 @@
-const path = require('path');
+const {isDev, getReadableCssClassName, getDistPath} = require('./utils');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
 	entry: './src/orkan/orkan-admin/index.js',
 	output: {
-		path: path.resolve(__dirname, 'dist'),
+		path: getDistPath(),
 		publicPath: '/', // this maked the bundle.js to be served at root in dev-derver
 		filename: 'orkan-admin.js',
 		library: '__orkan_admin__',
@@ -26,11 +27,32 @@ module.exports = {
 			{
 				test: /\.scss$/,
 				exclude: /node_modules/,
-				use: ['style-loader', 'css-loader', 'sass-loader'],
+				use: [
+					'style-loader',
+					{
+						loader: 'css-loader',
+						options: {
+							modules: true,
+							localIdentName: '[hash:base64:5]',
+							getLocalIdent: isDev() && getReadableCssClassName
+						}
+					},
+					'sass-loader'
+				],
 			},
 			{
 				test: /\.css$/,
-				use: ['style-loader', 'css-loader'],
+				use: [
+					'style-loader',
+					{
+						loader: 'css-loader',
+						options: {
+							modules: true,
+							localIdentName: '[hash:base64:5]',
+							getLocalIdent: isDev() && getReadableCssClassName
+						}
+					}
+				],
 				// exclude: /node_modules/
 			},
 			{
@@ -43,15 +65,7 @@ module.exports = {
 	resolve: {
 		extensions: ['.ts', '.tsx', '.js', '.json', '.scss', '.css']
 	},
-	optimization: {
-		// minimize: false,
-		// namedModules: true,
-		// namedChunks: true
-	},
 	devtool: "cheap-module-source-map",
-	plugins: [
-	],
-
 	devServer: {
 		headers: {
 			'Access-Control-Allow-Origin': '*'
@@ -63,6 +77,9 @@ module.exports = {
 		compress: true,
 		historyApiFallback: {disableDotRule: true}
 	},
+	optimization: {
+		// minimize: false
+	},
 	externals: {
 		react: 'React',
 		'react-dom': 'ReactDOM',
@@ -71,5 +88,11 @@ module.exports = {
 		'classnames': 'classNames',
 		'autobind-decorator': 'autobind',
 		'firebase/app': 'firebase',
-	}
+		'firebase/storage': 'firebase',
+		'firebase/auth': 'firebase',
+		'firebase/database': 'firebase',
+	},
+	plugins: [
+		// new BundleAnalyzerPlugin()
+	]
 };

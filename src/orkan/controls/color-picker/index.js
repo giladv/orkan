@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import autobind from 'autobind-decorator';
 import classNames from 'classnames';
-import {SketchPicker} from 'react-color';
+// import SketchPicker from 'react-color/lib/Sketch';
 import {observable} from 'mobx';
 import {observer} from 'mobx-react';
 

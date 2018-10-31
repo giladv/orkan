@@ -7,7 +7,7 @@ import autobind from 'autobind-decorator';
 import classNames from 'classnames';
 
 
-import OrkanIcon from '../orkan-icon';
+import OrkanIcon from '../icon';
 import orkanInject from '../orkan-inject';
 import Img from '../img';
 import OrkanListItem from '../orkan-list-item';

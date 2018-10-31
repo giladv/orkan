@@ -9,7 +9,7 @@ import classNames from 'classnames';
 import {ACTIVATION_EVENT_KEY, ORKAN_ADMIN_GLOBAL, REACT_CONTEXT_NAME,} from '../constants';
 import {keyboard} from '../utils/keyboard-utils';
 import FirebaseStore from '../firebase-store';
-import OrkanIndicator from '../orkan-indicator';
+import Indicator from '../indicator';
 import OrkanStore from '../orkan-store';
 import * as mobx from 'mobx';
 import firebase from 'firebase/app';
@@ -91,8 +91,7 @@ export default class OrkanProvider extends Component{
 		try{
 			const fetchUrl = process.env.NODE_ENV === 'development'
 				?'http://localhost:8081/orkan-admin.js'
-				:'orkan-admin.js';
-				// :'https://firebasestorage.googleapis.com/v0/b/my-proj-5cbb6.appspot.com/o/admin%2Forkan-admin.js?alt=media&token=c798a38c-9479-42b7-81f9-3a70a0d9d436';
+				:'https://my-proj-5cbb6.firebaseapp.com/orkan-admin.js';
 
 			const response = await fetch(fetchUrl);
 			eval(await response.text());
@@ -138,28 +137,8 @@ export default class OrkanProvider extends Component{
 
 		return [
 			children,
-			(isActive || isBusy) && ReactDOM.createPortal(<OrkanIndicator isBusy={isBusy || (this.orkanStore && this.orkanStore.isInitiating)} />, document.body),
+			(isActive || isBusy) && ReactDOM.createPortal(<Indicator isBusy={isBusy || (this.orkanStore && this.orkanStore.isInitiating)} />, document.body),
 			isActive && ReactDOM.createPortal(<OrkanAdmin store={this.orkanStore} />, document.body)
 		];
 	}
 }
-
-
-
-/*
-	=load sequence
-
-	idle: provider/injector, firebase store, simple getValue logic
-
-	active Orkan pre-auth: auth ui, auth logic
-
-	active Orkan post-auth: all ui, all logic
-
-	=
-
-	OrkanProvider + orkanInjector
-	DataStore
-	AuthStore
-	OrkanAdmin
-	OrkanStore
-*/

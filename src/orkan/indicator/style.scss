@@ -1,7 +1,7 @@
 @import '../globals';
 
 
-.OrkanIndicator{
+.root{
 	z-index: 99999999999999;
 	animation: orkanTopUiAnimation;
 	animation-timing-function: ease-in-out;
@@ -27,11 +27,11 @@
 		bottom: 0;
 		@include stripesBackground($pink, $pink-1);
 	}
-	&.OrkanIndicator-busy:after{
+	&.busy:after{
 			animation-play-state: running;
 	}
 
-	&.OrkanIndicator-not-busy:after{
+	&.notBusy:after{
 		animation-play-state: paused;
 	}
 }

@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import {observer} from 'mobx-react';
 import {observable} from 'mobx';
 import autobind from 'autobind-decorator';
-import classNames from 'classnames';
 
-import OrkanIcon from '../orkan-icon';
+import {createStyle} from '../utils/style-utils';
+import Icon from '../icon';
 
-import './style.scss';
+import style from './style.scss';
 
 @observer
 export default class OrkanActionButton extends Component{
@@ -20,11 +20,10 @@ export default class OrkanActionButton extends Component{
 
 	render(){
 		const {className, icon, ...otherProps} = this.props;
-
-		const newClassName = classNames('OrkanActionButton', className);
+		const s = createStyle(style, className);
 
 		return (
-			<OrkanIcon {...otherProps} className={newClassName} type={icon} />
+			<Icon {...otherProps} className={s.root} type={icon} />
 		);
 	}
 }

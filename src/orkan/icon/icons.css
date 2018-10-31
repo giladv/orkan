@@ -1,15 +1,15 @@
 @font-face {
   font-family: 'orkanicons';
-  src:  url('./fonts/orkanicons.eot?2dfyaz');
-  src:  url('./fonts/orkanicons.eot?2dfyaz#iefix') format('embedded-opentype'),
-    url('./fonts/orkanicons.ttf?2dfyaz') format('truetype'),
-    url('./fonts/orkanicons.woff?2dfyaz') format('woff'),
-    url('./fonts/orkanicons.svg?2dfyaz#orkanicons') format('svg');
+  src:  url('./fonts/orkanicons.eot?4qlt4z');
+  src:  url('./fonts/orkanicons.eot?4qlt4z#iefix') format('embedded-opentype'),
+    url('./fonts/orkanicons.ttf?4qlt4z') format('truetype'),
+    /*url('./fonts/orkanicons.woff?4qlt4z') format('woff'),*/
+    url('./fonts/orkanicons.svg?4qlt4z#orkanicons') format('svg');
   font-weight: normal;
   font-style: normal;
 }
 
-[class^="OrkanIcon-"], [class*=" OrkanIcon-"] {
+.icon {
   /* use !important to prevent issues with browser extensions that change fonts */
   font-family: 'orkanicons' !important;
   speak: none;
@@ -24,54 +24,54 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.OrkanIcon-dots:before {
+.icon-dots:before {
   content: "\e903";
 }
-.OrkanIcon-plus:before {
+.icon-plus:before {
   content: "\e901";
 }
-.OrkanIcon-data2:before {
+.icon-data2:before {
   content: "\e022";
 }
-.OrkanIcon-edit:before {
+.icon-edit:before {
   content: "\e600";
 }
-.OrkanIcon-calendar:before {
+.icon-calendar:before {
   content: "\e604";
 }
-.OrkanIcon-picture:before {
+.icon-picture:before {
   content: "\e608";
 }
-.OrkanIcon-flash:before {
+.icon-flash:before {
   content: "\e904";
 }
-.OrkanIcon-sortable:before {
+.icon-sortable:before {
   content: "\e909";
 }
-.OrkanIcon-play:before {
+.icon-play:before {
   content: "\e90b";
 }
-.OrkanIcon-user:before {
+.icon-user:before {
   content: "\e91e";
 }
-.OrkanIcon-arr:before {
+.icon-arr:before {
   content: "\e605";
 }
-.OrkanIcon-close:before {
+.icon-close:before {
   content: "\e900";
 }
-.OrkanIcon-diamond:before {
+.icon-diamond:before {
   content: "\e902";
 }
-.OrkanIcon-trash:before {
+.icon-trash:before {
   content: "\e907";
 }
-.OrkanIcon-v:before {
+.icon-v:before {
   content: "\e90a";
 }
-.OrkanIcon-spinner:before {
+.icon-spinner:before {
   content: "\e90e";
 }
-.OrkanIcon-clear:before {
+.icon-clear:before {
   content: "\e910";
 }

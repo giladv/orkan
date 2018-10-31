@@ -8,7 +8,7 @@ import classNames from 'classnames';
 import Sidebar from '../sidebar';
 import OrkanDataForm from '../orkan-data-form';
 import OrkanSettingsPanel from '../orkan-settings-panel';
-import OrkanHeader from '../orkan-header';
+import Header from '../header';
 import {keyboard, onDoublePress} from '../utils/keyboard-utils';
 import OrkanAuth from '../orkan-auth';
 import OrkanSpinner from '../orkan-spinner';
@@ -18,8 +18,9 @@ import OrkanUsersRequests from '../orkan-users-requests';
 import OrkanStore from '../orkan-store';
 import { SCHEMA_KEY_NAME} from '../constants';
 import OrkanSchemaEditor from '../orkan-schema-editor';
+import {createStyle} from '../utils/style-utils';
 
-import './style.scss';
+import style from './style.scss';
 
 
 @observer
@@ -108,12 +109,18 @@ export default class OrkanProvider extends Component{
 			]);
 		}
 
-		const newClassName = classNames('Orkan', className, {
-			'Orkan-disabled': isResizing
+		const s = createStyle(style, className, {
+			root: {
+				disabled: isResizing
+			}
 		});
 
+		// const newClassName = classNames('Orkan', className, {
+		// 	'Orkan-disabled': isResizing
+		// });
+
 		return (
-			<div className={newClassName}>
+			<div className={s.root}>
 				{store.isAdmin() && store.activePath &&
 					<Sidebar
 						side='left'
@@ -125,7 +132,7 @@ export default class OrkanProvider extends Component{
 
 						<OrkanUsersRequests onApprove={uid => store.approveUserRequest(uid)} onDecline={this.handleDeclineUserRequest}/>
 
-						<OrkanHeader primary title={headerTitle} onClose={this.handleClose}/>
+						<Header primary title={headerTitle} onClose={this.handleClose}/>
 
 						{store.isLoadingActivePath && <OrkanSpinner/>}
 
@@ -163,6 +170,7 @@ export default class OrkanProvider extends Component{
 
 				{store.settingsPath &&
 					<OrkanSettingsPanel
+						className={s.settingsPanel}
 						store={store}/>
 				}
 				{!store.isInitiating && !store.isAdmin() && <OrkanAuth auth={store.authStore}/>}

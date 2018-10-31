@@ -11,7 +11,7 @@ import DropdownContainer from '../../dropdown-container';
 import orkanInject from '../../orkan-inject';
 
 import './style';
-import Icon from '../../orkan-icon';
+import Icon from '../../icon';
 
 @observer
 export default class Select extends Component {

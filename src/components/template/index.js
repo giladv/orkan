@@ -7,7 +7,7 @@ import {withRouter} from 'react-router';
 // import './fonts.css';
 // import './main.css';
 // import './vendor.css';
-import {Collection, Value, WithValue} from '../../orkan';
+// import {Collection, Value, WithValue} from '../../orkan';
 
 @withRouter
 export default class Template extends Component{

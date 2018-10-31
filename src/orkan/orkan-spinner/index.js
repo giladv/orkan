@@ -4,7 +4,7 @@ import {observer} from 'mobx-react';
 import {observable} from 'mobx';
 import autobind from 'autobind-decorator';
 import classNames from 'classnames';
-import {SyncLoader} from 'react-spinners';
+import SyncLoader from 'react-spinners/SyncLoader';
 
 import './style.scss';
 

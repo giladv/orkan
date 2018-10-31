@@ -8,7 +8,7 @@ import map from 'lodash/map';
 import firebase from 'firebase/app';
 
 import OrkanSpinner from '../orkan-spinner';
-import OrkanHeader from '../orkan-header';
+import Header from '../header';
 import Select from '../controls/select';
 import orkanInject from '../orkan-inject';
 import Thumbnail from '../thumbnail';
@@ -80,7 +80,7 @@ export default class OrkanMediaGallery extends Component{
 
 		return (
 			<div className={newClassName}>
-				<OrkanHeader primary onClose={reject} title='Media Gallery'/>
+				<Header primary onClose={reject} title='Media Gallery'/>
 				<div className="OrkanMediaGallery-actions">
 					<Select value={filter} onChange={value => this.obState.filter = value} options={filterOptions}/>
 					<UploadButton onComplete={this.handleUploadComplete}/>

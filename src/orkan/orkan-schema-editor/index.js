@@ -13,7 +13,7 @@ import './style.scss';
 import OrkanActionButton from '../orkan-action-button';
 import Input from '../controls/input';
 import {COLLECTION_KEY} from '../constants';
-import OrkanIcon from '../orkan-icon';
+import OrkanIcon from '../icon';
 
 
 @observer

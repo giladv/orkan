@@ -5,7 +5,7 @@ import classNames from 'classnames';
 
 import {formInput} from '../../form';
 
-import Icon from '../../orkan-icon';
+import Icon from '../../icon';
 
 import './style';
 

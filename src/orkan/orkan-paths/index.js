@@ -5,14 +5,14 @@ import {observable} from 'mobx';
 import autobind from 'autobind-decorator';
 import classNames from 'classnames';
 
-import OrkanHeader from '../orkan-header';
+import Header from '../header';
 import Input from '../controls/input';
 import orkanInject from '../orkan-inject';
 import OrkanListItem from '../orkan-list-item';
 import {typeOrFalse} from '../utils/prop-types-utils';
 
 import './style.scss';
-import OrkanIcon from '../orkan-icon';
+import OrkanIcon from '../icon';
 import Button from '../button';
 import DropdownContainer from '../dropdown-container';
 import OrkanStore from '../orkan-store';
@@ -130,7 +130,7 @@ export default class OrkanPaths extends Component{
 		return (
 			<div className='OrkanPaths'>
 				{showHeader && !isPathCollection && nonPrimitiveKeysExist && primitiveKeysExist &&
-					<OrkanHeader title='Other Paths'/>
+					<Header title='Other Paths'/>
 				}
 				{isPathCollection &&
 					<div className='OrkanPaths-header'>
