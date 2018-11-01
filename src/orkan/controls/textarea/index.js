@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import autobind from 'autobind-decorator';
-import classNames from 'classnames';
 
 import {formInput} from '../../form';
+import {createStyle} from '../../utils/style-utils';
 
-import './style';
+import style from './style';
 
 @autobind
 export default class Textarea extends Component {
@@ -13,10 +13,15 @@ export default class Textarea extends Component {
 	static propTypes = {
 		value: PropTypes.string,
 		rows: PropTypes.number,
+		size: PropTypes.oneOf(['small', 'medium', 'large']),
 		placeholder: PropTypes.string,
 		onChange: PropTypes.func,
 		disabled: PropTypes.bool,
-		negative: PropTypes.bool
+	};
+
+	static defaultProps = {
+		size: 'medium',
+		onChange: () => null
 	};
 
 	handleChange(e){
@@ -38,26 +43,24 @@ export default class Textarea extends Component {
 
 	render(){
 
-		var {className, value, rows, onChange, placeholder, small, disabled, negative} = this.props;
+		const {className, value, rows, onChange, placeholder, disabled, size, ...otherProps} = this.props;
 
-		var inputClassName = classNames('Textarea-input', {});
-
-		var className = classNames('Textarea', className, {
-			'Textarea-medium': true,
-			'Textarea-negative': negative
-		})
+		const s = createStyle(style, className, style[size], {
+			root: {
+				disabled
+			}
+		});
 
 		return (
-			<div className={className}>
-
+			<div {...otherProps} className={s.root}>
 				<textarea
 					ref="input"
 					rows={rows}
 					disabled={disabled}
-					className={inputClassName}
+					className={s.input}
 					placeholder={placeholder}
 					onChange={this.handleChange}
-					value={value}></textarea>
+					value={value}/>
 			</div>
 		);
 	}

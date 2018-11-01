@@ -1,14 +1,13 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {observer} from 'mobx-react';
-import isObject from 'lodash/isObject';
 import {observable} from 'mobx';
 import autobind from 'autobind-decorator';
 import classNames from 'classnames';
 
-import Form, {FormField} from '../form/index';
-import FormStore from '../form/form-store';
-import {InputControl} from '../controls/input/index';
+import Form from '../form';
+import FormField from '../form-field';
+import {InputControl} from '../controls/input';
 import {SubmitButton} from '../button';
 import {TextareaControl} from '../controls/textarea';
 import {DatePickerControl} from '../controls/date-picker';
@@ -20,12 +19,13 @@ import {SwitchControl} from '../controls/switch';
 import {SliderControl} from '../controls/slider';
 import {WysiwygControl} from '../controls/wysiwyg';
 import OrkanStore from '../orkan-store';
+import {createStyle} from '../utils/style-utils';
 
-import './style.scss';
+import style from './style.scss';
 
 
 @observer
-export default class OrkanDataForm extends Component{
+export default class DataForm extends Component{
 
 	static propTypes = {
 		store: PropTypes.instanceOf(OrkanStore).isRequired,
@@ -51,10 +51,17 @@ export default class OrkanDataForm extends Component{
 		this.obState.isBusy = false;
 	}
 
+	getStyle(){
+		const {className, classes} = this.props;
+		return createStyle(style, className, classes);
+	}
+
 
 	renderControl(path){
 		const {store} = this.props;
 		const {uiType, uiSize, dataSource, dataSourcePath, dataSourceLabel, dataSourceValue, dataSourceOptions, fromValue, toValue} = store.getSettingsByPath(path) || {};
+
+		const s = this.getStyle();
 
 		switch(uiType){
 			default:
@@ -82,7 +89,7 @@ export default class OrkanDataForm extends Component{
 					return null;
 				}
 			case 'media':
-				return <MediaControl/>;
+				return <MediaControl className={s.mediaControl}/>;
 			case 'color':
 				return <ColorPickerControl/>
 
@@ -92,17 +99,20 @@ export default class OrkanDataForm extends Component{
 	renderFormFields(){
 		const {store} = this.props;
 
+		const s = this.getStyle();
+
+
 		if(!store.isPathPrimitive(store.activePath)){
 			return store.getPrimitiveKeysByPath(store.activePath)
 				.map((key, i) => (
-					<FormField compact key={key} label={'/' + key} name={`${store.activePath}.${key}`} onSettings={() => store.setSettingsPath(`${store.activePath}/${key}`)}>
+					<FormField compact key={key} className={s.formField} label={'/' + key} name={`${store.activePath}.${key}`} onSettings={() => store.setSettingsPath(`${store.activePath}/${key}`)}>
 						{this.renderControl(`${store.activePath}/${key}`)}
 					</FormField>
 				))
 		}else{
 			const activePathParts = store.activePath.split('/');
 			return (
-				<FormField compact key={store.activePath} label={'/' + activePathParts[activePathParts.length-1]} name={store.activePath} onSettings={() => store.setSettingsPath(store.activePath)}>
+				<FormField compact key={store.activePath} className={s.formField} label={'/' + activePathParts[activePathParts.length-1]} name={store.activePath} onSettings={() => store.setSettingsPath(store.activePath)}>
 					{this.renderControl(store.activePath)}
 				</FormField>
 			);
@@ -111,20 +121,21 @@ export default class OrkanDataForm extends Component{
 
 
 	render(){
-		const {className, store} = this.props;
+		const {store} = this.props;
 		const {isBusy} = this.obState;
 
 		if(!store.getPrimitiveKeysByPath(store.activePath).length){
 			return null;
 		}
 
-		const newClassName = classNames('OrkanDataForm', className);
+		const s = this.getStyle();
+
 
 		return (
-			<Form className={newClassName} store={store.dataFormStore} onSubmit={this.handleSubmit}>
+			<Form className={s.root} store={store.dataFormStore} onSubmit={this.handleSubmit}>
 				<span/>
 				{this.renderFormFields()}
-				<div className="OrkanDataForm-actions">
+				<div className={s.actions}>
 					<SubmitButton primary disabled={!store.dataFormStore.isDirty} isBusy={isBusy}>Save Changes</SubmitButton>
 				</div>
 			</Form>

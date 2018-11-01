@@ -3,16 +3,16 @@ import PropTypes from 'prop-types';
 import {observer} from 'mobx-react';
 import {observable} from 'mobx';
 import autobind from 'autobind-decorator';
-import classNames from 'classnames';
 
-import OrkanActionButton from '../orkan-action-button';
+import ActionButton from '../action-button';
 import {typeOrFalse} from '../utils/prop-types-utils';
-
-import './style.scss';
 import Img from '../img';
+import {createStyle} from '../utils/style-utils';
+
+import style from './style.scss';
 
 @observer
-export default class OrkanListItem extends Component{
+export default class ListItem extends Component{
 	static propTypes = {
 		image: PropTypes.string,
 		buttons: PropTypes.arrayOf(typeOrFalse(PropTypes.shape({
@@ -31,16 +31,15 @@ export default class OrkanListItem extends Component{
 	}
 
 	render(){
-		const {className, buttons, children, image, ...otherProps} = this.props;
-
-		const newClassName = classNames('OrkanListItem', className);
+		const {className, buttons, classes, children, image, ...otherProps} = this.props;
+		const s = createStyle(style, className, classes);
 
 		return (
-			<div {...otherProps} className={newClassName}>
-				{image && <Img mode='cover' src={image}/>}
-				<div className="OrkanListItem-label">{children}</div>
+			<div {...otherProps} className={s.root}>
+				{image && <Img className={s.img} mode='cover' src={image}/>}
+				<div className={s.label}>{children}</div>
 				{buttons.filter(it => !!it).map((button, i) => (
-					<OrkanActionButton key={i} icon={button.icon} onClick={e => this.handleButtonClick(e, button)} />
+					<ActionButton className={s.actionButton} key={i} icon={button.icon} onClick={e => this.handleButtonClick(e, button)} />
 				))}
 			</div>
 		);

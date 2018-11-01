@@ -7,7 +7,7 @@ import classNames from 'classnames';
 import map from 'lodash/map';
 import firebase from 'firebase/app';
 
-import OrkanSpinner from '../orkan-spinner';
+import Spinner from '../spinner';
 import Header from '../header';
 import Select from '../controls/select';
 import orkanInject from '../orkan-inject';

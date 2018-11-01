@@ -1,19 +1,19 @@
 @import '../../globals';
 
-.Wysiwyg{
+.root{
 	display: flex;
 	flex-direction: column;
-	.ql-toolbar{
+	:global(.ql-toolbar){
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
 	}
 
-	.ql-container{
+	:global(.ql-container){
 		flex: 1;
 		display: flex;
 	}
-	.ql-tooltip{
+	:global(.ql-tooltip){
 		z-index: 1;
 	}
 }

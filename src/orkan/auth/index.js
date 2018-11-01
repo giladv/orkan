@@ -6,18 +6,17 @@ import autobind from 'autobind-decorator';
 import classNames from 'classnames';
 import firebase from 'firebase/app';
 import * as firebaseui from 'firebaseui'
+import uniqueId from 'lodash/uniqueId';
+
+import Spinner from '../spinner';
+import {createStyle} from '../utils/style-utils';
 
 import 'firebaseui/dist/firebaseui.css';
-import './style.scss';
-import uniqueId from 'lodash/uniqueId';
-import OrkanSpinner from '../orkan-spinner';
-
-window.uiInst = null;
-
+import style from './style.scss';
 
 
 @observer
-export default class OrkanAuth extends Component{
+export default class Auth extends Component{
 
 	static propTypes = {
 		auth: PropTypes.object.isRequired
@@ -36,15 +35,14 @@ export default class OrkanAuth extends Component{
 	}
 
 	render(){
-		const {className, auth} = this.props;
+		const {className, auth, classes} = this.props;
 		const {isBusy} = this.obState;
-
-		const newClassName = classNames('OrkanAuth', className);
+		const s = createStyle(style, className, classes);
 
 		return (
-			<div className={newClassName}>
-				<h2>Sign-in to Orkan</h2>
-				{isBusy && <OrkanSpinner/>}
+			<div className={s.root}>
+				<h2 className={s.header}>Sign-in to Orkan</h2>
+				{isBusy && <Spinner className={s.spinner}/>}
 				{!isBusy &&
 					<FirebaseAuth auth={auth} onSuccess={this.handleSuccess}/>
 				}

@@ -1,0 +1,138 @@
+@import '../normalize';
+@import '../globals';
+
+.root {
+	position: fixed;
+	left: 0;
+	right: 0;
+	top: 5px;
+	bottom: 0;
+	z-index: 999999999;
+	pointer-events: none;
+	display: flex;
+	flex-direction: row;
+	> * {
+		pointer-events: all;
+	}
+	ul{
+		list-style: none;
+		padding: 0;
+	}
+	* {
+		text-decoration: none;
+		box-sizing: border-box;
+		outline: none;
+		-webkit-font-smoothing: antialiased;
+		-ms-text-size-adjust: 100%;
+		-webkit-text-size-adjust: 100%;
+		font-family: 'Roboto', sans-serif;
+
+	}
+}
+
+.titlePart{
+	display: inline-block;
+	@include smallListItemAnimation(false);
+	cursor: pointer;
+	margin: 0 2px;
+	&:first-child{
+		margin-left: 0;
+	}
+	&:hover{
+		text-decoration: underline;
+	}
+}
+
+.sidebar{
+	@include listItemAnimation(false);
+	z-index: 1000000000000000000000;
+}
+
+.sidebarContent{
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	padding: 0;
+	background: #ffffff;
+}
+
+.header{
+	flex: 0 0 auto;
+}
+
+.scrollContainer{
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	overflow-y: auto;
+}
+
+.auth{
+	align-self: flex-start;
+	margin: 0 auto;
+	animation: orkanTopUiAnimation;
+	animation-duration: .2s;
+	animation-timing-function: ease-in-out;
+
+}
+
+.settingsPanel{
+	@include listItemAnimation(false);
+	width: 300px;
+	z-index: -1; // so it always be under the main panel for animations
+}
+
+//.mediaGallery{
+//	animation: orkanTopUiAnimation;
+//	animation-duration: .2s;
+//	animation-timing-function: ease-in-out;
+//	margin: 0 auto;
+//}
+
+
+.spinner{
+	margin-top: 40px;
+	text-align: center;
+}
+
+.dataForm {
+	margin: 0 0 20px 0;
+}
+.schemaEditor{
+	margin-top: 15px;
+}
+
+
+.footer{
+	height: $headerSize;
+	padding: 0 15px;
+	background: #343A4D;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	color: #A7ADC0;
+}
+
+.footerAuth{
+	display: flex;
+	align-items: center;
+	font-size: 13px;
+	span{
+		&:hover{
+			text-decoration: underline;
+			cursor: pointer;
+		}
+	}
+}
+
+.footerAuthImg{
+	border-radius: 50%;
+	width: 25px;
+	height: 25px;
+	margin-right: 8px;
+}
+
+.disabled{
+	pointer-events: all;
+	user-select: none;
+}

@@ -1,12 +1,9 @@
 @import '../../globals';
 
-.Switch{
-	.react-switch-bg{
+.root{
+	:global(.react-switch-bg){
 		box-shadow: inset 0 1px 0 1px $lightGray2,
 		inset 0 4px 0 1px $lightGray1;
 		background: #ffffff !important;
 	}
-	.react-switch-handle{
-	}
-
 }

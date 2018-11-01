@@ -1,7 +1,7 @@
 @import '../globals';
 
 
-.OrkanAuth{
+.root{
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -11,16 +11,7 @@
 	border-bottom-left-radius: 5px;
 	border-bottom-right-radius: 5px;
 	box-shadow: 0 12px 40px rgba(0,0,0,.3);
-	h2{
-		font-family: 'Roboto';
-		font-size: 15px;
-		padding: 0;
-		margin: 0;
-		text-align: center;
-	}
-	.OrkanSpinner{
-		margin-top: 20px;
-	}
+
 
 	#firebaseui_container{
 		margin: 20px 0 0 0;
@@ -35,4 +26,15 @@
 	}
 }
 
+.header{
+	font-family: 'Roboto';
+	font-size: 15px;
+	padding: 0;
+	margin: 0;
+	text-align: center;
+	font-weight: 300;
+}
 
+.spinner{
+	margin-top: 20px;
+}

@@ -1,97 +1,78 @@
 @import '../../globals';
 
+@mixin size($config){
+	.selectedOption{
+		font-size: map-get($config, controlFontSize);
+		line-height: map-get($config, controlHeight);
+		height: map-get($config, controlHeight);
+		padding: 0 map-get($config, controlHeight) 0 10px;
+	}
 
+	.toggleButton{
+		width: map-get($config, controlHeight);
+		line-height: map-get($config, controlHeight);
+		> *{
+			font-size: map-get($config, controlIconSize);
+		}
+	}
+}
 
-.Select{
+.root{
 	position: relative;
 	display: inline-block;
 	-webkit-user-select: none;
 	min-width: 100px;
 	cursor: default;
 	@include globalFont;
-	&.Select-open{
-		.Select-selected-item{
-			border-color: $aqua;
-			box-shadow: inset 0px 4px 0px 0px $aqua-1;
-		}
-	}
-	.Select-selected-item{
-		@include inputLike();
-		color: $gray;
-		background: #ffffff;
-		border-radius: 3px;
-		resize: none;
-	}
 
-	.Select-toggle-button{
-		height: 100%;
-		position: absolute;
-		display: block;
-		right: 0;
-		top: 0;
-		text-align: center;
-		cursor: pointer;
-		.OrkanIcon{
-			transform: rotateZ(90deg);
-			color: $grey6;
-		}
+
+}
+
+
+
+.selectedOption{
+	@include inputLike();
+	color: $gray;
+	background: #ffffff;
+	border-radius: 3px;
+	resize: none;
+}
+
+.toggleButton{
+	height: 100%;
+	position: absolute;
+	display: block;
+	right: 0;
+	top: 0;
+	text-align: center;
+	cursor: pointer;
+	> *{
+		transform: rotateZ(90deg);
+		color: $grey6;
 	}
+}
 
-	&.Select-no-value{
-		.Select-selected-item{
-			color: $grey5;
-		}
+.open{
+	.selectedOption{
+		border-color: $aqua;
+		box-shadow: inset 0px 4px 0px 0px $aqua-1;
 	}
+}
 
-	&.Select-negative{
-
-		$specialGray: darken($gray1, 2.5%);
-		&.Select-open{
-			.Select-selected-item{
-				border-color: $gray3;
-				box-shadow: inset 0px 3px 0px 0px $specialGray;
-				color: lighten($gray-2, 10%);
-			}
-		}
-		.Select-selected-item{
-			border: 1px solid $specialGray;
-			color: $gray-2;
-			background: $gray1;
-			box-shadow: inset 0px 3px 0px 0px $specialGray;
-		}
-		.Select-toggle-button{
-			.OrkanIcon{
-				color: $grey7;
-			}
-		}
+.noValue{
+	.selectedOption{
+		color: $grey5;
 	}
+}
 
-	@mixin size($config){
-		.Select-selected-item{
-			font-size: map-get($config, controlFontSize);
-			line-height: map-get($config, controlHeight);
-			height: map-get($config, controlHeight);
-			padding: 0 map-get($config, controlHeight) 0 10px;
-		}
+.small{
+	@include size($smallConfig);
+}
 
-		.Select-toggle-button{
-			width: map-get($config, controlHeight);
-			line-height: map-get($config, controlHeight);
-			.OrkanIcon{
-				font-size: map-get($config, controlIconSize);
-			}
-		}
-	}
+.medium{
+	@include size($mediumConfig);
+}
 
-	&.Select-small{
-		@include size($smallConfig);
-	}
-
-	&.Select-medium{
-		@include size($mediumConfig);
-	}
-
-	&.Select-large{
-		@include size($largeConfig);
-	}
+.large{
+	@include size($largeConfig);
 }

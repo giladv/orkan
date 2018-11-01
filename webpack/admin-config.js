@@ -2,11 +2,11 @@ const {isDev, getReadableCssClassName, getDistPath} = require('./utils');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
-	entry: './src/orkan/orkan-admin/index.js',
+	entry: './src/orkan/admin/index.js',
 	output: {
 		path: getDistPath(),
 		publicPath: '/', // this maked the bundle.js to be served at root in dev-derver
-		filename: 'orkan-admin.js',
+		filename: 'admin.js',
 		library: '__orkan_admin__',
 	},
 	module: {
@@ -44,14 +44,7 @@ module.exports = {
 				test: /\.css$/,
 				use: [
 					'style-loader',
-					{
-						loader: 'css-loader',
-						options: {
-							modules: true,
-							localIdentName: '[hash:base64:5]',
-							getLocalIdent: isDev() && getReadableCssClassName
-						}
-					}
+					'css-loader'
 				],
 				// exclude: /node_modules/
 			},

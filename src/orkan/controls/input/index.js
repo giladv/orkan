@@ -1,32 +1,32 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import autobind from 'autobind-decorator';
-import classNames from 'classnames';
 
 import {formInput} from '../../form';
-
 import Icon from '../../icon';
+import {createStyle} from '../../utils/style-utils';
 
-import './style';
+import style from './style';
 
 @autobind
 export default class Input extends Component {
 	static propTypes = {
 		value: PropTypes.string,
 		type: PropTypes.oneOf(['text', 'number', 'password']),
+		size: PropTypes.oneOf(['small', 'medium', 'large']),
 		placeholder: PropTypes.string,
 		defaultValue: PropTypes.any,
 		preIcon: PropTypes.string,
 		postIcon: PropTypes.string,
 		onChange: PropTypes.func,
 		disabled: PropTypes.bool,
-		important: PropTypes.bool,
 		autoFocus: PropTypes.bool,
 		error: PropTypes.bool
 	};
 
 	static defaultProps = {
 		type: 'text',
+		size: 'medium',
 		onChange: () => null,
 	};
 
@@ -52,33 +52,30 @@ export default class Input extends Component {
 	}
 
 	render(){
-		const {className, preIcon, postIcon, value, onChange, placeholder, disabled, error, important, type, defaultValue, ...otherProps} = this.props;
+		const {className, classes, preIcon, postIcon, value, onChange, placeholder, disabled, error, type, defaultValue, size, ...otherProps} = this.props;
 
-		const inputClassName = classNames('Input-input', {
-			'Input-input-pre-padding': !!preIcon,
-			'Input-input-post-padding': !!postIcon,
-		});
-
-		const newClassName = classNames('Input', className, {
-			'Input-medium': true,
-			'Input-error': error,
-			'Input-important': important
+		const s = createStyle(style, className, classes, style[size], {
+			root: {
+				hasPreIcon: !!preIcon,
+				hasPostIcon: !!postIcon,
+				error
+			}
 		});
 
 		return (
-			<div {...otherProps} className={newClassName}>
+			<div {...otherProps} className={s.root}>
 				<input
 					type={type}
 					ref="input"
 					defaultValue={defaultValue}
 					disabled={disabled}
-					className={inputClassName}
+					className={s.input}
 					placeholder={placeholder}
 					onChange={this.handleChange}
 					value={value || ''}/>
 
-				{preIcon && <Icon className='Input-pre-icon' type={preIcon}/>}
-				{postIcon && <Icon className='Input-post-icon' type={preIcon}/>}
+				{preIcon && <Icon className={s.preIcon} type={preIcon}/>}
+				{postIcon && <Icon className={s.postIcon} type={preIcon}/>}
 			</div>
 		);
 	}

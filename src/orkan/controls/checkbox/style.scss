@@ -1,6 +1,6 @@
 @import '../../globals';
 
-.Checkbox{
+.root{
 	display: inline-flex;
 	> span{
 		display: inline-flex;
@@ -10,21 +10,24 @@
 		border-radius: 3px;
 		align-items: center;
 		justify-content: center;
-		.OrkanIcon{
-			opacity: 0;
-			font-size: 7px;
-			color: $grey6;
-		}
+
 	}
 
-	&.Checkbox-checked{
-		.OrkanIcon{
-			opacity: 1;
-		}
-	}
+}
 
-	&.Checkbox-disabled{
-		opacity: 0.5;
-		cursor: default;
+.icon{
+	opacity: 0;
+	font-size: 7px;
+	color: $grey6;
+}
+
+.checked{
+	.icon{
+		opacity: 1;
 	}
+}
+
+.disabled{
+	opacity: 0.5;
+	cursor: default;
 }

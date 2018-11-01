@@ -1,0 +1,23 @@
+@import '../globals';
+
+$pink: #FA2949;
+$HeaderHeight: 46px;
+
+
+.root {
+	padding: 0 15px;
+	margin: 0;
+}
+
+.formField{
+	margin-top: 10px;
+}
+
+.mediaControl{
+	max-width: 300px;
+}
+
+.actions {
+	margin-top: 20px;
+	text-align: right;
+}

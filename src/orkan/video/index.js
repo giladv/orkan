@@ -8,7 +8,7 @@ import Img from '../img';
 import Icon from '../icon';
 
 import './style';
-import OrkanActionButton from '../orkan-action-button';
+import ActionButton from '../action-button';
 
 @autobind
 export default class Video extends Component {

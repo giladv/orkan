@@ -1,0 +1,35 @@
+@import '../globals';
+
+@mixin size($config){
+	height: map-get($config, controlHeight);
+	font-size: map-get($config, controlFontSize);
+}
+
+.root{
+	border-bottom: 1px solid $grey2;
+	font-weight: 400;
+	color: $gray;
+	display: flex;
+	align-items: center;
+	padding: 0 10px;
+	&:hover{
+		background-color: $grey0;
+	}
+
+}
+
+.selected{
+	background-color: $grey0;
+}
+
+.small{
+	@include size($smallConfig);
+}
+
+.medium{
+	@include size($mediumConfig);
+}
+
+.large{
+	@include size($largeConfig);
+}

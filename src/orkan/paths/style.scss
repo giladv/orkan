@@ -1,7 +1,7 @@
 @import '../globals';
 
 
-.OrkanPaths {
+.Paths {
 	margin: 0;
 	padding: 0;
 	.Header{
@@ -9,7 +9,7 @@
 			display: block;
 		}
 	}
-	.OrkanPaths-header{
+	.Paths-header{
 		height: $headerSize;
 		background: #F2F4F7;
 		display: flex;
@@ -17,7 +17,7 @@
 		padding: 0 15px 0 10px;
 		> .DropdownContainer{
 			margin-right: 5px;
-			> .OrkanIcon{
+			> .Icon{
 				font-size: 13px;
 				width: 13px;
 				height: 29px;
@@ -36,7 +36,7 @@
 
 		}
 	}
-	.OrkanPaths-path{
+	.Paths-path{
 		@include smallListItemAnimation();
 		cursor: pointer;
 		padding: 0 15px;
@@ -47,17 +47,17 @@
 		display: flex;
 		border-bottom: 1px solid #D0D2D6;
 		&:hover{
-			.OrkanIcon{
+			.Icon{
 				display: flex;
 			}
 		}
-		.OrkanPaths-path-label{
+		.Paths-path-label{
 			flex: 1;
 			font-size: 13px;
 			color: #71778A;
 		}
 
-		.OrkanIcon{
+		.Icon{
 			display: none;
 			background: #F2F4F7;
 			border-radius: 3px;

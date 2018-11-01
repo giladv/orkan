@@ -7,10 +7,10 @@ import autobind from 'autobind-decorator';
 import classNames from 'classnames';
 
 
-import OrkanIcon from '../icon';
+import Icon from '../icon';
 import orkanInject from '../orkan-inject';
 import Img from '../img';
-import OrkanListItem from '../orkan-list-item';
+import ListItem from '../list-item';
 import {USER_REQUESTS_KEY_NAME} from '../constants';
 
 import './style.scss';
@@ -39,13 +39,13 @@ export default class OrkanUsersRequests extends Component{
 		return (
 			<div className="OrkanUsersRequests-requests">
 				{map(requests, (request, uid) => (
-					<OrkanListItem key={uid} className="OrkanUsersRequests-request" buttons={[
+					<ListItem key={uid} className="OrkanUsersRequests-request" buttons={[
 						{icon: 'v', onClick: () => onApprove(uid)},
 						{icon: 'clear', onClick: () => onDecline(uid)}
 					]}>
 						<Img src={request.avatarUrl}/>
 						{request.email}
-					</OrkanListItem>
+					</ListItem>
 				))}
 			</div>
 		);
@@ -66,9 +66,9 @@ export default class OrkanUsersRequests extends Component{
 		return (
 			<div className={newClassName}>
 				<div className="OrkanUsersRequests-header" onClick={() => this.obState.isOpen = !isOpen}>
-					<OrkanIcon type='user'/>
+					<Icon type='user'/>
 					<span className='OrkanUsersRequests-title'>{totalRequests} User request{totalRequests > 1?'s':''}</span>
-					<OrkanIcon type='play' className='OrkanUsersRequests-toggle-button'/>
+					<Icon type='play' className='OrkanUsersRequests-toggle-button'/>
 				</div>
 				{isOpen && this.renderRequests()}
 

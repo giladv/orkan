@@ -11,7 +11,6 @@ import {createStyle} from '../utils/style-utils';
 
 import style from './style.scss';
 
-console.log(style)
 @observer
 export default class Header extends Component{
 

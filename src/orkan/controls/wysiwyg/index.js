@@ -1,15 +1,14 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import autobind from 'autobind-decorator';
-import classNames from 'classnames';
-import {observable} from 'mobx';
 import {observer} from 'mobx-react';
 import ReactQuill from 'react-quill';
 
 import {formInput} from '../../form';
+import {createStyle} from '../../utils/style-utils';
 
 import 'react-quill/dist/quill.snow.css';
-import './style';
+import style from './style';
 
 @observer
 export default class Wysiwyg extends Component {
@@ -27,14 +26,16 @@ export default class Wysiwyg extends Component {
 	render(){
 		const {className, value, onChange, disabled, ...otherProps} = this.props;
 
-		const newClassName = classNames('Wysiwyg', className, {
-			'Wysiwyg-disabled': disabled
+		const s = createStyle(style, className, {
+			root: {
+				disabled
+			}
 		});
 
 		return (
 			<ReactQuill
 				{...otherProps}
-				className={newClassName}
+				className={s.root}
 				onChange={onChange}
 				value={value}/>
 		);

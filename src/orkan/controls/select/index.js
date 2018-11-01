@@ -9,9 +9,10 @@ import map from 'lodash/map';
 import {formInput} from '../../form';
 import DropdownContainer from '../../dropdown-container';
 import orkanInject from '../../orkan-inject';
-
-import './style';
 import Icon from '../../icon';
+
+import style from './style';
+import {createStyle} from '../../utils/style-utils';
 
 @observer
 export default class Select extends Component {
@@ -21,11 +22,13 @@ export default class Select extends Component {
 		options: PropTypes.array,
 		placeholder: PropTypes.string,
 		handleLabel: PropTypes.func,
+		size: PropTypes.oneOf(['small', 'medium', 'large']),
 		onChange: PropTypes.func,
 		error: PropTypes.bool
 	};
 
 	static defaultProps = {
+		size: 'medium',
 		options: [],
 		onChange: () => null,
 		handleLabel: option => option.label
@@ -64,23 +67,24 @@ export default class Select extends Component {
 	}
 
 	render(){
-		const {className, value, options, handleLabel, placeholder, ...otherProps} = this.props;
+		const {className, classes, value, options, handleLabel, placeholder, size, ...otherProps} = this.props;
 		const {isOpen} = this.state;
 
 		const selectedOption = options.find(option => option.value === value);
 
-		const newClassName = classNames('Select', className, {
-			'Select-open': isOpen,
-			'Select-no-value': !selectedOption,
-			'Select-medium': true
+		const s = createStyle(style, className, classes, style[size], {
+			root: {
+				open: isOpen,
+				noValue: !selectedOption
+			}
 		});
 
 		return (
-			<DropdownContainer {...otherProps} className={newClassName} options={options} onSelect={this.handleSelect} isOpen={isOpen} onClose={this.closeOptions}>
-				<div className="Select-selected-item" onClick={this.handleToggle}>
+			<DropdownContainer {...otherProps} className={s.root} options={options} onSelect={this.handleSelect} isOpen={isOpen} onClose={this.closeOptions}>
+				<div className={s.selectedOption} onClick={this.handleToggle}>
 					{selectedOption?handleLabel(selectedOption):placeholder}
 				</div>
-				<a className="Select-toggle-button" onClick={this.handleToggle}><Icon type='play'/></a>
+				<a className={s.toggleButton} onClick={this.handleToggle}><Icon type='play'/></a>
 			</DropdownContainer>
 		);
 	}

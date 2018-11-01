@@ -6,11 +6,12 @@ import autobind from 'autobind-decorator';
 import classNames from 'classnames';
 import SyncLoader from 'react-spinners/SyncLoader';
 
-import './style.scss';
+import {createStyle} from '../utils/style-utils';
 
+import style from './style.scss';
 
 @observer
-export default class OrkanSpinner extends Component{
+export default class Spinner extends Component{
 
 	static propTypes = {
 		size: PropTypes.string
@@ -22,10 +23,11 @@ export default class OrkanSpinner extends Component{
 
 	render(){
 		const {className, size} = this.props;
-		const newClassName = classNames('OrkanSpinner', className);
+
+		const s = createStyle(style, className);
 
 		return (
-			<SyncLoader className={newClassName} {...sizes[size]} color='#d1d4de'/>
+			<SyncLoader className={s.root} {...sizes[size]} color='#d1d4de'/>
 		);
 	}
 }

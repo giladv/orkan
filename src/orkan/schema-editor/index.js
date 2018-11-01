@@ -3,21 +3,22 @@ import PropTypes from 'prop-types';
 import {observer} from 'mobx-react';
 import {observable} from 'mobx';
 import autobind from 'autobind-decorator';
-import classNames from 'classnames';
 import map from 'lodash/map';
 import isObject from 'lodash/isObject';
 import set from 'lodash/set';
 import cloneDeep from 'lodash/cloneDeep';
 
-import './style.scss';
-import OrkanActionButton from '../orkan-action-button';
+import ActionButton from '../action-button';
 import Input from '../controls/input';
 import {COLLECTION_KEY} from '../constants';
-import OrkanIcon from '../icon';
+import Icon from '../icon';
+import {createStyle} from '../utils/style-utils';
+
+import style from './style.scss';
 
 
 @observer
-export default class OrkanSchemaEditor extends Component{
+export default class SchemaEditor extends Component{
 	static propTypes = {
 		value: PropTypes.object
 	};
@@ -88,48 +89,55 @@ export default class OrkanSchemaEditor extends Component{
 	}
 
 	renderField(key, field, parentPath){
+		const {className, classes} = this.props;
 		const {createPath, createValue, openPaths} = this.obState;
 
 		const currentPath = [parentPath, key].filter(it => !!it).join('.');
 		const isPathOpen = openPaths.includes(currentPath);
 
-		const className = classNames('OrkanSchemaEditor-field', {
-			'OrkanSchemaEditor-field-open': isPathOpen
+		const s = createStyle(style, className, classes, {
+			field: {
+				openField: isPathOpen
+			}
 		});
 
 		const isFieldPrimitive = !isObject(field);
 
 		return (
-			<div key={key} className={className}>
-				<div className='OrkanSchemaEditor-field-label'>
+			<div key={key} className={s.field}>
+				<div className={s.fieldContent}>
 
-					{!isFieldPrimitive && <OrkanIcon type='arr' onClick={() => this.togglePath(currentPath)}/>}
+					{!isFieldPrimitive && <Icon className={s.fieldToggleIcon} type='arr' onClick={() => this.togglePath(currentPath)}/>}
 
-					<div className="OrkanSchemaEditor-field-name" onClick={() => this.togglePath(currentPath)}>
+					<div className={s.fieldLabel} onClick={() => this.togglePath(currentPath)}>
 						{key || 'Root'}
 					</div>
 
-					<div className="OrkanSchemaEditor-field-actions">
+					<div className={s.fieldActions}>
 						{currentPath &&
-							<OrkanActionButton icon='trash' onClick={() => this.handleRemoveField(currentPath)}/>
+							<ActionButton className={s.fieldActionButton} icon='trash' onClick={() => this.handleRemoveField(currentPath)}/>
 						}
 						{!field[COLLECTION_KEY] &&
-							<OrkanActionButton icon='plus' onClick={() =>{
-								this.obState.createPath = currentPath;
-								!this.isPathOpen(currentPath) && this.togglePath(currentPath);
-							}}/>
+							<ActionButton
+								icon='plus'
+								className={s.fieldActionButton}
+								onClick={() => {
+									this.obState.createPath = currentPath;
+									!this.isPathOpen(currentPath) && this.togglePath(currentPath);
+								}}/>
 						}
 					</div>
 				</div>
-				<div className='OrkanSchemaEditor-field-children' style={{height: isPathOpen?'auto':0}}>
+				<div className={s.fieldChildren} style={{height: isPathOpen?'auto':0}}>
 					{createPath === currentPath &&
-						<div className='OrkanSchemaEditor-field-create'>
+						<div className={s.fieldCreate}>
 							<Input autoFocus
-							   placeholder='Field name'
-							   value={createValue}
-							   onChange={value => this.obState.createValue = value}
-							   onKeyPress={this.handleKeyPress}
-							   onBlur={this.handleBlur}/>
+								className={s.fieldCreateInput}
+								placeholder='Field name'
+								value={createValue}
+								onChange={value => this.obState.createValue = value}
+								onKeyPress={this.handleKeyPress}
+								onBlur={this.handleBlur}/>
 						</div>
 					}
 					{!isFieldPrimitive && map(field, (value, key) => this.renderField(key, value, currentPath))}
@@ -138,11 +146,11 @@ export default class OrkanSchemaEditor extends Component{
 		);
 	}
 	render(){
-		const {className, value} = this.props;
+		const {className, classes, value} = this.props;
+		const s = createStyle(style, className, classes);
 
-		const newClassName = classNames('OrkanSchemaEditor', className);
 		return (
-			<div className={newClassName}>
+			<div className={s.root}>
 				{this.renderField(null, value, null)}
 			</div>
 		);

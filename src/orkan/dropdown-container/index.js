@@ -6,14 +6,17 @@ import {observable} from 'mobx';
 import {observer} from 'mobx-react';
 
 import {keyboard} from '../utils/keyboard-utils';
+import {createStyle} from '../utils/style-utils';
 
-import './style';
+import style from './style';
+import dropdownOptionStore from './dropdown-option-style.scss';
 
 @observer
 export default class DropdownContainer extends Component {
 
 	static propTypes = {
 		options: PropTypes.array,
+		size: PropTypes.oneOf(['small', 'medium', 'large']),
 		isOpen: PropTypes.bool,
 		onClose: PropTypes.func,
 		renderOption: PropTypes.func,
@@ -21,6 +24,7 @@ export default class DropdownContainer extends Component {
 	};
 
 	static defaultProps = {
+		size: 'medium',
 		options: [],
 		onSelect: option => null,
 		onClose: () => null,
@@ -126,24 +130,31 @@ export default class DropdownContainer extends Component {
 	}
 
 	render(){
-		const {className, children, options, isOpen, onSelect, ...otherProps} = this.props;
+		const {className, children, options, isOpen, onSelect, size, ...otherProps} = this.props;
 		const {selectedOptionIndex} = this.state;
 
-		const newClassName = classNames('DropdownContainer', className, {
-			'DropdownContainer-open': isOpen,
-			'DropdownContainer-medium': true
+		const s = createStyle(style, className, style[size], {
+			root: {
+				open: isOpen
+			}
 		});
 
 		return (
-			<div {...otherProps} className={newClassName} tabIndex="0" onBlur={this.handleClose}>
+			<div {...otherProps} className={s.root} tabIndex="0" onBlur={this.handleClose}>
 				{children}
 				{isOpen &&
-					<ul className="DropdownContainer-options" onMouseDown={e => e.preventDefault()}>
+					<ul className={s.optionsList} onMouseDown={e => e.preventDefault()}>
 						{options.map((option, i) => (
-							<li key={i} ref={'option' + i} className={classNames({'DropdownContainer-options-selected': selectedOptionIndex === i})} onMouseDown={() => this.selectOption(option)}>{this.renderOption(option)}</li>
+							<li
+								key={i}
+								ref={'option' + i}
+								className={classNames(s.option, {[s.selectedOption]: selectedOptionIndex === i})}
+								onMouseDown={() => this.selectOption(option)}>
+									{this.renderOption(option)}
+							</li>
 						))}
 						{!options.length &&
-							<li className="DropdownContainer-options-empty">No options available</li>
+							<li className={s.emptyOption}>No options available</li>
 						}
 					</ul>
 				}
@@ -160,22 +171,27 @@ export class DropdownOption extends Component {
 
 	static propTypes = {
 		label: PropTypes.string,
+		size: PropTypes.oneOf(['small', 'medium', 'large']),
+		selected: PropTypes.bool
 	};
 
 
 	static defaultProps = {
+		size: 'medium'
 	};
 
 	render(){
 
-		const {className, label, ...otherProps} = this.props;
+		const {className, label, size, selected, ...otherProps} = this.props;
 
-		const newClassName = classNames('DropdownOption', className, {
-			'DropdownOption-small': true
+		const s = createStyle(dropdownOptionStore, className, dropdownOptionStore[size], {
+			root: {
+				selected
+			}
 		});
 
 		return (
-			<div {...otherProps} className={newClassName}>
+			<div {...otherProps} className={s.root}>
 				{label}
 			</div>
 		);

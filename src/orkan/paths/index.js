@@ -8,11 +8,11 @@ import classNames from 'classnames';
 import Header from '../header';
 import Input from '../controls/input';
 import orkanInject from '../orkan-inject';
-import OrkanListItem from '../orkan-list-item';
+import ListItem from '../list-item';
 import {typeOrFalse} from '../utils/prop-types-utils';
 
 import './style.scss';
-import OrkanIcon from '../icon';
+import Icon from '../icon';
 import Button from '../button';
 import DropdownContainer from '../dropdown-container';
 import OrkanStore from '../orkan-store';
@@ -23,7 +23,7 @@ import OrkanStore from '../orkan-store';
 
 }, {liveEditedData: false})
 @observer
-export default class OrkanPaths extends Component{
+export default class Paths extends Component{
 
 	static propTypes = {
 		path: PropTypes.string.isRequired,
@@ -96,7 +96,7 @@ export default class OrkanPaths extends Component{
 			const {collectionMainLabel, collectionImage} = store.getSettingsByPath(path);
 
 			return Object.keys(value).map(key => (
-				<OrkanListItem
+				<ListItem
 					key={key}
 					image={collectionImage && value[key][collectionImage]}
 					onClick={() => this.handleClickPath(key)}
@@ -105,11 +105,11 @@ export default class OrkanPaths extends Component{
 					]}>
 
 					{collectionMainLabel?value[key][collectionMainLabel]:'/'+key}
-				</OrkanListItem>
+				</ListItem>
 			))
 		}else{
 			return store.getNonPrimitiveKeysByPath(path, true).map(key => (
-				<OrkanListItem key={key} onClick={() => this.handleClickPath(key)}>/{key}</OrkanListItem>
+				<ListItem key={key} onClick={() => this.handleClickPath(key)}>/{key}</ListItem>
 			));
 		}
 	}
@@ -128,19 +128,19 @@ export default class OrkanPaths extends Component{
 		const primitiveKeysExist = store.getPrimitiveKeysByPath(path, true).length > 0;
 
 		return (
-			<div className='OrkanPaths'>
+			<div className='Paths'>
 				{showHeader && !isPathCollection && nonPrimitiveKeysExist && primitiveKeysExist &&
 					<Header title='Other Paths'/>
 				}
 				{isPathCollection &&
-					<div className='OrkanPaths-header'>
+					<div className='Paths-header'>
 						<DropdownContainer
 							options={options}
 							isOpen={isOptionsOpen}
 							onSelect={this.handleSelectOption}
 							onClose={() => this.obState.isOptionsOpen = false}
 							onFocus={() => this.obState.isOptionsOpen = true}>
-							<OrkanIcon type='dots'/>
+							<Icon type='dots'/>
 						</DropdownContainer>
 						<Input placeholder='key (optional)' value={newKey} onChange={value => this.obState.newKey = value}/>
 						<Button primary onClick={this.handleCreate}>create</Button>

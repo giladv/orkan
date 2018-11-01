@@ -7,8 +7,9 @@ import {observer} from 'mobx-react';
 import OriginalSwitch from "react-switch";
 
 import {formInput} from '../../form';
+import {createStyle} from '../../utils/style-utils';
 
-import './style';
+import style from './style';
 
 @observer
 export default class Switch extends Component {
@@ -26,16 +27,16 @@ export default class Switch extends Component {
 	render(){
 		const {className, value, onChange, disabled, ...otherProps} = this.props;
 
-		const newClassName = classNames('Switch', className, {
-			'Switch-disabled': disabled
+		const s = createStyle(style, className, {
+			root: {
+				disabled
+			}
 		});
 
 		return (
 			<OriginalSwitch
 				{...otherProps}
-				className={newClassName}
-				// onColor='#48e4c6'
-				// offColor='#cdd3df'
+				className={s.root}
 				offHandleColor='#cdd3df'
 				onHandleColor='#fa2849'
 				handleDiameter={12}

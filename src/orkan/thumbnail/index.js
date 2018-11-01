@@ -1,14 +1,14 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import autobind from 'autobind-decorator';
-import classNames from 'classnames';
 import path from 'path';
 
 import Img from '../img';
-import OrkanActionButton from '../orkan-action-button';
+import ActionButton from '../action-button';
 import Video from '../video';
+import {createStyle} from '../utils/style-utils';
 
-import './style';
+import style from './style';
 
 @autobind
 export default class Thumbnail extends Component {
@@ -18,6 +18,7 @@ export default class Thumbnail extends Component {
 		leftLabel: PropTypes.string,
 		rightLabel: PropTypes.string,
 		ratio: PropTypes.number,
+		size: PropTypes.oneOf(['small', 'medium', 'large']),
 		buttons: PropTypes.arrayOf(PropTypes.shape({
 			icon: PropTypes.string,
 			onClick: PropTypes.func
@@ -25,6 +26,7 @@ export default class Thumbnail extends Component {
 	};
 
 	static defaultProps = {
+		size: 'medium',
 		ratio: 60,
 		buttons: [],
 		src: require('./placeholder.png')
@@ -49,32 +51,30 @@ export default class Thumbnail extends Component {
 	}
 
 	render(){
-		const {className, src, leftLabel, rightLabel, buttons, ratio, ...otherProps} = this.props;
+		const {className, classes, src, leftLabel, rightLabel, buttons, ratio, size, ...otherProps} = this.props;
 
-		const newClassName = classNames('Thumbnail', className, {
-			'Thumbnail-medium': true,
-		});
+		const s = createStyle(style, className, classes, style[size]);
 
 		const fileType = this.getFileType();
 		const cleanButtons = buttons.filter(it => !!it);
 
 		return (
-			<div {...otherProps} className={newClassName}>
-				<div className="Thumbnail-actions-container">
+			<div {...otherProps} className={s.root}>
+				<div className={s.topContainer}>
 					{cleanButtons.length > 0 &&
-						<div className="Thumbnail-actions">
+						<div className={s.actions}>
 							{cleanButtons.map((button, i) => (
-								<OrkanActionButton key={i} icon={button.icon} onClick={button.onClick}/>
+								<ActionButton className={s.actionButton} key={i} icon={button.icon} onClick={button.onClick}/>
 							))}
 						</div>
 					}
-					{fileType === 'image' && <Img mode='cover' src={src} ratio={ratio}/>}
-					{fileType === 'video' && <Video src={src} ratio={ratio}/>}
+					{fileType === 'image' && <Img className={s.img} mode='cover' src={src} ratio={ratio}/>}
+					{fileType === 'video' && <Video className={s.video} src={src} ratio={ratio}/>}
 				</div>
 				{(leftLabel || rightLabel) &&
-					<div className="Thumbnail-content">
-						<div className="Thumbnail-left-label">{leftLabel}</div>
-						<div className="Thumbnail-right-label">{rightLabel}</div>
+					<div className={s.content}>
+						<div className={s.leftLabel}>{leftLabel}</div>
+						<div className={s.rightLabel}>{rightLabel}</div>
 					</div>
 
 				}

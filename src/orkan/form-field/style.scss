@@ -1,0 +1,54 @@
+@import '../globals';
+
+
+.root{
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	&:hover{
+		.settings{
+			opacity: 1;
+		}
+	}
+}
+
+
+
+.settings{
+	cursor: pointer;
+	font-size: 10px;
+	color: #A6AAB6;
+	position: absolute;
+	top: 6px;
+	right: 0;
+	opacity: 0;
+	transition: opacity .2s ease-in-out;
+	&:hover{
+		text-decoration: underline;
+	}
+}
+
+.label{
+	margin: 0;
+	font-size: 15px;
+	font-weight: 300;
+	transition: color .2s linear;
+	vertical-align: top;
+	color: #71778A;
+}
+
+.input{
+	position: relative;
+	vertical-align: top;
+	line-height: initial;
+	> *{
+		width: 100%;
+	}
+}
+
+
+.error{
+	.label{
+		color: #f6003a !important;
+	}
+}

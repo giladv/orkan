@@ -228,7 +228,7 @@ $invisibleShadowRgba: rgba(0, 0, 0, 0.06);
 	}
 }
 
-@keyframes orkanAuthAnimation {
+@keyframes AuthAnimation {
 	from {
 		transform: translate3d(-50%, -100%, 0);
 	}
@@ -287,7 +287,7 @@ $invisibleShadowRgba: rgba(0, 0, 0, 0.06);
 }
 
 @mixin globalFont(){
-	font-family: 'Roboto';
+	font-family: 'Roboto', sans-serif;
 }
 
 

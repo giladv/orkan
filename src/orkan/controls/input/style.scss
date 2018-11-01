@@ -1,116 +1,95 @@
 @import '../../globals';
 
-.Input{
+
+@mixin size($height, $fontSize){
+	// borders compensation
+	$height: $height - 2px;
+
+	.input{
+		line-height: $height;
+		font-size: $fontSize;
+		padding: 0 ($height - $fontSize) / 2;
+	}
+
+	&.hasPreIcon{
+		.input{
+			padding-left: $height !important;
+		}
+	}
+
+	&.hasPostIcon{
+		.input{
+			padding-right: $height !important;
+		}
+	}
+
+	.preIcon{
+		font-size: $fontSize * 0.91;
+		left: 10px;
+	}
+
+	.postIcon{
+		font-size: $fontSize * 0.91;
+		right: 10px;
+	}
+}
+
+
+
+.root{
 	position: relative;
 	display: inline-block;
 	vertical-align: middle;
-	.Input-input{
-		font-family: Roboto;
-		@include inputLike();
-		width: 100%;
-		margin: 0;
-		border-radius: 3px;
-		resize: none;
-		color: $gray;
-		height: auto;
-		&::placeholder{
-			color: $grey5;
-		}
-		&:focus{
-			@include inputLike(); // to prevent override
-			border-color: $aqua;
-			box-shadow: inset 0 4px 0 0 $aqua-1;
-		}
+}
 
+
+
+.input{
+	@include globalFont;
+	@include inputLike();
+	width: 100%;
+	margin: 0;
+	border-radius: 3px;
+	resize: none;
+	color: $gray;
+	height: auto;
+	&::placeholder{
+		color: $grey5;
+	}
+	&:focus{
+		@include inputLike(); // to prevent override
+		border-color: $aqua;
+		box-shadow: inset 0 4px 0 0 $aqua-1;
 	}
 
-	.Input-pre-icon, .Input-post-icon{
-		position: absolute;
-		top: 50%;
-		transform: translate3d(0, -50%, 0);
-		width: auto;
+}
+
+.preIcon, .postIcon{
+	position: absolute;
+	top: 50%;
+	transform: translate3d(0, -50%, 0);
+	width: auto;
+}
+
+
+
+.error{
+	.input{
+		border-color: $pink;
+		box-shadow: inset 0 3px 0 0 $pink-1;
+		color: $pink;
 	}
+}
 
-	&.Input-block{
-		display: block;
-	}
 
-	&.Input-negative{
-		$specialGray: darken($gray1, 2%);
-		.Input-input{
-			background: $gray1;
-			border-color: $specialGray;
-			box-shadow: inset 0 3px 0 0 $specialGray;
-			color: $gray-2;
-			&:focus{
-				border-color: $gray3;
-				color: lighten($gray-2, 10%);
-				box-shadow: inset 0 4px 0 0 $specialGray;
-			}
-		}
-	}
+.small{
+	@include size($controlHeightSmall, $controlFontSizeSmall);
+}
 
-	&.Input-error{
-		.Input-input{
-			border-color: $pink;
-			box-shadow: inset 0 3px 0 0 $pink-1;
-			color: $pink;
-		}
-	}
+.medium{
+	@include size($controlHeightMedium, $controlFontSizeMedium);
+}
 
-	&.Input-important{
-		.Input-input {
-			background: $grey0;
-			box-shadow: inset 0 3px 0 0 $grey2;
-			&::placeholder{
-				color: $grey5;
-			}
-			&:focus{
-				border-color: $grey5;
-				box-shadow: inset 0 4px 0 0 $grey2;
-			}
-		}
-	}
-
-	@mixin size($height, $fontSize){
-
-		// borders compensation
-		$height: $height - 2px;
-
-		.Input-input{
-			line-height: $height;
-			font-size: $fontSize;
-			padding: 0 ($height - $fontSize) / 2;
-
-			&.Input-input-pre-padding{
-				padding-left: $height !important;
-			}
-
-			&.Input-input-post-padding{
-				padding-right: $height !important;
-			}
-		}
-
-		.Input-pre-icon{
-			font-size: $fontSize * 0.91;
-			left: 10px;
-		}
-
-		.Input-post-icon{
-			font-size: $fontSize * 0.91;
-			right: 10px;
-		}
-	}
-
-	&.Input-small{
-		@include size($controlHeightSmall, $controlFontSizeSmall);
-	}
-
-	&.Input-medium{
-		@include size($controlHeightMedium, $controlFontSizeMedium);
-	}
-
-	&.Input-large{
-		@include size($controlHeightLarge, $controlFontSizeLarge);
-	}
+.large{
+	@include size($controlHeightLarge, $controlFontSizeLarge);
 }

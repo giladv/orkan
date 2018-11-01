@@ -1,15 +1,14 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import autobind from 'autobind-decorator';
-import classNames from 'classnames';
 import {observer} from 'mobx-react';
 
 import Thumbnail from '../../thumbnail';
 import {formInput} from '../../form';
 import orkanInject from '../../orkan-inject';
-
-import './style.scss';
 import OrkanMediaGallery from '../../orkan-media-gallery';
+import {createStyle} from '../../utils/style-utils';
+
+import style from './style.scss';
 
 @orkanInject()
 @observer
@@ -26,15 +25,14 @@ export default class Media extends Component {
 
 
 	render(){
-		const {className, value, orkan, onChange} = this.props;
+		const {className, value, orkan, onChange, ...otherProps} = this.props;
 
-		const newClassName = classNames('Media', className, {
-			'Media-medium': true,
-		});
+		const s = createStyle(style, className);
 
 		return (
 			<Thumbnail
-				className={newClassName}
+				{...otherProps}
+				className={s.root}
 				buttons={[
 					{icon: 'picture', onClick: () => orkan.openModal(OrkanMediaGallery).then(value => onChange(value)).catch(err => null)},
 					value && {icon: 'clear', onClick: () => onChange(null)},

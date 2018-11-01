@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import autobind from 'autobind-decorator';
-import classNames from 'classnames';
 
 import Drag from '../utils/drag';
+import {createStyle} from '../utils/style-utils';
 
-import './style';
+import style from './style';
 
 @autobind
 export default class Sidebar extends Component {
@@ -75,20 +75,15 @@ export default class Sidebar extends Component {
 	}
 
 	render(){
-		const {className, side, initialSize, children, ...otherProps} = this.props;
+		const {className, classes, side, initialSize, children, ...otherProps} = this.props;
 		const {size} = this.state;
 
-		const newClassName = classNames('Sidebar', className, {
-			'Sidebar-left': side === 'left',
-			'Sidebar-right': side === 'right',
-			'Sidebar-bottom': side === 'bottom'
-		});
+		const s = createStyle(style, className, classes, style[side]);
 
 		return (
-			<div {...otherProps} className={newClassName} style={{flexBasis: size}}
-				 onMouseDown={e => e.stopPropagation()}>
-				<div className="Sidebar-resize-handle" ref="handle" onMouseDown={this.handleHandleMouseDown}></div>
-				<div className="Sidebar-content" style={{width: size}}>{children}</div>
+			<div {...otherProps} className={s.root} style={{flexBasis: size}} onMouseDown={e => e.stopPropagation()}>
+				<div className={s.handle} ref="handle" onMouseDown={this.handleHandleMouseDown}></div>
+				<div className={s.content} style={{width: size}}>{children}</div>
 			</div>
 		);
 	}

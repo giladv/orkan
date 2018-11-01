@@ -90,8 +90,8 @@ export default class OrkanProvider extends Component{
 		this.obState.isBusy = true;
 		try{
 			const fetchUrl = process.env.NODE_ENV === 'development'
-				?'http://localhost:8081/orkan-admin.js'
-				:'https://my-proj-5cbb6.firebaseapp.com/orkan-admin.js';
+				?'http://localhost:8081/admin.js'
+				:'https://my-proj-5cbb6.firebaseapp.com/admin.js';
 
 			const response = await fetch(fetchUrl);
 			eval(await response.text());

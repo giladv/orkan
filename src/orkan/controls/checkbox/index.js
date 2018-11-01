@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import autobind from 'autobind-decorator';
-import classNames from 'classnames';
 import Icon from '../../icon';
 
 import {formInput} from '../../form';
+import {createStyle} from '../../utils/style-utils';
 
-import './style';
+import style from './style';
 
 
 @autobind
@@ -30,17 +30,19 @@ export default class Checkbox extends Component {
 	}
 
 	render(){
-		const {className, value, icon, disabled, ...otherProps} = this.props;
+		const {classes, className, value, icon, disabled, ...otherProps} = this.props;
 
-		const newClassName = classNames('Checkbox', className, {
-			'Checkbox-checked': value,
-			'Checkbox-disabled': disabled
+		const s = createStyle(style, className, classes, {
+			root: {
+				checked: !!value,
+				disabled
+			}
 		});
 
 		return (
-			<a {...otherProps} className={newClassName} onClick={this.toggle}>
+			<a {...otherProps} className={s.root} onClick={this.toggle}>
 				<span>
-					<Icon type={icon}/>
+					<Icon className={s.icon} type={icon}/>
 				</span>
 			</a>
 		);

@@ -1,14 +1,14 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import autobind from 'autobind-decorator';
-import classNames from 'classnames';
-// import SketchPicker from 'react-color/lib/Sketch';
+import SketchPicker from 'react-color/lib/Sketch';
 import {observable} from 'mobx';
 import {observer} from 'mobx-react';
 
 import {formInput} from '../../form';
 
-import './style';
+import style from './style';
+import {createStyle} from '../../utils/style-utils';
 
 
 function getContrastColor(hex = '', bw = true) {
@@ -23,7 +23,7 @@ function getContrastColor(hex = '', bw = true) {
 		// throw new Error('Invalid HEX color.');
 		return;
 	}
-	var r = parseInt(hex.slice(0, 2), 16),
+	let r = parseInt(hex.slice(0, 2), 16),
 		g = parseInt(hex.slice(2, 4), 16),
 		b = parseInt(hex.slice(4, 6), 16);
 	if (bw) {
@@ -59,17 +59,19 @@ export default class ColorPicker extends Component {
 	};
 
 	render(){
-		const {className, value, onChange, disabled, ...otherProps} = this.props;
+		const {classes, className, value, onChange, disabled, ...otherProps} = this.props;
 		const {isOpen} = this.obState;
 
-		const newClassName = classNames('ColorPicker', className, {
-			'ColorPicker-disabled': disabled
+		const s = createStyle(style, className, classes, {
+			root: {
+				disabled
+			}
 		});
 
 		return (
-			<div {...otherProps} className={newClassName} onFocus={() => this.obState.isOpen = true} onBlur={() => this.obState.isOpen = false} tabIndex={0}>
-				<div className="ColorPicker-color" style={{background: value, color: getContrastColor(value + '')}}>{value}</div>
-				{isOpen && <SketchPicker color={value} onChange={e => onChange(e.hex)}/>}
+			<div {...otherProps} className={s.root} onFocus={() => this.obState.isOpen = true} onBlur={() => this.obState.isOpen = false} tabIndex={0}>
+				<div className={s.color} style={{background: value, color: getContrastColor(value + '')}}>{value}</div>
+				{isOpen && <SketchPicker className={s.picker} color={value} onChange={e => onChange(e.hex)}/>}
 			</div>
 		);
 	}

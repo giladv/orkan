@@ -6,8 +6,9 @@ import {observable, action} from 'mobx';
 import autobind from 'autobind-decorator';
 
 import FormStore from './form-store';
+import {createStyle} from '../utils/style-utils';
 
-import './style.scss';
+import style from './style.scss';
 
 
 @observer
@@ -81,11 +82,11 @@ export default class Form extends Component {
 	}
 
 	render(){
-		const {className, children, onSubmit, store} = this.props;
-		const newClassName = classNames('Form', className);
+		const {className, children} = this.props;
+		const s = createStyle(style, className);
 
 		return (
-			<form className={newClassName} action='/' onSubmit={this.handleSubmit}>
+			<form className={s.root} action='/' onSubmit={this.handleSubmit}>
 				{children}
 				{/*this to allow submit on return*/}
 				<input type="submit" style={{display: 'none'}}/>
@@ -173,50 +174,3 @@ export const formSubmit = DecoratedComponent =>
 			return <DecoratedComponent {...this.props} className={newClassName} onClick={e => form.submit()}/>;
 		}
 	};
-
-
-@formInput()
-export class FormField extends Component {
-
-	static propTypes = {
-		name: PropTypes.string,
-		label: PropTypes.string,
-		error: PropTypes.string,
-		centered: PropTypes.bool,
-		compact: PropTypes.bool,
-		onSettings: PropTypes.func
-	};
-
-
-	static defaultProps = {
-	};
-
-
-	render(){
-		const {name, label, className, error, children, centered, compact, onSettings, ...otherProps} = this.props;
-
-		const newClassName = classNames('FormField', className, {
-			'FormField-error': error,
-			'FormField-small': true,
-			'FormField-centered': centered,
-			'FormField-compact': compact,
-		});
-
-		return (
-			<div {...otherProps} className={newClassName}>
-				{onSettings && <a onClick={onSettings} className="FormField-settings">Settings</a>}
-				<label className="FormField-label" htmlFor={name}>{label}</label>
-
-				{children &&
-				<div className="FormField-input">
-					{cloneElement(children, {name})}
-				</div>
-				}
-				{error &&
-				<div className='FormField-error'>{error}</div>
-				}
-			</div>
-
-		);
-	}
-}

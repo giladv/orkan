@@ -2,7 +2,37 @@
 
 
 
-.Button{
+@mixin size($height, $fontSize){
+	font-size: $fontSize;
+	height: $height;
+
+	.label{
+		$sidePadding: ($height - $fontSize) / 1.1;
+		padding: 0 $sidePadding;
+		display: flex;
+		font-size: $fontSize;
+		.Icon{
+			font-size: $fontSize * 1.1;
+		}
+	}
+
+	&.square{
+		width: $height !important;
+		height: $height;
+		letter-spacing: normal !important;
+		.label{
+			padding: 0;
+		}
+	}
+}
+
+@mixin style($baseColor, $textColor){
+	background: $baseColor;
+	color: $textColor;
+}
+
+
+.root{
 	display: inline-flex;
 	border-radius: 3px;
 	text-transform: uppercase;
@@ -21,105 +51,72 @@
 		outline: none;
 	}
 	&:hover{
-		.Button-label{
+		.label{
 			transform: scale3d(0.98, 0.98, 1);
 		}
 	}
+}
 
-	&.Button-disabled{
-		opacity: 0.5;
-		cursor: default;
+
+
+.spinner{
+	transition: all .2s ease;
+	position: absolute;
+	opacity: 0;
+	transform: translate3d(0, -50%, 0);
+}
+
+.label{
+	line-height: 1;
+	transition: all .2s ease;
+
+	.Icon{
+		vertical-align: middle;
+	}
+	span{
+		vertical-align: middle;
+	}
+}
+
+.disabled{
+	opacity: 0.5;
+	cursor: default;
+}
+
+.busy{
+	.label{
+		transform: translate3d(0, 100%, 0);
+		opacity: 0;
 	}
 
-	.Button-spinner{
-		transition: all .2s ease;
-		position: absolute;
-		//transform: translate3d(0, 0, 0);
-		&.Button-spinner-hidden{
-			transform: translate3d(0, -50%, 0);
-			opacity: 0;
-		}
+	.spinner{
+		opacity: 1;
+		transform: translate3d(0, 0, 0);
 	}
-
-	.Button-label{
-		line-height: 1;
-		transition: all .2s ease;
-		&.Button-label-hidden{
-			transform: translate3d(0, 100%, 0);
-			opacity: 0;
-		}
-		.OrkanIcon{
-			vertical-align: middle;
-		}
-		span{
-			vertical-align: middle;
-		}
-	}
-
-	@mixin size($height, $fontSize){
-		font-size: $fontSize;
-		height: $height;
-
-		.Button-label{
-			$sidePadding: ($height - $fontSize) / 1.1;
-			padding: 0 $sidePadding;
-			display: flex;
-			font-size: $fontSize;
-			.OrkanIcon{
-				font-size: $fontSize * 1.1;
-			}
-		}
-
-		&.Button-square{
-			width: $height !important;
-			height: $height;
-			letter-spacing: normal !important;
-			.Button-label{
-				padding: 0;
-			}
-		}
-	}
-
-	@mixin buttonStyle($baseColor, $textColor){
-		background: $baseColor;
-		color: $textColor;
-		&.Button-negative{
-			background-color: $grey7;
-			color: $baseColor;
-			.Button-label > .OrkanIcon{
-				color: $baseColor;
-			}
-			.Button-spinner{
-				color: $baseColor;
-			}
-		}
-	}
-
-	&.Button-small{
-		@include size($controlHeightSmall, $controlFontSizeSmall);
-	}
-
-	&.Button-medium{
-		@include size($controlHeightMedium, $controlFontSizeMedium);
-	}
-
-	&.Button-large{
-		@include size($controlHeightLarge, $controlFontSizeLarge);
-	}
-
-	// styles
-	&.Button-secondary{
-		@include buttonStyle($grey1, $gray);
-	}
-
-	&.Button-important{
-		@include buttonStyle($pink, #ffffff);
-	}
-
-	&.Button-primary{
-		@include buttonStyle(#343A4D, #ffffff);
-	}
+}
 
 
+.secondary{
+	@include style($grey1, $gray);
+}
 
+.important{
+	@include style($pink, #ffffff);
+}
+
+.primary{
+	@include style(#343A4D, #ffffff);
+}
+
+
+.small{
+	@include size($controlHeightSmall, $controlFontSizeSmall);
+}
+
+.medium{
+	@include size($controlHeightMedium, $controlFontSizeMedium);
+}
+
+.large{
+	@include size($controlHeightLarge, $controlFontSizeLarge);
 }

@@ -3,28 +3,27 @@ import PropTypes from 'prop-types';
 import {observer} from 'mobx-react';
 import {observable} from 'mobx';
 import autobind from 'autobind-decorator';
-import classNames from 'classnames';
 
 import Sidebar from '../sidebar';
-import OrkanDataForm from '../orkan-data-form';
+import DataForm from '../data-form';
 import OrkanSettingsPanel from '../orkan-settings-panel';
 import Header from '../header';
 import {keyboard, onDoublePress} from '../utils/keyboard-utils';
-import OrkanAuth from '../orkan-auth';
-import OrkanSpinner from '../orkan-spinner';
-import OrkanPaths from '../orkan-paths';
+import Auth from '../auth';
+import Spinner from '../spinner';
+import Paths from '../paths';
 import Img from '../img';
 import OrkanUsersRequests from '../orkan-users-requests';
 import OrkanStore from '../orkan-store';
 import { SCHEMA_KEY_NAME} from '../constants';
-import OrkanSchemaEditor from '../orkan-schema-editor';
+import SchemaEditor from '../schema-editor';
 import {createStyle} from '../utils/style-utils';
 
 import style from './style.scss';
 
 
 @observer
-export default class OrkanProvider extends Component{
+export default class Admin extends Component{
 
 	static propTypes = {
 		store: PropTypes.instanceOf(OrkanStore).isRequired
@@ -49,8 +48,6 @@ export default class OrkanProvider extends Component{
 		});
 
 		window.lo = () => auth.signOut();
-
-		// store.openModal(OrkanMediaGallery);
 	}
 
 	@autobind
@@ -71,17 +68,6 @@ export default class OrkanProvider extends Component{
 		store.declineUserRequest(uid);
 	}
 
-	@autobind
-	handleRemoveCollectionItem(key){
-		const {store} = this.props;
-
-		if(!confirm('are you sure?')){
-			return;
-		}
-
-		store.removeCollectionItem(key);
-	}
-
 	render() {
 		const {className, store} = this.props;
 		const {isResizing} = this.obState;
@@ -92,6 +78,12 @@ export default class OrkanProvider extends Component{
 		if(!schema){
 			return null;
 		}
+
+		const s = createStyle(style, className, {
+			root: {
+				disabled: isResizing
+			}
+		});
 
 		let headerParts;
 		let headerTitle;
@@ -104,20 +96,12 @@ export default class OrkanProvider extends Component{
 			}
 
 			headerTitle = headerParts.map((part, i) => [
-				<span key={i} onClick={() => store.setActivePath(headerParts.slice(0, i+1).join('/'))}>{i === 0 && headerParts.length === 1?'Root':part}</span>,
+				<span className={s.titlePart} key={i} onClick={() => store.setActivePath(headerParts.slice(0, i+1).join('/'))}>{i === 0 && headerParts.length === 1?'Root':part}</span>,
 				i < headerParts.length - 1 && '/'
 			]);
 		}
 
-		const s = createStyle(style, className, {
-			root: {
-				disabled: isResizing
-			}
-		});
 
-		// const newClassName = classNames('Orkan', className, {
-		// 	'Orkan-disabled': isResizing
-		// });
 
 		return (
 			<div className={s.root}>
@@ -125,7 +109,7 @@ export default class OrkanProvider extends Component{
 					<Sidebar
 						side='left'
 						initialSize={300}
-						className='Orkan-ui'
+						classes={{root: s.sidebar, content: s.sidebarContent}}
 						onResizeStart={() => this.obState.isResizing = true}
 						onResizeEnd={() => this.obState.isResizing = false}
 						onResize={size => document.body.style.paddingLeft = size + 'px'}>
@@ -134,32 +118,32 @@ export default class OrkanProvider extends Component{
 
 						<Header primary title={headerTitle} onClose={this.handleClose}/>
 
-						{store.isLoadingActivePath && <OrkanSpinner/>}
+						{store.isLoadingActivePath && <Spinner className={s.spinner}/>}
 
 
-						<div className='Orkan-ui-scroll'>
+						<div className={s.scrollContainer}>
 
 							{!store.isLoadingActivePath &&
-								<OrkanDataForm
+								<DataForm
 									path={store.activePath}
 									store={store}/>
 							}
 
 							{!store.isLoadingActivePath &&
-								<OrkanPaths
+								<Paths
 									path={store.activePath}
 									store={store} />
 							}
 
 							{store.activePath === './' + SCHEMA_KEY_NAME &&
-								<OrkanSchemaEditor
+								<SchemaEditor
 									value={store.getSchema()}
 									onChange={value => store.dataStore.setValue(SCHEMA_KEY_NAME, value)}/>
 							}
 						</div>
-						<div className="Orkan-ui-footer">
-							<div className="Orkan-ui-footer-auth">
-								<Img src={store.user.photoURL}/>
+						<div className={s.footer}>
+							<div className={s.footerAuth}>
+								<Img className={s.footerAuthImg} src={store.user.photoURL}/>
 								<span onClick={() => store.logout()}>Logout</span>
 							</div>
 							<span/>
@@ -173,7 +157,8 @@ export default class OrkanProvider extends Component{
 						className={s.settingsPanel}
 						store={store}/>
 				}
-				{!store.isInitiating && !store.isAdmin() && <OrkanAuth auth={store.authStore}/>}
+
+				{!store.isInitiating && !store.isAdmin() && <Auth className={s.auth} auth={store.authStore}/>}
 				{store.modal && <store.modal.Component {...store.modal.props}/>}
 			</div>
 		);

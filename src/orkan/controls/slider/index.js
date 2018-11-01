@@ -5,9 +5,10 @@ import classNames from 'classnames';
 import OriginalSlider from 'rc-slider';
 
 import {formInput} from '../../form';
+import {createStyle} from '../../utils/style-utils';
 
 import 'rc-slider/assets/index.css';
-import './style';
+import style from './style';
 
 @autobind
 export default class Slider extends Component {
@@ -22,13 +23,15 @@ export default class Slider extends Component {
 	render(){
 		const {className, error, value, min, ...otherProps} = this.props;
 
-		const newClassName = classNames('Slider', className, {
-			'Slider-error': error,
+		const s = createStyle(style, className, {
+			root: {
+				error
+			}
 		});
 
 		const safeValue = isNaN(value)?0:value;
 
-		return <OriginalSlider {...otherProps} className={newClassName} value={safeValue} min={parseFloat(min)}/>;
+		return <OriginalSlider {...otherProps} className={s.root} value={safeValue} min={parseFloat(min)}/>;
 	}
 
 

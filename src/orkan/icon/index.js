@@ -1,13 +1,12 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 
 import style from './style.scss';
-import icons from './icons.css';
-console.log(icons)
+import icons from './icons.scss';
+
 import {createStyle} from '../utils/style-utils';
 
-export default class OrkanIcon extends Component {
+export default class Icon extends Component {
     static propTypes = {
 		type: PropTypes.string.isRequired
     };

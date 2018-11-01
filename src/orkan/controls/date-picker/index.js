@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import autobind from 'autobind-decorator';
-import classNames from 'classnames';
 import dateFormat from 'dateformat';
 import {observer} from 'mobx-react';
 import{observable} from 'mobx';
@@ -10,8 +9,9 @@ import {default as ThirdPartyDatePicker} from '../../date-picker';
 import {formInput} from '../../form';
 import DropdownContainer from '../../dropdown-container';
 import Input from '../input';
+import {createStyle} from '../../utils/style-utils';
 
-import './style';
+import style from './style';
 
 
 @observer
@@ -47,23 +47,20 @@ export default class DatePicker extends Component {
 	}
 
 	render(){
-		const {className, value, onChange, ...otherProps} = this.props;
+		const {className, value, onChange, disabled, ...otherProps} = this.props;
 		const {isOpen} = this.obState;
 
-		const newClassName = classNames('DatePicker', className, {
-			'DatePicker-medium': true,
-		})
+		const s = createStyle(style, className, {
+			root: {
+				disabled
+			}
+		});
 
-		// return <ThirdPartyDatePicker date={value} onMouseDown={e => e.preventDefault()} onDayClick={this.handleDayClick}/>;
-		const tooltip = (
-			// <Tooltip seamless>
-				<ThirdPartyDatePicker date={value} onDayClick={this.handleDayClick}/>
-			// </Tooltip>
-		);
+		const picker = <ThirdPartyDatePicker className={s.picker} date={value} onDayClick={this.handleDayClick}/>;
 
 		return (
-			<DropdownContainer className={newClassName} renderOption={() => tooltip} options={[{label: 1, value: 1}]} isOpen={isOpen} onClose={() => this.obState.isOpen = false}>
-				<Input {...otherProps} className={newClassName} preIcon="calendar" value={this.formatDate(value)} onFocus={() => this.obState.isOpen = true}/>
+			<DropdownContainer className={s.root} classes={{optionsList: s.optionsList}} renderOption={() => picker} options={[{label: 1, value: 1}]} isOpen={isOpen} onClose={() => this.obState.isOpen = false}>
+				<Input {...otherProps} className={s.input} preIcon="calendar" value={this.formatDate(value)} onFocus={() => this.obState.isOpen = true}/>
 			</DropdownContainer>
 		);
 	}

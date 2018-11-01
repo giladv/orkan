@@ -1,17 +1,17 @@
 @import '../../globals';
 
-.Slider{
-	.rc-slider-rail{
+.root{
+	:global(.rc-slider-rail){
 		background-color: #D1D4DE;
 		height: 1px;
 	}
 
-	.rc-slider-track{
+	:global(.rc-slider-track){
 		background-color: #FA2949;
 		height: 1px;
 	}
 
-	.rc-slider-handle{
+	:global(.rc-slider-handle){
 		border-color: #FA2949;
 		margin-top: -6px;
 		&:focus{

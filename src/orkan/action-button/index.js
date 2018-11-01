@@ -10,7 +10,7 @@ import Icon from '../icon';
 import style from './style.scss';
 
 @observer
-export default class OrkanActionButton extends Component{
+export default class ActionButton extends Component{
 	static propTypes = {
 		icon: PropTypes.string
 	};

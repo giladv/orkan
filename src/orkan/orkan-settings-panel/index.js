@@ -5,7 +5,8 @@ import {observable} from 'mobx';
 import autobind from 'autobind-decorator';
 import classNames from 'classnames';
 
-import Form, {FormField} from '../form/index';
+import Form from '../form';
+import FormField from '../form-field';
 import {SubmitButton} from '../button';
 import {SelectControl} from '../controls/select';
 import {InputControl} from '../controls/input';

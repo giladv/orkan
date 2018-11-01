@@ -1,62 +1,49 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import autobind from 'autobind-decorator';
 import {observer} from 'mobx-react';
 import {observable} from 'mobx';
-import OrkanSpinner from '../orkan-spinner';
+import Spinner from '../spinner';
 
-import './style';
+import style from './style';
 import {formSubmit} from '../form';
+import {createStyle} from '../utils/style-utils';
 
 @observer
 export default class Button extends Component{
 	static propTypes = {
-		tooltip: PropTypes.string,
 		primary: PropTypes.bool,
 		important: PropTypes.bool,
 		secondary: PropTypes.bool,
 		square: PropTypes.bool,
 		isBusy: PropTypes.bool,
 		disabled: PropTypes.bool,
+		size: PropTypes.oneOf(['small', 'medium', 'large'])
 	};
 
 	static defaultProps = {
+		size: 'medium'
 	};
-
-	@autobind
-	clickHandler(e){
-		const {onClick} = this.props;
-
-		onClick && onClick(e);
-	}
-
 
 
 	render(){
-		const {className, primary, secondary, important, square, isBusy, disabled, tooltip, ...otherProps} = this.props;
+		const {className, classes, primary, secondary, important, square, isBusy, disabled, size, ...otherProps} = this.props;
 
-		const newClassName = classNames('Button', className, {
-			'Button-medium': true,
-			'Button-primary': primary,
-			'Button-secondary': secondary,
-			'Button-important': important,
-			'Button-disabled': disabled,
-			'Button-square': square
-		});
-
-		const labelClassName = classNames('Button-label', {
-			'Button-label-hidden': isBusy
-		});
-
-		const spinnerClassName = classNames('Button-spinner', {
-			'Button-spinner-hidden': !isBusy
+		const s = createStyle(style, className, classes, style[size], {
+			root: {
+				primary,
+				secondary,
+				important,
+				disabled,
+				square,
+				isBusy
+			}
 		});
 
 		return (
-			<a {...otherProps} className={newClassName} onClick={this.clickHandler} tabIndex="0">
-				<OrkanSpinner className={spinnerClassName} size={2}/>
-				<div className={labelClassName}>{this.props.children}</div>
+			<a {...otherProps} className={s.root} tabIndex="0">
+				<Spinner className={s.spinner} size={2}/>
+				<div className={s.label}>{this.props.children}</div>
 			</a>
 		);
 	}
