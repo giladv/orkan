@@ -82,12 +82,12 @@
 	z-index: -1; // so it always be under the main panel for animations
 }
 
-//.mediaGallery{
-//	animation: orkanTopUiAnimation;
-//	animation-duration: .2s;
-//	animation-timing-function: ease-in-out;
-//	margin: 0 auto;
-//}
+.modal{
+	animation: orkanTopUiAnimation;
+	animation-duration: .2s;
+	animation-timing-function: ease-in-out;
+	margin: 0 auto;
+}
 
 
 .spinner{

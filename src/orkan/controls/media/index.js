@@ -5,7 +5,7 @@ import {observer} from 'mobx-react';
 import Thumbnail from '../../thumbnail';
 import {formInput} from '../../form';
 import orkanInject from '../../orkan-inject';
-import OrkanMediaGallery from '../../orkan-media-gallery';
+import MediaGallery from '../../media-gallery';
 import {createStyle} from '../../utils/style-utils';
 
 import style from './style.scss';
@@ -34,7 +34,7 @@ export default class Media extends Component {
 				{...otherProps}
 				className={s.root}
 				buttons={[
-					{icon: 'picture', onClick: () => orkan.openModal(OrkanMediaGallery).then(value => onChange(value)).catch(err => null)},
+					{icon: 'picture', onClick: () => orkan.openModal(MediaGallery).then(value => onChange(value)).catch(err => null)},
 					value && {icon: 'clear', onClick: () => onChange(null)},
 				]}
 				src={value || undefined}/>

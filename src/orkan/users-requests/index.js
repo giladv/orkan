@@ -31,10 +31,6 @@ export default class UsersRequests extends Component{
 		isOpen: false
 	};
 
-	getStyle(){
-
-	}
-
 	renderRequests(){
 		const {requests, onApprove, onDecline} = this.props;
 
@@ -55,7 +51,7 @@ export default class UsersRequests extends Component{
 	render(){
 		const {className, classes, requests} = this.props;
 		const {isOpen} = this.obState;
-		
+
 		if(!requests){
 			return null;
 		}

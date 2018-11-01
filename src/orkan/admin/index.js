@@ -159,7 +159,7 @@ export default class Admin extends Component{
 				}
 
 				{!store.isInitiating && !store.isAdmin() && <Auth className={s.auth} auth={store.authStore}/>}
-				{store.modal && <store.modal.Component {...store.modal.props}/>}
+				{store.modal && <store.modal.Component {...store.modal.props} className={s.modal}/>}
 			</div>
 		);
 	}

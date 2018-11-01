@@ -33,7 +33,7 @@
 	align-items: stretch;
 	border-radius: 5px;
 	&:hover{
-		.Thumbnail-actions{
+		.actions{
 			display: block;
 		}
 	}
@@ -44,9 +44,10 @@
 
 }
 
-.img{
+.img, .video{
 	width: 100%;
 }
+
 .actions{
 	display: none;
 	position: absolute;

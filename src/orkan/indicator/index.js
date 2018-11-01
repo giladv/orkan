@@ -1,9 +1,5 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {observer} from 'mobx-react';
-import {observable} from 'mobx';
-import autobind from 'autobind-decorator';
-import classNames from 'classnames';
 
 import {createStyle} from '../utils/style-utils';
 

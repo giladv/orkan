@@ -1,16 +1,10 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import autobind from 'autobind-decorator';
-import classNames from 'classnames';
 
-import Button from '../button';
-import Img from '../img';
-import Icon from '../icon';
+import {createStyle} from '../utils/style-utils';
 
-import './style';
-import ActionButton from '../action-button';
+import style from './style';
 
-@autobind
 export default class Video extends Component {
 
 	static propTypes = {
@@ -23,12 +17,11 @@ export default class Video extends Component {
 	};
 
 	render(){
-		const {className, src, ratio, controls, ...otherProps} = this.props;
-
-		const newClassName = classNames('Video', className);
+		const {className, src, ratio, controls, classes, ...otherProps} = this.props;
+		const s = createStyle(style, className, classes);
 
 		return (
-			<div {...otherProps} className={newClassName} style={{paddingTop: ratio + '%'}}>
+			<div {...otherProps} className={s.root} style={{paddingTop: ratio + '%'}}>
 				<video controls={controls}>
 					<source src={src} type="video/mp4"/>
 					Your browser does not support this ormat
