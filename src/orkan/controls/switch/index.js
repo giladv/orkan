@@ -1,8 +1,5 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import autobind from 'autobind-decorator';
-import classNames from 'classnames';
-import {observable} from 'mobx';
 import {observer} from 'mobx-react';
 import OriginalSwitch from "react-switch";
 

@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import {observer} from 'mobx-react';
 import {observable} from 'mobx';
 import autobind from 'autobind-decorator';
-import classNames from 'classnames';
 
 import Form from '../form';
 import FormField from '../form-field';
@@ -11,13 +10,14 @@ import {InputControl} from '../controls/input';
 import {SubmitButton} from '../button';
 import {TextareaControl} from '../controls/textarea';
 import {DatePickerControl} from '../controls/date-picker';
-import {DynamicSelectControl, SelectControl} from '../controls/select';
+import {SelectControl} from '../controls/select';
 import {CheckboxControl} from '../controls/checkbox';
 import {ColorPickerControl} from '../controls/color-picker';
 import {MediaControl} from '../controls/media';
 import {SwitchControl} from '../controls/switch';
 import {SliderControl} from '../controls/slider';
 import {WysiwygControl} from '../controls/wysiwyg';
+import {DynamicSelectControl} from '../controls/dynamic-select';
 import OrkanStore from '../orkan-store';
 import {createStyle} from '../utils/style-utils';
 

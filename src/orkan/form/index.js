@@ -1,6 +1,5 @@
 import React, {Component, cloneElement} from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import {observer} from 'mobx-react';
 import {observable, action} from 'mobx';
 import autobind from 'autobind-decorator';
@@ -169,8 +168,7 @@ export const formSubmit = DecoratedComponent =>
 		render(){
 			const {className} = this.props;
 			const {form} = this.context;
-			const newClassName = classNames('FormSubmit', className);
 
-			return <DecoratedComponent {...this.props} className={newClassName} onClick={e => form.submit()}/>;
+			return <DecoratedComponent {...this.props} onClick={e => form.submit()}/>;
 		}
 	};

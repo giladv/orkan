@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import autobind from 'autobind-decorator';
-import classNames from 'classnames';
 import OriginalSlider from 'rc-slider';
 
 import {formInput} from '../../form';

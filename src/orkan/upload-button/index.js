@@ -1,14 +1,14 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import autobind from 'autobind-decorator';
-import classNames from 'classnames';
 import {observer} from 'mobx-react';
 import {observable} from 'mobx';
 import firebase from 'firebase/app';
 
 import Button from '../button';
+import {createStyle} from '../utils/style-utils';
 
-import './style.scss';
+import style from './style.scss';
 
 @observer
 export default class UploadButton extends Component {
@@ -27,7 +27,7 @@ export default class UploadButton extends Component {
 
 	@autobind
 	async handleUpload(e){
-		const {onComplete, orkan} = this.props;
+		const {onComplete} = this.props;
 		e.stopPropagation();
 
 		this.obState.isBusy = true;
@@ -49,10 +49,10 @@ export default class UploadButton extends Component {
 		const {className} = this.props;
 		const {isBusy} = this.obState;
 
-		const newClassName = classNames('UploadButton', className);
+		const s = createStyle(style, className);
 
 		return (
-			<Button className={newClassName} isBusy={isBusy} primary onClick={() => this.input.click()}>
+			<Button className={s.root} isBusy={isBusy} primary onClick={() => this.input.click()}>
 				<input style={{display: 'none'}} ref={ref => this.input = ref} type="file" onChange={this.handleUpload}/>
 				upload
 			</Button>

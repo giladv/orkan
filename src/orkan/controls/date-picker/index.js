@@ -4,6 +4,7 @@ import autobind from 'autobind-decorator';
 import dateFormat from 'dateformat';
 import {observer} from 'mobx-react';
 import{observable} from 'mobx';
+import DayPicker, { DateUtils } from 'react-day-picker';
 
 import {default as ThirdPartyDatePicker} from '../../date-picker';
 import {formInput} from '../../form';
@@ -11,6 +12,7 @@ import DropdownContainer from '../../dropdown-container';
 import Input from '../input';
 import {createStyle} from '../../utils/style-utils';
 
+import 'react-day-picker/lib/style.css';
 import style from './style';
 
 
@@ -56,7 +58,7 @@ export default class DatePicker extends Component {
 			}
 		});
 
-		const picker = <ThirdPartyDatePicker className={s.picker} date={value} onDayClick={this.handleDayClick}/>;
+		const picker = <DayPicker className={s.picker} selectedDays={new Date(value)} onDayClick={this.handleDayClick} />
 
 		return (
 			<DropdownContainer className={s.root} classes={{optionsList: s.optionsList}} renderOption={() => picker} options={[{label: 1, value: 1}]} isOpen={isOpen} onClose={() => this.obState.isOpen = false}>
