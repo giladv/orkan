@@ -58,6 +58,13 @@ export default class Admin extends Component{
 	}
 
 	@autobind
+	handleLogout(){
+		const {store} = this.props;
+		this.handleClose();
+		store.logout();
+	}
+
+	@autobind
 	handleDeclineUserRequest(uid){
 		const {store} = this.props;
 
@@ -144,7 +151,7 @@ export default class Admin extends Component{
 						<div className={s.footer}>
 							<div className={s.footerAuth}>
 								<Img className={s.footerAuthImg} src={store.user.photoURL}/>
-								<span onClick={() => store.logout()}>Logout</span>
+								<span onClick={this.handleLogout}>Logout</span>
 							</div>
 							<span/>
 						</div>

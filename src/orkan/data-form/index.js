@@ -102,8 +102,8 @@ export default class DataForm extends Component{
 		const s = this.getStyle();
 
 
-		if(!store.isPathPrimitive(store.activePath)){
-			return store.getPrimitiveKeysByPath(store.activePath)
+		if(!store.isPathPrimitive(store.activePath, true)){
+			return store.getPrimitiveKeysByPath(store.activePath, true)
 				.map((key, i) => (
 					<FormField compact key={key} className={s.formField} label={'/' + key} name={`${store.activePath}.${key}`} onSettings={() => store.setSettingsPath(`${store.activePath}/${key}`)}>
 						{this.renderControl(`${store.activePath}/${key}`)}
@@ -124,7 +124,7 @@ export default class DataForm extends Component{
 		const {store} = this.props;
 		const {isBusy} = this.obState;
 
-		if(!store.getPrimitiveKeysByPath(store.activePath).length){
+		if(!store.getPrimitiveKeysByPath(store.activePath, true).length){
 			return null;
 		}
 

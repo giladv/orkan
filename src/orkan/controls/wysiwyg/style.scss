@@ -5,7 +5,7 @@
 	flex-direction: column;
 	:global(.ql-toolbar){
 		white-space: nowrap;
-		overflow: hidden;
+		//overflow: hidden;
 		text-overflow: ellipsis;
 	}
 

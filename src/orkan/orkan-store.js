@@ -180,9 +180,9 @@ export default class OrkanStore{
 
 	}
 
-	getPrimitiveKeysByPath(path){
+	getPrimitiveKeysByPath(path, includeNative){
 		validPathInvariant(path);
-		const schema = this.getSchema();
+		const schema = this.getSchema(includeNative);
 		return getSchemaPrimitiveKeysByPath(schema, path);
 	}
 
@@ -332,7 +332,7 @@ export default class OrkanStore{
 const orkanSchema = {
 	[SCHEMA_KEY_NAME]: {},
 	[USERS_KEY_NAME]: {
-		_: {
+		[COLLECTION_KEY]: {
 			editData: 'string',
 			editPermissions: 'string',
 			editSchema: 'string',
@@ -345,7 +345,7 @@ const orkanSchemaSettings = {
 	[USERS_KEY_NAME]: {
 		collectionMainLabel: 'email',
 		collectionImage: 'avatarUrl',
-		_: {
+		[COLLECTION_KEY]: {
 			editData: {
 				uiType: 'switch'
 			},
