@@ -1,76 +1,46 @@
 @import '../globals';
 
 
-.Paths {
+.root{
 	margin: 0;
 	padding: 0;
-	.Header{
-		.Input{
-			display: block;
-		}
-	}
-	.Paths-header{
-		height: $headerSize;
-		background: #F2F4F7;
-		display: flex;
-		align-items: center;
-		padding: 0 15px 0 10px;
-		> .DropdownContainer{
-			margin-right: 5px;
-			> .Icon{
-				font-size: 13px;
-				width: 13px;
-				height: 29px;
-				border-radius: 3px;
-				cursor: pointer;
-				&:hover{
-					background: #E4E7ED;
-				}
-			}
-		}
-		> .Input{
-			flex: 1;
-			margin-right: 10px;
-		}
-		> .Button{
 
-		}
-	}
-	.Paths-path{
-		@include smallListItemAnimation();
-		cursor: pointer;
-		padding: 0 15px;
-		height: $headerSize;
-		background: white;
-		font-size: 15px;
-		align-items: center;
-		display: flex;
-		border-bottom: 1px solid #D0D2D6;
-		&:hover{
-			.Icon{
-				display: flex;
-			}
-		}
-		.Paths-path-label{
-			flex: 1;
-			font-size: 13px;
-			color: #71778A;
-		}
+}
 
-		.Icon{
-			display: none;
-			background: #F2F4F7;
-			border-radius: 3px;
-			width: 25px;
-			height: 25px;
-			justify-content: center;
-			align-items: center;
-			color: #191D2B;
-			font-size: 13px;
-			&:hover{
-				background: $pink;
-				color: #ffffff;
-			}
-		}
+
+.header{
+	.Input{
+		display: block;
 	}
+}
+
+.collectionHeader{
+	height: $headerSize;
+	background: #F2F4F7;
+	display: flex;
+	align-items: center;
+	padding: 0 15px 0 10px;
+	> .DropdownContainer{
+
+	}
+}
+
+.collectionHeaderDropdown{
+	margin-right: 5px;
+}
+
+.collectionHeaderDropdownIcon{
+	font-size: 13px;
+	width: 13px;
+	height: 29px;
+	border-radius: 3px;
+	cursor: pointer;
+	&:hover{
+		background: #E4E7ED;
+	}
+}
+
+.collectionHeaderInput{
+	flex: 1;
+	margin-right: 10px;
 }

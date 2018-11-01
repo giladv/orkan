@@ -3,22 +3,20 @@ import PropTypes from 'prop-types';
 import {observer} from 'mobx-react';
 import map from 'lodash/map';
 import {observable} from 'mobx';
-import autobind from 'autobind-decorator';
-import classNames from 'classnames';
 
 
 import Icon from '../icon';
 import orkanInject from '../orkan-inject';
-import Img from '../img';
 import ListItem from '../list-item';
 import {USER_REQUESTS_KEY_NAME} from '../constants';
+import {createStyle} from '../utils/style-utils';
 
-import './style.scss';
+import style from './style.scss';
 
 
 @orkanInject(() => ({requests: USER_REQUESTS_KEY_NAME}), {liveEditedData: false})
 @observer
-export default class OrkanUsersRequests extends Component{
+export default class UsersRequests extends Component{
 	static propTypes = {
 		onApprove: PropTypes.func,
 		onDecline: PropTypes.func
@@ -33,17 +31,20 @@ export default class OrkanUsersRequests extends Component{
 		isOpen: false
 	};
 
+	getStyle(){
+
+	}
+
 	renderRequests(){
 		const {requests, onApprove, onDecline} = this.props;
 
 		return (
-			<div className="OrkanUsersRequests-requests">
+			<div>
 				{map(requests, (request, uid) => (
-					<ListItem key={uid} className="OrkanUsersRequests-request" buttons={[
+					<ListItem key={uid} image={request.avatarUrl} buttons={[
 						{icon: 'v', onClick: () => onApprove(uid)},
 						{icon: 'clear', onClick: () => onDecline(uid)}
 					]}>
-						<Img src={request.avatarUrl}/>
 						{request.email}
 					</ListItem>
 				))}
@@ -52,23 +53,23 @@ export default class OrkanUsersRequests extends Component{
 	}
 
 	render(){
-		const {className, requests} = this.props;
+		const {className, classes, requests} = this.props;
 		const {isOpen} = this.obState;
-
-		const newClassName = classNames('OrkanUsersRequests', className);
-
+		
 		if(!requests){
 			return null;
 		}
 
+		const s = createStyle(style, className, classes);
+
 		const totalRequests = Object.keys(requests).length;
 
 		return (
-			<div className={newClassName}>
-				<div className="OrkanUsersRequests-header" onClick={() => this.obState.isOpen = !isOpen}>
-					<Icon type='user'/>
-					<span className='OrkanUsersRequests-title'>{totalRequests} User request{totalRequests > 1?'s':''}</span>
-					<Icon type='play' className='OrkanUsersRequests-toggle-button'/>
+			<div className={s.root}>
+				<div className={s.header} onClick={() => this.obState.isOpen = !isOpen}>
+					<Icon className={s.headerIcon} type='user'/>
+					<span className={s.headerTitle}>{totalRequests} User request{totalRequests > 1?'s':''}</span>
+					<Icon type='play' className={s.toggleButton}/>
 				</div>
 				{isOpen && this.renderRequests()}
 

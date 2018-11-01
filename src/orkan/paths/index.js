@@ -9,11 +9,13 @@ import Input from '../controls/input';
 import orkanInject from '../orkan-inject';
 import ListItem from '../list-item';
 
-import './style.scss';
 import Icon from '../icon';
 import Button from '../button';
 import DropdownContainer from '../dropdown-container';
 import OrkanStore from '../orkan-store';
+import {createStyle} from '../utils/style-utils';
+
+import style from './style.scss';
 
 
 @orkanInject(({path, store}) => {
@@ -85,7 +87,10 @@ export default class Paths extends Component{
 		store.removeCollectionItem(key);
 	}
 
-
+	getStyle(){
+		const {className, classes} = this.props;
+		return createStyle(style, className, classes);
+	}
 
 	renderPaths(){
 		const {store, path, value} = this.props;
@@ -125,22 +130,25 @@ export default class Paths extends Component{
 		const nonPrimitiveKeysExist = store.getNonPrimitiveKeysByPath(path, true).length > 0;
 		const primitiveKeysExist = store.getPrimitiveKeysByPath(path, true).length > 0;
 
+		const s = this.getStyle();
+
 		return (
-			<div className='Paths'>
+			<div className={s.root}>
 				{showHeader && !isPathCollection && nonPrimitiveKeysExist && primitiveKeysExist &&
 					<Header title='Other Paths'/>
 				}
 				{isPathCollection &&
-					<div className='Paths-header'>
+					<div className={s.collectionHeader}>
 						<DropdownContainer
+							className={s.collectionHeaderDropdown}
 							options={options}
 							isOpen={isOptionsOpen}
 							onSelect={this.handleSelectOption}
 							onClose={() => this.obState.isOptionsOpen = false}
 							onFocus={() => this.obState.isOptionsOpen = true}>
-							<Icon type='dots'/>
+							<Icon className={s.collectionHeaderDropdownIcon} type='dots'/>
 						</DropdownContainer>
-						<Input placeholder='key (optional)' value={newKey} onChange={value => this.obState.newKey = value}/>
+						<Input className={s.collectionHeaderInput} placeholder='key (optional)' value={newKey} onChange={value => this.obState.newKey = value}/>
 						<Button primary onClick={this.handleCreate}>create</Button>
 					</div>
 				}

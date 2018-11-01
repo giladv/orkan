@@ -1,0 +1,31 @@
+@import '../normalize';
+@import '../globals';
+
+$HeaderHeight: 46px;
+
+
+.root{
+	display: flex;
+	flex-direction: column;
+	background: white;
+	border-right: 2px solid rgba(0,0,0,.1);
+}
+
+.form{
+	padding: 0 15px;
+}
+
+.formField{
+	margin-top: 10px;
+}
+
+.actions {
+	margin-top: 20px;
+	text-align: right;
+}
+
+.headerPath{
+	font-size: 13px;
+	color: #71778A;
+	margin-left: 10px;
+}

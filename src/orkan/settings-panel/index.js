@@ -14,8 +14,9 @@ import Header from '../header';
 import {SliderControl} from '../controls/slider';
 import OrkanStore from '../orkan-store';
 import {COLLECTION_KEY} from '../constants';
+import {createStyle} from '../utils/style-utils';
 
-import './style.scss';
+import style from './style.scss';
 
 
 @observer
@@ -41,6 +42,11 @@ export default class OrkanSettingsPanel extends Component{
 		this.obState.isBusy = false;
 	}
 
+	getStyle(){
+		const {className, classes} = this.props;
+		return createStyle(style, className, classes);
+	}
+
 	renderCollectionSettings(){
 		const {store} = this.props;
 		const {isBusy} = this.obState;
@@ -52,19 +58,21 @@ export default class OrkanSettingsPanel extends Component{
 
 		collectionMainLabelOption.unshift({label: '$key', value: ''});
 
+		const s = this.getStyle();
+
 		return (
-			<Form store={store.settingsFormStore} onSubmit={this.handleSubmit}>
+			<Form className={s.form} store={store.settingsFormStore} onSubmit={this.handleSubmit}>
 				<span/>
 
-				<FormField compact name='collectionMainLabel' label='Main label key'>
+				<FormField className={s.formField} name='collectionMainLabel' label='Main label key'>
 					<SelectControl options={collectionMainLabelOption}/>
 				</FormField>
 
-				<FormField compact name='collectionImage' label='Image key'>
+				<FormField className={s.formField} name='collectionImage' label='Image key'>
 					<SelectControl options={collectionMainLabelOption}/>
 				</FormField>
 
-				<div className="OrkanSettingsPanel-actions">
+				<div className={s.actions}>
 					<SubmitButton primary disabled={!store.settingsFormStore.isDirty} isBusy={isBusy}>Save Changes</SubmitButton>
 				</div>
 			</Form>
@@ -76,6 +84,7 @@ export default class OrkanSettingsPanel extends Component{
 		const {store} = this.props;
 		const {isBusy} = this.obState;
 
+		const s = this.getStyle();
 
 		const collectionPathsOptions = store.getCollectionsPaths().map(path => ({label: path, value: path}));
 		let dataSourcePrimitivesOptions = [];
@@ -92,57 +101,57 @@ export default class OrkanSettingsPanel extends Component{
 		const isOptionsUiSelected = ['select', 'radio'].includes(store.settingsFormStore.get('uiType'));
 
 		return (
-			<Form store={store.settingsFormStore} onSubmit={this.handleSubmit}>
+			<Form className={s.form} store={store.settingsFormStore} onSubmit={this.handleSubmit}>
 				<span/>
 
-				<FormField compact name='uiType' label='UI type'>
+				<FormField className={s.formField} name='uiType' label='UI type'>
 					<SelectControl options={typeOptions}/>
 				</FormField>
 
 				{['textarea', 'wysiwyg'].includes(store.settingsFormStore.get('uiType')) &&
-					<FormField compact name='uiSize' label='Size'>
+					<FormField className={s.formField} name='uiSize' label='Size'>
 						<SliderControl min={3} max={13} />
 					</FormField>
 				}
 
 				{store.settingsFormStore.get('uiType') === 'slider' &&
-					<FormField compact name='fromValue' label='From value'>
+					<FormField className={s.formField} name='fromValue' label='From value'>
 						<InputControl type='number' defaultValue={1} />
 					</FormField>
 				}
 
 				{store.settingsFormStore.get('uiType') === 'slider' &&
-					<FormField compact name='toValue' label='To value'>
+					<FormField className={s.formField} name='toValue' label='To value'>
 						<InputControl type='number' defaultValue={10}  />
 					</FormField>
 				}
 
 
 				{isOptionsUiSelected &&
-				<FormField compact name='dataSource' label='Data Source'>
+				<FormField className={s.formField} name='dataSource' label='Data Source'>
 					<SelectControl options={dataSourceOptions}/>
 				</FormField>
 				}
 
 				{isOptionsUiSelected && store.settingsFormStore.get('dataSource') === 'dynamic' &&
-				<FormField compact name='dataSourcePath' label='Data Source Path'>
+				<FormField className={s.formField} name='dataSourcePath' label='Data Source Path'>
 					<SelectControl options={collectionPathsOptions}/>
 				</FormField>
 				}
 
 				{isOptionsUiSelected && store.settingsFormStore.get('dataSource') === 'dynamic' &&
-				<FormField compact name='dataSourceLabel' label='Data Source Label'>
+				<FormField className={s.formField} name='dataSourceLabel' label='Data Source Label'>
 					<SelectControl options={dataSourcePrimitivesOptions}/>
 				</FormField>
 				}
 
 				{isOptionsUiSelected && store.settingsFormStore.get('dataSource') === 'dynamic' &&
-				<FormField compact name='dataSourceValue' label='Data Source Value'>
+				<FormField className={s.formField} name='dataSourceValue' label='Data Source Value'>
 					<SelectControl options={dataSourcePrimitivesOptions}/>
 				</FormField>
 				}
 
-				<div className="OrkanSettingsPanel-actions">
+				<div className={s.actions}>
 					<SubmitButton primary disabled={!store.settingsFormStore.isDirty} isBusy={isBusy}>Save Changes</SubmitButton>
 				</div>
 			</Form>
@@ -150,13 +159,13 @@ export default class OrkanSettingsPanel extends Component{
 	}
 
 	render(){
-		const {className, store} = this.props;
+		const {store} = this.props;
 
-		const newClassName = classNames('OrkanSettingsPanel', className);
+		const s = this.getStyle();
 
 		return (
-			<div className={newClassName}>
-				<Header title={['Settings', <span key={1}>{store.settingsPath}</span>]} onClose={() => store.clearSettingsPath()}/>
+			<div className={s.root}>
+				<Header title={['Settings', <span key={1} className={s.headerPath}>{store.settingsPath}</span>]} onClose={() => store.clearSettingsPath()}/>
 				{store.isPathCollection(store.settingsPath)
 					?this.renderCollectionSettings()
 					:this.renderFieldSettings()

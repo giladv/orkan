@@ -29,7 +29,7 @@ window.firebase = firebase;
 
 
 @observer
-export default class OrkanProvider extends Component{
+export default class Provider extends Component{
 
 	static propTypes = {
 		store: PropTypes.instanceOf(FirebaseStore).isRequired,

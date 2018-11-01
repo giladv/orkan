@@ -6,14 +6,14 @@ import autobind from 'autobind-decorator';
 
 import Sidebar from '../sidebar';
 import DataForm from '../data-form';
-import OrkanSettingsPanel from '../orkan-settings-panel';
+import OrkanSettingsPanel from '../settings-panel';
 import Header from '../header';
 import {keyboard, onDoublePress} from '../utils/keyboard-utils';
 import Auth from '../auth';
 import Spinner from '../spinner';
 import Paths from '../paths';
 import Img from '../img';
-import OrkanUsersRequests from '../orkan-users-requests';
+import UsersRequests from '../users-requests';
 import OrkanStore from '../orkan-store';
 import { SCHEMA_KEY_NAME} from '../constants';
 import SchemaEditor from '../schema-editor';
@@ -114,7 +114,7 @@ export default class Admin extends Component{
 						onResizeEnd={() => this.obState.isResizing = false}
 						onResize={size => document.body.style.paddingLeft = size + 'px'}>
 
-						<OrkanUsersRequests onApprove={uid => store.approveUserRequest(uid)} onDecline={this.handleDeclineUserRequest}/>
+						<UsersRequests onApprove={uid => store.approveUserRequest(uid)} onDecline={this.handleDeclineUserRequest}/>
 
 						<Header primary title={headerTitle} onClose={this.handleClose}/>
 
