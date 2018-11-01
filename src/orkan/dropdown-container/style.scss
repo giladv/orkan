@@ -53,10 +53,6 @@
 	color: $gray;
 }
 
-.selectedOption{
-	background: $grey1;
-}
-
 .small{
 	@include size($smallConfig);
 }

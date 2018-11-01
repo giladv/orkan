@@ -123,10 +123,10 @@ export default class DropdownContainer extends Component {
 		this.props.onSelect(option);
 	}
 
-	renderOption(option){
-		const {renderOption, size, theme} = this.props;
+	renderOption(option, isSelected){
+		const {renderOption, size} = this.props;
 
-		return renderOption(option, size, theme) || <DropdownOption label={option.label} size={size} theme={theme} />;
+		return renderOption(option, isSelected) || <DropdownOption selected={isSelected} label={option.label} size={size} />;
 	}
 
 	render(){
@@ -148,9 +148,8 @@ export default class DropdownContainer extends Component {
 							<li
 								key={i}
 								ref={'option' + i}
-								className={classNames(s.option, {[s.selectedOption]: selectedOptionIndex === i})}
 								onMouseDown={() => this.selectOption(option)}>
-									{this.renderOption(option)}
+									{this.renderOption(option, selectedOptionIndex === i)}
 							</li>
 						))}
 						{!options.length &&

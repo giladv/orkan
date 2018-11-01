@@ -3,13 +3,11 @@ import PropTypes from 'prop-types';
 import {observer} from 'mobx-react';
 import {observable} from 'mobx';
 import autobind from 'autobind-decorator';
-import classNames from 'classnames';
 
 import Header from '../header';
 import Input from '../controls/input';
 import orkanInject from '../orkan-inject';
 import ListItem from '../list-item';
-import {typeOrFalse} from '../utils/prop-types-utils';
 
 import './style.scss';
 import Icon from '../icon';
