@@ -2403,10 +2403,6 @@ detect-node@^2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/detect-node/-/detect-node-2.0.3.tgz#a2033c09cc8e158d37748fbde7507832bd6ce127"
 
-dialog-polyfill@^0.4.7:
-  version "0.4.10"
-  resolved "https://registry.yarnpkg.com/dialog-polyfill/-/dialog-polyfill-0.4.10.tgz#c4ea68a0deed4abb59a6a2a025c548b278cd532e"
-
 diff@^3.3.1, diff@^3.5.0:
   version "3.5.0"
   resolved "https://registry.yarnpkg.com/diff/-/diff-3.5.0.tgz#800c0dd1e0a8bfbc95835c202ad220fe317e5a12"
@@ -2986,12 +2982,6 @@ firebase@5.0.0:
     "@firebase/storage" "0.2.0"
     dom-storage "2.1.0"
     xmlhttprequest "1.8.0"
-
-firebaseui@^3.4.1:
-  version "3.4.1"
-  resolved "https://registry.yarnpkg.com/firebaseui/-/firebaseui-3.4.1.tgz#f440f1cc653d98f97caadf8f58f7d67b83d00fde"
-  dependencies:
-    dialog-polyfill "^0.4.7"
 
 first-chunk-stream@^2.0.0:
   version "2.0.0"

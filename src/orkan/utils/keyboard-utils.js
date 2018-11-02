@@ -1,5 +1,5 @@
-import HumanInput from 'humaninput/dist/humaninput-full.min';
-
+window.__VERSION__ = 0
+import HumanInput from 'humaninput/lib/humaninput';
 export class Keyboard{
 	constructor(){
 		this.binder = new HumanInput(window);

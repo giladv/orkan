@@ -88,9 +88,9 @@ module.exports = (env, argv) => {
 			'firebase/auth': 'firebase',
 			'firebase/database': 'firebase',
 		},
-		// plugins: [
-		// 	new BundleAnalyzerPlugin()
-		// ]
+		plugins: [
+			new BundleAnalyzerPlugin()
+		]
 	};
 };
 

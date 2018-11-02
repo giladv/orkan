@@ -2,12 +2,10 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {observer} from 'mobx-react';
 import firebase from 'firebase/app';
-import * as firebaseui from 'firebaseui'
-import uniqueId from 'lodash/uniqueId';
 
 import {createStyle} from '../utils/style-utils';
+import AuthButton from '../auth-button';
 
-import 'firebaseui/dist/firebaseui.css';
 import style from './style.scss';
 
 
@@ -18,55 +16,55 @@ import style from './style.scss';
 export default class FirebaseAuth extends Component{
 
 	static propTypes = {
-		auth: PropTypes.object.isRequired,
+		providers: PropTypes.arrayOf(PropTypes.oneOf(['facebook', 'google', 'github'])),
 		onSuccess: PropTypes.func
 	};
 
 	static defaultProps = {
+		providers: ['google', 'facebook', 'github'],
 		onSuccess: () => null
 	};
 
-	componentWillMount(){
-		const {onSuccess} = this.props;
-
-		this.domId = 'FirebaseAuth_' + uniqueId();
-		this.uiConfig = {
-			// Popup signin flow rather than redirect flow.
-			signInFlow: 'popup',
-			callbacks: {
-				signInSuccessWithAuthResult: (e) => {
-					// without this the ui will disappear after any successful login
-					// onSuccess(e.user);
-					if(!this.isUnmounted){
-						this.ui.reset();
-						this.ui.start('#' + this.domId, this.uiConfig);
-					}
-				}
-			},
-			// We will display Google and Facebook as auth providers.
-			signInOptions: [
-				firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-			]
-		};
-	}
-
 	componentDidMount(){
 		const {auth} = this.props;
-		this.ui = new firebaseui.auth.AuthUI(auth);
-		// The start method will wait until the DOM is loaded.
-		this.ui.start('#' + this.domId, this.uiConfig);
+
+		this.firebaseProviders = {
+			google: new firebase.auth.GoogleAuthProvider(),
+			facebook: new firebase.auth.FacebookAuthProvider(),
+			github: new firebase.auth.GithubAuthProvider()
+		};
 	}
 
 	componentWillUnmount(){
 		this.isUnmounted = true;
-		this.ui.reset();
-		this.ui.delete();
+	}
+
+	handleProviderClick(provider){
+		const firebaseProvider = this.firebaseProviders[provider];
+		firebase.auth().signInWithPopup(firebaseProvider).then(function(result) {
+			console.log(user)
+		}).catch(function(error) {
+			// Handle Errors here.
+			var errorCode = error.code;
+			var errorMessage = error.message;
+			// The email of the user's account used.
+			var email = error.email;
+			// The firebase.auth.AuthCredential type that was used.
+			var credential = error.credential;
+
+		});
 	}
 
 	render(){
-		const {className} = this.props;
-		const s = createStyle(style, className);
-
+		const {className, providers, classes} = this.props;
+		const s = createStyle(style, className, classes);
+		return (
+			<div className={s.root}>
+				{providers.map((provider, i) => (
+					<AuthButton key={i} className={s.authButton} provider={provider} onClick={() => this.handleProviderClick(provider)}/>
+				))}
+			</div>
+		);
 		return (
 			<div id={this.domId} className={s.root}/>
 		);

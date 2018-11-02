@@ -13,17 +13,10 @@
 	box-shadow: 0 12px 40px rgba(0,0,0,.3);
 
 
-	#firebaseui_container{
-		margin: 20px 0 0 0;
-		ul{
-			margin: 0;
-			li{
-				&:last-child{
-					margin: 0;
-				}
-			}
-		}
-	}
+}
+
+.auth{
+	margin: 20px 0 0 0;
 }
 
 .header{

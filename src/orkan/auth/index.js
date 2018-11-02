@@ -8,7 +8,6 @@ import Spinner from '../spinner';
 import FirebaseAuth from '../firebase-auth';
 import {createStyle} from '../utils/style-utils';
 
-import 'firebaseui/dist/firebaseui.css';
 import style from './style.scss';
 
 
@@ -41,7 +40,7 @@ export default class Auth extends Component{
 				<h2 className={s.header}>Sign-in to Orkan</h2>
 				{isBusy && <Spinner className={s.spinner}/>}
 				{!isBusy &&
-					<FirebaseAuth auth={auth} onSuccess={this.handleSuccess}/>
+					<FirebaseAuth className={s.auth} auth={auth} onSuccess={this.handleSuccess}/>
 				}
 			</div>
 		);

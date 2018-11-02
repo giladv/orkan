@@ -1,16 +1,11 @@
 @import '../globals';
 
-
 .root{
-	#firebaseui_container{
-		margin: 20px 0 0 0;
-		ul{
-			margin: 0;
-			li{
-				&:last-child{
-					margin: 0;
-				}
-			}
-		}
+}
+
+.authButton{
+	margin-bottom: 10px;
+	&:last-child{
+		margin-bottom: 0;
 	}
 }

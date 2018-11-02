@@ -8,7 +8,7 @@ import 'firebase/auth'
 import 'firebase/storage'
 
 import App from './components/app';
-import Template from './components/template';
+// import Template from './components/template';
 
 import './css/style.scss';
 
@@ -36,7 +36,7 @@ ReactDOM.render(
 	<OrkanProvider store={firebaseStore} auth={firebaseApp.auth()}>
 		<Router history={hashHistory}>
 			<Route path="/" component={App}/>
-			<Route path="/template" component={Template}/>
+			{/*<Route path="/template" component={Template}/>*/}
 		</Router>
 	</OrkanProvider>,
 	document.getElementById('root')

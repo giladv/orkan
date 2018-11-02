@@ -19,7 +19,6 @@
     "autobind-decorator": "^1.4.3",
     "classnames": "^2.2.5",
     "dateformat": "^3.0.3",
-    "firebaseui": "^3.4.1",
     "humaninput": "^1.1.15",
     "invariant": "^2.2.4",
     "lodash": "^4.17.5",
