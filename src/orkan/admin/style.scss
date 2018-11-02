@@ -67,14 +67,6 @@
 	overflow-y: auto;
 }
 
-.auth{
-	align-self: flex-start;
-	margin: 0 auto;
-	animation: orkanTopUiAnimation;
-	animation-duration: .2s;
-	animation-timing-function: ease-in-out;
-
-}
 
 .settingsPanel{
 	@include listItemAnimation(false);
@@ -83,6 +75,7 @@
 }
 
 .modal{
+	align-self: flex-start;
 	animation: orkanTopUiAnimation;
 	animation-duration: .2s;
 	animation-timing-function: ease-in-out;

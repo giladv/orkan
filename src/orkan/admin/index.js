@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {observer} from 'mobx-react';
-import {observable} from 'mobx';
+import {observable, reaction} from 'mobx';
 import autobind from 'autobind-decorator';
 
 import Sidebar from '../sidebar';
@@ -37,18 +37,23 @@ export default class Admin extends Component{
 	componentWillMount(){
 		const {store} = this.props;
 
-		store.init();
-		window.b = store;
+		this.killAuthReaction = reaction(() => store.isAdmin(), isAdmin => {
+			isAdmin?store.clearModal():store.openModal(Auth);
+		}, {fireImmediately: true});
 
+		store.init();
 
 		keyboard.bind('escape', this.handleClose);
 
 		onDoublePress('shift', () => {
 			!store.activePath && store.setActivePath('.');
 		});
-
-		window.lo = () => auth.signOut();
 	}
+
+	componentWillUnmount(){
+		this.killAuthReaction();
+	}
+
 
 	@autobind
 	handleClose(){
@@ -165,7 +170,6 @@ export default class Admin extends Component{
 						store={store}/>
 				}
 
-				{!store.isInitiating && !store.isAdmin() && <Auth className={s.auth} auth={store.authStore}/>}
 				{store.modal && <store.modal.Component {...store.modal.props} className={s.modal}/>}
 			</div>
 		);

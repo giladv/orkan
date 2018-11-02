@@ -70,8 +70,10 @@
 
 
 .openField{
-	.fieldToggleIcon{
-		transform: rotateZ(90deg);
+	> .fieldContent{
+		> .fieldToggleIcon{
+			transform: rotateZ(90deg);
+		}
 	}
 }
 
