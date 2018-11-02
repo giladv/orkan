@@ -21,6 +21,8 @@ import FirebaseStore from '../firebase-store';
 import Indicator from '../indicator';
 import OrkanStore from '../orkan-store';
 
+import './style';
+
 let OrkanAdmin;
 
 window.mobx = mobx;

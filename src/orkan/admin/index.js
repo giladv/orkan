@@ -138,6 +138,7 @@ export default class Admin extends Component{
 
 							{!store.isLoadingActivePath &&
 								<DataForm
+									className={s.dataForm}
 									path={store.activePath}
 									store={store}/>
 							}

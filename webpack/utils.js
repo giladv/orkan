@@ -24,8 +24,4 @@ module.exports.getReadableCssClassName = (loaderContext, localIdentName, localNa
 
 
 
-module.exports.isProd = () => process.env.NODE_ENV === 'production';
-module.exports.isDev = () => process.env.NODE_ENV === 'development' || !process.env.NODE_ENV;
-
-
 module.exports.getDistPath = () => path.resolve(__dirname, '../dist');

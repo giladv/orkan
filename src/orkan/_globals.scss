@@ -181,64 +181,24 @@ $invisibleShadowRgba: rgba(0, 0, 0, 0.06);
 	}
 }
 
-@keyframes listItemAnimation {
-	0% {
-		//opacity: .1;
-		transform: translateX(-10px);
-	}
-	99% {
-		transform: translateX(0);
-		opacity: 1;
-	}
-	100% {
-		transform: none;
-	}
-}
 
-@keyframes smallListItemAnimation {
-	from {
-		opacity: 0;
-		transform: translateX(-5px);
-	}
-	to {
-		transform: translateX(0);
-		opacity: 1;
-	}
-}
 
-@keyframes modalAnimation {
-	from {
-		opacity: 0;
-		transform: translateY(-50%);
-	}
-	to {
-		transform: translateY(0);
-		opacity: 1;
-	}
-}
 
-@keyframes orkanTopUiAnimation {
-	from {
-		opacity: 0;
-		transform: translate3d(0, -100%, 0);
-	}
-	to {
-		opacity: 1;
-		transform: translate3d(0, 0, 0);
-	}
-}
 
-@keyframes AuthAnimation {
-	from {
-		transform: translate3d(-50%, -100%, 0);
-	}
-	to {
-		transform: translate3d(-50%, 0, 0);
-	}
-}
 
 
 @mixin smallListItemAnimation($includeDelay: true) {
+	@keyframes smallListItemAnimation {
+		from {
+			opacity: 0;
+			transform: translateX(-5px);
+		}
+		to {
+			transform: translateX(0);
+			opacity: 1;
+		}
+	}
+
 	animation: smallListItemAnimation;
 	animation-duration: .3s;
 	opacity: 0;
@@ -251,6 +211,19 @@ $invisibleShadowRgba: rgba(0, 0, 0, 0.06);
 }
 
 @mixin listItemAnimation($includeDelay: true) {
+	@keyframes listItemAnimation {
+		0% {
+			//opacity: .1;
+			transform: translateX(-10px);
+		}
+		99% {
+			transform: translateX(0);
+			opacity: 1;
+		}
+		100% {
+			transform: none;
+		}
+	}
 	animation: listItemAnimation;
 	animation-duration: .3s;
 	//opacity: 0;
@@ -263,6 +236,17 @@ $invisibleShadowRgba: rgba(0, 0, 0, 0.06);
 }
 
 @mixin modalAnimation() {
+	@keyframes modalAnimation {
+		from {
+			opacity: 0;
+			transform: translate3d(0, -50%, 0);
+		}
+		to {
+			opacity: 1;
+			transform: translate3d(0, 0, 0);
+		}
+	}
+
 	animation: modalAnimation;
 	animation-duration: .3s;
 	animation-fill-mode: forwards;
@@ -317,41 +301,5 @@ $invisibleShadowRgba: rgba(0, 0, 0, 0.06);
 			z-index: 100000000;
 			border: 2px solid $pink;
 		}
-		&:before{
-			animation: editableOverlayAnimation;
-			animation-duration: .3s;
-			z-index: 100000001;
-			background: white;
-			left: 50%;
-			top: 50%;
-			position: absolute;
-			font-size: 15px !important;
-			font-weight: 500 !important;
-			font-family: 'Roboto';
-			color: $pink;
-			border-radius: 2px;
-			padding: 0 10px;
-			cursor: pointer;
-			height: 25px;
-			max-height: 100%;
-			transform: translate3d(-50%, -50%, 0);
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			text-align: center;
-			letter-spacing: normal;
-			text-transform: uppercase;
-		}
-	}
-}
-
-@keyframes editableOverlayAnimation {
-	from {
-		opacity: 0;
-		transform: translate3d(-60%, -50%, 0);
-	}
-	to {
-		opacity: 1;
-		transform: translate3d(-50%, -50%, 0);
 	}
 }

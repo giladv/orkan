@@ -76,10 +76,8 @@
 
 .modal{
 	align-self: flex-start;
-	animation: orkanTopUiAnimation;
-	animation-duration: .2s;
-	animation-timing-function: ease-in-out;
 	margin: 0 auto;
+	@include modalAnimation;
 }
 
 
