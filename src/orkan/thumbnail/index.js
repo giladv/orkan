@@ -9,6 +9,7 @@ import Video from '../video';
 import {createStyle} from '../utils/style-utils';
 
 import style from './style';
+import Icon from '../icon';
 
 @autobind
 export default class Thumbnail extends Component {
@@ -29,7 +30,7 @@ export default class Thumbnail extends Component {
 		size: 'medium',
 		ratio: 60,
 		buttons: [],
-		src: require('./placeholder.png')
+		// src: require('./placeholder.png')
 	};
 
 	getFileType(){
@@ -68,8 +69,13 @@ export default class Thumbnail extends Component {
 							))}
 						</div>
 					}
-					{fileType === 'image' && <Img className={s.img} mode='cover' src={src} ratio={ratio}/>}
-					{fileType === 'video' && <Video className={s.video} src={src} ratio={ratio}/>}
+					{!src &&
+						<div className={s.placeholder} style={{paddingTop: ratio + '%'}}>
+							<Icon className={s.placeholderIcon} type='picture'/>
+						</div>
+					}
+					{src && fileType === 'image' && <Img className={s.img} mode='cover' src={src} ratio={ratio}/>}
+					{src && fileType === 'video' && <Video className={s.video} src={src} ratio={ratio}/>}
 				</div>
 				{(leftLabel || rightLabel) &&
 					<div className={s.content}>

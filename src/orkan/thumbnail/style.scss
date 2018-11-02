@@ -48,6 +48,23 @@
 	width: 100%;
 }
 
+.placeholder{
+	width: 100%;
+	height: 100%;
+	position: relative;
+}
+
+.placeholderIcon{
+	position: absolute;
+	left: 0;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	font-size: 100px;
+	background: $lightGray1;
+	color: $lightGray3;
+}
+
 .actions{
 	display: none;
 	position: absolute;

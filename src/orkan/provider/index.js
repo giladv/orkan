@@ -5,17 +5,21 @@ import {observer} from 'mobx-react';
 import {observable} from 'mobx';
 import autobind from 'autobind-decorator';
 import classNames from 'classnames';
+import * as mobx from 'mobx';
 
-import {ACTIVATION_EVENT_KEY, ORKAN_ADMIN_GLOBAL, REACT_CONTEXT_NAME,} from '../constants';
+import firebase from 'firebase/app';
+import 'firebase/database';
+import 'firebase/auth'
+import 'firebase/storage'
+
+import {
+	ACTIVATION_EVENT_KEY, DEFAULT_BASE_PATH, FIREBASE_APP_NAME, ORKAN_ADMIN_GLOBAL, REACT_CONTEXT_NAME,
+	SUPPORTED_AUTH_PROVIDERS,
+} from '../constants';
 import {keyboard} from '../utils/keyboard-utils';
 import FirebaseStore from '../firebase-store';
 import Indicator from '../indicator';
 import OrkanStore from '../orkan-store';
-import * as mobx from 'mobx';
-import firebase from 'firebase/app';
-
-import 'firebase/database';
-import 'firebase/auth'
 
 let OrkanAdmin;
 
@@ -32,8 +36,21 @@ window.firebase = firebase;
 export default class Provider extends Component{
 
 	static propTypes = {
-		store: PropTypes.instanceOf(FirebaseStore).isRequired,
-		auth: PropTypes.object.isRequired
+		firebaseConfig: PropTypes.shape({
+			apiKey: PropTypes.string,
+			authDomain: PropTypes.string,
+			databaseURL: PropTypes.string,
+			projectId: PropTypes.string,
+			storageBucket: PropTypes.string,
+			messagingSenderId: PropTypes.string
+		}).isRequired,
+		basePath: PropTypes.string,
+		authProviders: PropTypes.arrayOf(PropTypes.oneOf(SUPPORTED_AUTH_PROVIDERS))
+	};
+
+	static defaultProps = {
+		basePath: DEFAULT_BASE_PATH,
+		authProviders: SUPPORTED_AUTH_PROVIDERS
 	};
 
 	static childContextTypes = {
@@ -53,10 +70,10 @@ export default class Provider extends Component{
 	@observable.ref orkanStore;
 
 	getChildContext() {
-		const {store} = this.props;
+
 		return {[REACT_CONTEXT_NAME]: {
-			store: this.props.store,
-			getValue: path => this.orkanStore?this.orkanStore.getValue(path):store.getValue(path),
+			store: this.firebaseStore,
+			getValue: path => this.orkanStore?this.orkanStore.getValue(path):this.firebaseStore.getValue(path),
 			setActivePath: path => this.orkanStore.setActivePath(path),
 			isEditMode: () => {
 				const {isActive, isModifierKeyDown} = this.obState;
@@ -68,6 +85,9 @@ export default class Provider extends Component{
 	}
 
 	componentWillMount(){
+		const {firebaseConfig, basePath} = this.props;
+		this.firebaseApp = firebase.initializeApp(firebaseConfig, FIREBASE_APP_NAME);
+		this.firebaseStore = new FirebaseStore(this.firebaseApp.database(), basePath);
 
 		// this.activate();
 		keyboard.bind('hold:1000:' + ACTIVATION_EVENT_KEY, this.activate);
@@ -81,8 +101,6 @@ export default class Provider extends Component{
 
 	@autobind
 	async activate(){
-		const {store, auth} = this.props;
-
 		if(this.obState.isActive){
 			return;
 		}
@@ -98,7 +116,7 @@ export default class Provider extends Component{
 			OrkanAdmin = window[ORKAN_ADMIN_GLOBAL].default;
 			delete window[ORKAN_ADMIN_GLOBAL];
 
-			this.orkanStore = new OrkanStore(store, auth);
+			this.orkanStore = new OrkanStore(this.firebaseStore, this.firebaseApp.auth());
 			this.obState.isActive = true;
 		}catch(err){
 			console.error(err);

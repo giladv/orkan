@@ -1,5 +1,6 @@
-const {getReadableCssClassName, getDistPath} = require('./utils');
+const {isDev, getReadableCssClassName, getDistPath} = require('./utils');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+console.log(isDev(), process.env.NODE_ENV)
 
 module.exports = (env, argv) => {
 	let isDev = argv.mode === 'development';
@@ -37,7 +38,7 @@ module.exports = (env, argv) => {
 							options: {
 								modules: true,
 								localIdentName: '[hash:base64:5]',
-								getLocalIdent: isDev && getReadableCssClassName
+								getLocalIdent: isDev() && getReadableCssClassName
 							}
 						},
 						'sass-loader'

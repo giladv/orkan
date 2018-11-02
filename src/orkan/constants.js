@@ -14,3 +14,12 @@ export const MEDIA_KEY_NAME = 'media';
 export const ACTIVATION_EVENT_KEY = 'o';
 
 export const COLLECTION_KEY = '_';
+
+
+
+export const SUPPORTED_AUTH_PROVIDERS = ['google', 'facebook', 'github'];
+
+export const DEFAULT_BASE_PATH = 'test';
+
+
+export const FIREBASE_APP_NAME = 'orkan';

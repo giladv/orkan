@@ -5,6 +5,7 @@ import firebase from 'firebase/app';
 
 import {createStyle} from '../utils/style-utils';
 import AuthButton from '../auth-button';
+import {FIREBASE_APP_NAME, SUPPORTED_AUTH_PROVIDERS} from '../constants';
 
 import style from './style.scss';
 
@@ -16,18 +17,16 @@ import style from './style.scss';
 export default class FirebaseAuth extends Component{
 
 	static propTypes = {
-		providers: PropTypes.arrayOf(PropTypes.oneOf(['facebook', 'google', 'github'])),
+		providers: PropTypes.arrayOf(PropTypes.oneOf(SUPPORTED_AUTH_PROVIDERS)),
 		onSuccess: PropTypes.func
 	};
 
 	static defaultProps = {
-		providers: ['google', 'facebook', 'github'],
+		providers: SUPPORTED_AUTH_PROVIDERS,
 		onSuccess: () => null
 	};
 
 	componentDidMount(){
-		const {auth} = this.props;
-
 		this.firebaseProviders = {
 			google: new firebase.auth.GoogleAuthProvider(),
 			facebook: new firebase.auth.FacebookAuthProvider(),
@@ -41,7 +40,7 @@ export default class FirebaseAuth extends Component{
 
 	handleProviderClick(provider){
 		const firebaseProvider = this.firebaseProviders[provider];
-		firebase.auth().signInWithPopup(firebaseProvider).then(function(result) {
+		firebase.auth(firebase.app(FIREBASE_APP_NAME)).signInWithPopup(firebaseProvider).then(function(result) {
 			console.log(user)
 		}).catch(function(error) {
 			// Handle Errors here.
@@ -58,15 +57,13 @@ export default class FirebaseAuth extends Component{
 	render(){
 		const {className, providers, classes} = this.props;
 		const s = createStyle(style, className, classes);
+
 		return (
 			<div className={s.root}>
 				{providers.map((provider, i) => (
 					<AuthButton key={i} className={s.authButton} provider={provider} onClick={() => this.handleProviderClick(provider)}/>
 				))}
 			</div>
-		);
-		return (
-			<div id={this.domId} className={s.root}/>
 		);
 	}
 }
