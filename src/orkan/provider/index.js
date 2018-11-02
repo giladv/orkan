@@ -137,7 +137,7 @@ export default class Provider extends Component{
 
 		return [
 			children,
-			(isActive || isBusy) && ReactDOM.createPortal(<Indicator isBusy={isBusy || (this.orkanStore && this.orkanStore.isInitiating)} />, document.body),
+			(isActive || isBusy) && ReactDOM.createPortal(<Indicator isBusy={isBusy || (this.orkanStore && this.orkanStore.isInitializing)} />, document.body),
 			isActive && ReactDOM.createPortal(<OrkanAdmin store={this.orkanStore} />, document.body)
 		];
 	}

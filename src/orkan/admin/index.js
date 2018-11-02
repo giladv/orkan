@@ -37,11 +37,12 @@ export default class Admin extends Component{
 	componentWillMount(){
 		const {store} = this.props;
 
-		this.killAuthReaction = reaction(() => store.isAdmin(), isAdmin => {
-			isAdmin?store.clearModal():store.openModal(Auth);
+		store.init();
+
+		this.killAuthReaction = reaction(() => !store.isAdmin() && !store.isInitializing, isAuthRequired => {
+			isAuthRequired?store.openModal(Auth):store.clearModal();
 		}, {fireImmediately: true});
 
-		store.init();
 
 		keyboard.bind('escape', this.handleClose);
 
