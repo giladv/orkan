@@ -89,7 +89,7 @@ export default class OrkanSettingsPanel extends Component{
 		const collectionPathsOptions = store.getCollectionsPaths().map(path => ({label: path, value: path}));
 		let dataSourcePrimitivesOptions = [];
 
-		if(store.settingsFormStore.get('dataSource') === 'dynamic'){
+		if(store.settingsFormStore.get('dataSource') === 'dynamic' && store.settingsFormStore.get('dataSourcePath')){
 			dataSourcePrimitivesOptions = store.getPrimitiveKeysByPath(store.settingsFormStore.get('dataSourcePath') + '/' + COLLECTION_KEY).map(primitive => ({
 				label: primitive,
 				value: primitive

@@ -1,8 +1,10 @@
 import React, {Component, cloneElement} from 'react';
 import PropTypes from 'prop-types';
 import map from 'lodash/map';
+import omitBy from 'lodash/omitBy';
 import autobind from 'autobind-decorator';
 import {observer} from 'mobx-react';
+import classNames from 'classnames'
 
 import orkanInject from '../orkan-inject';
 
@@ -48,9 +50,14 @@ export default class Collection extends Component{
 			}
 		});
 
+		const cleanCollection = omitBy(collection, it => !it);
+
 		return (
 			<div className={s.root}>
-				{map(collection, (item, key) => cloneElement(renderItem(item, key), {className: s.item, onClick: e => this.handleClick(e, key)}))}
+				{map(cleanCollection, (item, key) => {
+					const renderedItem = renderItem(item, key);
+					return cloneElement(renderedItem, {className: classNames(s.item, renderedItem.props.className), onClick: e => this.handleClick(e, key)});
+				})}
 			</div>
 		);
 	}

@@ -42,7 +42,7 @@ export default class Paths extends Component{
 
 	@autobind
 	handleCreate(){
-		const {path} = this.props;
+		const {path, store} = this.props;
 		const {newKey} = this.obState;
 		store.createCollectionItem(path, newKey);
 		this.obState.newKey = '';

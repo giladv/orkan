@@ -9,6 +9,7 @@ import Button from '../button';
 import {createStyle} from '../utils/style-utils';
 
 import style from './style.scss';
+import {FIREBASE_APP_NAME} from '../constants';
 
 @observer
 export default class UploadButton extends Component {
@@ -27,12 +28,14 @@ export default class UploadButton extends Component {
 
 	@autobind
 	async handleUpload(e){
+		try{
+
 		const {onComplete} = this.props;
 		e.stopPropagation();
 
 		this.obState.isBusy = true;
 		const file = this.input.files[0];
-		let fileRef = firebase.storage().ref(file.name);
+		let fileRef = firebase.storage(firebase.app(FIREBASE_APP_NAME)).ref(file.name);
 
 		const snapshot = await fileRef.put(file);
 
@@ -43,6 +46,9 @@ export default class UploadButton extends Component {
 		onComplete({url: downloadUrl, mimeType: contentType, name, fullPath, size, timeCreated});
 
 		this.obState.isBusy = false;
+		}catch(err){
+			console.log(err)
+		}
 	}
 
 	render(){

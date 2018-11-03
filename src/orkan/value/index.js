@@ -16,7 +16,8 @@ import style from './style';
 @observer
 export default class Value extends Component{
 	static propTypes = {
-		path: PropTypes.string.isRequired
+		path: PropTypes.string.isRequired,
+		html: PropTypes.bool
 	};
 
 	@autobind
@@ -32,7 +33,7 @@ export default class Value extends Component{
 	}
 
 	render(){
-		const {className, value, children, orkan, isPathLoading} = this.props;
+		const {className, value, children, orkan, isPathLoading, html} = this.props;
 
 
 		if(isPathLoading.value){
@@ -45,8 +46,11 @@ export default class Value extends Component{
 			}
 		});
 
-
-		return <span className={s.root} onClick={this.handleClick}>{value || children}</span>;
+		if(html){
+			return <span className={s.root} dangerouslySetInnerHTML={{__html: value || children}} onClick={this.handleClick}/>;
+		}else{
+			return <span className={s.root} onClick={this.handleClick}>{value || children}</span>;
+		}
 	}
 }
 

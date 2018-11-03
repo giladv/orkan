@@ -74,7 +74,7 @@ export default class Thumbnail extends Component {
 							<Icon className={s.placeholderIcon} type='picture'/>
 						</div>
 					}
-					{src && fileType === 'image' && <Img className={s.img} mode='cover' src={src} ratio={ratio}/>}
+					{src && fileType === 'image' && <Img className={s.img} mode='contain' src={src} ratio={ratio}/>}
 					{src && fileType === 'video' && <Video className={s.video} src={src} ratio={ratio}/>}
 				</div>
 				{(leftLabel || rightLabel) &&

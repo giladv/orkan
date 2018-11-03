@@ -36,7 +36,7 @@ export default class Button extends Component{
 				important,
 				disabled,
 				square,
-				isBusy
+				busy: isBusy
 			}
 		});
 
