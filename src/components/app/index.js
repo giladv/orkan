@@ -23,12 +23,7 @@ export default class App extends Component{
 				<header className={s.header}>
 					<div className={s.headerCenter}>
 						<a className={s.logo}>Orkan<span>.js</span></a>
-						<ul className={s.menu}>
-							<li><a>Features</a></li>
-							<li><a>Examples</a></li>
-							<li><a>Pricing</a></li>
-							<li><a>Docs</a></li>
-						</ul>
+						<Collection className={s.menu} path='menu' renderItem={(item, i) => <li><a href={item.link}>{item.label}</a></li>}/>
 					</div>
 				</header>
 
@@ -91,8 +86,11 @@ export default class App extends Component{
 					}/>
 				</div>
 
-				<footer>
-
+				<footer className={s.footer}>
+					<div className={s.footerCenter}>
+						<a className={s.footerLogo}>Orkan<span>.js</span></a>
+						<Collection className={s.footerMenu} path='menu' renderItem={(item, i) => <li><a href={item.link}>{item.label}</a></li>}/>
+					</div>
 				</footer>
 			</div>
 		);
