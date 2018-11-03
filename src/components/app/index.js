@@ -2,28 +2,51 @@ import React, { Component } from 'react';
 import autobind from 'autobind-decorator';
 import DevTools from 'mobx-react-devtools';
 import {withRouter} from 'react-router';
+import {observable} from 'mobx';
+import {observer} from 'mobx-react';
 
-import s from './style';
 import Collection from '../../orkan/collection';
 import Img from '../../orkan/img';
 import Value from '../../orkan/value';
 import WithValue from '../../orkan/with-value';
 import Button from '../button';
 import CodeBlock from '../code-block';
+import {createStyle} from '../../utils/style-utils';
 
+import style from './style';
 
 @withRouter
+@observer
 export default class App extends Component{
+	@observable obState = {
+		isCompactHeader: window.scrollY >= 120
+	};
+
+	componentDidMount(){
+		document.addEventListener('scroll', () => {
+			if(window.scrollY >= 120){
+				this.obState.isCompactHeader = true;
+			}else{
+				this.obState.isCompactHeader = false;
+			}
+		})
+	}
 
 	render(){
-		const {children} = this.props;
+		const {children, className} = this.props;
+		const {isCompactHeader} = this.obState;
 
+		const s = createStyle(style, className, {
+			header: {
+				compactHeader: isCompactHeader
+			}
+		});
 		return (
 			<div className={s.root}>
 				<header className={s.header}>
 					<div className={s.headerCenter}>
 						<a className={s.logo}>Orkan<span>.js</span></a>
-						<Collection className={s.menu} path='menu' renderItem={(item, i) => <li><a href={item.link}>{item.label}</a></li>}/>
+						<Collection className={s.menu} path='menu' renderItem={(item, i) => <li key={i}><a href={item.link}>{item.label}</a></li>}/>
 					</div>
 				</header>
 
@@ -89,7 +112,7 @@ export default class App extends Component{
 				<footer className={s.footer}>
 					<div className={s.footerCenter}>
 						<a className={s.footerLogo}>Orkan<span>.js</span></a>
-						<Collection className={s.footerMenu} path='menu' renderItem={(item, i) => <li><a href={item.link}>{item.label}</a></li>}/>
+						<Collection className={s.footerMenu} path='menu' renderItem={(item, i) => <li key={i}><a href={item.link}>{item.label}</a></li>}/>
 					</div>
 				</footer>
 			</div>
