@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import autobind from 'autobind-decorator';
-import DevTools from 'mobx-react-devtools';
 import {withRouter} from 'react-router';
 import {observable} from 'mobx';
 import {observer} from 'mobx-react';
@@ -23,8 +22,8 @@ export default class App extends Component{
 	};
 
 	componentDidMount(){
-		document.addEventListener('scroll', () => {
-			if(window.scrollY >= 120){
+		this.scrollContainer.addEventListener('scroll', e => {
+			if(this.scrollContainer.scrollTop >= 120){
 				this.obState.isCompactHeader = true;
 			}else{
 				this.obState.isCompactHeader = false;
@@ -49,72 +48,75 @@ export default class App extends Component{
 						<Collection className={s.menu} path='menu' renderItem={(item, i) => <li key={i}><a href={item.link}>{item.label}</a></li>}/>
 					</div>
 				</header>
+				<div className={s.scrollContainer} ref={ref => this.scrollContainer = ref}>
+					<div className={s.hero}>
+						<WithValue path='home/hero/background' render={value => <Img className={s.heroImg} mode='cover' src={value}/>}/>
 
-				<div className={s.hero}>
-					<WithValue path='home/hero/background' render={value => <Img className={s.heroImg} mode='cover' src={value}/>}/>
+							<h2 className={s.heroTitle}><Value html path='home/hero/title'/></h2>
+							<div className={s.heroActions}>
+								<WithValue path='home/hero/primaryCta' render={cta =>
+									<Button primary href={cta.link}>{cta.label}</Button>
+								}/>
 
-						<h2 className={s.heroTitle}><Value html path='home/hero/title'/></h2>
-						<div className={s.heroActions}>
-							<WithValue path='home/hero/primaryCta' render={cta =>
-								<Button primary href={cta.link}>{cta.label}</Button>
-							}/>
+								<WithValue path='home/hero/secondaryCta' render={cta =>
+									<Button href={cta.link}>{cta.label}</Button>
+								}/>
+							</div>
+					</div>
+					<a name="features"/>
+					<div className={s.features}>
+						<div className={s.featuresCenter}>
+							<h2 className={s.featuresTitle}><Value path='home/features/title'/></h2>
 
-							<WithValue path='home/hero/secondaryCta' render={cta =>
-								<Button href={cta.link}>{cta.label}</Button>
+							<Collection className={s.featuresList} path='home/features/list' renderItem={(item, i) =>
+								<div key={i} className={s.featureItem}>
+									<Img className={s.featureImg} mode='contain' src={item.img}/>
+									<div className={s.featureInfo}>
+										<h3 className={s.featureTitle}>{item.title}</h3>
+										<div className={s.featureBody}>{item.body}</div>
+									</div>
+								</div>
 							}/>
 						</div>
-				</div>
+					</div>
 
-				<div className={s.features}>
-					<div className={s.featuresCenter}>
-						<h2 className={s.featuresTitle}><Value path='home/features/title'/></h2>
+					<a name="examples"/>
+					<div className={s.examples}>
+						<div className={s.examplesCenter}>
+							<h2 className={s.examplesTitle}><Value path='home/examples/title'/></h2>
 
-						<Collection className={s.featuresList} path='home/features/list' limit={10} renderItem={(item, i) =>
-							<div key={i} className={s.featureItem}>
-								<Img className={s.featureImg} mode='contain' src={item.img}/>
-								<div className={s.featureInfo}>
-									<h3 className={s.featureTitle}>{item.title}</h3>
-									<div className={s.featureBody}>{item.body}</div>
+							<Collection className={s.examplesList} path='home/examples/list' renderItem={(item, i) =>
+								<div key={i} className={s.exampleItem}>
+									<div className={s.exampleInfo}>
+										<h3 className={s.exampleTitle}>{item.title}</h3>
+										<div className={s.exampleBody}>{item.body}</div>
+										<a className={s.exampleLink} href={item.learnMoreLink}>Learn more</a>
+									</div>
+									<CodeBlock className={s.exampleCode}>{item.code}</CodeBlock>
 								</div>
-							</div>
+							}/>
+						</div>
+					</div>
+
+
+					<div className={s.promo}>
+						<WithValue path='home/promo/background' render={value => <Img className={s.heroImg} mode='cover' src={value}/>}/>
+
+						<h2 className={s.promoTitle}><Value path='home/promo/title'/></h2>
+
+						<WithValue path='home/promo/cta' render={cta =>
+							<Button primary className={s.promoCta} href={cta.link}>{cta.label}</Button>
 						}/>
 					</div>
+
+					<footer className={s.footer}>
+						<div className={s.footerCenter}>
+							<a className={s.footerLogo}>Orkan<span>.js</span></a>
+							<Collection className={s.footerMenu} path='menu' renderItem={(item, i) => <li key={i}><a href={item.link}>{item.label}</a></li>}/>
+						</div>
+					</footer>
 				</div>
 
-				<div className={s.examples}>
-					<div className={s.examplesCenter}>
-						<h2 className={s.examplesTitle}><Value path='home/examples/title'/></h2>
-
-						<Collection className={s.examplesList} path='home/examples/list' limit={10} renderItem={(item, i) =>
-							<div key={i} className={s.exampleItem}>
-								<div className={s.exampleInfo}>
-									<h3 className={s.exampleTitle}>{item.title}</h3>
-									<div className={s.exampleBody}>{item.body}</div>
-									<a className={s.exampleLink} href={item.learnMoreLink}>Learn more</a>
-								</div>
-								<CodeBlock className={s.exampleCode}>{item.code}</CodeBlock>
-							</div>
-						}/>
-					</div>
-				</div>
-
-
-				<div className={s.promo}>
-					<WithValue path='home/promo/background' render={value => <Img className={s.heroImg} mode='cover' src={value}/>}/>
-
-					<h2 className={s.promoTitle}><Value path='home/promo/title'/></h2>
-
-					<WithValue path='home/promo/cta' render={cta =>
-						<Button primary className={s.promoCta} href={cta.link}>{cta.label}</Button>
-					}/>
-				</div>
-
-				<footer className={s.footer}>
-					<div className={s.footerCenter}>
-						<a className={s.footerLogo}>Orkan<span>.js</span></a>
-						<Collection className={s.footerMenu} path='menu' renderItem={(item, i) => <li key={i}><a href={item.link}>{item.label}</a></li>}/>
-					</div>
-				</footer>
 			</div>
 		);
 	}
