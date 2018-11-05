@@ -17,7 +17,8 @@ import style from './style';
 export default class Value extends Component{
 	static propTypes = {
 		path: PropTypes.string.isRequired,
-		html: PropTypes.bool
+		html: PropTypes.bool,
+		lightOverlay: PropTypes.bool,
 	};
 
 	@autobind
@@ -33,7 +34,7 @@ export default class Value extends Component{
 	}
 
 	render(){
-		const {className, value, children, orkan, isPathLoading, html} = this.props;
+		const {className, value, children, orkan, isPathLoading, html, lightOverlay} = this.props;
 
 
 		if(isPathLoading.value){
@@ -42,7 +43,8 @@ export default class Value extends Component{
 
 		const s = createStyle(style, className, {
 			root: {
-				editMode: orkan.isEditMode()
+				editMode: orkan.isEditMode(),
+				lightOverlay
 			}
 		});
 

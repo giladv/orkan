@@ -17,6 +17,7 @@ export default class Textarea extends Component {
 		placeholder: PropTypes.string,
 		onChange: PropTypes.func,
 		disabled: PropTypes.bool,
+		codeFriendly: PropTypes.bool,
 	};
 
 	static defaultProps = {
@@ -41,9 +42,41 @@ export default class Textarea extends Component {
 		this.selection && this.refs.input.setSelectionRange(this.selection.start, this.selection.end);
 	}
 
+	handleKeyDown(e) {
+		const {onChange, value} = this.props;
+
+		if (e.key === 'Tab'){
+			let newValue;
+			const start = e.target.selectionStart;
+			const end = e.target.selectionEnd;
+
+			if(e.shiftKey){
+				const prevChar = value.substr(start - 1, 1);
+				if(prevChar === '\t') {
+					newValue = value.substr(0, start - 1) + value.substr(start, value.length - start);
+					this.selection = {
+						start: start - 1,
+						end: end - 1
+					};
+				}
+			}else{
+				newValue = value.substring(0, start) + '\t' + value.substring(end);
+				this.selection = {
+					start: start + 1,
+					end: end + 1
+				};
+			}
+
+			newValue && onChange(newValue);
+			e.preventDefault();
+		}
+	}
+
+
+
 	render(){
 
-		const {className, value, rows, onChange, placeholder, disabled, size, ...otherProps} = this.props;
+		const {className, value, rows, onChange, placeholder, disabled, size, codeFriendly, ...otherProps} = this.props;
 
 		const s = createStyle(style, className, style[size], {
 			root: {
@@ -56,6 +89,7 @@ export default class Textarea extends Component {
 				<textarea
 					ref="input"
 					rows={rows}
+					onKeyDown={codeFriendly && this.handleKeyDown}
 					disabled={disabled}
 					className={s.input}
 					placeholder={placeholder}

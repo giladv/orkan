@@ -9,5 +9,8 @@
 
 .editMode{
 	@include editableOverlay;
+	&.lightOverlay{
+		@include editableOverlay(white, white);
+	}
 }
 

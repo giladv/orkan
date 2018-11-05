@@ -86,9 +86,7 @@ export default class Admin extends Component{
 		const {isResizing} = this.obState;
 
 
-		const schema = store.getSchema();
-
-		if(!schema){
+		if(store.isInitializing){
 			return null;
 		}
 

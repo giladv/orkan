@@ -18,6 +18,7 @@ import style from './style';
 export default class WithValue extends Component{
 	static propTypes = {
 		path: PropTypes.string.isRequired,
+		lightOverlay: PropTypes.bool,
 		render: PropTypes.func
 	};
 
@@ -34,7 +35,7 @@ export default class WithValue extends Component{
 	}
 
 	render(){
-		const {className, value, render, orkan} = this.props;
+		const {className, value, render, orkan, lightOverlay} = this.props;
 
 		if(!value){
 			return null;
@@ -44,7 +45,8 @@ export default class WithValue extends Component{
 
 		const s = createStyle(style, className, renderedValue.props.className, {
 			root: {
-				editMode: orkan.isEditMode()
+				editMode: orkan.isEditMode(),
+				lightOverlay
 			}
 		});
 

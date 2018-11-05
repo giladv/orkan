@@ -45,20 +45,20 @@ export default class App extends Component{
 				<header className={s.header}>
 					<div className={s.headerCenter}>
 						<a className={s.logo}>Orkan<span>.js</span></a>
-						<Collection className={s.menu} path='menu' renderItem={(item, i) => <li key={i}><a href={item.link}>{item.label}</a></li>}/>
+						<Collection lightOverlay className={s.menu} path='menu' renderItem={(item, i) => <li key={i}><a href={item.link}>{item.label}</a></li>}/>
 					</div>
 				</header>
 				<div className={s.scrollContainer} ref={ref => this.scrollContainer = ref}>
 					<div className={s.hero}>
-						<WithValue path='home/hero/background' render={value => <Img className={s.heroImg} mode='cover' src={value}/>}/>
+						<WithValue path='home/hero/background' lightOverlay render={value => <Img className={s.heroImg} mode='cover' src={value}/>}/>
 
-							<h2 className={s.heroTitle}><Value html path='home/hero/title'/></h2>
+							<h2 className={s.heroTitle}><Value html lightOverlay path='home/hero/title'/></h2>
 							<div className={s.heroActions}>
 								<WithValue path='home/hero/primaryCta' render={cta =>
 									<Button primary href={cta.link}>{cta.label}</Button>
 								}/>
 
-								<WithValue path='home/hero/secondaryCta' render={cta =>
+								<WithValue lightOverlay path='home/hero/secondaryCta' render={cta =>
 									<Button href={cta.link}>{cta.label}</Button>
 								}/>
 							</div>
@@ -92,7 +92,7 @@ export default class App extends Component{
 										<div className={s.exampleBody}>{item.body}</div>
 										<a className={s.exampleLink} href={item.learnMoreLink}>Learn more</a>
 									</div>
-									<CodeBlock className={s.exampleCode}>{item.code}</CodeBlock>
+									<CodeBlock className={s.exampleCode} value={item.code}/>
 								</div>
 							}/>
 						</div>
@@ -100,9 +100,9 @@ export default class App extends Component{
 
 
 					<div className={s.promo}>
-						<WithValue path='home/promo/background' render={value => <Img className={s.heroImg} mode='cover' src={value}/>}/>
+						<WithValue lightOverlay path='home/promo/background' render={value => <Img className={s.heroImg} mode='cover' src={value}/>}/>
 
-						<h2 className={s.promoTitle}><Value path='home/promo/title'/></h2>
+						<h2 className={s.promoTitle}><Value lightOverlay path='home/promo/title'/></h2>
 
 						<WithValue path='home/promo/cta' render={cta =>
 							<Button primary className={s.promoCta} href={cta.link}>{cta.label}</Button>

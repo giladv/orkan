@@ -279,7 +279,7 @@ $invisibleShadowRgba: rgba(0, 0, 0, 0.06);
 
 
 
-@mixin editableOverlay(){
+@mixin editableOverlay($color1: $pink, $color2: $pink){
 	&:hover {
 		position: relative;
 		&:after {
@@ -290,7 +290,7 @@ $invisibleShadowRgba: rgba(0, 0, 0, 0.06);
 			top: 0;
 			bottom: 0;
 			right: 0;
-			@include stripesBackground(rgba($pink, .9), rgba($pink, .8));
+			@include stripesBackground(rgba($color1, .9), rgba($color2, .8));
 			font-weight: 400 !important;
 			letter-spacing: normal;
 			text-transform: none;
@@ -300,7 +300,7 @@ $invisibleShadowRgba: rgba(0, 0, 0, 0.06);
 			align-items: center;
 			justify-content: center;
 			z-index: 100000000;
-			border: 2px solid $pink;
+			border: 2px solid $color1;
 		}
 	}
 }

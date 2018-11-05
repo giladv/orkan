@@ -1,3 +1,5 @@
+@import '../../orkan/globals';
+
 $darkColor: #121e20;
 
 @mixin thinFont(){
@@ -33,7 +35,9 @@ $darkColor: #121e20;
 }
 
 .scrollContainer{
-	overflow: auto;
+	overflow-y: auto;
+	overflow-x: hidden;
+	-webkit-overflow-scrolling: touch;
 	height: 100vh;
 }
 .header{
@@ -159,7 +163,7 @@ $darkColor: #121e20;
 .featuresCenter{
 	max-width: 1215px;
 	flex: 1;
-	padding: 100px 0 20px 0;
+	padding: 100px 30px 20px 30px;
 	position: relative;
 }
 
@@ -175,18 +179,19 @@ $darkColor: #121e20;
 }
 
 .featuresList{
+	justify-content: space-between;
 	display: flex;
-	justify-content: center;
 	flex-wrap: wrap;
 }
 
 .featureItem{
+	$columnWidth: 350px;
 	display: flex;
 	align-items: center;
-	width: 350px;
+	width: $columnWidth;
 	margin-bottom: 80px;
 	&:nth-child(2n){
-		margin-left: 420px;
+		margin-left: calc(100% - #{$columnWidth*2})
 	}
 }
 
@@ -251,15 +256,18 @@ $darkColor: #121e20;
 }
 
 .exampleCode{
-	margin-left: 130px;
-	width: 520px;
+	margin-left: 93px;
+	width: 610px;
+	background: #1D2234;
+	padding: 30px 40px;
+	border-radius: 5px;
 }
 
 .exampleInfo{
 	display: flex;
 	flex-direction: column;
 	width: 270px;
-	margin-left: 250px;
+	margin-top: 25px;
 }
 
 .exampleTitle{
@@ -282,6 +290,7 @@ $darkColor: #121e20;
 	font-size: 15px;
 	color: #ffffff;
 	margin-top: 10px;
+	align-self: flex-start;
 }
 
 
@@ -380,3 +389,10 @@ $darkColor: #121e20;
 		}
 	}
 }
+
+
+.negativeEditOverlay{
+	@include editableOverlay(white, white)
+}
+
+

@@ -21,7 +21,8 @@ import {createStyle} from '../utils/style-utils';
 export default class Collection extends Component{
 	static propTypes = {
 		path: PropTypes.string.isRequired,
-		renderItem: PropTypes.func
+		renderItem: PropTypes.func,
+		lightOverlay: PropTypes.bool,
 	};
 
 	static defaultProps = {
@@ -42,11 +43,12 @@ export default class Collection extends Component{
 	}
 
 	render(){
-		const {className, classes, renderItem, collection, orkan} = this.props;
+		const {className, classes, renderItem, collection, orkan, lightOverlay} = this.props;
 
 		const s = createStyle(style, className, classes, {
 			item: {
-				editMode: orkan.isEditMode()
+				editMode: orkan.isEditMode(),
+				lightOverlay
 			}
 		});
 

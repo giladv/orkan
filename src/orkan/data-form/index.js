@@ -67,7 +67,7 @@ export default class DataForm extends Component{
 			default:
 				return <InputControl/>;
 			case 'textarea':
-				return <TextareaControl rows={uiSize || 3}/>;
+				return <TextareaControl rows={uiSize || 3} codeFriendly/>;
 			case 'number':
 				return <InputControl type='number'/>;
 			case 'datetime':
