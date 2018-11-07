@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {observer} from 'mobx-react';
 import {observable} from 'mobx';
 import autobind from 'autobind-decorator';
-import classNames from 'classnames';
+import {SwitchControl} from '../controls/switch';
 
 import Form from '../form';
 import FormField from '../form-field';
@@ -20,7 +20,7 @@ import style from './style.scss';
 
 
 @observer
-export default class OrkanSettingsPanel extends Component{
+export default class SettingsPanel extends Component{
 
 	static propTypes = {
 		store: PropTypes.instanceOf(OrkanStore).isRequired,
@@ -112,6 +112,12 @@ export default class OrkanSettingsPanel extends Component{
 					<FormField className={s.formField} name='uiSize' label='Size'>
 						<SliderControl min={3} max={13} />
 					</FormField>
+				}
+
+				{store.settingsFormStore.get('uiType') === 'textarea' &&
+				<FormField className={s.formField} name='isCodeFriendly' label='Code friendly'>
+					<SwitchControl />
+				</FormField>
 				}
 
 				{store.settingsFormStore.get('uiType') === 'slider' &&

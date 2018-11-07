@@ -6,7 +6,7 @@ import autobind from 'autobind-decorator';
 
 import Sidebar from '../sidebar';
 import DataForm from '../data-form';
-import OrkanSettingsPanel from '../settings-panel';
+import SettingsPanel from '../settings-panel';
 import Header from '../header';
 import {keyboard, onDoublePress} from '../utils/keyboard-utils';
 import Auth from '../auth';
@@ -165,7 +165,7 @@ export default class Admin extends Component{
 				}
 
 				{store.settingsPath &&
-					<OrkanSettingsPanel
+					<SettingsPanel
 						className={s.settingsPanel}
 						store={store}/>
 				}

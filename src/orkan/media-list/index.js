@@ -4,13 +4,13 @@ import {observer} from 'mobx-react';
 import autobind from 'autobind-decorator';
 import map from 'lodash/map';
 
-import orkanInject from '../orkan-inject';
+import inject from '../inject';
 import Thumbnail from '../thumbnail';
 import {createStyle} from '../utils/style-utils';
 
 import style from './style.scss';
 
-@orkanInject(({filter}) => {
+@inject(({filter}) => {
 
 	if(filter === 'all'){
 		return {

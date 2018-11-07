@@ -1,0 +1,43 @@
+@import '../../css/globals';
+
+
+.root{
+	border-collapse: collapse;
+	thead{
+		background: #F2F4F7;
+		text-align: left;
+		th{
+			@include normalFont;
+			padding: 10px 14px;
+			font-size: 15px;
+			color: $secondary;
+			&:first-child{
+				border-radius: 5px 0 0 5px;
+			}
+
+			&:last-child{
+				border-radius: 0 5px 5px 0;
+				width: 100%;
+			}
+		}
+	}
+	tr{
+		td{
+			color: $secondary-1;
+			border-bottom: 1px solid #F2F4F7;
+			@include normalFont;
+			padding: 10px 14px;
+			font-size: 15px;
+		}
+		&:hover{
+			td{
+				color: $primary;
+			}
+		}
+	}
+}
+
+.centeredCell{
+	text-align: center;
+}
+

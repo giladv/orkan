@@ -1,0 +1,23 @@
+$secondary: #121e20;
+$secondary-1: #71778A;
+
+$primary: #FA2949;
+
+@mixin thinFont(){
+	font-weight: 100;
+}
+
+@mixin lightFont(){
+	font-weight: 300;
+}
+
+@mixin normalFont(){
+	font-weight: 400;
+}
+
+@mixin mediumFont(){
+	font-weight: 500;
+}
+
+
+$maxWidth: 1215px;

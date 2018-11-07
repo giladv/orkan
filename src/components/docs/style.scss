@@ -1,0 +1,47 @@
+@import '../../css/globals';
+
+
+.root{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.header{
+	width: 100%;
+}
+
+.columnsContainer{
+	width: 100%;
+	max-width: $maxWidth;
+	margin: 50px 0;
+	display: flex;
+	padding: 0 30px;
+}
+
+
+.sidebar{
+	display: flex;
+	flex-direction: column;
+	font-size: 15px;
+	color: $secondary;
+	a{
+		color: inherit;
+		margin-bottom: 10px;
+		&:hover{
+			color: $primary;
+		}
+	}
+}
+
+.pages{
+	display: flex;
+	flex-direction: column;
+}
+
+.content{
+	padding-left: 50px;
+	border-left: 1px solid #E2E2E2;
+	margin-left: 50px;
+	flex: 1;
+}

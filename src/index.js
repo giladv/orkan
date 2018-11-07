@@ -1,7 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {browserHistory, IndexRedirect, IndexRoute, Route, Router} from 'react-router';
+import "parse-prop-types"
 
+
+import ApiPage from './components/api-page';
 import App from './components/app';
+import DocPage from './components/doc-page';
+import Docs from './components/docs';
+import Home from './components/home';
 
 import './css/style.scss';
 
@@ -21,7 +28,17 @@ const config = {
 
 ReactDOM.render(
 	<OrkanProvider firebaseConfig={config}>
-		<App/>
+		<Router history={browserHistory}>
+			<Route path="/" component={App}>
+				<IndexRoute component={Home}/>
+				<Route path="docs" component={Docs}>
+					<IndexRedirect to='getting-started'/>
+
+					<Route path='api/:entityId' component={ApiPage}/>
+					<Route path=':pageId' component={DocPage}/>
+				</Route>
+			</Route>
+		</Router>
 	</OrkanProvider>,
 	document.getElementById('root')
 );

@@ -6,7 +6,7 @@ import autobind from 'autobind-decorator';
 
 import Header from '../header';
 import Input from '../controls/input';
-import orkanInject from '../orkan-inject';
+import inject from '../inject';
 import ListItem from '../list-item';
 
 import Icon from '../icon';
@@ -18,7 +18,7 @@ import {createStyle} from '../utils/style-utils';
 import style from './style.scss';
 
 
-@orkanInject(({path, store}) => {
+@inject(({path, store}) => {
 	return store.isPathCollection(path)?{value: path}:{};
 
 }, {liveEditedData: false})

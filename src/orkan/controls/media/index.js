@@ -4,13 +4,13 @@ import {observer} from 'mobx-react';
 
 import Thumbnail from '../../thumbnail';
 import {formInput} from '../../form';
-import orkanInject from '../../orkan-inject';
+import inject from '../../inject';
 import MediaGallery from '../../media-gallery';
 import {createStyle} from '../../utils/style-utils';
 
 import style from './style.scss';
 
-@orkanInject()
+@inject()
 @observer
 export default class Media extends Component {
 	static propTypes = {

@@ -7,7 +7,7 @@ import firebase from 'firebase/app';
 
 import Header from '../header';
 import Select from '../controls/select';
-import orkanInject from '../orkan-inject';
+import inject from '../inject';
 import UploadButton from '../upload-button';
 import {FIREBASE_APP_NAME, MEDIA_KEY_NAME} from '../constants';
 import {createStyle} from '../utils/style-utils';
@@ -15,7 +15,7 @@ import MediaList from '../media-list';
 
 import style from './style.scss';
 
-@orkanInject()
+@inject()
 @observer
 export default class MediaGallery extends Component{
 

@@ -6,7 +6,7 @@ import {observable} from 'mobx';
 
 
 import Icon from '../icon';
-import orkanInject from '../orkan-inject';
+import inject from '../inject';
 import ListItem from '../list-item';
 import {USER_REQUESTS_KEY_NAME} from '../constants';
 import {createStyle} from '../utils/style-utils';
@@ -14,7 +14,7 @@ import {createStyle} from '../utils/style-utils';
 import style from './style.scss';
 
 
-@orkanInject(() => ({requests: USER_REQUESTS_KEY_NAME}), {liveEditedData: false})
+@inject(() => ({requests: USER_REQUESTS_KEY_NAME}), {liveEditedData: false})
 @observer
 export default class UsersRequests extends Component{
 	static propTypes = {

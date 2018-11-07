@@ -1,0 +1,38 @@
+@import '../../css/globals';
+
+.root{
+	height: 230px;
+	display: flex;
+	justify-content: center;
+	align-items: flex-end;
+	position: relative;
+}
+
+.img{
+	position: absolute !important;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	z-index: 1;
+	background: $primary;
+}
+
+.title{
+	max-width: $maxWidth;
+	flex: 1;
+	@include thinFont;
+	font-size: 50px;
+	margin: 0 0 50px 0;
+	z-index: 2;
+	color: #ffffff;
+	padding: 0 30px;
+	strong{
+		@include mediumFont;
+		font-style: normal;
+	}
+	p{
+		margin: 0 0 20px;
+		padding: 0;
+	}
+}

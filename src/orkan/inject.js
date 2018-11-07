@@ -7,17 +7,22 @@ import values from 'lodash/values';
 import {REACT_CONTEXT_NAME} from './constants';
 
 
-export default function orkanInject(mapPathsToProps = () => ({}), config) {
+export default function inject(mapPathsToProps = () => ({}), config) {
 	const options = {
 		liveEditedData: true,
 		...config
 	};
 	return (DecoratedComponent) => {
 		@observer
-		class OrkanInjector extends Component {
+		class injector extends Component {
+			static propTypes = {
+				...(DecoratedComponent.propTypes || {})
+			};
 			static contextTypes = {
 				[REACT_CONTEXT_NAME]: PropTypes.object
 			};
+
+			static decoratedComponent = DecoratedComponent;
 
 			componentWillMount(){
 				const {store} = this.getContext();
@@ -77,6 +82,6 @@ export default function orkanInject(mapPathsToProps = () => ({}), config) {
 			}
 		}
 
-		return OrkanInjector;
+		return injector;
 	}
 }

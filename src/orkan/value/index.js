@@ -4,11 +4,11 @@ import autobind from 'autobind-decorator';
 import {observer} from 'mobx-react';
 
 import {createStyle} from '../utils/style-utils';
-import orkanInject from '../orkan-inject';
+import inject from '../inject';
 
 import style from './style';
 
-@orkanInject(props => {
+@inject(props => {
 	return {
 		value: props.path
 	};

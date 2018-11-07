@@ -4,11 +4,11 @@ import {observer} from 'mobx-react';
 import map from 'lodash/map';
 
 import {formInput} from '../../form';
-import orkanInject from '../../orkan-inject';
+import inject from '../../inject';
 import Select from '../select';
 
 
-@orkanInject(({optionsPath}) => {
+@inject(({optionsPath}) => {
 	return {
 		data: optionsPath
 	};

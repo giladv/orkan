@@ -6,13 +6,13 @@ import autobind from 'autobind-decorator';
 import {observer} from 'mobx-react';
 import classNames from 'classnames'
 
-import orkanInject from '../orkan-inject';
+import inject from '../inject';
 
 import style from './style';
 import {createStyle} from '../utils/style-utils';
 
 
-@orkanInject(props => {
+@inject(props => {
 	return {
 		collection: props.path
 	};

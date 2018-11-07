@@ -11,6 +11,11 @@
 		font-size: $fontSize;
 		padding: 5px ($height - $fontSize) / 2;
 	}
+	&.codeFriendly{
+		.input{
+			font-size: $fontSize * 0.9;
+		}
+	}
 }
 
 .root{
@@ -34,9 +39,16 @@
 	transition: border-color linear .2s;
 	box-shadow: inset 0px 3px 0px 0px darken($lightGray, 1%);
 	color: $gray;
+	tab-size: 3;
 	&:focus{
 		border-color: $aqua;
 		box-shadow: inset 0px 4px 0px 0px $aqua-1;
+	}
+}
+
+.codeFriendly{
+	.input{
+		@include monoFont;
 	}
 }
 

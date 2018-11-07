@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import autobind from 'autobind-decorator';
+import tabOverride from 'taboverride';
 
 import {formInput} from '../../form';
 import {createStyle} from '../../utils/style-utils';
@@ -26,50 +27,62 @@ export default class Textarea extends Component {
 	};
 
 	handleChange(e){
-
+		const {selectionStart, selectionEnd} = e.target;
 		this.selection = {
-			start: e.target.selectionStart,
-			end: e.target.selectionEnd
+			selectionStart,
+			selectionEnd
 		};
 
 		this.props.onChange(e.target.value);
 
 		e.stopPropagation();
+	}
 
+	componentDidMount(){
+		this.props.codeFriendly && this.initCodeFriendly();
 	}
 
 	componentDidUpdate(){
-		this.selection && this.refs.input.setSelectionRange(this.selection.start, this.selection.end);
+		// re selecting latest selection
+		this.selection && this.input.setSelectionRange(this.selection.selectionStart, this.selection.selectionEnd);
+	}
+
+	componentWillReceiveProps(nextProps){
+		const {codeFriendly} = this.props;
+
+		if(codeFriendly !== nextProps.codeFriendly){
+			nextProps.codeFriendly?this.initCodeFriendly():this.destroyCodeFriendly();
+		}
+	}
+
+	componentWillUnmount(){
+		this.destroyCodeFriendly();
 	}
 
 	handleKeyDown(e) {
-		const {onChange, value} = this.props;
-
-		if (e.key === 'Tab'){
-			let newValue;
-			const start = e.target.selectionStart;
-			const end = e.target.selectionEnd;
-
-			if(e.shiftKey){
-				const prevChar = value.substr(start - 1, 1);
-				if(prevChar === '\t') {
-					newValue = value.substr(0, start - 1) + value.substr(start, value.length - start);
-					this.selection = {
-						start: start - 1,
-						end: end - 1
-					};
-				}
-			}else{
-				newValue = value.substring(0, start) + '\t' + value.substring(end);
-				this.selection = {
-					start: start + 1,
-					end: end + 1
-				};
-			}
-
-			newValue && onChange(newValue);
-			e.preventDefault();
+		const {onChange, codeFriendly} = this.props;
+		if(!codeFriendly){
+			return;
 		}
+
+		const {selectionStart, selectionEnd} = e.target;
+
+		this.selection = {
+			selectionStart,
+			selectionEnd
+		};
+
+		onChange(e.target.value);
+	}
+
+	initCodeFriendly(){
+		tabOverride.set(this.input);
+
+	}
+
+	destroyCodeFriendly(){
+		tabOverride.set(this.input, false);
+
 	}
 
 
@@ -80,14 +93,15 @@ export default class Textarea extends Component {
 
 		const s = createStyle(style, className, style[size], {
 			root: {
-				disabled
+				disabled,
+				codeFriendly
 			}
 		});
 
 		return (
 			<div {...otherProps} className={s.root}>
 				<textarea
-					ref="input"
+					ref={ref => this.input = ref}
 					rows={rows}
 					onKeyDown={codeFriendly && this.handleKeyDown}
 					disabled={disabled}

@@ -1,22 +1,7 @@
-@import '../../orkan/globals';
+@import '../../css/globals';
 
-$darkColor: #121e20;
 
-@mixin thinFont(){
-	font-weight: 100;
-}
 
-@mixin lightFont(){
-	font-weight: 300;
-}
-
-@mixin normalFont(){
-	font-weight: 400;
-}
-
-@mixin mediumFont(){
-	font-weight: 500;
-}
 
 .root{
 
@@ -55,23 +40,18 @@ $darkColor: #121e20;
 	transform: translate3d(0, -29px, 0);
 	background: #FA2949;
 	.logo{
-		font-size: 18px;
+		transform: scale(.7);
 	}
 
 	.menu{
-		li{
-			a{
-				font-size: 14px;
-
-			}
-		}
+		transform: scale(.9);
 	}
 }
 
 .headerCenter{
 	height: 51px;
 	padding: 0 30px;
-	max-width: 1215px;
+	max-width: $maxWidth;
 	flex: 1;
 	display: flex;
 	flex-direction: row;
@@ -94,10 +74,11 @@ $darkColor: #121e20;
 	display: flex;
 	margin: 0;
 	padding: 0;
+	transition: transform .2s ease-out;
 	li{
 		margin-left: 50px;
 		a{
-			transition: font-size .2s ease-out, color .2s linear;
+			transition: color .2s linear;
 			@include lightFont;
 			font-size: 16px;
 			color: #ffffff;
@@ -105,242 +86,12 @@ $darkColor: #121e20;
 			&:hover{
 				color: #000;
 			}
+			&.activeMenuItem{
+				color: #000000;
+			}
 		}
 	}
 }
-
-.hero{
-	height: 620px;
-	display: flex;
-	justify-content: center;
-	flex-direction: column;
-	align-items: center;
-	position: relative;
-}
-
-.heroImg{
-	position: absolute !important;
-	left: 0;
-	top: 0;
-	bottom: 0;
-	right: 0;
-	z-index: 1;
-}
-
-.heroTitle{
-	@include thinFont;
-	font-size: 50px;
-	margin: 80px 0 0 0;
-	z-index: 2;
-	color: #ffffff;
-	text-align: center;
-	strong{
-		@include mediumFont;
-		font-style: normal;
-	}
-	p{
-		margin: 0 0 20px;
-		padding: 0;
-	}
-}
-
-.heroActions{
-	z-index: 2;
-	margin-top: 30px;
-	> * {
-		margin: 0 8px;
-	}
-}
-
-
-
-
-.features{
-	display: flex;
-	justify-content: center;
-}
-
-.featuresCenter{
-	max-width: 1215px;
-	flex: 1;
-	padding: 100px 30px 20px 30px;
-	position: relative;
-}
-
-.featuresTitle{
-	position: absolute;
-	left: 50%;
-	top: 50%;
-	transform: translate3d(-50%, -50%, 0);
-	@include lightFont;
-	font-size: 40px;
-	color: #FA2949;
-	margin: 0;
-}
-
-.featuresList{
-	justify-content: space-between;
-	display: flex;
-	flex-wrap: wrap;
-}
-
-.featureItem{
-	$columnWidth: 350px;
-	display: flex;
-	align-items: center;
-	width: $columnWidth;
-	margin-bottom: 80px;
-	&:nth-child(2n){
-		margin-left: calc(100% - #{$columnWidth*2})
-	}
-}
-
-.featureImg{
-	width: 75px;
-	height: 75px;
-}
-
-.featureInfo{
-	flex: 1;
-	margin-left: 30px;
-}
-
-.featureTitle{
-	@include normalFont;
-	font-size: 20px;
-	color: #191D2B;
-	margin: 0;
-}
-
-.featureBody{
-	@include lightFont;
-	font-size: 15px;
-	color: #71778A;
-	margin-top: 12px;
-}
-
-
-
-.examples{
-	background: #191D2B;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-}
-
-.examplesCenter{
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	flex-direction: column;
-	max-width: 1215px;
-	flex: 1;
-	padding: 100px 0;
-}
-
-.examplesTitle{
-	font-size: 40px;
-	color: #ffffff;
-	@include thinFont;
-	margin: 0;
-}
-
-.examplesList{
-}
-
-.exampleItem{
-	display: flex;
-	align-items: flex-start;
-	justify-content: center;
-	margin-top: 100px;
-}
-
-.exampleCode{
-	margin-left: 93px;
-	width: 610px;
-	background: #1D2234;
-	padding: 30px 40px;
-	border-radius: 5px;
-}
-
-.exampleInfo{
-	display: flex;
-	flex-direction: column;
-	width: 270px;
-	margin-top: 25px;
-}
-
-.exampleTitle{
-	@include lightFont;
-	font-size: 20px;
-	color: #ffffff;
-	margin: 0;
-
-}
-
-.exampleBody{
-	@include thinFont;
-	margin-top: 12px;
-	font-size: 15px;
-	color: #A7ADC0;
-}
-
-.exampleLink{
-	@include thinFont;
-	font-size: 15px;
-	color: #ffffff;
-	margin-top: 10px;
-	align-self: flex-start;
-}
-
-
-
-
-
-
-
-
-
-
-.promo{
-	height: 170px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	position: relative;
-}
-
-.promoImg{
-	position: absolute !important;
-	left: 0;
-	top: 0;
-	bottom: 0;
-	right: 0;
-	z-index: 1;
-}
-
-.promoTitle{
-	@include thinFont;
-	font-size: 40px;
-	margin: 0;
-	z-index: 2;
-	color: #ffffff;
-	text-align: center;
-	strong{
-		@include mediumFont;
-		font-style: normal;
-	}
-	p{
-		margin: 0 0 20px;
-		padding: 0;
-	}
-}
-
-.promoCta{
-	z-index: 2;
-	margin-left: 60px;
-}
-
 
 
 
@@ -351,11 +102,12 @@ $darkColor: #121e20;
 	display: flex;
 	align-items: flex-end;
 	justify-content: center;
+	background: #F2F4F7;
 }
 
 .footerCenter{
 	padding: 0 30px 30px 30px;
-	max-width: 1215px;
+	max-width: $maxWidth;
 	flex: 1;
 	display: flex;
 	flex-direction: row;
@@ -390,9 +142,5 @@ $darkColor: #121e20;
 	}
 }
 
-
-.negativeEditOverlay{
-	@include editableOverlay(white, white)
-}
 
 

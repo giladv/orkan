@@ -18,7 +18,7 @@
 	border-color: black;
 	&:hover{
 		opacity: 1;
-		border-color: #FA2949 !important;
+		//border-color: #FA2949 !important;
 	}
 }
 
@@ -27,8 +27,8 @@
 		top: 0;
 		bottom: 0;
 		width: 20px;
-		right: 0px;
-		border-right: 2px solid;
+		right: -2px;
+		border-right: 2px solid rgba(0,0,0, .5);
 		cursor: ew-resize;
 	}
 }

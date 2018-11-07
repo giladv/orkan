@@ -16,7 +16,6 @@ module.exports = (env, argv) => {
 			rules: [
 				{
 					test: /\.(js|ts|tsx)$/,
-					// use: 'awesome-typescript-loader',
 					use: [
 						{
 							loader: 'ts-loader',
