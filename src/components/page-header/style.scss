@@ -6,6 +6,7 @@
 	justify-content: center;
 	align-items: flex-end;
 	position: relative;
+	background: $primary;
 }
 
 .img{
@@ -15,7 +16,6 @@
 	bottom: 0;
 	right: 0;
 	z-index: 1;
-	background: $primary;
 }
 
 .title{

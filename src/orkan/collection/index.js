@@ -6,13 +6,13 @@ import autobind from 'autobind-decorator';
 import {observer} from 'mobx-react';
 import classNames from 'classnames'
 
-import inject from '../inject';
+import orkanInject from '../inject';
 
 import style from './style';
 import {createStyle} from '../utils/style-utils';
 
 
-@inject(props => {
+@orkanInject(props => {
 	return {
 		collection: props.path
 	};
@@ -26,7 +26,8 @@ export default class Collection extends Component{
 	};
 
 	static defaultProps = {
-		renderItem: () => null
+		renderItem: () => null,
+		lightOverlay: false
 	};
 
 	@autobind

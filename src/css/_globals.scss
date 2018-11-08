@@ -1,6 +1,12 @@
 $secondary: #121e20;
 $secondary-1: #71778A;
 
+
+@mixin monoFont(){
+	font-family: 'Roboto mono', monospace;
+}
+
+
 $primary: #FA2949;
 
 @mixin thinFont(){

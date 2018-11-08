@@ -25,13 +25,22 @@
 	flex-direction: column;
 	font-size: 15px;
 	color: $secondary;
+	flex: 0 0 auto;
 	a{
 		color: inherit;
 		margin-bottom: 10px;
 		&:hover{
 			color: $primary;
 		}
+		&.activeLink{
+			color: $primary;
+		}
 	}
+}
+
+.sidebarHeader{
+	color: $secondary-1;
+	margin: 10px 0;
 }
 
 .pages{

@@ -27,6 +27,11 @@
 			border-radius: 2px;
 		}
 	}
+	h3{
+		@include normalFont;
+		font-size: 20px;
+		margin: 40px 0 0 0;
+	}
 }
 
 .propsTable{

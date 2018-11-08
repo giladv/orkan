@@ -22,6 +22,10 @@ export default class WithValue extends Component{
 		render: PropTypes.func
 	};
 
+	static defaultProps = {
+		lightOverlay: false
+	};
+
 	@autobind
 	handleClick(e){
 		const {onClick, path, orkan} = this.props;

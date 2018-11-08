@@ -29,12 +29,15 @@ export default class App extends Component{
 	handleMenuClick(e, link){
 		const {router} = this.props;
 
-		if(link.startsWith('#')){
-			const elem = document.getElementsByName(link.slice(1))[0];
-			elem && elem.scrollIntoView({
-				behavior: 'smooth', // smooth scroll
-				block: 'start' // the upper border of the element will be aligned at the top of the visible part of the window of the scrollable area.
-			});
+		if(link.startsWith('/#')){
+			console.log('?!', link.split('#')[1])
+			setTimeout(() => {
+				const elem = document.getElementsByName(link.split('#')[1])[0];
+				elem && elem.scrollIntoView({
+					behavior: 'smooth', // smooth scroll
+					block: 'start' // the upper border of the element will be aligned at the top of the visible part of the window of the scrollable area.
+				});
+			}, 0)
 		}
 
 		router.push(link);

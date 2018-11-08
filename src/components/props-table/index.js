@@ -12,10 +12,49 @@ import style from './style';
 @observer
 export default class PropsTable extends Component{
 	static propTypes = {
-		component: PropTypes.instanceOf(Component)
+		component: PropTypes.instanceOf(Component),
+		descriptions: PropTypes.object
 	};
+
+	renderType(type){
+		switch(type.name){
+			case 'shape':
+				return (
+					<div>
+						object {'{'}
+						{Object.keys(type.value).map(key =>
+							<div>{key}: {this.renderType(type.value[key].type)}</div>
+						)}
+						{'}'}
+					</div>
+				);
+			case 'arrayOf':
+				return (
+					<div>
+						array[{this.renderType(type.value)}, ...]
+					</div>
+				);
+			case 'oneOf':
+				return type.value.join('|');
+			case 'func':
+				return 'function';
+			default:
+				return type.name;
+		}
+	}
+
+	renderDefaultProp(key){
+		const {component} = this.props;
+		const defaultProp = component.defaultProps[key];
+
+		if(defaultProp === undefined || typeof defaultProp === 'function'){
+			return;
+		}
+
+		return JSON.stringify(defaultProp).replace(/\"/g, "'")
+	}
 	render(){
-		const {className, component} = this.props;
+		const {className, component, descriptions} = this.props;
 
 		const s = createStyle(style, className);
 
@@ -34,10 +73,10 @@ export default class PropsTable extends Component{
 				{map(parsePropTypes(component), (value, key) =>
 					<tr key={key}>
 						<td>{key}</td>
-						<td>{value.type.name}</td>
+						<td className={s.typeCell}>{this.renderType(value.type)}</td>
 						<td className={s.centeredCell}>{value.required && <Icon type='v'/>}</td>
-						<td></td>
-						<td></td>
+						<td>{this.renderDefaultProp(key)}</td>
+						<td>{descriptions[key]}</td>
 					</tr>
 				)}
 			</table>

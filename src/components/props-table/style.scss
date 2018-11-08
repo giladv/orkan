@@ -28,6 +28,7 @@
 			@include normalFont;
 			padding: 10px 14px;
 			font-size: 15px;
+			vertical-align: top;
 		}
 		&:hover{
 			td{
@@ -41,3 +42,13 @@
 	text-align: center;
 }
 
+
+.root td.typeCell{
+	@include monoFont;
+	font-size: 14px;
+	> div{
+		div{
+			padding: 0 0 0 20px;
+		}
+	}
+}

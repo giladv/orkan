@@ -85,3 +85,16 @@ export default function inject(mapPathsToProps = () => ({}), config) {
 		return injector;
 	}
 }
+
+inject.propTypes = {
+	mapPropsToPaths: PropTypes.func,
+	options: PropTypes.shape({
+		liveEditedData: PropTypes.bool
+	})
+};
+
+inject.defaultProps = {
+	options: {
+		liveEditedData: true
+	}
+};
