@@ -32,12 +32,14 @@ export default class Wysiwyg extends Component {
 			}
 		});
 
+		console.log('?!', value)
+
 		return (
 			<ReactQuill
 				{...otherProps}
 				className={s.root}
 				onChange={onChange}
-				value={value}/>
+				value={value || ''}/>
 		);
 	}
 }

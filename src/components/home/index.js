@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import autobind from 'autobind-decorator';
-import {withRouter} from 'react-router';
+import {Link, withRouter} from 'react-router';
 import {observable} from 'mobx';
 import {observer} from 'mobx-react';
 
@@ -64,7 +64,7 @@ export default class Home extends Component{
 								<div className={s.exampleInfo}>
 									<h3 className={s.exampleTitle}>{item.title}</h3>
 									<div className={s.exampleBody}>{item.body}</div>
-									<a className={s.exampleLink} href={item.learnMoreLink}>Learn more</a>
+									<Link className={s.exampleLink} to={item.learnMoreLink}>Learn more</Link>
 								</div>
 								<CodeBlock className={s.exampleCode} value={item.code}/>
 							</div>

@@ -47,6 +47,10 @@ export default class WithValue extends Component{
 
 		const renderedValue = render(value);
 
+		if(!renderedValue){
+			return null;
+		}
+
 		const s = createStyle(style, className, renderedValue.props.className, {
 			root: {
 				editMode: orkan.isEditMode(),

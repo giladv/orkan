@@ -96,7 +96,7 @@ export default class Paths extends Component{
 		const {store, path, value} = this.props;
 
 		if(store.isPathCollection(path) && value){
-			const {collectionMainLabel, collectionImage} = store.getSettingsByPath(path);
+			const {collectionMainLabel, collectionImage} = store.getSettingsByPath(path) || {};
 
 			return Object.keys(value).map(key => (
 				<ListItem

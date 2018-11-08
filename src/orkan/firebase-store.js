@@ -1,3 +1,4 @@
+import omitBy from 'lodash/omitBy';
 import {observable, isObservable, toJS} from 'mobx';
 import nodePath from 'path';
 
@@ -27,7 +28,11 @@ export default class FirebaseStore{
 	}
 
 	setValue(path, value){
-		return this.database.ref(this.toAbsolutePath(path)).set(value);
+		let sanitizedValue = value;
+		if(typeof value === 'object'){
+			sanitizedValue = omitBy(value, value => value === undefined);
+		}
+		return this.database.ref(this.toAbsolutePath(path)).set(sanitizedValue);
 	}
 
 

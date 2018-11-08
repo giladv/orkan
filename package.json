@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
+    "builddeploy": "yarn run build-admin && yarn run build-app && yarn run deploy",
     "generate-docs": "react-docgen src/orkan/provider src/orkan/value src/orkan/with-value src/orkan/collection src/orkan/inject.js --pretty > docs.json",
     "deploy": "firebase deploy",
     "dev-admin": "webpack-dev-server --mode development --config webpack/admin-config.js",
