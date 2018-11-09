@@ -3,11 +3,13 @@ import PropTypes from 'prop-types';
 import {observer} from 'mobx-react';
 import mapValues from 'lodash/mapValues';
 import values from 'lodash/values';
+import pickBy from 'lodash/pickBy';
+import shallowCompare from 'react-addons-shallow-compare';
 
 import {REACT_CONTEXT_NAME} from './constants';
 
 
-export default function inject(mapPathsToProps = () => ({}), config) {
+export default function inject(mapPropsToPaths = () => ({}), config) {
 	const options = {
 		liveEditedData: true,
 		...config
@@ -23,40 +25,67 @@ export default function inject(mapPathsToProps = () => ({}), config) {
 			};
 
 			static decoratedComponent = DecoratedComponent;
+			disposables = [];
 
 			componentWillMount(){
-				const {store} = this.getContext();
-
-				const paths = values(mapPathsToProps(this.props)).filter(it => !!it);
-				this.disposables = paths.map(path => store.listen(path));
+				this.disposables = this.listenToPaths(this.props);
 			}
+
+			// componentWillReceiveProps(nextProps, nextState){
+			// 	if(shallowCompare(this, nextProps, nextState)){
+			// 		const newDisposables = this.listenToPaths(nextProps);
+			// 		this.disposeAllListeners();
+			// 		this.disposables = newDisposables;
+			// 	}
+			// }
 
 			componentWillUnmount(){
-				this.disposables.forEach(dispose => dispose());
+				this.disposeAllListeners();
 			}
-
 
 			getContext() {
 				return this.context[REACT_CONTEXT_NAME];
 			}
 
+			disposeAllListeners(){
+				this.disposables.forEach(dispose => dispose());
+			}
 
+			listenToPaths(props){
+				const {store} = this.getContext();
+
+				const paths = values(mapPropsToPaths(props)).filter(it => !!it);
+				return paths.map((pathQuery) => {
+					if(typeof pathQuery === 'object'){
+						const {path, ...options} = pathQuery;
+						const sanitizedOptions = pickBy(options, value => typeof value === 'string' && value.length);
+						return store.listenToCollection(path, sanitizedOptions);
+					}else{
+						return store.listen(pathQuery)
+					}
+				});
+			}
 
 			render() {
-				const {store} = this.getContext();
+				const {store, getValue} = this.getContext();
 				const {injectedProps = []} = this.props;
 				let mappedPaths;
 				let mappedValues = {};
 				let mappedStatuses = {};
 				try {
-					const {getValue} = this.getContext();
-					mappedPaths = mapPathsToProps(this.props);
-					mappedValues = mapValues(mappedPaths, path => {
-						if(!path){
+					mappedPaths = mapPropsToPaths(this.props);
+					mappedValues = mapValues(mappedPaths, pathQuery => {
+						if(!pathQuery){
 							return;
 						}
 
-						return options.liveEditedData?getValue(path):store.getValue(path)
+						if(typeof pathQuery === 'string'){
+							pathQuery = {path: pathQuery};
+						}
+
+						const {path, ...options} = pathQuery;
+
+						return options.liveEditedData?getValue(path):store.getValue(path, options)
 					});
 					mappedStatuses = mapValues(mappedPaths, path => store.isPathLoading(path))
 				} catch (err) {
@@ -86,6 +115,7 @@ export default function inject(mapPathsToProps = () => ({}), config) {
 	}
 }
 
+// for documentation purposes only
 inject.propTypes = {
 	mapPropsToPaths: PropTypes.func,
 	options: PropTypes.shape({
@@ -98,3 +128,5 @@ inject.defaultProps = {
 		liveEditedData: true
 	}
 };
+
+

@@ -128,7 +128,7 @@ export default class Provider extends Component{
 			this.obState.isBusy = false;
 		}, 500)
 
-		window.a = this.orkanStore;
+		// window.a = this.orkanStore;
 	}
 
 	@autobind

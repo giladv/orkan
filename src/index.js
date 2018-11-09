@@ -13,6 +13,8 @@ import Home from './components/home';
 import './css/style.scss';
 
 import {OrkanProvider} from './orkan';
+import Collection from './orkan/collection';
+import Value from './orkan/value';
 
 
 // config copied from Firebase console
@@ -28,17 +30,19 @@ const config = {
 
 ReactDOM.render(
 	<OrkanProvider firebaseConfig={config}>
-		<Router history={browserHistory}>
-			<Route path="/" component={App}>
-				<IndexRoute component={Home}/>
-				<Route path="docs" component={Docs}>
-					<IndexRedirect to='getting-started'/>
+		<Collection path='docs/categories' orderByChild='priority' renderItem={category => category.label}/>
+		<Collection path='docs/categories' orderByChild='priority' renderItem={category => category.label}/>
+		{/*<Router history={browserHistory}>*/}
+			{/*<Route path="/" component={App}>*/}
+				{/*<IndexRoute component={Home}/>*/}
+				{/*<Route path="docs" component={Docs}>*/}
+					{/*/!*<IndexRedirect to='general/getting-started'/>*!/*/}
 
-					<Route path='api/:entityId' component={ApiPage}/>
-					<Route path=':pageId' component={DocPage}/>
-				</Route>
-			</Route>
-		</Router>
+					{/*<Route path='api/:entityId' component={ApiPage}/>*/}
+					{/*<Route path=':categoryId/:pageId' component={DocPage}/>*/}
+				{/*</Route>*/}
+			{/*</Route>*/}
+		{/*</Router>*/}
 	</OrkanProvider>,
 	document.getElementById('root')
 );

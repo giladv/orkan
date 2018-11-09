@@ -30,7 +30,6 @@ export default class App extends Component{
 		const {router} = this.props;
 
 		if(link.startsWith('/#')){
-			console.log('?!', link.split('#')[1])
 			setTimeout(() => {
 				const elem = document.getElementsByName(link.split('#')[1])[0];
 				elem && elem.scrollIntoView({

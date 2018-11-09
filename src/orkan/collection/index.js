@@ -6,15 +6,14 @@ import autobind from 'autobind-decorator';
 import {observer} from 'mobx-react';
 import classNames from 'classnames'
 
-import orkanInject from '../inject';
+import inject from '../inject';
 
 import style from './style';
 import {createStyle} from '../utils/style-utils';
 
-
-@orkanInject(props => {
+@inject(({path, orderByChild}) => {
 	return {
-		collection: props.path
+		collection: {path, orderByChild}
 	};
 })
 @observer
@@ -59,7 +58,15 @@ export default class Collection extends Component{
 			<div className={s.root}>
 				{map(cleanCollection, (item, key) => {
 					const renderedItem = renderItem(item, key);
-					return cloneElement(renderedItem, {className: classNames(s.item, renderedItem.props.className), onClick: e => this.handleClick(e, key)});
+					if(!renderedItem){
+						return null;
+					}
+
+					if(typeof renderedItem === 'object'){
+						return cloneElement(renderedItem, {key, className: classNames(s.item, renderedItem.props.className), onClick: e => this.handleClick(e, key)});
+					}else{
+						return renderedItem;
+					}
 				})}
 			</div>
 		);
