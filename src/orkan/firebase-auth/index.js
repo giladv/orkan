@@ -41,7 +41,7 @@ export default class FirebaseAuth extends Component{
 	handleProviderClick(provider){
 		const firebaseProvider = this.firebaseProviders[provider];
 		firebase.auth(firebase.app(FIREBASE_APP_NAME)).signInWithPopup(firebaseProvider).then(function(result) {
-			console.log(user)
+
 		}).catch(function(error) {
 			// Handle Errors here.
 			var errorCode = error.code;

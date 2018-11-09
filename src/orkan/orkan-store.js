@@ -42,6 +42,7 @@ export default class OrkanStore{
 	constructor(dataStore, authStore){
 		this.dataStore = dataStore;
 		this.authStore = authStore;
+
 	}
 
 	init(){
@@ -160,11 +161,15 @@ export default class OrkanStore{
 		setTimeout(() => this.dataFormStore.setClean(), 2);
 	}
 
-	loadRequiredFieldsByPath(path){
-		return Promise.all(this.getPrimitiveKeysByPath(path)
-			.filter(key => this.dataStore.getValue(path + '/' + key) === undefined)
-			.map(key => this.dataStore.load(path + '/' + key))
-		);
+	async loadRequiredFieldsByPath(path){
+		if(this.isPathPrimitive(path)){
+			return await this.dataStore.load(path);
+		}else if(!this.isPathCollection(path)){
+			return await Promise.all(this.isPathCollection(path)?[]:this.getPrimitiveKeysByPath(path)
+				.filter(key => this.dataStore.getValue(path + '/' + key) === undefined)
+				.map(key => this.dataStore.load(path + '/' + key))
+			);
+		}
 	}
 
 
@@ -380,3 +385,6 @@ const defaultUserPermissions = {
 // 		}
 // 	}
 // }
+
+
+

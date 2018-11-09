@@ -32,8 +32,6 @@ export default class Wysiwyg extends Component {
 			}
 		});
 
-		console.log('?!', value)
-
 		return (
 			<ReactQuill
 				{...otherProps}

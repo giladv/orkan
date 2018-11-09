@@ -109,6 +109,7 @@ export default class DataForm extends Component{
 						{this.renderControl(`${store.activePath}/${key}`)}
 					</FormField>
 				))
+
 		}else{
 			const activePathParts = store.activePath.split('/');
 			return (
@@ -124,7 +125,7 @@ export default class DataForm extends Component{
 		const {store} = this.props;
 		const {isBusy} = this.obState;
 
-		if(!store.getPrimitiveKeysByPath(store.activePath, true).length){
+		if(store.isPathCollection(store.activePath) || !store.getPrimitiveKeysByPath(store.activePath, true).length){
 			return null;
 		}
 

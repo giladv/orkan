@@ -3,14 +3,16 @@ import PropTypes from 'prop-types';
 import {observer} from 'mobx-react';
 import {observable} from 'mobx';
 import autobind from 'autobind-decorator';
+import Form from '../form';
+import FormStore from '../form/form-store';
 
 import Header from '../header';
-import Input from '../controls/input';
+import Input, {InputControl} from '../controls/input';
 import inject from '../inject';
 import ListItem from '../list-item';
 
 import Icon from '../icon';
-import Button from '../button';
+import Button, {SubmitButton} from '../button';
 import DropdownContainer from '../dropdown-container';
 import OrkanStore from '../orkan-store';
 import {createStyle} from '../utils/style-utils';
@@ -36,16 +38,16 @@ export default class Paths extends Component{
 	};
 
 	@observable obState = {
-		newKey: '',
 		isOptionsOpen: false
 	};
+
+	createFormStore = new FormStore({}, {});
 
 	@autobind
 	handleCreate(){
 		const {path, store} = this.props;
-		const {newKey} = this.obState;
-		store.createCollectionItem(path, newKey);
-		this.obState.newKey = '';
+		store.createCollectionItem(path, this.createFormStore.get('key'));
+		this.createFormStore.reset();
 	}
 
 	@autobind
@@ -148,8 +150,10 @@ export default class Paths extends Component{
 							onFocus={() => this.obState.isOptionsOpen = true}>
 							<Icon className={s.collectionHeaderDropdownIcon} type='dots'/>
 						</DropdownContainer>
-						<Input className={s.collectionHeaderInput} placeholder='key (optional)' value={newKey} onChange={value => this.obState.newKey = value}/>
-						<Button primary onClick={this.handleCreate}>create</Button>
+						<Form store={this.createFormStore} onSubmit={this.handleCreate} className={s.createForm}>
+							<InputControl className={s.createFormInput} placeholder='key (optional)' name='key'/>
+							<SubmitButton primary>create</SubmitButton>
+						</Form>
 					</div>
 				}
 				{this.renderPaths()}

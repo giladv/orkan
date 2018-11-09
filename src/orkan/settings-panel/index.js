@@ -90,12 +90,15 @@ export default class SettingsPanel extends Component{
 		let dataSourcePrimitivesOptions = [];
 
 		if(store.settingsFormStore.get('dataSource') === 'dynamic' && store.settingsFormStore.get('dataSourcePath')){
-			dataSourcePrimitivesOptions = store.getPrimitiveKeysByPath(store.settingsFormStore.get('dataSourcePath') + '/' + COLLECTION_KEY).map(primitive => ({
-				label: primitive,
-				value: primitive
-			}));
+			if(!store.isPathPrimitive(store.settingsFormStore.get('dataSourcePath') + '/' + COLLECTION_KEY)){
+				dataSourcePrimitivesOptions = store.getPrimitiveKeysByPath(store.settingsFormStore.get('dataSourcePath') + '/' + COLLECTION_KEY).map(primitive => ({
+					label: primitive,
+					value: primitive
+				}));
+			}
 
 			dataSourcePrimitivesOptions.unshift({label: '$key', value: '$key'});
+			dataSourcePrimitivesOptions.unshift({label: '$value', value: '$value'});
 		}
 
 		const isOptionsUiSelected = ['select', 'radio'].includes(store.settingsFormStore.get('uiType'));
@@ -115,9 +118,9 @@ export default class SettingsPanel extends Component{
 				}
 
 				{store.settingsFormStore.get('uiType') === 'textarea' &&
-				<FormField className={s.formField} name='isCodeFriendly' label='Code friendly'>
-					<SwitchControl />
-				</FormField>
+					<FormField className={s.formField} name='isCodeFriendly' label='Code friendly'>
+						<SwitchControl />
+					</FormField>
 				}
 
 				{store.settingsFormStore.get('uiType') === 'slider' &&
@@ -134,27 +137,27 @@ export default class SettingsPanel extends Component{
 
 
 				{isOptionsUiSelected &&
-				<FormField className={s.formField} name='dataSource' label='Data Source'>
-					<SelectControl options={dataSourceOptions}/>
-				</FormField>
+					<FormField className={s.formField} name='dataSource' label='Data Source'>
+						<SelectControl options={dataSourceOptions}/>
+					</FormField>
 				}
 
 				{isOptionsUiSelected && store.settingsFormStore.get('dataSource') === 'dynamic' &&
-				<FormField className={s.formField} name='dataSourcePath' label='Data Source Path'>
-					<SelectControl options={collectionPathsOptions}/>
-				</FormField>
+					<FormField className={s.formField} name='dataSourcePath' label='Data Source Path'>
+						<SelectControl options={collectionPathsOptions}/>
+					</FormField>
 				}
 
 				{isOptionsUiSelected && store.settingsFormStore.get('dataSource') === 'dynamic' &&
-				<FormField className={s.formField} name='dataSourceLabel' label='Data Source Label'>
-					<SelectControl options={dataSourcePrimitivesOptions}/>
-				</FormField>
+					<FormField className={s.formField} name='dataSourceLabel' label='Data Source Label'>
+						<SelectControl options={dataSourcePrimitivesOptions}/>
+					</FormField>
 				}
 
 				{isOptionsUiSelected && store.settingsFormStore.get('dataSource') === 'dynamic' &&
-				<FormField className={s.formField} name='dataSourceValue' label='Data Source Value'>
-					<SelectControl options={dataSourcePrimitivesOptions}/>
-				</FormField>
+					<FormField className={s.formField} name='dataSourceValue' label='Data Source Value'>
+						<SelectControl options={dataSourcePrimitivesOptions}/>
+					</FormField>
 				}
 
 				<div className={s.actions}>

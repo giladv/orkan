@@ -40,7 +40,14 @@
 	}
 }
 
-.collectionHeaderInput{
+
+.createForm{
+	display: flex;
+	flex: 1;
+	flex-direction: row;
+	align-items: center;
+}
+.createFormInput{
 	flex: 1;
 	margin-right: 10px;
 }

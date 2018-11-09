@@ -17,7 +17,7 @@ export default class DocPage extends Component{
 		const s = createStyle(style, className);
 
 		return (
-			<WithValue path={'docs/pages/' + params.pageId} render={page =>
+			<WithValue path={`docs/categories/${params.categoryId}/pages/${params.pageId}`} render={page =>
 				<div className={s.root}>
 					<h2>{page.title}</h2>
 					<div dangerouslySetInnerHTML={{__html: page.body}}/>

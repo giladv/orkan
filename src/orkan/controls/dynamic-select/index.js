@@ -26,14 +26,13 @@ export class DynamicSelect extends Component {
 	static defaultProps = {
 	};
 
-
 	render(){
 		const {data, optionsLabel, optionsValue, ...otherProps} = this.props;
 
 
 		const options = !data?[]:map(data, (item, key) => ({
-			label: optionsLabel === '$key'?key:item[optionsLabel],
-			value: optionsValue === '$key'?key:item[optionsValue]
+			label: getWithFlags(key, item, optionsLabel),
+			value: getWithFlags(key, item, optionsValue)
 		}));
 
 
@@ -45,3 +44,15 @@ export class DynamicSelect extends Component {
 
 
 export const DynamicSelectControl = formInput()(DynamicSelect);
+
+
+const getWithFlags = (key, value, keyWithFlags) => {
+	switch(keyWithFlags){
+		case '$key':
+			return key;
+		case '$value':
+			return value;
+		default:
+			return value[keyWithFlags];
+	}
+};
