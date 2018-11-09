@@ -1,6 +1,9 @@
+import {isEmpty} from 'lodash';
 import {observable} from 'mobx';
 import autobind from 'autobind-decorator';
 import isObject from 'lodash/isObject';
+import cloneDeep from 'lodash/cloneDeep';
+import get from 'lodash/get';
 import invariant from 'invariant';
 
 import FormStore from './form/form-store';
@@ -8,7 +11,7 @@ import {
 	COLLECTION_KEY, SCHEMA_KEY_NAME, SCHEMA_SETTINGS_KEY_NAME, USER_REQUESTS_KEY_NAME,
 	USERS_KEY_NAME
 } from './constants';
-import {getSchemaCollectionPaths, getSchemaPrimitiveKeysByPath, schemaGet, toSchemaPath} from './utils/schema-utils';
+import {getSchemaCollectionPaths, schemaGet, toSchemaPath} from './utils/schema-utils';
 
 const validPathInvariant = path => invariant(path.startsWith('.'), 'Invalid path structure. paths must start with `.`');
 
@@ -32,7 +35,7 @@ export default class OrkanStore{
 	@observable settingsPath;
 
 	@observable isLoadingActivePath = false;
-	@observable isInitializing = false;
+	@observable isInitializing = true;
 
 	@observable.ref user;
 
@@ -88,60 +91,121 @@ export default class OrkanStore{
 		});
 	}
 
-	getValue(nonAbsolutePath){
+	/*
+
+		# use cases where we return the plain FB value
+
+		// something isn't loaded yet
+		// none of below conditions meet
+
+
+		# use cases where we need to merge the value with dataFormStore
+
+		// case #1 child of path in any level is being edited
+		path: hero
+		activePath: hero/cta or hero/cta/label
+		- solution: merge form data into FB data and return
+
+		// case #2 primitive path direct parent is being edited
+		path: hero/title
+		activePath: hero
+		- solution: pick the field from the form and return
+
+		//  case #3 path is being edited
+		path: hero/title
+		activePath: hero/title
+		- solution: pick the field from the form and return
+
+	*/
+
+	getValue(nonAbsolutePath, options){
 		// to enable components use relative paths (e.g something vs ./something)
 		const path = toAbsolutePath(nonAbsolutePath);
 
-		if(this.isLoadingActivePath){
-			return this.dataStore.getValue(path);
+		if(!this.activePath || this.isInitializing || this.dataStore.isPathLoading(SCHEMA_KEY_NAME) || this.isLoadingActivePath){
+			return this.dataStore.getValue(nonAbsolutePath, options);
 		}
 
 		if(this.activePath === path){
-			return this.dataFormStore.get(this.activePath) || this.dataStore.getValue(path);
-		}else if(this.activePath && this.activePath.indexOf(path) === 0){
-			return {
-				...this.dataStore.getValue(path),
-				[this.activePath.replace(path + '/', '')]: this.dataFormStore.get(this.activePath) || this.dataStore.getValue(this.activePath)
-			};
-		}else if(!this.isPathPrimitive(path)){
-			return this.dataStore.getValue(path);
-		}else if(this.activePath && path.indexOf(this.activePath) === 0){
+		// case #3
+		console.log('@case #3', path);
 
-			const relativePath = path.replace(this.activePath, '');
-			let relativePathParts = relativePath.split('/');
-			relativePathParts.shift(); // removing the first item because its empty
+			if(this.isPathPrimitive(path)){
+				return this.dataFormStore.get(this.activePath)
+			}else if(this.isPathCollection(path)){
+				return this.dataStore.getValue(nonAbsolutePath, options);
+			}else{
+				return {
+					...this.dataStore.getValue(nonAbsolutePath, options),
+					...this.dataFormStore.get(this.activePath)
+				};
+			}
 
-			if(relativePathParts.length === 1){
+		}else if(path.startsWith(this.activePath) && this.isPathPrimitive(path)){
+		// case #2
+		console.log('@case #2', path);
+
+			const relativePath = path.replace(this.activePath + '/', '');
+			const relativePathParts = relativePath.split('/');
+
+			const isPathDeeplyNested = relativePathParts.length > 1;
+
+			if(isPathDeeplyNested){
+				return this.dataStore.getValue(path, options);
+			}else{
 				const formValue = this.dataFormStore.get(this.activePath);
 				return formValue && formValue[relativePathParts[0]];
+			}
+
+		}else if(this.activePath.startsWith(path)){
+		// case #1
+		console.log('@case #1', this.activePath, path, this.dataFormStore.toJS(), this.dataFormStore.get(this.activePath));
+
+			const dataStoreValue = this.dataStore.getValue(nonAbsolutePath, options);
+			let clonedData = cloneDeep(dataStoreValue);
+			if(Array.isArray(dataStoreValue)){
+				const pathParts = this.activePath.replace(path + '/', '').split('/');
+				const firstKey = pathParts.shift();
+				const collectionItem = clonedData.find(item => item.$key === firstKey);
+				if(collectionItem){
+					const propertyToOverride = pathParts.length?get(collectionItem, pathParts):collectionItem;
+					Object.assign(propertyToOverride, this.dataFormStore.get(this.activePath));
+					return clonedData;
+				}else{
+					return dataStoreValue;
+				}
 			}else{
-				return this.dataStore.getValue(path);
+				const propertyToOverride = get(clonedData, this.activePath.replace(path + '/', '').split('/'));
+				Object.assign(propertyToOverride, this.dataFormStore.get(this.activePath));
+				return clonedData
 			}
 
 		}else{
-			return this.dataStore.getValue(path);
+			return this.dataStore.getValue(nonAbsolutePath, options);
 		}
-
 	}
 
 	async setActivePath(nonAbsolutePath){
 		// to enable components use relative paths (e.g something vs ./something)
 		const path = toAbsolutePath(nonAbsolutePath);
 
+		this.isLoadingActivePath = true;
+
 		this.activePath = path;
 		this.dataFormStore.reset();
 
-		this.isLoadingActivePath = true;
 		await this.loadRequiredFieldsByPath(path);
 		this.isLoadingActivePath = false;
 		const storeValue = this.dataStore.getValue(path) || {};
 
-		if(!this.isPathPrimitive(path)){
+		console.log('$$', path)
+		if(this.isPathPrimitive(path)){
+			this.dataFormStore.set(path, this.dataStore.getValue(path));
+		}else if(!this.isPathCollection(path)){
+			console.log('non primitive non collection set', path)
 			this.getPrimitiveKeysByPath(path).forEach(key => {
 				this.dataFormStore.set(`${path}.${key}`, storeValue[key]);
 			});
-		}else{
-			this.dataFormStore.set(path, this.dataStore.getValue(path));
 		}
 
 		setTimeout(() => this.dataFormStore.setClean(), 2);
@@ -176,7 +240,8 @@ export default class OrkanStore{
 	getSchemaByPath(path, includeNative){
 		validPathInvariant(path);
 		const schema = this.getSchema(includeNative);
-		return schemaGet(schema, path);
+		const schemaPath = toSchemaPath(schema, path);
+		return schemaGet(schema, schemaPath);
 	}
 
 	isPathPrimitive(path, includeNative){
@@ -188,8 +253,10 @@ export default class OrkanStore{
 
 	getPrimitiveKeysByPath(path, includeNative){
 		validPathInvariant(path);
-		const schema = this.getSchema(includeNative);
-		return getSchemaPrimitiveKeysByPath(schema, path);
+
+		const pathSchema = this.getSchemaByPath(path, includeNative);
+		return !pathSchema?[]:Object.keys(pathSchema)
+			.filter(key => !isObject(pathSchema[key]))
 	}
 
 	getNonPrimitiveKeysByPath(path, includeNative){
@@ -262,10 +329,10 @@ export default class OrkanStore{
 	}
 
 	isPathCollection(path){
-		return !!this.getSchemaByPath(path, true)[COLLECTION_KEY];
+		const subSchema = this.getSchemaByPath(path, true);
+		return subSchema && !!subSchema[COLLECTION_KEY];
 	}
 
-	// todo: how do i create a primitive collection item?
 	async createCollectionItem(path, key){
 		validPathInvariant(path);
 
@@ -388,3 +455,8 @@ const defaultUserPermissions = {
 
 
 
+
+const magic = (base, overridePath, override) => {
+	const overridePathParts = overridePath.split('/');
+
+}

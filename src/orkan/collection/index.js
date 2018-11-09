@@ -53,6 +53,7 @@ export default class Collection extends Component{
 		});
 
 		const cleanCollection = omitBy(collection, it => !it);
+		console.log('##', collection)
 
 		return (
 			<div className={s.root}>

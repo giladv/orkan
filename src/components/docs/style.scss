@@ -24,10 +24,9 @@
 	display: flex;
 	flex-direction: column;
 	font-size: 15px;
-	color: $secondary;
 	flex: 0 0 auto;
 	a{
-		color: inherit;
+		color: $secondary-1;
 		margin-bottom: 10px;
 		&:hover{
 			color: $primary;
@@ -39,8 +38,9 @@
 }
 
 .sidebarHeader{
-	color: $secondary-1;
+	color: $secondary;
 	margin: 10px 0;
+	font-weight: 500;
 }
 
 .pages{

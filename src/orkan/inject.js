@@ -4,6 +4,7 @@ import {observer} from 'mobx-react';
 import mapValues from 'lodash/mapValues';
 import values from 'lodash/values';
 import pickBy from 'lodash/pickBy';
+import isEmpty from 'lodash/isEmpty';
 import shallowCompare from 'react-addons-shallow-compare';
 
 import {REACT_CONTEXT_NAME} from './constants';
@@ -31,13 +32,13 @@ export default function inject(mapPropsToPaths = () => ({}), config) {
 				this.disposables = this.listenToPaths(this.props);
 			}
 
-			// componentWillReceiveProps(nextProps, nextState){
-			// 	if(shallowCompare(this, nextProps, nextState)){
-			// 		const newDisposables = this.listenToPaths(nextProps);
-			// 		this.disposeAllListeners();
-			// 		this.disposables = newDisposables;
-			// 	}
-			// }
+			componentWillReceiveProps(nextProps, nextState){
+				if(shallowCompare(this, nextProps, nextState)){
+					const newDisposables = this.listenToPaths(nextProps);
+					this.disposeAllListeners();
+					this.disposables = newDisposables;
+				}
+			}
 
 			componentWillUnmount(){
 				this.disposeAllListeners();
@@ -57,8 +58,8 @@ export default function inject(mapPropsToPaths = () => ({}), config) {
 				const paths = values(mapPropsToPaths(props)).filter(it => !!it);
 				return paths.map((pathQuery) => {
 					if(typeof pathQuery === 'object'){
-						const {path, ...options} = pathQuery;
-						const sanitizedOptions = pickBy(options, value => typeof value === 'string' && value.length);
+						const {path, ...queryOptions} = pathQuery;
+						const sanitizedOptions = pickBy(queryOptions, value => typeof value === 'string' && value.length);
 						return store.listenToCollection(path, sanitizedOptions);
 					}else{
 						return store.listen(pathQuery)
@@ -83,9 +84,12 @@ export default function inject(mapPropsToPaths = () => ({}), config) {
 							pathQuery = {path: pathQuery};
 						}
 
-						const {path, ...options} = pathQuery;
-
-						return options.liveEditedData?getValue(path):store.getValue(path, options)
+						const {path, ...queryOptions} = pathQuery;
+						let sanitizedOptions = pickBy(queryOptions, option => !!option);
+						sanitizedOptions = isEmpty(sanitizedOptions)?null:sanitizedOptions;
+						return options.liveEditedData
+							?getValue(path, sanitizedOptions)
+							:store.getValue(path, sanitizedOptions);
 					});
 					mappedStatuses = mapValues(mappedPaths, path => store.isPathLoading(path))
 				} catch (err) {

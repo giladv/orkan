@@ -39,14 +39,6 @@ export const toSchemaPath = (schema, path) => {
 	return schemaPathParts.join('/');
 };
 
-
-export const getSchemaPrimitiveKeysByPath = (schema, path) => {
-	const pathSchema = schemaGet(schema, path);
-	return !pathSchema?[]:Object.keys(pathSchema)
-		.filter(key => !isObject(pathSchema[key]))
-};
-
-
 export const getSchemaCollectionPaths = (schema) => {
 	let collectionPaths = [];
 	schemaWalk(schema, (value, path) => {

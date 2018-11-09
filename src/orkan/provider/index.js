@@ -75,7 +75,7 @@ export default class Provider extends Component{
 
 		return {[REACT_CONTEXT_NAME]: {
 			store: this.firebaseStore,
-			getValue: path => this.orkanStore?this.orkanStore.getValue(path):this.firebaseStore.getValue(path),
+			getValue: (path, options) => this.orkanStore?this.orkanStore.getValue(path, options):this.firebaseStore.getValue(path, options),
 			setActivePath: path => this.orkanStore.setActivePath(path),
 			isEditMode: () => {
 				const {isActive, isModifierKeyDown} = this.obState;

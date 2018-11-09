@@ -21,7 +21,7 @@ export default class FirebaseStore{
 		this.database = database;
 		this.rootPath = rootPath;
 
-		window.a = () => console.log(this.map.toJS(), this.collections.toJS(), this.listeners.toJS())
+		window.a = () => console.log(this.map.toJS(), this.collections.toJS(), this.listeners.toJS(), this.pathsStatus.toJS())
 	}
 
 	toAbsolutePath(path){
@@ -29,12 +29,18 @@ export default class FirebaseStore{
 	}
 
 	getValue(path, options){
-		if(options && !isEmpty(options)){
+		if(options){
 			const pathWithQueryString = path + '?' + optionsToQueryString(options);
 			const collection = this.collections.get(pathWithQueryString) || [];
 			return collection.map(collectionKey => {
 				const value = this.map.get(toDotPath(nodePath.join(path, collectionKey)))
-				return isObservable(value)?toJS(value):value
+				const raw = isObservable(value)?toJS(value):value;
+				if(typeof raw === 'object'){
+					return {...raw, $key: collectionKey};
+				}else{
+					return {$value: raw, $key: collectionKey};
+				}
+
 			});
 		}else{
 			const value = this.map.get(toDotPath(path));
@@ -76,7 +82,7 @@ export default class FirebaseStore{
 			};
 
 			this.setPathIsLoading(path, true);
-			const ref = createRefWithOptions(this.database.ref(this.toAbsolutePath(path)), options);
+			const ref = this.database.ref(this.toAbsolutePath(path));
 			ref.on('value', valueHandler);
 
 			listener = observable({
@@ -167,6 +173,10 @@ export default class FirebaseStore{
 		if(!collection){
 			collection = observable([]);
 			this.collections.set(pathWithQueryString, collection);
+		}
+
+		if(collection.indexOf(key) > -1){
+			return;
 		}
 
 		const prevIndex = collection.indexOf(afterKey);

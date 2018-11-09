@@ -30,19 +30,15 @@ const config = {
 
 ReactDOM.render(
 	<OrkanProvider firebaseConfig={config}>
-		<Collection path='docs/categories' orderByChild='priority' renderItem={category => category.label}/>
-		<Collection path='docs/categories' orderByChild='priority' renderItem={category => category.label}/>
-		{/*<Router history={browserHistory}>*/}
-			{/*<Route path="/" component={App}>*/}
-				{/*<IndexRoute component={Home}/>*/}
-				{/*<Route path="docs" component={Docs}>*/}
-					{/*/!*<IndexRedirect to='general/getting-started'/>*!/*/}
-
-					{/*<Route path='api/:entityId' component={ApiPage}/>*/}
-					{/*<Route path=':categoryId/:pageId' component={DocPage}/>*/}
-				{/*</Route>*/}
-			{/*</Route>*/}
-		{/*</Router>*/}
+		<Router history={browserHistory}>
+			<Route path="/" component={App}>
+				<IndexRoute component={Home}/>
+				<Route path="docs" component={Docs}>
+					<Route path='api/:entityId' component={ApiPage}/>
+					<Route path=':categoryId/:pageId' component={DocPage}/>
+				</Route>
+			</Route>
+		</Router>
 	</OrkanProvider>,
 	document.getElementById('root')
 );

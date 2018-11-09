@@ -59,7 +59,7 @@ export default class Home extends Component{
 					<div className={s.examplesCenter}>
 						<h2 className={s.examplesTitle}><Value path='home/examples/title'/></h2>
 
-						<Collection className={s.examplesList} path='home/examples/list' renderItem={(item, i) =>
+						<Collection className={s.examplesList} path='home/examples/list' orderByChild='priority' renderItem={(item, i) =>
 							<div key={i} className={s.exampleItem}>
 								<div className={s.exampleInfo}>
 									<h3 className={s.exampleTitle}>{item.title}</h3>
