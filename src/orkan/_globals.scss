@@ -29,21 +29,6 @@ $largeConfig: (
 	fieldFontSize: 1 5px
 );
 
-// FIELDS CONFIG
-$fieldWidthSmall: 230px;
-$fieldLabelWidthSmall: 150px;
-$fieldFontSizeSmall: 13px;
-
-$fieldWidthMedium: 400px;
-$fieldLabelWidthMedium: 150px;
-$fieldFontSizeMedium: 14px;
-
-$fieldWidthLarge: 500px;
-$fieldLabelWidthLarge: 150px;
-$fieldFontSizeLarge: 15px;
-
-$fieldWidthLarger: 1000px;
-
 // CONTROLS CONFIG
 $controlHeightSmall: 26px;
 $controlFontSizeSmall: 11.5px;
@@ -62,10 +47,6 @@ $grey3: #D1D4DE;
 $grey4: #B9C0CE;
 $grey5: #B7BBC7;
 $grey6: #71778A;
-$grey7: #2b2b38;
-$grey8: #1D1D25;
-$grey9: #13131B;
-$grey10: #0B0B0F;
 
 $primary: #72ecd9;
 $primary1: #54aea0;
@@ -85,81 +66,14 @@ $aqua2: darken($aqua, 18%);
 $aqua3: darken($aqua, 20%);
 $aqua4: darken($aqua, 30%);
 
-$lightGray-1: #f5f6f9;
 $lightGray: #fafafa;
 $lightGray1: #EAEFF3;
 $lightGray2: #cdd3e0;
 $lightGray3: #a5abb8;
-$lightGray4: #535864;
 
 $gray: #575757;
-$gray-2: lighten($gray, 35%);
-$gray1: darken($gray, 5%);
-$gray2: darken($gray, 8%);
-$gray3: darken($gray, 10%);
-$gray4: darken($gray, 15%);
-$gray5: darken($gray, 20%);
 
 // MIXINS
-@mixin triangleBase($direction, $color, $width, $height) {
-	content: ' ';
-	width: 0;
-	height: 0;
-	display: inline-block;
-	@if $direction == 'up' {
-
-		border: {
-			bottom: $height solid $color;
-			right: $width/2 solid transparent;
-			left: $width/2 solid transparent;
-		}
-
-	} @else if $direction == 'down' {
-
-		border: {
-			top: $height solid $color;
-			right: $width/2 solid transparent;
-			left: $width/2 solid transparent;
-		}
-	} @else if $direction == 'right' {
-
-		border: {
-			top: $width/2 solid transparent;
-			bottom: $width/2 solid transparent;
-			left: $height solid $color;
-		}
-	} @else if $direction == 'left' {
-
-		border: {
-			top: $width/2 solid transparent;
-			bottom: $width/2 solid transparent;
-			right: $height solid $color;
-		}
-	}
-}
-
-@mixin triangle($direction, $color, $width, $height) {
-	&:after {
-		position: absolute;
-		top: 0;
-		z-index: 1;
-		@include triangleBase($direction, $color, $width, $height);
-	}
-	&:before {
-		position: absolute;
-		top: 0px;
-		left: -2px;
-		@include triangleBase($direction, rgba(0, 0, 0, .1), $width + 1, $height + 1);
-	}
-}
-
-@mixin container3D($baseColor, $lightShadow, $darkShadow, $depth) {
-	// overflow: scroll;
-	// box-shadow: 0 ($depth - 1) 0 0 $lightShadow,
-	// 				0 $depth 0 0 $darkShadow;
-	// margin-bottom: $depth;
-	// background-color: $baseColor;
-}
 
 @mixin notSelectable() {
 	-webkit-user-select: none; /* Chrome/Safari */
@@ -180,11 +94,6 @@ $invisibleShadowRgba: rgba(0, 0, 0, 0.06);
 		}
 	}
 }
-
-
-
-
-
 
 
 @mixin smallListItemAnimation($includeDelay: true) {

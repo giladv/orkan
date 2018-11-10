@@ -125,6 +125,5 @@
 
 .disabled{
 	pointer-events: all;
-	-webkit-user-select: none;
-	user-select: none;
+	@include notSelectable();
 }

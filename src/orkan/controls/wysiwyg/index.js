@@ -70,10 +70,9 @@ export default class Wysiwyg extends Component {
 					toolbar: {
 						container: [
 							[{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-							['bold', 'italic', 'link'],
+							['image', 'link'],
+							['bold', 'italic'],
 							['blockquote', {'list': 'ordered'}, {'list': 'bullet'}],
-							['image']
-
 						],
 						handlers: {
 							image: this.handleImage
