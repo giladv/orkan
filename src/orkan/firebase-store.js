@@ -1,11 +1,17 @@
+import invariant from 'invariant';
 import omitBy from 'lodash/omitBy';
 import forEach from 'lodash/forEach';
 import map from 'lodash/map';
-import isEmpty from 'lodash/isEmpty';
 import {observable, isObservable, toJS} from 'mobx';
 import nodePath from 'path';
 
 import {ObservableNestedMap} from './form/observable-nested-map';
+
+const validPathInvariant = path => {
+	invariant(typeof path === 'string', 'Invalid path expected a string, got ' + typeof path);
+	invariant(!path.startsWith('.') && !path.startsWith('/'), 'Invalid path structure. paths cannot start with `.` or `/`. got:' + path);
+};
+
 
 export default class FirebaseStore{
 	database;
@@ -21,14 +27,17 @@ export default class FirebaseStore{
 		this.database = database;
 		this.rootPath = rootPath;
 
-		window.a = () => console.log(this.map.toJS(), this.collections.toJS(), this.listeners.toJS(), this.pathsStatus.toJS())
+		window.a = () => console.log(this.map.toJS(), toJS(this.collections), toJS(this.listeners), toJS(this.pathsStatus))
 	}
 
 	toAbsolutePath(path){
+		validPathInvariant(path);
 		return nodePath.join(this.rootPath, path);
 	}
 
 	getValue(path, options){
+		validPathInvariant(path);
+
 		if(options){
 			const pathWithQueryString = path + '?' + optionsToQueryString(options);
 			const collection = this.collections.get(pathWithQueryString) || [];
@@ -49,6 +58,8 @@ export default class FirebaseStore{
 	}
 
 	setValue(path, value){
+		validPathInvariant(path);
+
 		let sanitizedValue = value;
 		if(typeof value === 'object'){
 			sanitizedValue = omitBy(value, value => value === undefined);
@@ -58,11 +69,13 @@ export default class FirebaseStore{
 
 
 	push(path){
+		validPathInvariant(path);
 		return this.database.ref(this.toAbsolutePath(path)).push();
 	}
 
 
 	listen(path){
+		validPathInvariant(path);
 
 		let listener = this.listeners.get(path);
 
@@ -108,6 +121,7 @@ export default class FirebaseStore{
 
 	listenToCollection(path, options){
 
+		validPathInvariant(path);
 
 		const pathWithQueryString = path + '?' + optionsToQueryString(options);
 
@@ -118,10 +132,13 @@ export default class FirebaseStore{
 		}else{
 			const ref = createRefWithOptions(this.database.ref(this.toAbsolutePath(path)), options);
 
+			this.setPathIsLoading(path, true);
+
 			const addedHandler = (snapshot, prevKey) => {
 				const childPath = nodePath.join(path, snapshot.key);
 				this.map.set(toDotPath(childPath), snapshot.exportVal());
 				this.addToCollection(pathWithQueryString, prevKey, snapshot.key);
+				this.setPathIsLoading(path, false);
 			};
 
 			const removedHandler = (snapshot) => {
@@ -140,6 +157,8 @@ export default class FirebaseStore{
 				this.removeFromCollection(pathWithQueryString, snapshot.key);
 				this.addToCollection(pathWithQueryString, prevKey, snapshot.key);
 			};
+
+
 
 			ref.on('child_added', addedHandler);
 			ref.on('child_removed', removedHandler);
@@ -169,6 +188,8 @@ export default class FirebaseStore{
 	}
 
 	addToCollection(pathWithQueryString, afterKey, key){
+		validPathInvariant(pathWithQueryString);
+
 		let collection = this.collections.get(pathWithQueryString);
 		if(!collection){
 			collection = observable([]);
@@ -190,6 +211,8 @@ export default class FirebaseStore{
 
 
 	async load(path){
+		validPathInvariant(path);
+
 		this.setPathIsLoading(path, true);
 		const snapshot = await this.database.ref(this.toAbsolutePath(path)).once('value');
 		const snapshotVal = snapshot.exportVal();
@@ -201,21 +224,29 @@ export default class FirebaseStore{
 	}
 
 	remove(path){
+		validPathInvariant(path);
+
 		return this.database.ref(this.toAbsolutePath(path)).remove();
 	}
 
 
 	clearCache(path){
+		validPathInvariant(path);
+
 		const dotPath = path.split('/').join('.');
 		this.map.set(dotPath, null);
 	}
 
 	setPathStatus(path, status){
+		validPathInvariant(path);
+
 		const currentStatus = this.pathsStatus.get(path) || {};
 		this.pathsStatus.set(path, {...currentStatus, ...status});
 	}
 
 	setPathIsLoading(path, state){
+		validPathInvariant(path);
+
 		const currentStatus = this.pathsStatus.get(path);
 		if(!currentStatus || !state){
 			this.setPathStatus(path, {isLoading: state});
@@ -223,6 +254,8 @@ export default class FirebaseStore{
 	}
 
 	isPathLoading(path){
+		validPathInvariant(path);
+
 		const currentStatus = this.pathsStatus.get(path);
 		return currentStatus && currentStatus.isLoading;
 	}

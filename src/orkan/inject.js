@@ -4,7 +4,7 @@ import {observer} from 'mobx-react';
 import mapValues from 'lodash/mapValues';
 import values from 'lodash/values';
 import pickBy from 'lodash/pickBy';
-import isEmpty from 'lodash/isEmpty';
+import omitBy from 'lodash/omitBy';
 import shallowCompare from 'react-addons-shallow-compare';
 
 import {REACT_CONTEXT_NAME} from './constants';
@@ -75,23 +75,22 @@ export default function inject(mapPropsToPaths = () => ({}), config) {
 				let mappedStatuses = {};
 				try {
 					mappedPaths = mapPropsToPaths(this.props);
-					mappedValues = mapValues(mappedPaths, pathQuery => {
-						if(!pathQuery){
+					mappedValues = mapValues(mappedPaths, path => {
+						if(!path){
 							return;
 						}
 
-						if(typeof pathQuery === 'string'){
-							pathQuery = {path: pathQuery};
+						let pathOptions;
+
+						if(typeof path !== 'string'){
+							pathOptions = omitBy(path, (value, key) => key === 'path' || value === undefined);
 						}
 
-						const {path, ...queryOptions} = pathQuery;
-						let sanitizedOptions = pickBy(queryOptions, option => !!option);
-						sanitizedOptions = isEmpty(sanitizedOptions)?null:sanitizedOptions;
 						return options.liveEditedData
-							?getValue(path, sanitizedOptions)
-							:store.getValue(path, sanitizedOptions);
+							?getValue(path.path || path, pathOptions)
+							:store.getValue(path.path || path, pathOptions);
 					});
-					mappedStatuses = mapValues(mappedPaths, path => store.isPathLoading(path))
+					mappedStatuses = mapValues(mappedPaths, path => store.isPathLoading(path.path || path))
 				} catch (err) {
 					//React 14+ reports the error in "inject" with a wrong stack trace. It will write something about
 					//failing to reconcile a different component that was already unmounted.

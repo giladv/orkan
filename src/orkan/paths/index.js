@@ -7,21 +7,22 @@ import Form from '../form';
 import FormStore from '../form/form-store';
 
 import Header from '../header';
-import Input, {InputControl} from '../controls/input';
+import {InputControl} from '../controls/input';
 import inject from '../inject';
 import ListItem from '../list-item';
 
 import Icon from '../icon';
-import Button, {SubmitButton} from '../button';
+import {SubmitButton} from '../button';
 import DropdownContainer from '../dropdown-container';
 import OrkanStore from '../orkan-store';
+import {stripRootFromPath} from '../utils/path-utils';
 import {createStyle} from '../utils/style-utils';
 
 import style from './style.scss';
 
 
 @inject(({path, store}) => {
-	return store.isPathCollection(path)?{value: path}:{};
+	return store.isPathCollection(path)?{value: stripRootFromPath(path)}:{};
 
 }, {liveEditedData: false})
 @observer

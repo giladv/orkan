@@ -29,8 +29,8 @@ export default class Docs extends Component{
 					<div className={s.sidebar}>
 						<Collection path='docs/categories' orderByChild='priority' renderItem={category =>
 							<div>
-								<div className={s.sidebarHeader}>{category.label} {category.$key}</div>
-								<Collection path={`docs/categories/${category.$key}/pages`} orderByChild='priority' renderItem={page =>
+								<div className={s.sidebarHeader}>{category.label}</div>
+								<Collection className={s.sidebarPagesList} path={`docs/categories/${category.$key}/pages`} orderByChild='priority' renderItem={page =>
 									<Link activeClassName={s.activeLink} to={`/docs/${category.$key}/${page.$key}`}>{page.title}</Link>
 								}/>
 							</div>

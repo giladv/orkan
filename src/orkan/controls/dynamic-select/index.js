@@ -5,12 +5,13 @@ import map from 'lodash/map';
 
 import {formInput} from '../../form';
 import inject from '../../inject';
+import {stripRootFromPath} from '../../utils/path-utils';
 import Select from '../select';
 
 
 @inject(({optionsPath}) => {
 	return {
-		data: optionsPath
+		data: stripRootFromPath(optionsPath)
 	};
 })
 @observer

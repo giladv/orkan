@@ -53,18 +53,17 @@ export default class Collection extends Component{
 		});
 
 		const cleanCollection = omitBy(collection, it => !it);
-		console.log('##', collection)
 
 		return (
 			<div className={s.root}>
-				{map(cleanCollection, (item, key) => {
-					const renderedItem = renderItem(item, key);
+				{map(cleanCollection, (item) => {
+					const renderedItem = renderItem(item, item.$key);
 					if(!renderedItem){
 						return null;
 					}
 
 					if(typeof renderedItem === 'object'){
-						return cloneElement(renderedItem, {key, className: classNames(s.item, renderedItem.props.className), onClick: e => this.handleClick(e, key)});
+						return cloneElement(renderedItem, {key: item.$key, className: classNames(s.item, renderedItem.props.className), onClick: e => this.handleClick(e, item.$key)});
 					}else{
 						return renderedItem;
 					}

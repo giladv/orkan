@@ -23,7 +23,7 @@ export default class PropsTable extends Component{
 					<div>
 						object {'{'}
 						{Object.keys(type.value).map(key =>
-							<div>{key}: {this.renderType(type.value[key].type)}</div>
+							<div key={key}>{key}: {this.renderType(type.value[key].type)}</div>
 						)}
 						{'}'}
 					</div>
@@ -70,15 +70,17 @@ export default class PropsTable extends Component{
 						<th>Description</th>
 					</tr>
 				</thead>
-				{map(parsePropTypes(component), (value, key) =>
-					<tr key={key}>
-						<td>{key}</td>
-						<td className={s.typeCell}>{this.renderType(value.type)}</td>
-						<td className={s.centeredCell}>{value.required && <Icon type='v'/>}</td>
-						<td>{this.renderDefaultProp(key)}</td>
-						<td>{descriptions[key]}</td>
-					</tr>
-				)}
+				<tbody>
+					{map(parsePropTypes(component), (value, key) =>
+						<tr key={key}>
+							<td>{key}</td>
+							<td className={s.typeCell}>{this.renderType(value.type)}</td>
+							<td className={s.centeredCell}>{value.required && <Icon type='v'/>}</td>
+							<td>{this.renderDefaultProp(key)}</td>
+							<td>{descriptions[key]}</td>
+						</tr>
+					)}
+				</tbody>
 			</table>
 		);
 	}

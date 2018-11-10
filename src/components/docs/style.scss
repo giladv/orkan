@@ -43,6 +43,11 @@
 	font-weight: 500;
 }
 
+.sidebarPagesList{
+	display: flex;
+	flex-direction: column;
+}
+
 .pages{
 	display: flex;
 	flex-direction: column;

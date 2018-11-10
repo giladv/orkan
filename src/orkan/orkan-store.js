@@ -1,5 +1,5 @@
 import {isEmpty} from 'lodash';
-import {observable} from 'mobx';
+import {observable, computed} from 'mobx';
 import autobind from 'autobind-decorator';
 import isObject from 'lodash/isObject';
 import cloneDeep from 'lodash/cloneDeep';
@@ -11,6 +11,7 @@ import {
 	COLLECTION_KEY, SCHEMA_KEY_NAME, SCHEMA_SETTINGS_KEY_NAME, USER_REQUESTS_KEY_NAME,
 	USERS_KEY_NAME
 } from './constants';
+import {stripRootFromPath} from './utils/path-utils';
 import {getSchemaCollectionPaths, schemaGet, toSchemaPath} from './utils/schema-utils';
 
 const validPathInvariant = path => invariant(path.startsWith('.'), 'Invalid path structure. paths must start with `.`');
@@ -45,7 +46,10 @@ export default class OrkanStore{
 	constructor(dataStore, authStore){
 		this.dataStore = dataStore;
 		this.authStore = authStore;
+	}
 
+	@computed get activePathWithoutRoot(){
+		return stripRootFromPath(this.activePath);
 	}
 
 	init(){
@@ -118,30 +122,30 @@ export default class OrkanStore{
 
 	*/
 
-	getValue(nonAbsolutePath, options){
+	getValue(anyTypeOfPath, options){
 		// to enable components use relative paths (e.g something vs ./something)
-		const path = toAbsolutePath(nonAbsolutePath);
+		const path = toAbsolutePath(anyTypeOfPath);
 
 		if(!this.activePath || this.isInitializing || this.dataStore.isPathLoading(SCHEMA_KEY_NAME) || this.isLoadingActivePath){
-			return this.dataStore.getValue(nonAbsolutePath, options);
+			return this.dataStore.getValue(stripRootFromPath(anyTypeOfPath), options);
 		}
 
 		if(this.activePath === path){
 		// case #3
 		console.log('@case #3', path);
 
-			if(this.isPathPrimitive(path)){
+			if(this.isPathPrimitive(path, true)){
 				return this.dataFormStore.get(this.activePath)
 			}else if(this.isPathCollection(path)){
-				return this.dataStore.getValue(nonAbsolutePath, options);
+				return this.dataStore.getValue(stripRootFromPath(anyTypeOfPath), options);
 			}else{
 				return {
-					...this.dataStore.getValue(nonAbsolutePath, options),
+					...this.dataStore.getValue(stripRootFromPath(anyTypeOfPath), options),
 					...this.dataFormStore.get(this.activePath)
 				};
 			}
 
-		}else if(path.startsWith(this.activePath) && this.isPathPrimitive(path)){
+		}else if(path.startsWith(this.activePath) && this.isPathPrimitive(path, true)){
 		// case #2
 		console.log('@case #2', path);
 
@@ -151,7 +155,7 @@ export default class OrkanStore{
 			const isPathDeeplyNested = relativePathParts.length > 1;
 
 			if(isPathDeeplyNested){
-				return this.dataStore.getValue(path, options);
+				return this.dataStore.getValue(stripRootFromPath(anyTypeOfPath), options);
 			}else{
 				const formValue = this.dataFormStore.get(this.activePath);
 				return formValue && formValue[relativePathParts[0]];
@@ -161,7 +165,7 @@ export default class OrkanStore{
 		// case #1
 		console.log('@case #1', this.activePath, path, this.dataFormStore.toJS(), this.dataFormStore.get(this.activePath));
 
-			const dataStoreValue = this.dataStore.getValue(nonAbsolutePath, options);
+			const dataStoreValue = this.dataStore.getValue(stripRootFromPath(anyTypeOfPath), options);
 			let clonedData = cloneDeep(dataStoreValue);
 			if(Array.isArray(dataStoreValue)){
 				const pathParts = this.activePath.replace(path + '/', '').split('/');
@@ -169,25 +173,29 @@ export default class OrkanStore{
 				const collectionItem = clonedData.find(item => item.$key === firstKey);
 				if(collectionItem){
 					const propertyToOverride = pathParts.length?get(collectionItem, pathParts):collectionItem;
-					Object.assign(propertyToOverride, this.dataFormStore.get(this.activePath));
+
+					// if propertyToOverride is an empty collection it will be undefined so we need to make sure
+					propertyToOverride && Object.assign(propertyToOverride, this.dataFormStore.get(this.activePath));
 					return clonedData;
 				}else{
 					return dataStoreValue;
 				}
 			}else{
 				const propertyToOverride = get(clonedData, this.activePath.replace(path + '/', '').split('/'));
-				Object.assign(propertyToOverride, this.dataFormStore.get(this.activePath));
+
+				// if propertyToOverride is an empty collection it will be undefined so we need to make sure
+				propertyToOverride && Object.assign(propertyToOverride, this.dataFormStore.get(this.activePath));
 				return clonedData
 			}
 
 		}else{
-			return this.dataStore.getValue(nonAbsolutePath, options);
+			return this.dataStore.getValue(stripRootFromPath(anyTypeOfPath), options);
 		}
 	}
 
-	async setActivePath(nonAbsolutePath){
+	async setActivePath(anyTypeOfPath){
 		// to enable components use relative paths (e.g something vs ./something)
-		const path = toAbsolutePath(nonAbsolutePath);
+		const path = toAbsolutePath(anyTypeOfPath);
 
 		this.isLoadingActivePath = true;
 
@@ -196,14 +204,12 @@ export default class OrkanStore{
 
 		await this.loadRequiredFieldsByPath(path);
 		this.isLoadingActivePath = false;
-		const storeValue = this.dataStore.getValue(path) || {};
+		const storeValue = this.dataStore.getValue(stripRootFromPath(anyTypeOfPath)) || {};
 
-		console.log('$$', path)
-		if(this.isPathPrimitive(path)){
-			this.dataFormStore.set(path, this.dataStore.getValue(path));
+		if(this.isPathPrimitive(path, true)){
+			this.dataFormStore.set(path, storeValue);
 		}else if(!this.isPathCollection(path)){
-			console.log('non primitive non collection set', path)
-			this.getPrimitiveKeysByPath(path).forEach(key => {
+			this.getPrimitiveKeysByPath(path, true).forEach(key => {
 				this.dataFormStore.set(`${path}.${key}`, storeValue[key]);
 			});
 		}
@@ -213,25 +219,26 @@ export default class OrkanStore{
 
 	async submitData(){
 		const newValue = this.dataFormStore.get(this.activePath);
-		const currentValue = this.dataStore.getValue(this.activePath);
+		const currentValue = this.dataStore.getValue(this.activePathWithoutRoot);
 
 
 		if(isObject(newValue) && isObject(currentValue)){
-			await this.dataStore.setValue(this.activePath, {...currentValue, ...newValue});
+			await this.dataStore.setValue(this.activePathWithoutRoot, {...currentValue, ...newValue});
 		}else{
-			await this.dataStore.setValue(this.activePath, newValue);
+			await this.dataStore.setValue(this.activePathWithoutRoot, newValue);
 		}
 
 		setTimeout(() => this.dataFormStore.setClean(), 2);
 	}
 
 	async loadRequiredFieldsByPath(path){
-		if(this.isPathPrimitive(path)){
-			return await this.dataStore.load(path);
+		const pathWithoutHome = stripRootFromPath(path);
+		if(this.isPathPrimitive(path, true)){
+			return await this.dataStore.load(pathWithoutHome);
 		}else if(!this.isPathCollection(path)){
-			return await Promise.all(this.isPathCollection(path)?[]:this.getPrimitiveKeysByPath(path)
-				.filter(key => this.dataStore.getValue(path + '/' + key) === undefined)
-				.map(key => this.dataStore.load(path + '/' + key))
+			return await Promise.all(this.isPathCollection(path)?[]:this.getPrimitiveKeysByPath(path, true)
+				.filter(key => this.dataStore.getValue(pathWithoutHome + '/' + key) === undefined)
+				.map(key => this.dataStore.load(pathWithoutHome + '/' + key))
 			);
 		}
 	}
@@ -264,7 +271,7 @@ export default class OrkanStore{
 		const pathSchema = this.getSchemaByPath(path, includeNative);
 
 		if(this.isPathCollection(path)){
-			return Object.keys(this.dataStore.getValue(path) || {})
+			return Object.keys(this.dataStore.getValue(stripRootFromPath(path)) || {})
 		}else{
 			return Object.keys(pathSchema)
 				.filter(key => isObject(pathSchema[key]))
@@ -336,14 +343,14 @@ export default class OrkanStore{
 	async createCollectionItem(path, key){
 		validPathInvariant(path);
 
-		const finalKey = key || this.dataStore.push(this.activePath).key;
+		const finalKey = key || this.dataStore.push(this.activePathWithoutRoot).key;
 		this.setActivePath(path + '/' + finalKey);
 	}
 
 
 	removeCollectionItem(path){
 		validPathInvariant(path);
-		return this.dataStore.remove(path);
+		return this.dataStore.remove(stripRootFromPath(path));
 	}
 
 	getSchema(includeNative = false){
@@ -409,6 +416,7 @@ export default class OrkanStore{
 
 
 
+
 const orkanSchema = {
 	[SCHEMA_KEY_NAME]: {},
 	[USERS_KEY_NAME]: {
@@ -443,20 +451,3 @@ const orkanSchemaSettings = {
 const defaultUserPermissions = {
 	editData: true
 };
-
-
-// {
-// 	blog:{
-// 		posts: {
-// 			_: {title, body, date, image}
-// 		}
-// 	}
-// }
-
-
-
-
-const magic = (base, overridePath, override) => {
-	const overridePathParts = overridePath.split('/');
-
-}
