@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Link from 'react-router/lib/Link';
 
 import {createStyle} from '../../utils/style-utils';
 
@@ -18,9 +19,9 @@ export default class Button extends Component{
 			}
 		});
 		return (
-			<a {...otherProps} className={s.root}>
+			<Link {...otherProps} className={s.root}>
 				{children}
-			</a>
+			</Link>
 		);
 	}
 }

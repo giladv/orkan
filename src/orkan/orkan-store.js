@@ -163,7 +163,7 @@ export default class OrkanStore{
 
 		}else if(this.activePath.startsWith(path)){
 		// case #1
-		console.log('@case #1', this.activePath, path, this.dataFormStore.toJS(), this.dataFormStore.get(this.activePath));
+		console.log('@case #1', path);
 
 			const dataStoreValue = this.dataStore.getValue(stripRootFromPath(anyTypeOfPath), options);
 			let clonedData = cloneDeep(dataStoreValue);

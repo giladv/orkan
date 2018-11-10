@@ -12,6 +12,37 @@
 	:global(.ql-container){
 		flex: 1;
 		display: flex;
+		:global(.ql-editor){
+			flex: 1;
+			@include normalFont;
+			h1{
+				@include mediumFont;
+				margin-top: 20px;
+			}
+			h2{
+				@include mediumFont;
+				margin-top: 20px;
+			}
+			h3{
+				@include mediumFont;
+				margin-top: 20px;
+			}
+			h4{
+				margin-top: 20px;
+			}
+			h5{
+				margin-top: 20px;
+			}
+			p{
+				margin-top: 5px;
+			}
+			a{
+
+			}
+			strong{
+				@include mediumFont;
+			}
+		}
 	}
 	:global(.ql-tooltip){
 		z-index: 1;

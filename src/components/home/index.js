@@ -31,11 +31,11 @@ export default class Home extends Component{
 						<h2 className={s.heroTitle}><Value html lightOverlay path='home/hero/title'/></h2>
 						<div className={s.heroActions}>
 							<WithValue path='home/hero/primaryCta' render={cta =>
-								<Button primary href={cta.link}>{cta.label}</Button>
+								<Button primary to={cta.link}>{cta.label}</Button>
 							}/>
 
 							<WithValue lightOverlay path='home/hero/secondaryCta' render={cta =>
-								<Button href={cta.link}>{cta.label}</Button>
+								<Button to={cta.link}>{cta.label}</Button>
 							}/>
 						</div>
 				</div>
@@ -79,7 +79,7 @@ export default class Home extends Component{
 					<h2 className={s.promoTitle}><Value lightOverlay path='home/promo/title'/></h2>
 
 					<WithValue path='home/promo/cta' render={cta =>
-						<Button primary className={s.promoCta} href={cta.link}>{cta.label}</Button>
+						<Button primary className={s.promoCta} to={cta.link}>{cta.label}</Button>
 					}/>
 				</div>
 			</div>

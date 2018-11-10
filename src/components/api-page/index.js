@@ -27,8 +27,7 @@ export default class ApiPage extends Component{
 		const s = createStyle(style, className);
 
 		const isComponent = isEntityComponent(api.entity);
-		console.log(api)
-		// !isComponent && console.log(api.entity.toString().split(/[\(\{\,]/g)));
+
 		return (
 			<div className={s.root}>
 				<h2>{api.name} <span>{isComponent?'Component':'Function'}</span></h2>

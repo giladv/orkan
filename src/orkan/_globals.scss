@@ -280,7 +280,25 @@ $invisibleShadowRgba: rgba(0, 0, 0, 0.06);
 }
 
 
+@mixin thinFont(){
+	font-weight: 100;
+}
 
+@mixin lightFont(){
+	font-weight: 300;
+}
+
+@mixin normalFont(){
+	font-weight: 400;
+}
+
+@mixin mediumFont(){
+	font-weight: 500;
+}
+
+@mixin boldFont(){
+	font-weight: 600;
+}
 
 
 
