@@ -14,6 +14,7 @@ import ListItem from '../list-item';
 import Icon from '../icon';
 import {SubmitButton} from '../button';
 import DropdownContainer from '../dropdown-container';
+import MoveModal from '../move-modal';
 import OrkanStore from '../orkan-store';
 import {stripRootFromPath} from '../utils/path-utils';
 import {createStyle} from '../utils/style-utils';
@@ -107,7 +108,9 @@ export default class Paths extends Component{
 					image={collectionImage && value[key][collectionImage]}
 					onClick={() => this.handleClickPath(key)}
 					buttons={[
-						{icon: 'trash', onClick: (e) => this.handleRemove(e, key)}
+						{icon: 'move', onClick: (e) => store.openModal(MoveModal, {path: path + '/' + key, store})},
+						{icon: 'clone', onClick: (e) => this.handleRemove(e, key)},
+						{icon: 'trash', onClick: (e) => this.handleRemove(e, key)},
 					]}>
 
 					{collectionMainLabel?value[key][collectionMainLabel]:'/'+key}

@@ -86,7 +86,7 @@ export default class SettingsPanel extends Component{
 
 		const s = this.getStyle();
 
-		const collectionPathsOptions = store.getCollectionsPaths().map(path => ({label: path, value: path}));
+		const collectionPathsOptions = store.getCollectionSchemaPaths().map(path => ({label: path, value: path}));
 		let dataSourcePrimitivesOptions = [];
 
 		if(store.settingsFormStore.get('dataSource') === 'dynamic' && store.settingsFormStore.get('dataSourcePath')){
@@ -113,7 +113,7 @@ export default class SettingsPanel extends Component{
 
 				{['textarea', 'wysiwyg'].includes(store.settingsFormStore.get('uiType')) &&
 					<FormField className={s.formField} name='uiSize' label='Size'>
-						<SliderControl min={3} max={13} />
+						<SliderControl min={3} max={30} />
 					</FormField>
 				}
 

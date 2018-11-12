@@ -27,7 +27,7 @@ export default class FirebaseStore{
 		this.database = database;
 		this.rootPath = rootPath;
 
-		window.a = () => console.log(this.map.toJS(), toJS(this.collections), toJS(this.listeners), toJS(this.pathsStatus))
+		window.a = () => console.log(this, this.map.toJS(), toJS(this.collections), toJS(this.listeners), toJS(this.pathsStatus))
 	}
 
 	toAbsolutePath(path){
@@ -85,11 +85,10 @@ export default class FirebaseStore{
 			const valueHandler = (snapshot) => {
 				const snapshotVal = snapshot.exportVal();
 				const dotPath = path.split('/').join('.');
-
 				if(snapshotVal){
 					this.map.set(dotPath, snapshotVal);
 				}else{
-					this.map.set(dotPath, null);
+					this.map.remove(dotPath);
 				}
 				this.setPathIsLoading(path, false);
 			};
@@ -143,7 +142,7 @@ export default class FirebaseStore{
 
 			const removedHandler = (snapshot) => {
 				const childPath = nodePath.join(path, snapshot.key);
-				this.map.set(toDotPath(childPath));
+				this.map.remove(toDotPath(childPath));
 				this.removeFromCollection(pathWithQueryString, snapshot.key);
 			};
 
@@ -225,7 +224,6 @@ export default class FirebaseStore{
 
 	remove(path){
 		validPathInvariant(path);
-
 		return this.database.ref(this.toAbsolutePath(path)).remove();
 	}
 
@@ -234,7 +232,7 @@ export default class FirebaseStore{
 		validPathInvariant(path);
 
 		const dotPath = path.split('/').join('.');
-		this.map.set(dotPath, null);
+		this.map.remove(dotPath);
 	}
 
 	setPathStatus(path, status){

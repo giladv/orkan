@@ -17,6 +17,7 @@ import UsersRequests from '../users-requests';
 import OrkanStore from '../orkan-store';
 import { SCHEMA_KEY_NAME} from '../constants';
 import SchemaEditor from '../schema-editor';
+import {getParentPath} from '../utils/path-utils';
 import {createStyle} from '../utils/style-utils';
 
 import style from './style.scss';
@@ -133,7 +134,11 @@ export default class Admin extends Component{
 
 
 						<div className={s.scrollContainer}>
-
+							{/*{store.isPathCollection(getParentPath(store.activePath)) &&*/}
+								{/*<div className={s.collectionItemHeader}>*/}
+									{/*hello*/}
+								{/*</div>*/}
+							{/*}*/}
 							{!store.isLoadingActivePath &&
 								<DataForm
 									className={s.dataForm}

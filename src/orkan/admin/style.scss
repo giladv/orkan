@@ -67,6 +67,13 @@
 	overflow-y: auto;
 }
 
+.collectionItemHeader{
+	height: $headerSize;
+	background: #F2F4F7;
+	display: flex;
+	align-items: center;
+	padding: 0 15px 0 10px;
+}
 
 .settingsPanel{
 	@include listItemAnimation(false);

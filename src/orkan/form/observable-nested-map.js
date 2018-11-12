@@ -65,6 +65,18 @@ export class ObservableNestedMap{
 		return this.set(parts.join('.'), value, obj);
 	}
 
+
+	@action remove(key, ctx = this.map){
+		var parts = key.split(KEY_SPLIT_REGEX).filter(part => !!part);
+		var part = parts.shift();
+
+		if(!parts.length){
+			return this.map.delete(part);
+		}
+
+		return this.remove(parts.join('.'), this.get(part, ctx));
+	}
+
 	@action merge(value){
 		this.map.merge(nestedMapFromObj(value));
 	}

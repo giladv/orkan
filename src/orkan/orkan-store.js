@@ -4,6 +4,7 @@ import autobind from 'autobind-decorator';
 import isObject from 'lodash/isObject';
 import cloneDeep from 'lodash/cloneDeep';
 import get from 'lodash/get';
+import isEqualWith from 'lodash/isEqualWith';
 import invariant from 'invariant';
 
 import FormStore from './form/form-store';
@@ -11,19 +12,10 @@ import {
 	COLLECTION_KEY, SCHEMA_KEY_NAME, SCHEMA_SETTINGS_KEY_NAME, USER_REQUESTS_KEY_NAME,
 	USERS_KEY_NAME
 } from './constants';
-import {stripRootFromPath} from './utils/path-utils';
+import {stripRootFromPath, toAbsolutePath} from './utils/path-utils';
 import {getSchemaCollectionPaths, schemaGet, toSchemaPath} from './utils/schema-utils';
 
 const validPathInvariant = path => invariant(path.startsWith('.'), 'Invalid path structure. paths must start with `.`');
-
-const toAbsolutePath = path => {
-	let pathParts = path.split('/');
-	if(pathParts[0] !== '.'){
-		pathParts.unshift('.');
-	}
-
-	return pathParts.join('/');
-};
 
 export default class OrkanStore{
 	dataStore;
@@ -243,12 +235,23 @@ export default class OrkanStore{
 		}
 	}
 
+	toSchemaPath(path){
+		validPathInvariant(path);
+		const schema = this.getSchema(true);
+		return toSchemaPath(schema, path);
+	}
 
 	getSchemaByPath(path, includeNative){
 		validPathInvariant(path);
 		const schema = this.getSchema(includeNative);
 		const schemaPath = toSchemaPath(schema, path);
-		return schemaGet(schema, schemaPath);
+		return schemaPath && schemaGet(schema, schemaPath);
+	}
+
+	isSchemaCompatible(path, toPath){
+		const pathSchema = this.getSchemaByPath(path);
+		const toPathSchema = this.getSchemaByPath(toPath);
+		return isSchemaCompatible(pathSchema, toPathSchema);
 	}
 
 	isPathPrimitive(path, includeNative){
@@ -371,8 +374,41 @@ export default class OrkanStore{
 		return this.dataStore.getValue(USERS_KEY_NAME + '/' + this.user.uid);
 	}
 
-	getCollectionsPaths(includeNative){
+	getCollectionSchemaPaths(includeNative){
 		return getSchemaCollectionPaths(this.getSchema(includeNative));
+	}
+
+	/*
+		0: "./blog/posts"
+		1: "./docs/categories"
+		2: "./docs/categories/_/pages"
+		3: "./home/examples/list"
+		4: "./home/features/list"
+		5: "./menu"
+
+
+	*/
+	getCollectionPaths(includeNative){
+		const collectionSchemaPaths = this.getCollectionSchemaPaths(includeNative);
+		collectionSchemaPaths.map(path => {
+			if(!path.includes('/' + COLLECTION_KEY + '/')){
+				return path;
+			}
+
+			const pathParts = path.split()
+
+		})
+	}
+
+	getPathsFromSchemaPaths(schemaPaths){
+		schemaPaths.map(schemaPath => {
+			if(!schemaPath.includes('/' + COLLECTION_KEY + '/')){
+				return schemaPath;
+			}
+
+			const pathParts = schemaPath.split()
+
+		})
 	}
 
 	async approveUserRequest(uid){
@@ -450,4 +486,22 @@ const orkanSchemaSettings = {
 
 const defaultUserPermissions = {
 	editData: true
+};
+
+
+
+
+
+const isSchemaCompatible = (schema, toSchema) => {
+	const schemaKeys = Object.keys(schema)
+	return !schemaKeys.find(key => {
+		if(typeof schema[key] !== typeof toSchema[key]){
+			return true;
+		}
+		if(isObject(schema[key])){
+			return !isSchemaCompatible(schema[key], toSchema[key]);
+		}else{
+			return schema[key] !== toSchema[key];
+		}
+	});
 };
