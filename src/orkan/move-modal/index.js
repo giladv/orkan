@@ -4,7 +4,6 @@ import {observer} from 'mobx-react';
 import {observable} from 'mobx';
 import autobind from 'autobind-decorator';
 import {InputControl} from '../controls/input';
-import {SelectControl} from '../controls/select';
 
 import Form from '../form';
 import FormField from '../form-field';
