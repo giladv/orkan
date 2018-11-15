@@ -4,13 +4,13 @@ import {Link, withRouter} from 'react-router';
 import {observable} from 'mobx';
 import {observer} from 'mobx-react';
 
-import Collection from '../../orkan/collection';
 import Img from '../../orkan/img';
 import Value from '../../orkan/value';
 import WithValue from '../../orkan/with-value';
 import Button from '../button';
 import CodeBlock from '../code-block';
 import {createStyle} from '../../utils/style-utils';
+import List from '../../orkan/list';
 
 import style from './style';
 
@@ -26,24 +26,24 @@ export default class Home extends Component{
 		return (
 			<div className={s.root}>
 				<div name="hero" className={s.hero}>
-					<WithValue path='home/hero/background' lightOverlay render={value => <Img className={s.heroImg} mode='cover' src={value}/>}/>
+					<WithValue path='objects/home/hero/background' lightOverlay render={value => <Img className={s.heroImg} mode='cover' src={value}/>}/>
 
-						<h2 className={s.heroTitle}><Value html lightOverlay path='home/hero/title'/></h2>
+						<h2 className={s.heroTitle}><Value html lightOverlay path='objects/home/hero/title'/></h2>
 						<div className={s.heroActions}>
-							<WithValue path='home/hero/primaryCta' render={cta =>
+							<WithValue path='objects/home/hero/primaryCta' render={cta =>
 								<Button primary to={cta.link}>{cta.label}</Button>
 							}/>
 
-							<WithValue lightOverlay path='home/hero/secondaryCta' render={cta =>
+							<WithValue lightOverlay path='objects/home/hero/secondaryCta' render={cta =>
 								<Button to={cta.link}>{cta.label}</Button>
 							}/>
 						</div>
 				</div>
 				<div name='features' className={s.features}>
 					<div className={s.featuresCenter}>
-						<h2 className={s.featuresTitle}><Value path='home/features/title'/></h2>
+						<h2 className={s.featuresTitle}><Value path='objects/home/features/title'/></h2>
 
-						<Collection className={s.featuresList} path='home/features/list' renderItem={(item, i) =>
+						<List className={s.featuresList} path='objects/home/features/list' renderItem={(item, i) =>
 							<div key={i} className={s.featureItem}>
 								<Img className={s.featureImg} mode='contain' src={item.img}/>
 								<div className={s.featureInfo}>
@@ -57,9 +57,9 @@ export default class Home extends Component{
 
 				<div name='examples' className={s.examples}>
 					<div className={s.examplesCenter}>
-						<h2 className={s.examplesTitle}><Value path='home/examples/title'/></h2>
+						<h2 className={s.examplesTitle}><Value path='objects/home/examples/title'/></h2>
 
-						<Collection className={s.examplesList} path='home/examples/list' orderByChild='priority' renderItem={(item, i) =>
+						<List className={s.examplesList} path='objects/home/examples/list' orderByChild='priority' renderItem={(item, i) =>
 							<div key={i} className={s.exampleItem}>
 								<div className={s.exampleInfo}>
 									<h3 className={s.exampleTitle}>{item.title}</h3>
@@ -74,11 +74,11 @@ export default class Home extends Component{
 
 
 				<div className={s.promo}>
-					<WithValue lightOverlay path='home/promo/background' render={value => <Img className={s.heroImg} mode='cover' src={value}/>}/>
+					<WithValue lightOverlay path='objects/home/promo/background' render={value => <Img className={s.heroImg} mode='cover' src={value}/>}/>
 
-					<h2 className={s.promoTitle}><Value lightOverlay path='home/promo/title'/></h2>
+					<h2 className={s.promoTitle}><Value lightOverlay path='objects/home/promo/title'/></h2>
 
-					<WithValue path='home/promo/cta' render={cta =>
+					<WithValue path='objects/home/promo/cta' render={cta =>
 						<Button primary className={s.promoCta} to={cta.link}>{cta.label}</Button>
 					}/>
 				</div>

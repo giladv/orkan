@@ -15,9 +15,9 @@ import Paths from '../paths';
 import Img from '../img';
 import UsersRequests from '../users-requests';
 import OrkanStore from '../orkan-store';
-import { SCHEMA_KEY_NAME} from '../constants';
+import {SCHEMA_KEY_NAME, SCHEMA_PATH} from '../constants';
 import SchemaEditor from '../schema-editor';
-import {getParentPath} from '../utils/path-utils';
+import {getParentPath, toAbsolutePath} from '../utils/path-utils';
 import {createStyle} from '../utils/style-utils';
 
 import style from './style.scss';
@@ -36,9 +36,10 @@ export default class Admin extends Component{
 	};
 
 	componentWillMount(){
-		const {store} = this.props;
+		const {store, store2} = this.props;
 
 		store.init();
+		store2.init();
 
 		this.killAuthReaction = reaction(() => !store.isAdmin() && !store.isInitializing, isAuthRequired => {
 			isAuthRequired?store.openModal(Auth):store.clearModal();
@@ -49,6 +50,7 @@ export default class Admin extends Component{
 
 		onDoublePress('shift', () => {
 			!store.activePath && store.setActivePath('.');
+			!store2.activePath && store2.setActivePath('.');
 		});
 	}
 
@@ -83,7 +85,7 @@ export default class Admin extends Component{
 	}
 
 	render() {
-		const {className, store} = this.props;
+		const {className, store, store2} = this.props;
 		const {isResizing} = this.obState;
 
 
@@ -100,15 +102,15 @@ export default class Admin extends Component{
 		let headerParts;
 		let headerTitle;
 
-		if(store.activePath){
-			headerParts = store.activePath.split('/');
+		if(store2.activePath){
+			headerParts = store2.activePath.split('/');
 
-			if(store.isPathPrimitive(store.activePath, true)){
+			if(store2.isPathPrimitive(store2.activePath, true)){
 				headerParts = headerParts.slice(0, -1);
 			}
 
 			headerTitle = headerParts.map((part, i) => [
-				<span className={s.titlePart} key={i} onClick={() => store.setActivePath(headerParts.slice(0, i+1).join('/'))}>{i === 0 && headerParts.length === 1?'Root':part}</span>,
+				<span className={s.titlePart} key={i} onClick={() => store2.setActivePath(headerParts.slice(0, i+1).join('/'))}>{i === 0 && headerParts.length === 1?'Root':part}</span>,
 				i < headerParts.length - 1 && '/'
 			]);
 		}
@@ -134,11 +136,6 @@ export default class Admin extends Component{
 
 
 						<div className={s.scrollContainer}>
-							{/*{store.isPathCollection(getParentPath(store.activePath)) &&*/}
-								{/*<div className={s.collectionItemHeader}>*/}
-									{/*hello*/}
-								{/*</div>*/}
-							{/*}*/}
 							{!store.isLoadingActivePath &&
 								<DataForm
 									className={s.dataForm}
@@ -148,14 +145,14 @@ export default class Admin extends Component{
 
 							{!store.isLoadingActivePath &&
 								<Paths
-									path={store.activePath}
-									store={store} />
+									path={store2.activePath}
+									store={store2} />
 							}
 
-							{store.activePath === './' + SCHEMA_KEY_NAME &&
+							{store2.activePath === toAbsolutePath(SCHEMA_PATH) &&
 								<SchemaEditor
-									value={store.getSchema()}
-									onChange={value => store.dataStore.setValue(SCHEMA_KEY_NAME, value)}/>
+									value={store2.getSchema()}
+									onChange={value => store2.dataStore.setValue(SCHEMA_PATH, value)}/>
 							}
 						</div>
 						<div className={s.footer}>

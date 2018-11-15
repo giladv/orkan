@@ -11,13 +11,13 @@ import inject from '../inject';
 import style from './style';
 import {createStyle} from '../utils/style-utils';
 
-@inject(({path, orderBy, where}) => {
+@inject(({path}) => {
 	return {
-		collection: {path, orderBy, where}
+		collection: path
 	};
 })
 @observer
-export default class Collection extends Component{
+export default class List extends Component{
 	static propTypes = {
 		path: PropTypes.string.isRequired,
 		renderItem: PropTypes.func,
@@ -52,11 +52,10 @@ export default class Collection extends Component{
 			}
 		});
 
-		const cleanCollection = omitBy(collection, it => !it);
-
+		const cleanList = omitBy(collection, it => !it);
 		return (
 			<div className={s.root}>
-				{map(cleanCollection, (item) => {
+				{map(cleanList, (item) => {
 					const renderedItem = renderItem(item, item.$key);
 					if(!renderedItem){
 						return null;

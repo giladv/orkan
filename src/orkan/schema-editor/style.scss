@@ -3,11 +3,20 @@
 
 .root{
 	font-size: 13px;
-	padding: 0 15px;
+	//padding: 0 15px;
 }
 
 .field{
+	display: flex;
+	flex-direction: column;
+}
 
+.rootField{
+	padding: 9px 15px;
+	border-bottom: 1px solid #D0D2D6;
+	&:last-child:not(:first-child){
+		border-bottom: none;
+	}
 }
 
 .fieldContent{

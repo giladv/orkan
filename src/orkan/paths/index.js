@@ -23,7 +23,7 @@ import style from './style.scss';
 
 
 @inject(({path, store}) => {
-	return store.isPathCollection(path)?{value: stripRootFromPath(path)}:{};
+	return store.isPathCollection(path)?{value: stripRootFromPath(path.split('/').slice(0, 1).join('/'))}:{};
 
 }, {liveEditedData: false})
 @observer
@@ -55,6 +55,7 @@ export default class Paths extends Component{
 	@autobind
 	handleClickPath(key){
 		const {path, store} = this.props;
+		console.log('set active', path + '/' + key)
 		store.setActivePath(path + '/' + key)
 	}
 

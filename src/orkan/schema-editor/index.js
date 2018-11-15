@@ -7,10 +7,12 @@ import map from 'lodash/map';
 import isObject from 'lodash/isObject';
 import set from 'lodash/set';
 import cloneDeep from 'lodash/cloneDeep';
+import omit from 'lodash/omit';
 
 import ActionButton from '../action-button';
 import Input from '../controls/input';
 import {COLLECTION_KEY} from '../constants';
+import Header from '../header';
 import Icon from '../icon';
 import {createStyle} from '../utils/style-utils';
 
@@ -92,12 +94,16 @@ export default class SchemaEditor extends Component{
 		const {className, classes} = this.props;
 		const {createPath, createValue, openPaths} = this.obState;
 
-		const currentPath = [parentPath, key].filter(it => !!it).join('.');
+		const isArray = Array.isArray(field);
+		field = isArray?field[0]:field;
+
+		const currentPath = [parentPath, key, isArray && '0'].filter(it => !!it).join('.');
 		const isPathOpen = openPaths.includes(currentPath);
 
 		const s = createStyle(style, className, classes, {
 			field: {
-				openField: isPathOpen
+				openField: isPathOpen,
+				rootField: !parentPath || parentPath === 'objects'
 			}
 		});
 
@@ -105,29 +111,32 @@ export default class SchemaEditor extends Component{
 
 		return (
 			<div key={key} className={s.field}>
-				<div className={s.fieldContent}>
+				{key &&
+					<div className={s.fieldContent}>
 
-					{!isFieldPrimitive && <Icon className={s.fieldToggleIcon} type='arr' onClick={() => this.togglePath(currentPath)}/>}
+						{!isFieldPrimitive && <Icon className={s.fieldToggleIcon} type='arr' onClick={() => this.togglePath(currentPath)}/>}
 
-					<div className={s.fieldLabel} onClick={() => this.togglePath(currentPath)}>
-						{key || 'Root'}
+						<div className={s.fieldLabel} onClick={() => this.togglePath(currentPath)}>
+							{key}
+						</div>
+
+						<div className={s.fieldActions}>
+							{currentPath &&
+								<ActionButton className={s.fieldActionButton} icon='trash' onClick={() => this.handleRemoveField(currentPath)}/>
+							}
+							{!field[COLLECTION_KEY] &&
+								<ActionButton
+									icon='plus'
+									className={s.fieldActionButton}
+									onClick={() => {
+										this.obState.createPath = currentPath;
+										!this.isPathOpen(currentPath) && this.togglePath(currentPath);
+									}}/>
+							}
+							<ActionButton className={s.fieldActionButton} icon='array' onClick={() => this.handleRemoveField(currentPath)} active={isArray}/>
+						</div>
 					</div>
-
-					<div className={s.fieldActions}>
-						{currentPath &&
-							<ActionButton className={s.fieldActionButton} icon='trash' onClick={() => this.handleRemoveField(currentPath)}/>
-						}
-						{!field[COLLECTION_KEY] &&
-							<ActionButton
-								icon='plus'
-								className={s.fieldActionButton}
-								onClick={() => {
-									this.obState.createPath = currentPath;
-									!this.isPathOpen(currentPath) && this.togglePath(currentPath);
-								}}/>
-						}
-					</div>
-				</div>
+				}
 				<div className={s.fieldChildren} style={{height: isPathOpen?'auto':0}}>
 					{createPath === currentPath &&
 						<div className={s.fieldCreate}>
@@ -148,10 +157,16 @@ export default class SchemaEditor extends Component{
 	render(){
 		const {className, classes, value} = this.props;
 		const s = createStyle(style, className, classes);
-
 		return (
 			<div className={s.root}>
-				{this.renderField(null, value, null)}
+				<Header title='Objects'/>
+				<div>
+					{map(value.objects, (field, key) => this.renderField(key, field, 'objects'))}
+				</div>
+				<Header title='Collections'/>
+				<div>
+					{map(omit(value, 'objects'), (field, key) => this.renderField(key, field, null))}
+				</div>
 			</div>
 		);
 	}

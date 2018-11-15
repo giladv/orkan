@@ -12,15 +12,20 @@ import style from './style.scss';
 @observer
 export default class ActionButton extends Component{
 	static propTypes = {
-		icon: PropTypes.string
+		icon: PropTypes.string,
+		active: PropTypes.bool
 	};
 
 	static defaultProps = {
 	};
 
 	render(){
-		const {className, icon, ...otherProps} = this.props;
-		const s = createStyle(style, className);
+		const {className, icon, active, ...otherProps} = this.props;
+		const s = createStyle(style, className, {
+			root: {
+				active
+			}
+		});
 
 		return (
 			<Icon {...otherProps} className={s.root} type={icon} />

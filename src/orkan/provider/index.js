@@ -2,13 +2,14 @@ import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import {observer} from 'mobx-react';
-import {observable} from 'mobx';
+import {createAtom, observable} from 'mobx';
 import autobind from 'autobind-decorator';
 import classNames from 'classnames';
 import * as mobx from 'mobx';
 
 import firebase from 'firebase/app';
 import 'firebase/database';
+import 'firebase/firestore';
 import 'firebase/auth'
 import 'firebase/storage'
 
@@ -16,10 +17,12 @@ import {
 	ACTIVATION_EVENT_KEY, DEFAULT_BASE_PATH, FIREBASE_APP_NAME, ORKAN_ADMIN_GLOBAL, REACT_CONTEXT_NAME,
 	SUPPORTED_AUTH_PROVIDERS,
 } from '../constants';
+import Firestore from '../firestore';
 import {keyboard} from '../utils/keyboard-utils';
 import FirebaseStore from '../firebase-store';
 import Indicator from '../indicator';
 import OrkanStore from '../orkan-store';
+import OrkanStore2 from '../orkan-store2';
 
 import './style';
 
@@ -32,6 +35,8 @@ window.PropTypes = PropTypes;
 window.classNames = classNames;
 window.autobind = autobind;
 window.firebase = firebase;
+
+
 
 
 @observer
@@ -74,15 +79,15 @@ export default class Provider extends Component{
 	getChildContext() {
 
 		return {[REACT_CONTEXT_NAME]: {
-			store: this.firebaseStore,
-			getValue: (path, options) => this.orkanStore?this.orkanStore.getValue(path, options):this.firebaseStore.getValue(path, options),
-			setActivePath: path => this.orkanStore.setActivePath(path),
+			store: this.fireStore,
+			getValue: (path, options) => this.orkanStore2?this.orkanStore2.getValue(path, options):this.fireStore.getValue(path, options),
+			setActivePath: path => this.orkanStore2.setActivePath(path),
 			isEditMode: () => {
 				const {isActive, isModifierKeyDown} = this.obState;
 				return isActive && this.orkanStore.isAdmin() && isModifierKeyDown
 			},
 			// is this making any sense??
-			openModal: (...props) => this.orkanStore && this.orkanStore.openModal(...props)
+			openModal: (...props) => this.orkanStore2 && this.orkanStore2.openModal(...props)
 		}};
 	}
 
@@ -90,7 +95,13 @@ export default class Provider extends Component{
 		const {firebaseConfig, basePath} = this.props;
 		this.firebaseApp = firebase.initializeApp(firebaseConfig, FIREBASE_APP_NAME);
 		this.firebaseStore = new FirebaseStore(this.firebaseApp.database(), basePath);
-
+		this.fireStore = new Firestore(firebase.firestore(this.firebaseApp));
+		// this.fireStore.load('objects/home/features/list').then(users => console.log('load', users));
+		// this.fireStore.listen('orkanUsers', {where: {active: {'==': true}}});
+		this.fireStore.listen(path);
+		window.set = () => this.fireStore.setValue('orkanUsers/new', {blabla: 123, active: true});
+		window.remove = () => this.fireStore.remove('orkanUsers/new/active');
+		// this.fireStore.listen('orkanUsers');
 		// this.activate();
 		keyboard.bind('hold:1000:' + ACTIVATION_EVENT_KEY, this.activate);
 
@@ -119,6 +130,7 @@ export default class Provider extends Component{
 			delete window[ORKAN_ADMIN_GLOBAL];
 
 			this.orkanStore = new OrkanStore(this.firebaseStore, this.firebaseApp.auth());
+			window.s2 = this.orkanStore2 = new OrkanStore2(this.fireStore, this.firebaseApp.auth());
 			this.obState.isActive = true;
 		}catch(err){
 			console.error(err);
@@ -154,11 +166,19 @@ export default class Provider extends Component{
 	render() {
 		const {children} = this.props;
 		const {isActive, isBusy} = this.obState;
-
+		console.log('!!!', this.fireStore.isLoading(path), this.fireStore.getValue(path))
 		return [
 			children,
 			(isActive || isBusy) && ReactDOM.createPortal(<Indicator isBusy={isBusy || (this.orkanStore && this.orkanStore.isInitializing)} />, document.body),
-			isActive && ReactDOM.createPortal(<OrkanAdmin store={this.orkanStore} />, document.body)
+			isActive && ReactDOM.createPortal(<OrkanAdmin store={this.orkanStore} store2={this.orkanStore2} />, document.body)
 		];
 	}
 }
+
+
+
+
+
+
+
+const path = 'objects/home/features/list';
