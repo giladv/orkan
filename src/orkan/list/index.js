@@ -13,7 +13,7 @@ import {createStyle} from '../utils/style-utils';
 
 @inject(({path}) => {
 	return {
-		collection: path
+		value: path
 	};
 })
 @observer
@@ -43,7 +43,7 @@ export default class List extends Component{
 	}
 
 	render(){
-		const {className, classes, renderItem, collection, orkan, lightOverlay} = this.props;
+		const {className, classes, renderItem, value, orkan, lightOverlay} = this.props;
 
 		const s = createStyle(style, className, classes, {
 			item: {
@@ -52,17 +52,16 @@ export default class List extends Component{
 			}
 		});
 
-		const cleanList = omitBy(collection, it => !it);
 		return (
 			<div className={s.root}>
-				{map(cleanList, (item) => {
+				{map(value, (item, i) => {
 					const renderedItem = renderItem(item, item.$key);
 					if(!renderedItem){
 						return null;
 					}
 
 					if(typeof renderedItem === 'object'){
-						return cloneElement(renderedItem, {key: item.$key, className: classNames(s.item, renderedItem.props.className), onClick: e => this.handleClick(e, item.$key)});
+						return cloneElement(renderedItem, {key: i, className: classNames(s.item, renderedItem.props.className), onClick: e => this.handleClick(e, i)});
 					}else{
 						return renderedItem;
 					}

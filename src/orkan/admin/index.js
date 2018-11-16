@@ -128,7 +128,7 @@ export default class Admin extends Component{
 
 						<UsersRequests onApprove={uid => store.approveUserRequest(uid)} onDecline={this.handleDeclineUserRequest}/>
 
-						<Header primary title={headerTitle} onClose={this.handleClose}/>
+						<Header primary title={headerTitle} onActionClick={this.handleClose}/>
 
 						{store2.isLoadingActivePath && <Spinner className={s.spinner}/>}
 
@@ -170,7 +170,7 @@ export default class Admin extends Component{
 						store={store2}/>
 				}
 
-				{store2.modal && <store.modal.Component {...store2.modal.props} className={s.modal}/>}
+				{store2.modal && <store2.modal.Component {...store2.modal.props} className={s.modal}/>}
 			</div>
 		);
 	}

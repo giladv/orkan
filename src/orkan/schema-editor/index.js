@@ -11,6 +11,7 @@ import unset from 'lodash/unset';
 import isEmpty from 'lodash/isEmpty';
 import cloneDeep from 'lodash/cloneDeep';
 import omit from 'lodash/omit';
+import classNames from 'classnames';
 
 import ActionButton from '../action-button';
 import Input from '../controls/input';
@@ -75,7 +76,7 @@ export default class SchemaEditor extends Component{
 		if(isEmpty(get(clone, parentPath))){
 			set(clone, parentPath, true);
 		}
-		console.log(clone, path, parentPath)
+
 		onChange(clone);
 		this.obState.createPath = null;
 		this.obState.createValue = null;
@@ -102,12 +103,8 @@ export default class SchemaEditor extends Component{
 	}
 
 	togglePath(path){
-		const {value} = this.props;
 		const {openPaths} = this.obState;
 
-		// if(path && !isObject(get(value, path))){
-		// 	return;
-		// }
 		if(this.isPathOpen(path)){
 			openPaths.remove(path);
 		}else{
@@ -121,27 +118,46 @@ export default class SchemaEditor extends Component{
 		return openPaths.includes(path);
 	}
 
-	renderField(key, field, parentPath){
+	getStyle(){
 		const {className, classes} = this.props;
+		return createStyle(style, className, classes);
+	}
+
+	renderCreate(placeholder = 'Field name'){
+		const {createValue} = this.obState;
+		const s = this.getStyle();
+		return (
+			<div className={s.fieldCreate}>
+				<Input autoFocus
+					   className={s.fieldCreateInput}
+					   placeholder={placeholder}
+					   value={createValue}
+					   onChange={value => this.obState.createValue = value}
+					   onKeyPress={this.handleKeyPress}
+					   onBlur={this.handleBlur}/>
+			</div>
+		);
+	}
+
+	renderField(key, field, parentPath){
 		const {createPath, createValue, openPaths} = this.obState;
 
 		const isArray = Array.isArray(field);
-		// field = isArray?field[0]:field;
 
 		const currentPath = [parentPath, key].filter(it => !!it).join('.');
 		const isPathOpen = openPaths.includes(currentPath);
 
-		const s = createStyle(style, className, classes, {
-			field: {
-				openField: isPathOpen,
-				rootField: !parentPath || parentPath === 'objects'
-			}
+		const s = this.getStyle();
+
+		const className = classNames(s.field, {
+			[s.openField]: isPathOpen,
+			[s.rootField]: !parentPath || parentPath === 'objects'
 		});
 
 		const isFieldPrimitive = !isObject(field);
 
 		return (
-			<div key={key} className={s.field}>
+			<div key={key} className={className}>
 				{key &&
 					<div className={s.fieldContent}>
 
@@ -164,21 +180,20 @@ export default class SchemaEditor extends Component{
 										!this.isPathOpen(currentPath) && this.togglePath(currentPath);
 									}}/>
 							}
-							<ActionButton className={s.fieldActionButton} icon='array' onClick={() => this.handleToggleArray(currentPath)} active={isArray}/>
+							{parentPath !== 'objects' &&
+								<ActionButton
+									className={classNames(s.fieldActionButton, isArray && s.persistentAction)}
+									icon='array'
+									onClick={() => this.handleToggleArray(currentPath)}
+									disabled={!parentPath}
+									active={isArray}/>
+							}
 						</div>
 					</div>
 				}
 				<div className={s.fieldChildren} style={{height: isPathOpen?'auto':0}}>
 					{createPath === (isArray?currentPath + '.0':currentPath) &&
-						<div className={s.fieldCreate}>
-							<Input autoFocus
-								className={s.fieldCreateInput}
-								placeholder='Field name'
-								value={createValue}
-								onChange={value => this.obState.createValue = value}
-								onKeyPress={this.handleKeyPress}
-								onBlur={this.handleBlur}/>
-						</div>
+						this.renderCreate()
 					}
 					{!isFieldPrimitive && map(isArray?field[0]:field, (value, key) => this.renderField(key, value, isArray?currentPath + '.0':currentPath))}
 				</div>
@@ -186,15 +201,20 @@ export default class SchemaEditor extends Component{
 		);
 	}
 	render(){
-		const {className, classes, value} = this.props;
-		const s = createStyle(style, className, classes);
+		const {value} = this.props;
+		const {createPath} = this.obState;
+
+		const s = this.getStyle();
+
 		return (
 			<div className={s.root}>
-				<Header title='Objects'/>
+				<Header title='Objects' actionIcon='plus' onActionClick={() => this.obState.createPath = 'objects'}/>
+				{createPath === 'objects' && <div className={s.rootCreate}>{this.renderCreate('Object name')}</div>}
 				<div>
 					{map(value.objects, (field, key) => this.renderField(key, field, 'objects'))}
 				</div>
-				<Header title='Collections'/>
+				<Header title='Collections' actionIcon='plus' onActionClick={() => this.obState.createPath = ''}/>
+				{createPath === '' && <div className={s.rootCreate}>{this.renderCreate('Collection name')}</div>}
 				<div>
 					{map(omit(value, 'objects'), (field, key) => this.renderField(key, field, null))}
 				</div>

@@ -13,17 +13,19 @@ import style from './style.scss';
 export default class ActionButton extends Component{
 	static propTypes = {
 		icon: PropTypes.string,
-		active: PropTypes.bool
+		active: PropTypes.bool,
+		disabled: PropTypes.bool,
 	};
 
 	static defaultProps = {
 	};
 
 	render(){
-		const {className, icon, active, ...otherProps} = this.props;
+		const {className, icon, active, disabled, ...otherProps} = this.props;
 		const s = createStyle(style, className, {
 			root: {
-				active
+				active,
+				disabled
 			}
 		});
 

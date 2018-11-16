@@ -10,6 +10,7 @@ import FormStore from '../form/form-store';
 import Header from '../header';
 import {InputControl} from '../controls/input';
 import inject from '../inject';
+import ListEmptyItem from '../list-empty-item';
 import ListItem from '../list-item';
 import Icon from '../icon';
 import {SubmitButton} from '../button';
@@ -49,7 +50,12 @@ export default class Paths extends Component{
 	@autobind
 	handleCreate(){
 		const {path, store} = this.props;
-		store.createCollectionItem(path, this.createFormStore.get('key'));
+		if(store.isPathCollection(path)){
+			store.createCollectionItem(path, this.createFormStore.get('key'));
+		}else{
+			store.createArrayItem(path);
+		}
+
 		this.createFormStore.reset();
 	}
 
@@ -101,8 +107,12 @@ export default class Paths extends Component{
 	renderPaths(){
 		const {store, path, value} = this.props;
 
-		if(value && (store.isPathCollection(path) || store.isPathArray(path))){
+		if(store.isPathCollection(path) || store.isPathArray(path)){
 			const {collectionMainLabel, collectionImage} = store.getSettingsByPath(path) || {};
+
+			if(!value || !value.length){
+				return <ListEmptyItem/>
+			}
 
 			return map(value, (item, key) => {
 				const itemKey = item.$key || key;

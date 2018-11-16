@@ -19,7 +19,7 @@ import {
 	USER_REQUESTS_KEY_NAME, USERS_KEY,
 	USERS_KEY_NAME
 } from './constants';
-import {stripRootFromPath, toAbsolutePath} from './utils/path-utils';
+import {getParentPath, stripRootFromPath, toAbsolutePath} from './utils/path-utils';
 import {getSchemaCollectionPaths, schemaGet, toSchemaPath} from './utils/schema-utils';
 
 const validPathInvariant = path => invariant(path.startsWith('.'), 'Invalid path structure. paths must start with `.`');
@@ -197,10 +197,12 @@ export default class OrkanStore{
 	}
 
 	async setActivePath(anyTypeOfPath){
+		console.log('?!', anyTypeOfPath)
 		// to enable components use relative paths (e.g something vs ./something)
 		const path = toAbsolutePath(anyTypeOfPath);
 
-		this.activePath = path;
+		this.activePath = this.isPathPrimitive(path, true)?getParentPath(path):path;
+
 		this.dataFormStore.reset();
 
 		if(path === '.'){
@@ -208,44 +210,44 @@ export default class OrkanStore{
 		}
 
 		this.isLoadingActivePath = true;
-		path !== '.' && await this.loadRequiredFieldsByPath(path);
+		await this.loadRequiredFieldsByPath(this.activePath);
 		this.isLoadingActivePath = false;
-		const storeValue = this.dataStore.getValue(stripRootFromPath(anyTypeOfPath)) || {};
+		const storeValue = this.dataStore.getValue(stripRootFromPath(this.activePath)) || {};
 
-		if(this.isPathPrimitive(path, true)){
-			this.dataFormStore.set(path, storeValue);
-		}else if(!this.isPathCollection(path)){
-			this.getPrimitiveKeysByPath(path, true).forEach(key => {
-				this.dataFormStore.set(`${path}.${key}`, storeValue[key]);
+		if(!this.isPathCollection(this.activePath)){
+
+			this.getPrimitiveKeysByPath(this.activePath, true).forEach(key => {
+				this.dataFormStore.set(`${this.activePath}.${key}`, storeValue[key]);
 			});
 		}
-
+		console.log(this.dataFormStore.toJS())
 		setTimeout(() => this.dataFormStore.setClean(), 2);
 	}
 
 	async submitData(){
 		const queryablePath = toQueryablePath(this.activePathWithoutRoot);
 		const {innerPath} = breakPath(this.activePathWithoutRoot);
-		const formValue = this.dataFormStore.get(this.activePath);
 
-		let finalValue = omitBy(formValue, val => !val);
+		const formValue = omitBy(this.dataFormStore.get(this.activePath), val => !val);
+		const currentValue = this.dataStore.getValue(stripRootFromPath(this.activePath)) || {};
+		const finalValue = {...currentValue, ...formValue};
+
+		let document = cloneDeep(this.dataStore.getValue(queryablePath) || {});
 
 		if(innerPath){
-			finalValue = cloneDeep(this.dataStore.getValue(queryablePath) || {});
-			set(finalValue, toDotPath(innerPath), formValue);
+			set(document, toDotPath(innerPath), finalValue);
+		}else{
+			Object.assign(document, finalValue);
 		}
-		debugger;
-		await this.dataStore.setValue(queryablePath, finalValue);
 
+		await this.dataStore.setValue(queryablePath, document);
 		setTimeout(() => this.dataFormStore.setClean(), 2);
 	}
 
 	async loadRequiredFieldsByPath(path){
 		const pathWithoutHome = stripRootFromPath(path);
-		if(this.isPathPrimitive(path, true)){
-			return await this.dataStore.load(pathWithoutHome);
-		}else if(!this.isPathCollection(path)){
-			return await Promise.all(this.isPathCollection(path)?[]:this.getPrimitiveKeysByPath(path, true)
+		if(!this.isPathCollection(path)){
+			return await Promise.all(this.getPrimitiveKeysByPath(path, true)
 				.filter(key => this.dataStore.getValue(pathWithoutHome + '/' + key) === undefined)
 				.map(key => this.dataStore.load(pathWithoutHome + '/' + key))
 			);
@@ -365,8 +367,15 @@ export default class OrkanStore{
 	async createCollectionItem(path, key){
 		validPathInvariant(path);
 
-		const finalKey = key || this.dataStore.generateKey(this.activePathWithoutRoot);
+		const finalKey = key || this.dataStore.generateKey(stripRootFromPath(path));
 		this.setActivePath(path + '/' + finalKey);
+	}
+
+
+	async createArrayItem(path){
+		validPathInvariant(path);
+		const arr = this.dataStore.getValue(stripRootFromPath(path)) || [];
+		this.setActivePath(path + '/' + arr.length);
 	}
 
 

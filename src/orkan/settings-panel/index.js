@@ -174,7 +174,7 @@ export default class SettingsPanel extends Component{
 
 		return (
 			<div className={s.root}>
-				<Header title={['Settings', <span key={1} className={s.headerPath}>{store.settingsPath}</span>]} onClose={() => store.clearSettingsPath()}/>
+				<Header title={['Settings', <span key={1} className={s.headerPath}>{store.settingsPath}</span>]} onActionClick={() => store.clearSettingsPath()}/>
 				{store.isPathCollection(store.settingsPath)
 					?this.renderCollectionSettings()
 					:this.renderFieldSettings()

@@ -19,8 +19,19 @@
 	}
 }
 
+.rootCreate{
+	height: $headerSize;
+	display: flex;
+	align-items: center;
+	padding: 0 10px;
+	border-bottom: 1px solid #D0D2D6;
+	> * {
+		flex: 1;
+	}
+}
+
 .fieldContent{
-	height: 27px;
+	height: 30px;
 	display: flex;
 	align-items: center;
 	&:hover{
@@ -28,7 +39,9 @@
 			color: #000000;
 		}
 		.fieldActions{
-			display: flex;
+			> :not(.persistentAction){
+				display: flex;
+			}
 		}
 	}
 }
@@ -51,8 +64,11 @@
 
 
 .fieldActions{
-	display: none;
+	display: flex;
 	flex: 0 0 auto;
+	> :not(.persistentAction) {
+		display: none;
+	}
 }
 
 .fieldActionButton{
@@ -71,6 +87,8 @@
 	display: flex;
 	align-items: center;
 }
+
+
 
 .fieldCreateInput{
 	flex: 1;

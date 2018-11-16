@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {observer} from 'mobx-react';
 import autobind from 'autobind-decorator';
 import map from 'lodash/map';
+import {MEDIA_KEY} from '../constants';
 
 import inject from '../inject';
 import Thumbnail from '../thumbnail';
@@ -11,18 +12,13 @@ import {createStyle} from '../utils/style-utils';
 import style from './style.scss';
 
 @inject(({filter}) => {
-
-	if(filter === 'all'){
-		return {
-			image: 'media/image',
-			video: 'media/video',
-			audio: 'media/audio'
-		};
-	}else{
-		return {
-			[filter]: 'media/' + filter
-		};
-	}
+	const isAll = filter === 'all';
+	return {
+		media: {
+			path: MEDIA_KEY,
+			where: !isAll && {type: {'==': filter}}
+		}
+	};
 }, {liveEditedData: false})
 @observer
 export default class MediaList extends Component{
@@ -39,9 +35,7 @@ export default class MediaList extends Component{
 	};
 
 	render(){
-		const {className, classes, image = {}, video = {}, audio = {}, onRemove, onSelect} = this.props;
-
-		const media = {...image, ...video, ...audio};
+		const {className, classes, image = {}, video = {}, audio = {}, onRemove, onSelect, media} = this.props;
 
 		const s = createStyle(style, className, classes);
 

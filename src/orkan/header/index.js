@@ -13,15 +13,16 @@ export default class Header extends Component{
 	static propTypes = {
 		primary: PropTypes.bool,
 		title: PropTypes.any,
-		onClose: PropTypes.func,
-		onCreate: PropTypes.func,
+		actionIcon: PropTypes.string,
+		onActionClick: PropTypes.string,
 	};
 
 	static defaultProps = {
+		actionIcon: 'close'
 	};
 
 	render(){
-		const {className, onClose, title, primary} = this.props;
+		const {className, onActionClick, actionIcon, title, primary} = this.props;
 
 		const s = createStyle(style, className, {
 			root: {
@@ -32,7 +33,7 @@ export default class Header extends Component{
 		return (
 			<h2 className={s.root}>
 				<div className={s.title}>{title}</div>
-				{onClose && <Icon className={s.icon} type='close' onClick={onClose}/>}
+				{onActionClick && <Icon className={s.icon} type={actionIcon} onClick={onActionClick}/>}
 			</h2>
 		);
 	}

@@ -9,7 +9,7 @@ import Header from '../header';
 import Select from '../controls/select';
 import inject from '../inject';
 import UploadButton from '../upload-button';
-import {FIREBASE_APP_NAME, MEDIA_KEY_NAME} from '../constants';
+import {FIREBASE_APP_NAME, MEDIA_KEY, MEDIA_KEY_NAME} from '../constants';
 import {createStyle} from '../utils/style-utils';
 import MediaList from '../media-list';
 
@@ -42,10 +42,7 @@ export default class MediaGallery extends Component{
 	async handleUploadComplete(metaData){
 		const {orkan} = this.props;
 		this.obState.isBusy = true;
-		const path = MEDIA_KEY_NAME + '/' + this.getMediaType(metaData.mimeType)
-		const {key} = orkan.store.push(path);
-
-		await orkan.store.setValue(path + '/' + key, metaData);
+		await orkan.store.setValue(MEDIA_KEY, metaData);
 		this.obState.isBusy = false;
 	}
 
@@ -77,7 +74,7 @@ export default class MediaGallery extends Component{
 
 		return (
 			<div className={s.root}>
-				<Header primary className={s.header} onClose={reject} title='Media Gallery'/>
+				<Header primary className={s.header} onActionClick={reject} title='Media Gallery'/>
 				<div className={s.actions}>
 					<Select value={filter} onChange={value => this.obState.filter = value} options={filterOptions}/>
 					<UploadButton onComplete={this.handleUploadComplete}/>
