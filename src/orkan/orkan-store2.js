@@ -1,11 +1,13 @@
 import {isEmpty} from 'lodash';
-import {observable, computed} from 'mobx';
+import {observable, computed, toJS} from 'mobx';
 import autobind from 'autobind-decorator';
 import isObject from 'lodash/isObject';
 import cloneDeep from 'lodash/cloneDeep';
 import get from 'lodash/get';
+import set from 'lodash/set';
 import isEqualWith from 'lodash/isEqualWith';
 import invariant from 'invariant';
+import {breakPath, toDotPath, toQueryablePath} from './firestore';
 
 import FormStore from './form/form-store';
 import {
@@ -45,6 +47,8 @@ export default class OrkanStore{
 	constructor(dataStore, authStore){
 		this.dataStore = dataStore;
 		this.authStore = authStore;
+
+		window.s = () => toJS(this);
 	}
 
 	@computed get activePathWithoutRoot(){
@@ -196,7 +200,6 @@ export default class OrkanStore{
 		// to enable components use relative paths (e.g something vs ./something)
 		const path = toAbsolutePath(anyTypeOfPath);
 
-
 		this.activePath = path;
 		this.dataFormStore.reset();
 
@@ -221,15 +224,13 @@ export default class OrkanStore{
 	}
 
 	async submitData(){
+		const queryablePath = toQueryablePath(this.activePathWithoutRoot);
+		const {innerPath} = breakPath(this.activePathWithoutRoot);
 		const newValue = this.dataFormStore.get(this.activePath);
-		const currentValue = this.dataStore.getValue(this.activePathWithoutRoot);
+		const currentValueClone = cloneDeep(this.dataStore.getValue(queryablePath));
+		set(currentValueClone, toDotPath(innerPath), newValue);
 
-
-		if(isObject(newValue) && isObject(currentValue)){
-			await this.dataStore.setValue(this.activePathWithoutRoot, {...currentValue, ...newValue});
-		}else{
-			await this.dataStore.setValue(this.activePathWithoutRoot, newValue);
-		}
+		await this.dataStore.setValue(queryablePath, currentValueClone);
 
 		setTimeout(() => this.dataFormStore.setClean(), 2);
 	}
@@ -306,7 +307,7 @@ export default class OrkanStore{
 	getSettingsByPath(path){
 		validPathInvariant(path);
 		const schema = this.getSchema(true);
-		const schemaSettings = this.getSchemaSettings();
+		const schemaSettings = this.getSchemaSettings(true);
 
 		const schemaPath = toSchemaPath(schema, path);
 		if(schemaPath === this.settingsPath){
@@ -318,8 +319,9 @@ export default class OrkanStore{
 
 	async submitSettings(){
 		const newValue = this.settingsFormStore.toJS();
-
-		await this.dataStore.setValue(SCHEMA_SETTINGS_KEY_NAME + '/' + this.settingsPath, newValue);
+		const schemaSettingsClone = cloneDeep(this.getSchemaSettings());
+		set(schemaSettingsClone, toDotPath(stripRootFromPath(this.settingsPath)), newValue);
+		await this.dataStore.setValue(SCHEMA_SETTINGS_PATH, schemaSettingsClone);
 
 		this.clearSettingsPath();
 	}
@@ -328,30 +330,14 @@ export default class OrkanStore{
 	setSettingsPath(path){
 		validPathInvariant(path);
 
-		const schema = this.getSchema(true);
-		const schemaSettings = this.getSchemaSettings();
-
-		const schemaPath = toSchemaPath(schema, path);
-		this.settingsPath = schemaPath;
-
-		let defaultSettings;
-
-		if(this.isPathCollection(path)){
-			defaultSettings = {
-				collectionMainLabel: ''
-			};
-		}else{
-			defaultSettings = {
-				uiType: 'text'
-			};
-		}
-
-		this.settingsFormStore.reset({...defaultSettings, ...schemaGet(schemaSettings, schemaPath)});
+		this.settingsPath = this.toSchemaPath(path);
+		const defaultSettings = this.isPathCollection(path)?defaultCollectionSettings:defaultPrimitiveSettings;
+		this.settingsFormStore.reset({...defaultSettings, ...this.getSettingsByPath(path)});
 	}
 
 	isPathCollection(path){
 		const subSchema = this.getSchemaByPath(path, true);
-		return subSchema && !!subSchema[COLLECTION_KEY];
+		return subSchema && Array.isArray(subSchema);
 	}
 
 	async createCollectionItem(path, key){
@@ -374,10 +360,10 @@ export default class OrkanStore{
 		};
 	}
 
-	getSchemaSettings(){
+	getSchemaSettings(includeNative = false){
 		return {
 			...this.dataStore.getValue(SCHEMA_SETTINGS_PATH),
-			...orkanSchemaSettings
+			...includeNative?orkanSchemaSettings:{}
 		};
 	}
 
@@ -468,21 +454,19 @@ const orkanSchema = {
 	[SYSTEM_OBJECTS_KEY]: {
 		[SCHEMA_KEY]: {},
 	},
-	[USERS_KEY]: {
-		[COLLECTION_KEY]: {
-			editData: 'string',
-			editPermissions: 'string',
-			editSchema: 'string',
+	[USERS_KEY]: [
+		{
+			editData: true,
+			editPermissions: true,
+			editSchema: true,
 		}
-	}
+	]
 };
 
 
 const orkanSchemaSettings = {
-	[USERS_KEY_NAME]: {
-		collectionMainLabel: 'email',
-		collectionImage: 'avatarUrl',
-		[COLLECTION_KEY]: {
+	[USERS_KEY]: [
+		{
 			editData: {
 				uiType: 'switch'
 			},
@@ -492,8 +476,12 @@ const orkanSchemaSettings = {
 			editSchema: {
 				uiType: 'switch'
 			}
+		},
+		{
+			labelField: 'email',
+			imageField: 'avatarUrl'
 		}
-	}
+	]
 };
 
 
@@ -502,6 +490,13 @@ const defaultUserPermissions = {
 };
 
 
+const defaultPrimitiveSettings = {
+	uiType: 'text'
+};
+
+const defaultCollectionSettings = {
+	labelField: ''
+};
 
 
 
@@ -518,3 +513,68 @@ const isSchemaCompatible = (schema, toSchema) => {
 		}
 	});
 };
+
+
+
+/*
+
+	# schema
+	{
+		objects; {
+			home: {
+				features: {
+					title,
+					list: [{
+						title, body, img
+					}]
+				}
+			}
+		}
+		docs; [{
+			title, body
+		}]
+
+	}
+
+	# schema settings
+	{
+		objects__home__features__title: {uiTypes}
+		objects__home__features__list: {uiTypes}
+		objects__home__features__list__: {uiTypes}
+	}
+
+	{
+		objects: {
+			home: {
+				features: {
+					title: {uiType}
+					list: {
+						$settings: {
+							labelField,
+							imageField,
+						}
+						title: {uiTypes}
+						body: {uiTypes}
+						img: {uiTypes}
+					}
+
+					list: [
+						{
+							title: {uiTypes}
+							body: {uiTypes}
+							img: {uiTypes}
+						},
+						{
+							labelField,
+							imageField,
+						}
+					]
+				}
+			}
+		}
+	}
+
+
+
+
+*/

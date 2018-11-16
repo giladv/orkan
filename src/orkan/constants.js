@@ -39,6 +39,7 @@ export const FIREBASE_APP_NAME = 'orkan';
 
 
 export const USERS_KEY = 'orkanUsers';
+export const USERS_REQUESTS_KEY = 'orkanUsersRequests';
 export const SYSTEM_OBJECTS_KEY = 'orkanObjects';
 export const SCHEMA_KEY = 'schema';
 export const SCHEMA_SETTINGS_KEY = 'schemaSettings';

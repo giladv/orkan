@@ -18,7 +18,7 @@ const validQueryInvariant = (path, options) => {
 };
 
 const settablePathInvariant = path => {
-	invariant(path.split('/').length <= 2, `Invalid query arguments. cannot query non collections with options`);
+	invariant(path.split('/').length <= 2, `Invalid query arguments. cannot use non collections paths with options`);
 };
 
 
@@ -327,14 +327,14 @@ const applyOrderByOptionsToQuery = (query, orderByOptions = {}) => {
 	return finalQuery;
 };
 
-const toDotPath = slashPath => slashPath.split('/').join('.');
+export const toDotPath = slashPath => slashPath.split('/').join('.');
 
-const breakPath = path => {
+export const breakPath = path => {
 	const [collection, docPath, ...innerParts] = path.split('/');
 	return {collection, docPath, innerPath: innerParts.join('/')};
 };
 
-const toQueryablePath = path => path.split('/').slice(0,2).join('/');
+export const toQueryablePath = path => path.split('/').slice(0,2).join('/');
 
 
 const isCollectionPath = path => path.split('/').length === 1;

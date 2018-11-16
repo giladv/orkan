@@ -6,14 +6,19 @@ import autobind from 'autobind-decorator';
 import map from 'lodash/map';
 import isObject from 'lodash/isObject';
 import set from 'lodash/set';
+import get from 'lodash/get';
+import unset from 'lodash/unset';
+import isEmpty from 'lodash/isEmpty';
 import cloneDeep from 'lodash/cloneDeep';
 import omit from 'lodash/omit';
 
 import ActionButton from '../action-button';
 import Input from '../controls/input';
 import {COLLECTION_KEY} from '../constants';
+import {toDotPath} from '../firestore';
 import Header from '../header';
 import Icon from '../icon';
+import {getParentPath} from '../utils/path-utils';
 import {createStyle} from '../utils/style-utils';
 
 import style from './style.scss';
@@ -39,9 +44,9 @@ export default class SchemaEditor extends Component{
 		if(e.key === 'Enter'){
 			const clone = cloneDeep(value);
 			const fullPath = [createPath, createValue].filter(it => !!it).join('.'); // createPath might be empty for root
-			set(clone, fullPath, 'string');
+			set(clone, fullPath, true);
+			console.log(fullPath, clone)
 			onChange(clone);
-			// this.obState.createPath = null;
 			this.obState.createValue = null;
 		}else if(e.key === 'Esc'){
 			this.obState.createPath = null;
@@ -63,11 +68,37 @@ export default class SchemaEditor extends Component{
 		if(!confirm('are you sure?')){
 			return;
 		}
+
+		const parentPath = toDotPath(getParentPath(path));
 		const clone = cloneDeep(value);
-		set(clone, path, null)
+		unset(clone, path);
+		if(isEmpty(get(clone, parentPath))){
+			set(clone, parentPath, true);
+		}
+		console.log(clone, path, parentPath)
 		onChange(clone);
 		this.obState.createPath = null;
 		this.obState.createValue = null;
+	}
+
+	@autobind
+	handleToggleArray(path){
+		const {onChange, value} = this.props;
+
+		const clone = cloneDeep(value);
+		const pathValue = get(clone, path);
+		let newPathValue;
+
+		if(Array.isArray(pathValue)){
+			newPathValue = pathValue[0] || true;
+		}else if(pathValue){
+			newPathValue = [pathValue];
+		}else{
+			newPathValue = [];
+		}
+
+		set(clone, path, newPathValue);
+		onChange(clone);
 	}
 
 	togglePath(path){
@@ -95,9 +126,9 @@ export default class SchemaEditor extends Component{
 		const {createPath, createValue, openPaths} = this.obState;
 
 		const isArray = Array.isArray(field);
-		field = isArray?field[0]:field;
+		// field = isArray?field[0]:field;
 
-		const currentPath = [parentPath, key, isArray && '0'].filter(it => !!it).join('.');
+		const currentPath = [parentPath, key].filter(it => !!it).join('.');
 		const isPathOpen = openPaths.includes(currentPath);
 
 		const s = createStyle(style, className, classes, {
@@ -129,16 +160,16 @@ export default class SchemaEditor extends Component{
 									icon='plus'
 									className={s.fieldActionButton}
 									onClick={() => {
-										this.obState.createPath = currentPath;
+										this.obState.createPath = isArray?currentPath + '.0':currentPath;
 										!this.isPathOpen(currentPath) && this.togglePath(currentPath);
 									}}/>
 							}
-							<ActionButton className={s.fieldActionButton} icon='array' onClick={() => this.handleRemoveField(currentPath)} active={isArray}/>
+							<ActionButton className={s.fieldActionButton} icon='array' onClick={() => this.handleToggleArray(currentPath)} active={isArray}/>
 						</div>
 					</div>
 				}
 				<div className={s.fieldChildren} style={{height: isPathOpen?'auto':0}}>
-					{createPath === currentPath &&
+					{createPath === (isArray?currentPath + '.0':currentPath) &&
 						<div className={s.fieldCreate}>
 							<Input autoFocus
 								className={s.fieldCreateInput}
@@ -149,7 +180,7 @@ export default class SchemaEditor extends Component{
 								onBlur={this.handleBlur}/>
 						</div>
 					}
-					{!isFieldPrimitive && map(field, (value, key) => this.renderField(key, value, currentPath))}
+					{!isFieldPrimitive && map(isArray?field[0]:field, (value, key) => this.renderField(key, value, isArray?currentPath + '.0':currentPath))}
 				</div>
 			</div>
 		);

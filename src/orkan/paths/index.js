@@ -3,18 +3,17 @@ import PropTypes from 'prop-types';
 import {observer} from 'mobx-react';
 import {observable} from 'mobx';
 import autobind from 'autobind-decorator';
+import map from 'lodash/map';
+
 import Form from '../form';
 import FormStore from '../form/form-store';
-
 import Header from '../header';
 import {InputControl} from '../controls/input';
 import inject from '../inject';
 import ListItem from '../list-item';
-
 import Icon from '../icon';
 import {SubmitButton} from '../button';
 import DropdownContainer from '../dropdown-container';
-import MoveModal from '../move-modal';
 import OrkanStore from '../orkan-store';
 import {stripRootFromPath} from '../utils/path-utils';
 import {createStyle} from '../utils/style-utils';
@@ -22,8 +21,10 @@ import {createStyle} from '../utils/style-utils';
 import style from './style.scss';
 
 
-@inject(({path, store}) => {
-	return store.isPathCollection(path)?{value: stripRootFromPath(path.split('/').slice(0, 1).join('/'))}:{};
+@inject(({path}) => {
+	console.log('?!', path)
+	const sanitizedPath = stripRootFromPath(path);
+	return {value: sanitizedPath};
 
 }, {liveEditedData: false})
 @observer
@@ -103,20 +104,20 @@ export default class Paths extends Component{
 		if(store.isPathCollection(path) && value){
 			const {collectionMainLabel, collectionImage} = store.getSettingsByPath(path) || {};
 
-			return Object.keys(value).map(key => (
-				<ListItem
-					key={key}
+			return map(value, (item, key) => {
+				const itemKey = item.$key || key;
+				return <ListItem
+					key={itemKey}
 					image={collectionImage && value[key][collectionImage]}
-					onClick={() => this.handleClickPath(key)}
+					onClick={() => this.handleClickPath(itemKey)}
 					buttons={[
-						{icon: 'move', onClick: (e) => store.openModal(MoveModal, {path: path + '/' + key, store})},
-						{icon: 'clone', onClick: (e) => this.handleRemove(e, key)},
-						{icon: 'trash', onClick: (e) => this.handleRemove(e, key)},
+						{icon: 'clone', onClick: (e) => this.handleRemove(e, itemKey)},
+						{icon: 'trash', onClick: (e) => this.handleRemove(e, itemKey)},
 					]}>
 
-					{collectionMainLabel?value[key][collectionMainLabel]:'/'+key}
+					{collectionMainLabel ? value[key][collectionMainLabel] : '/' + itemKey}
 				</ListItem>
-			))
+			})
 		}else{
 			return store.getNonPrimitiveKeysByPath(path, true).map(key => (
 				<ListItem key={key} onClick={() => this.handleClickPath(key)}>/{key}</ListItem>
@@ -126,7 +127,7 @@ export default class Paths extends Component{
 
 	render(){
 		const {store, path, showHeader} = this.props;
-		const {newKey, isOptionsOpen} = this.obState;
+		const {isOptionsOpen} = this.obState;
 
 		const options = [
 			{label: 'Settings', value: 'settings'},

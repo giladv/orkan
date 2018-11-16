@@ -61,27 +61,30 @@ export default class Admin extends Component{
 
 	@autobind
 	handleClose(){
-		const {store} = this.props;
+		const {store, store2} = this.props;
 		store.activePath && store.clearActivePath();
+		store2.activePath && store2.clearActivePath();
 		document.body.style.paddingLeft = '';
 	}
 
 	@autobind
 	handleLogout(){
-		const {store} = this.props;
+		const {store, store2} = this.props;
 		this.handleClose();
 		store.logout();
+		store2.logout();
 	}
 
 	@autobind
 	handleDeclineUserRequest(uid){
-		const {store} = this.props;
+		const {store, store2} = this.props;
 
 		if(!confirm('are you sure?')){
 			return;
 		}
 
 		store.declineUserRequest(uid);
+		store2.declineUserRequest(uid);
 	}
 
 	render() {
@@ -119,7 +122,7 @@ export default class Admin extends Component{
 
 		return (
 			<div className={s.root}>
-				{store.isAdmin() && store.activePath &&
+				{store2.isAdmin() && store2.activePath &&
 					<Sidebar
 						side='left'
 						initialSize={300}
@@ -132,18 +135,18 @@ export default class Admin extends Component{
 
 						<Header primary title={headerTitle} onClose={this.handleClose}/>
 
-						{store.isLoadingActivePath && <Spinner className={s.spinner}/>}
+						{store2.isLoadingActivePath && <Spinner className={s.spinner}/>}
 
 
 						<div className={s.scrollContainer}>
-							{!store.isLoadingActivePath &&
+							{!store2.isLoadingActivePath &&
 								<DataForm
 									className={s.dataForm}
-									path={store.activePath}
-									store={store}/>
+									path={store2.activePath}
+									store={store2}/>
 							}
 
-							{!store.isLoadingActivePath &&
+							{!store2.isLoadingActivePath &&
 								<Paths
 									path={store2.activePath}
 									store={store2} />
@@ -166,13 +169,13 @@ export default class Admin extends Component{
 					</Sidebar>
 				}
 
-				{store.settingsPath &&
+				{store2.settingsPath &&
 					<SettingsPanel
 						className={s.settingsPanel}
-						store={store}/>
+						store={store2}/>
 				}
 
-				{store.modal && <store.modal.Component {...store.modal.props} className={s.modal}/>}
+				{store2.modal && <store.modal.Component {...store2.modal.props} className={s.modal}/>}
 			</div>
 		);
 	}

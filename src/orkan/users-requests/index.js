@@ -8,13 +8,13 @@ import {observable} from 'mobx';
 import Icon from '../icon';
 import inject from '../inject';
 import ListItem from '../list-item';
-import {USER_REQUESTS_KEY_NAME} from '../constants';
+import {USER_REQUESTS_KEY_NAME, USERS_REQUESTS_KEY} from '../constants';
 import {createStyle} from '../utils/style-utils';
 
 import style from './style.scss';
 
 
-@inject(() => ({requests: USER_REQUESTS_KEY_NAME}), {liveEditedData: false})
+@inject(() => ({requests: USERS_REQUESTS_KEY}), {liveEditedData: false})
 @observer
 export default class UsersRequests extends Component{
 	static propTypes = {
@@ -52,7 +52,7 @@ export default class UsersRequests extends Component{
 		const {className, classes, requests} = this.props;
 		const {isOpen} = this.obState;
 
-		if(!requests){
+		if(!requests.length){
 			return null;
 		}
 
