@@ -21,6 +21,8 @@ const settablePathInvariant = path => {
 	invariant(path.split('/').length <= 2, `Invalid query arguments. cannot use non collections paths with options`);
 };
 
+const collectionPathInvariant = path => invariant(path.split('/').length === 1, 'Invalid collection path. expected a path with one segment');
+
 
 /*
 	# how does it work?
@@ -275,6 +277,11 @@ export default class Firestore{
 		query = applyOrderByOptionsToQuery(query, options.orderBy);
 
 		return query;
+	}
+
+	generateKey(path){
+		collectionPathInvariant(path);
+		return this.api.collection(path).doc().id;
 	}
 }
 

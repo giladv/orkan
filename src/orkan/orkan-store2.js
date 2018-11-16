@@ -5,17 +5,17 @@ import isObject from 'lodash/isObject';
 import cloneDeep from 'lodash/cloneDeep';
 import get from 'lodash/get';
 import set from 'lodash/set';
-import isEqualWith from 'lodash/isEqualWith';
+import omitBy from 'lodash/omitBy';
 import invariant from 'invariant';
 import {breakPath, toDotPath, toQueryablePath} from './firestore';
 
 import FormStore from './form/form-store';
 import {
-	COLLECTION_KEY, SCHEMA_KEY,
-	SCHEMA_KEY_NAME,
+	COLLECTION_KEY,
+	SCHEMA_KEY,
 	SCHEMA_PATH,
-	SCHEMA_SETTINGS_KEY_NAME,
-	SCHEMA_SETTINGS_PATH, SYSTEM_OBJECTS_KEY,
+	SCHEMA_SETTINGS_PATH,
+	SYSTEM_OBJECTS_KEY,
 	USER_REQUESTS_KEY_NAME, USERS_KEY,
 	USERS_KEY_NAME
 } from './constants';
@@ -129,7 +129,7 @@ export default class OrkanStore{
 		// to enable components use relative paths (e.g something vs ./something)
 		const path = toAbsolutePath(anyTypeOfPath);
 
-		if(!this.activePath || this.isInitializing || this.dataStore.isLoading(SCHEMA_KEY_NAME) || this.isLoadingActivePath){
+		if(!this.activePath || this.isInitializing || this.dataStore.isLoading(SCHEMA_KEY) || this.isLoadingActivePath){
 			return this.dataStore.getValue(stripRootFromPath(anyTypeOfPath), options);
 		}
 
@@ -226,11 +226,16 @@ export default class OrkanStore{
 	async submitData(){
 		const queryablePath = toQueryablePath(this.activePathWithoutRoot);
 		const {innerPath} = breakPath(this.activePathWithoutRoot);
-		const newValue = this.dataFormStore.get(this.activePath);
-		const currentValueClone = cloneDeep(this.dataStore.getValue(queryablePath));
-		set(currentValueClone, toDotPath(innerPath), newValue);
+		const formValue = this.dataFormStore.get(this.activePath);
 
-		await this.dataStore.setValue(queryablePath, currentValueClone);
+		let finalValue = omitBy(formValue, val => !val);
+
+		if(innerPath){
+			finalValue = cloneDeep(this.dataStore.getValue(queryablePath) || {});
+			set(finalValue, toDotPath(innerPath), formValue);
+		}
+		debugger;
+		await this.dataStore.setValue(queryablePath, finalValue);
 
 		setTimeout(() => this.dataFormStore.setClean(), 2);
 	}
@@ -336,6 +341,23 @@ export default class OrkanStore{
 	}
 
 	isPathCollection(path){
+		const pathParts = path.split('/');
+
+		if(pathParts.length !== 2){
+			return false;
+		}
+
+		const subSchema = this.getSchemaByPath(path, true);
+		return subSchema && Array.isArray(subSchema);
+	}
+
+	isPathArray(path){
+		const pathParts = path.split('/');
+
+		if(pathParts.length <= 2){
+			return false;
+		}
+
 		const subSchema = this.getSchemaByPath(path, true);
 		return subSchema && Array.isArray(subSchema);
 	}
@@ -343,7 +365,7 @@ export default class OrkanStore{
 	async createCollectionItem(path, key){
 		validPathInvariant(path);
 
-		const finalKey = key || this.dataStore.push(this.activePathWithoutRoot).key;
+		const finalKey = key || this.dataStore.generateKey(this.activePathWithoutRoot);
 		this.setActivePath(path + '/' + finalKey);
 	}
 

@@ -101,7 +101,7 @@ export default class Paths extends Component{
 	renderPaths(){
 		const {store, path, value} = this.props;
 
-		if(store.isPathCollection(path) && value){
+		if(value && (store.isPathCollection(path) || store.isPathArray(path))){
 			const {collectionMainLabel, collectionImage} = store.getSettingsByPath(path) || {};
 
 			return map(value, (item, key) => {
@@ -135,6 +135,7 @@ export default class Paths extends Component{
 		];
 
 		const isPathCollection = store.isPathCollection(path);
+		const isPathArray = store.isPathArray(path);
 		const nonPrimitiveKeysExist = store.getNonPrimitiveKeysByPath(path, true).length > 0;
 		const primitiveKeysExist = store.getPrimitiveKeysByPath(path, true).length > 0;
 
@@ -145,7 +146,7 @@ export default class Paths extends Component{
 				{showHeader && !isPathCollection && nonPrimitiveKeysExist && primitiveKeysExist &&
 					<Header title='Other Paths'/>
 				}
-				{isPathCollection &&
+				{(isPathCollection || isPathArray) &&
 					<div className={s.collectionHeader}>
 						<DropdownContainer
 							className={s.collectionHeaderDropdown}
@@ -157,7 +158,9 @@ export default class Paths extends Component{
 							<Icon className={s.collectionHeaderDropdownIcon} type='dots'/>
 						</DropdownContainer>
 						<Form store={this.createFormStore} onSubmit={this.handleCreate} className={s.createForm}>
-							<InputControl className={s.createFormInput} placeholder='key (optional)' name='key'/>
+							{isPathCollection &&
+								<InputControl className={s.createFormInput} placeholder='key (optional)' name='key'/>
+							}
 							<SubmitButton primary>create</SubmitButton>
 						</Form>
 					</div>
