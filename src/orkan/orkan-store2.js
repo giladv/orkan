@@ -14,8 +14,7 @@ import {
 	SCHEMA_KEY,
 	SCHEMA_PATH,
 	SCHEMA_SETTINGS_PATH,
-	SYSTEM_OBJECTS_KEY,
-	USER_REQUESTS_KEY_NAME,
+	SYSTEM_OBJECTS_KEY, USER_REQUESTS_KEY,
 	USERS_KEY
 } from './constants';
 import {getParentPath, stripRootFromPath, toAbsolutePath} from './utils/path-utils';
@@ -91,7 +90,7 @@ export default class OrkanStore{
 
 
 	createUserRequest(user){
-		return this.dataStore.setValue(USER_REQUESTS_KEY_NAME + '/' + user.uid, {
+		return this.dataStore.setValue(USER_REQUESTS_KEY + '/' + user.uid, {
 			email: user.email,
 			avatarUrl: user.photoURL
 		});
@@ -422,14 +421,14 @@ export default class OrkanStore{
 
 
 	async approveUserRequest(uid){
-		const userRequest = this.dataStore.getValue(USER_REQUESTS_KEY_NAME + '/'	+ uid);
-		await this.dataStore.remove(USER_REQUESTS_KEY_NAME + '/'	+ uid);
+		const userRequest = this.dataStore.getValue(USER_REQUESTS_KEY + '/'	+ uid);
+		await this.dataStore.remove(USER_REQUESTS_KEY + '/'	+ uid);
 		await this.dataStore.setValue(USERS_KEY + '/'	+ uid, {...userRequest, ...defaultUserPermissions});
 	}
 
 
 	declineUserRequest(uid){
-		return this.dataStore.remove(USER_REQUESTS_KEY_NAME + '/'	+ uid);
+		return this.dataStore.remove(USER_REQUESTS_KEY + '/'	+ uid);
 	}
 
 	openModal(Component, props = {}){
@@ -491,8 +490,8 @@ const orkanSchemaSettings = {
 			}
 		},
 		{
-			labelField: 'email',
-			imageField: 'avatarUrl'
+			collectionMainLabel: 'email',
+			collectionImage: 'avatarUrl'
 		}
 	]
 };

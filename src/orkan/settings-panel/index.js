@@ -13,7 +13,6 @@ import {InputControl} from '../controls/input';
 import Header from '../header';
 import {SliderControl} from '../controls/slider';
 import OrkanStore2 from '../orkan-store2';
-import {COLLECTION_KEY} from '../constants';
 import {createStyle} from '../utils/style-utils';
 
 import style from './style.scss';
@@ -51,7 +50,7 @@ export default class SettingsPanel extends Component{
 		const {store} = this.props;
 		const {isBusy} = this.obState;
 
-		let collectionMainLabelOption = store.getPrimitiveKeysByPath(store.settingsPath + '/' + COLLECTION_KEY).map(primitive => ({
+		let collectionMainLabelOption = store.getPrimitiveKeysByPath(store.settingsPath + '/0').map(primitive => ({
 			label: primitive,
 			value: primitive
 		}));
@@ -90,8 +89,8 @@ export default class SettingsPanel extends Component{
 		let dataSourcePrimitivesOptions = [];
 
 		if(store.settingsFormStore.get('dataSource') === 'dynamic' && store.settingsFormStore.get('dataSourcePath')){
-			if(!store.isPathPrimitive(store.settingsFormStore.get('dataSourcePath') + '/' + COLLECTION_KEY)){
-				dataSourcePrimitivesOptions = store.getPrimitiveKeysByPath(store.settingsFormStore.get('dataSourcePath') + '/' + COLLECTION_KEY).map(primitive => ({
+			if(!store.isPathPrimitive(store.settingsFormStore.get('dataSourcePath') + '/0')){
+				dataSourcePrimitivesOptions = store.getPrimitiveKeysByPath(store.settingsFormStore.get('dataSourcePath') + '/0').map(primitive => ({
 					label: primitive,
 					value: primitive
 				}));

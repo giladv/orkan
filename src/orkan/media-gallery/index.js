@@ -9,7 +9,7 @@ import Header from '../header';
 import Select from '../controls/select';
 import inject from '../inject';
 import UploadButton from '../upload-button';
-import {FIREBASE_APP_NAME, MEDIA_KEY, MEDIA_KEY_NAME} from '../constants';
+import {FIREBASE_APP_NAME, MEDIA_KEY} from '../constants';
 import {createStyle} from '../utils/style-utils';
 import MediaList from '../media-list';
 
@@ -55,7 +55,7 @@ export default class MediaGallery extends Component{
 		let fileRef = firebase.storage(firebase.app(FIREBASE_APP_NAME)).ref(media.fullPath);
 		fileRef.delete();
 
-		const path = MEDIA_KEY_NAME + '/' + this.getMediaType(media.mimeType) + '/' + key;
+		const path = MEDIA_KEY + '/' + this.getMediaType(media.mimeType) + '/' + key;
 		orkan.store.remove(path);
 
 	}

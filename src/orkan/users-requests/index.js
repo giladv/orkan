@@ -8,7 +8,7 @@ import {observable} from 'mobx';
 import Icon from '../icon';
 import inject from '../inject';
 import ListItem from '../list-item';
-import {USER_REQUESTS_KEY_NAME, USERS_REQUESTS_KEY} from '../constants';
+import {USERS_REQUESTS_KEY} from '../constants';
 import {createStyle} from '../utils/style-utils';
 
 import style from './style.scss';
@@ -36,10 +36,10 @@ export default class UsersRequests extends Component{
 
 		return (
 			<div>
-				{map(requests, (request, uid) => (
-					<ListItem key={uid} image={request.avatarUrl} buttons={[
-						{icon: 'v', onClick: () => onApprove(uid)},
-						{icon: 'clear', onClick: () => onDecline(uid)}
+				{map(requests, request => (
+					<ListItem key={request.$key} image={request.avatarUrl} buttons={[
+						{icon: 'v', onClick: () => onApprove(request.$key)},
+						{icon: 'clear', onClick: () => onDecline(request.$key)}
 					]}>
 						{request.email}
 					</ListItem>

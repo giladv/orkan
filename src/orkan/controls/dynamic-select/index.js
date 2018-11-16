@@ -11,7 +11,7 @@ import Select from '../select';
 
 @inject(({optionsPath}) => {
 	return {
-		data: stripRootFromPath(optionsPath)
+		data: optionsPath && stripRootFromPath(optionsPath)
 	};
 })
 @observer

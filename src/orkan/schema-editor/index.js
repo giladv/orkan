@@ -15,7 +15,6 @@ import classNames from 'classnames';
 
 import ActionButton from '../action-button';
 import Input from '../controls/input';
-import {COLLECTION_KEY} from '../constants';
 import {toDotPath} from '../firestore';
 import Header from '../header';
 import Icon from '../icon';
@@ -172,15 +171,13 @@ export default class SchemaEditor extends Component{
 							{currentPath &&
 								<ActionButton className={s.fieldActionButton} icon='trash' onClick={() => this.handleRemoveField(currentPath)}/>
 							}
-							{!field[COLLECTION_KEY] &&
-								<ActionButton
-									icon='plus'
-									className={s.fieldActionButton}
-									onClick={() => {
-										this.obState.createPath = isArray?currentPath + '.0':currentPath;
-										!this.isPathOpen(currentPath) && this.togglePath(currentPath);
-									}}/>
-							}
+							<ActionButton
+								icon='plus'
+								className={s.fieldActionButton}
+								onClick={() => {
+									this.obState.createPath = isArray?currentPath + '.0':currentPath;
+									!this.isPathOpen(currentPath) && this.togglePath(currentPath);
+								}}/>
 							{parentPath !== 'objects' &&
 								<ActionButton
 									className={classNames(s.fieldActionButton, isArray && s.persistentAction)}
