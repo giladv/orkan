@@ -1,6 +1,6 @@
 import invariant from 'invariant';
 
-const PATH_SEPARATOR_REGEX = '/';
+const PATH_SEPARATOR = '/';
 
 
 export const stripRootFromPath = (path) => path.replace(/^\.\/?/, '');
@@ -11,10 +11,12 @@ export const validAbsolutePathInvariant = path => {
 };
 
 export const getParentPath = path => {
-	const pathParts = path.split(PATH_SEPARATOR_REGEX);
+	const pathParts = path.split(PATH_SEPARATOR);
 
 	if(pathParts.length > 1){
 		return pathParts.slice(0, -1).join('/');
+	}else if(pathParts.length === 1){
+		return '';
 	}else{
 		return pathParts[0];
 	}

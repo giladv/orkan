@@ -14,6 +14,8 @@ test('stripRootFromPath', () => {
 
 
 test('getParentPath', () => {
+	expect(getParentPath('home')).toBe('');
+	expect(getParentPath('./home')).toBe('.');
 	expect(getParentPath('home/hero')).toBe('home');
 	expect(getParentPath('./home/hero')).toBe('./home');
 	expect(getParentPath('')).toBe('');
