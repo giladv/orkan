@@ -14,7 +14,7 @@ import Spinner from '../spinner';
 import Paths from '../paths';
 import Img from '../img';
 import UsersRequests from '../users-requests';
-import OrkanStore from '../orkan-store';
+import OrkanStore2 from '../orkan-store2';
 import {SCHEMA_PATH} from '../constants';
 import SchemaEditor from '../schema-editor';
 import {toAbsolutePath} from '../utils/path-utils';
@@ -27,7 +27,7 @@ import style from './style.scss';
 export default class Admin extends Component{
 
 	static propTypes = {
-		store: PropTypes.instanceOf(OrkanStore).isRequired
+		store: PropTypes.instanceOf(OrkanStore2).isRequired
 	};
 
 
@@ -36,7 +36,7 @@ export default class Admin extends Component{
 	};
 
 	componentWillMount(){
-		const {store, store2} = this.props;
+		const {store2} = this.props;
 
 		store2.init();
 
@@ -126,7 +126,7 @@ export default class Admin extends Component{
 						onResizeEnd={() => this.obState.isResizing = false}
 						onResize={size => document.body.style.paddingLeft = size + 'px'}>
 
-						<UsersRequests onApprove={uid => store.approveUserRequest(uid)} onDecline={this.handleDeclineUserRequest}/>
+						<UsersRequests onApprove={uid => store2.approveUserRequest(uid)} onDecline={this.handleDeclineUserRequest}/>
 
 						<Header primary title={headerTitle} onActionClick={this.handleClose}/>
 

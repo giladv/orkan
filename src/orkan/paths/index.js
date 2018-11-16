@@ -15,7 +15,7 @@ import ListItem from '../list-item';
 import Icon from '../icon';
 import {SubmitButton} from '../button';
 import DropdownContainer from '../dropdown-container';
-import OrkanStore from '../orkan-store';
+import OrkanStore2 from '../orkan-store2';
 import {stripRootFromPath} from '../utils/path-utils';
 import {createStyle} from '../utils/style-utils';
 
@@ -23,7 +23,6 @@ import style from './style.scss';
 
 
 @inject(({path}) => {
-	console.log('?!', path)
 	const sanitizedPath = stripRootFromPath(path);
 	return {value: sanitizedPath};
 
@@ -34,7 +33,7 @@ export default class Paths extends Component{
 	static propTypes = {
 		path: PropTypes.string.isRequired,
 		showHeader: PropTypes.bool,
-		store: PropTypes.instanceOf(OrkanStore).isRequired,
+		store: PropTypes.instanceOf(OrkanStore2).isRequired,
 	};
 
 	static defaultProps = {
@@ -62,7 +61,6 @@ export default class Paths extends Component{
 	@autobind
 	handleClickPath(key){
 		const {path, store} = this.props;
-		console.log('set active', path + '/' + key)
 		store.setActivePath(path + '/' + key)
 	}
 

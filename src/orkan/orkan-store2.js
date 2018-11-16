@@ -11,13 +11,12 @@ import {breakPath, toDotPath, toQueryablePath} from './firestore';
 
 import FormStore from './form/form-store';
 import {
-	COLLECTION_KEY,
 	SCHEMA_KEY,
 	SCHEMA_PATH,
 	SCHEMA_SETTINGS_PATH,
 	SYSTEM_OBJECTS_KEY,
-	USER_REQUESTS_KEY_NAME, USERS_KEY,
-	USERS_KEY_NAME
+	USER_REQUESTS_KEY_NAME,
+	USERS_KEY
 } from './constants';
 import {getParentPath, stripRootFromPath, toAbsolutePath} from './utils/path-utils';
 import {getSchemaCollectionPaths, schemaGet, toSchemaPath} from './utils/schema-utils';
@@ -137,9 +136,7 @@ export default class OrkanStore{
 		// case #3
 		console.log('@case #3', path);
 
-			if(this.isPathPrimitive(path, true)){
-				return this.dataFormStore.get(this.activePath)
-			}else if(this.isPathCollection(path)){
+			if(this.isPathCollection(path)){
 				return this.dataStore.getValue(stripRootFromPath(anyTypeOfPath), options);
 			}else{
 				return {
@@ -168,12 +165,21 @@ export default class OrkanStore{
 		// case #1
 		console.log('@case #1', path);
 
-			const dataStoreValue = this.dataStore.getValue(stripRootFromPath(anyTypeOfPath), options);
+		const dataStoreValue = this.dataStore.getValue(stripRootFromPath(anyTypeOfPath), options);
 			let clonedData = cloneDeep(dataStoreValue);
 			if(Array.isArray(dataStoreValue)){
 				const pathParts = this.activePath.replace(path + '/', '').split('/');
 				const firstKey = pathParts.shift();
-				const collectionItem = clonedData.find(item => item.$key === firstKey);
+				const isPathCollection = this.isPathCollection(anyTypeOfPath);
+
+				let collectionItem;
+				if(isPathCollection){
+					collectionItem = clonedData.find((item, key) => item.$key === firstKey);
+				}else{
+					collectionItem = clonedData[firstKey];
+				}
+
+
 				if(collectionItem){
 					const propertyToOverride = pathParts.length?get(collectionItem, pathParts):collectionItem;
 
@@ -197,7 +203,6 @@ export default class OrkanStore{
 	}
 
 	async setActivePath(anyTypeOfPath){
-		console.log('?!', anyTypeOfPath)
 		// to enable components use relative paths (e.g something vs ./something)
 		const path = toAbsolutePath(anyTypeOfPath);
 
@@ -220,7 +225,7 @@ export default class OrkanStore{
 				this.dataFormStore.set(`${this.activePath}.${key}`, storeValue[key]);
 			});
 		}
-		console.log(this.dataFormStore.toJS())
+
 		setTimeout(() => this.dataFormStore.setClean(), 2);
 	}
 
@@ -267,12 +272,6 @@ export default class OrkanStore{
 		return schemaPath && schemaGet(schema, schemaPath);
 	}
 
-	isSchemaCompatible(path, toPath){
-		const pathSchema = this.getSchemaByPath(path);
-		const toPathSchema = this.getSchemaByPath(toPath);
-		return isSchemaCompatible(pathSchema, toPathSchema);
-	}
-
 	isPathPrimitive(path, includeNative){
 		validPathInvariant(path);
 		const pathSchema = this.getSchemaByPath(path, includeNative);
@@ -313,23 +312,33 @@ export default class OrkanStore{
 
 	getSettingsByPath(path){
 		validPathInvariant(path);
-		const schema = this.getSchema(true);
+		// debugger;
 		const schemaSettings = this.getSchemaSettings(true);
 
-		const schemaPath = toSchemaPath(schema, path);
+		const schemaPath = this.toSchemaPath(path);
 		if(schemaPath === this.settingsPath){
 			return this.settingsFormStore.toJS();
 		}else if(schemaSettings){
-			return schemaGet(schemaSettings, schemaPath);
+			const pathSchemaSettings = schemaGet(schemaSettings, schemaPath);
+			return this.isPathIterable(path) &&  pathSchemaSettings?pathSchemaSettings[1]:pathSchemaSettings;
 		}
 	}
 
 	async submitSettings(){
 		const newValue = this.settingsFormStore.toJS();
 		const schemaSettingsClone = cloneDeep(this.getSchemaSettings());
-		set(schemaSettingsClone, toDotPath(stripRootFromPath(this.settingsPath)), newValue);
-		await this.dataStore.setValue(SCHEMA_SETTINGS_PATH, schemaSettingsClone);
 
+
+		if(this.isPathIterable(this.settingsPath)){
+			const pathSchemaSettings = get(schemaSettingsClone, toDotPath(stripRootFromPath(this.settingsPath))) || [];
+			pathSchemaSettings[0] = pathSchemaSettings[0] || {};
+			pathSchemaSettings[1] = newValue;
+			set(schemaSettingsClone, toDotPath(stripRootFromPath(this.settingsPath)), pathSchemaSettings);
+		}else{
+			set(schemaSettingsClone, toDotPath(stripRootFromPath(this.settingsPath)), newValue);
+		}
+
+		await this.dataStore.setValue(SCHEMA_SETTINGS_PATH, schemaSettingsClone);
 		this.clearSettingsPath();
 	}
 
@@ -338,8 +347,13 @@ export default class OrkanStore{
 		validPathInvariant(path);
 
 		this.settingsPath = this.toSchemaPath(path);
-		const defaultSettings = this.isPathCollection(path)?defaultCollectionSettings:defaultPrimitiveSettings;
+		const isPathIterable = this.isPathIterable(path);
+		const defaultSettings = isPathIterable?defaultCollectionSettings:defaultPrimitiveSettings;
 		this.settingsFormStore.reset({...defaultSettings, ...this.getSettingsByPath(path)});
+	}
+
+	isPathIterable(path){
+		return this.isPathCollection(path) || this.isPathArray(path);
 	}
 
 	isPathCollection(path){
@@ -399,50 +413,18 @@ export default class OrkanStore{
 	}
 
 	getUserPermissions(){
-		return this.dataStore.getValue(USERS_KEY_NAME + '/' + this.user.uid);
+		return this.dataStore.getValue(USERS_KEY + '/' + this.user.uid);
 	}
 
 	getCollectionSchemaPaths(includeNative){
 		return getSchemaCollectionPaths(this.getSchema(includeNative));
 	}
 
-	/*
-		0: "./blog/posts"
-		1: "./docs/categories"
-		2: "./docs/categories/_/pages"
-		3: "./home/examples/list"
-		4: "./home/features/list"
-		5: "./menu"
-
-
-	*/
-	getCollectionPaths(includeNative){
-		const collectionSchemaPaths = this.getCollectionSchemaPaths(includeNative);
-		collectionSchemaPaths.map(path => {
-			if(!path.includes('/' + COLLECTION_KEY + '/')){
-				return path;
-			}
-
-			const pathParts = path.split()
-
-		})
-	}
-
-	getPathsFromSchemaPaths(schemaPaths){
-		schemaPaths.map(schemaPath => {
-			if(!schemaPath.includes('/' + COLLECTION_KEY + '/')){
-				return schemaPath;
-			}
-
-			const pathParts = schemaPath.split()
-
-		})
-	}
 
 	async approveUserRequest(uid){
 		const userRequest = this.dataStore.getValue(USER_REQUESTS_KEY_NAME + '/'	+ uid);
 		await this.dataStore.remove(USER_REQUESTS_KEY_NAME + '/'	+ uid);
-		await this.dataStore.setValue(USERS_KEY_NAME + '/'	+ uid, {...userRequest, ...defaultUserPermissions});
+		await this.dataStore.setValue(USERS_KEY + '/'	+ uid, {...userRequest, ...defaultUserPermissions});
 	}
 
 
@@ -526,25 +508,8 @@ const defaultPrimitiveSettings = {
 };
 
 const defaultCollectionSettings = {
-	labelField: ''
+	// collectionMainLabel: ''
 };
-
-
-
-const isSchemaCompatible = (schema, toSchema) => {
-	const schemaKeys = Object.keys(schema)
-	return !schemaKeys.find(key => {
-		if(typeof schema[key] !== typeof toSchema[key]){
-			return true;
-		}
-		if(isObject(schema[key])){
-			return !isSchemaCompatible(schema[key], toSchema[key]);
-		}else{
-			return schema[key] !== toSchema[key];
-		}
-	});
-};
-
 
 
 /*
@@ -606,6 +571,38 @@ const isSchemaCompatible = (schema, toSchema) => {
 	}
 
 
+
+
+{
+	objects: {
+		type: 'object',
+		children: {
+			home: {
+				type: 'object',
+				children: {
+					features: {
+						type: 'object',
+						children: {
+							list: {
+								type: 'array',
+								of: {
+									type: 'object'
+									children: {..}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	docs: {
+
+	}
+}
+
+
+#### create the entire changed document from the root and then merge it
 
 
 */

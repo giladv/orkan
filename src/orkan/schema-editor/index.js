@@ -46,7 +46,7 @@ export default class SchemaEditor extends Component{
 			const clone = cloneDeep(value);
 			const fullPath = [createPath, createValue].filter(it => !!it).join('.'); // createPath might be empty for root
 			set(clone, fullPath, createPath === ''?[{}]:true);
-			console.log(fullPath, clone)
+
 			onChange(clone);
 			this.obState.createValue = null;
 		}else if(e.key === 'Esc'){

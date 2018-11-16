@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import {observer} from 'mobx-react';
-import {createAtom, observable} from 'mobx';
+import {observable} from 'mobx';
 import autobind from 'autobind-decorator';
 import classNames from 'classnames';
 import * as mobx from 'mobx';

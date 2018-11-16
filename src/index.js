@@ -12,10 +12,7 @@ import Home from './components/home';
 
 import './css/style.scss';
 
-import {OrkanProvider} from './orkan';
-import Collection from './orkan/collection';
-import Value from './orkan/value';
-
+import OrkanProvider from './orkan/provider';
 
 // config copied from Firebase console
 const config = {

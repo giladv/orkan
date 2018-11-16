@@ -12,7 +12,7 @@ import {SelectControl} from '../controls/select';
 import {InputControl} from '../controls/input';
 import Header from '../header';
 import {SliderControl} from '../controls/slider';
-import OrkanStore from '../orkan-store';
+import OrkanStore2 from '../orkan-store2';
 import {COLLECTION_KEY} from '../constants';
 import {createStyle} from '../utils/style-utils';
 
@@ -23,7 +23,7 @@ import style from './style.scss';
 export default class SettingsPanel extends Component{
 
 	static propTypes = {
-		store: PropTypes.instanceOf(OrkanStore).isRequired,
+		store: PropTypes.instanceOf(OrkanStore2).isRequired,
 	};
 
 	static defaultProps = {
@@ -175,7 +175,7 @@ export default class SettingsPanel extends Component{
 		return (
 			<div className={s.root}>
 				<Header title={['Settings', <span key={1} className={s.headerPath}>{store.settingsPath}</span>]} onActionClick={() => store.clearSettingsPath()}/>
-				{store.isPathCollection(store.settingsPath)
+				{(store.isPathCollection(store.settingsPath) || store.isPathArray(store.settingsPath))
 					?this.renderCollectionSettings()
 					:this.renderFieldSettings()
 				}
