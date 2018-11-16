@@ -5,6 +5,7 @@ import {observable} from 'mobx';
 import {observer} from 'mobx-react';
 
 import Collection from '../../orkan/collection';
+import List from '../../orkan/list';
 import {createStyle} from '../../utils/style-utils';
 
 import style from './style';
@@ -61,7 +62,7 @@ export default class App extends Component{
 				<header className={s.header}>
 					<div className={s.headerCenter}>
 						<a onClick={e => this.handleMenuClick(e, '#hero')} href='/#hero' className={s.logo}>Orkan<span>.js</span></a>
-						<Collection lightOverlay className={s.menu} path='menu' renderItem={(item, i) =>
+						<List lightOverlay className={s.menu} path='objects/menu/items' renderItem={(item, i) =>
 							<li key={i}>
 								<Link onClick={e => this.handleMenuClick(e, item.link)} to={item.link}>{item.label}</Link>
 							</li>
@@ -76,7 +77,7 @@ export default class App extends Component{
 					<footer className={s.footer}>
 						<div className={s.footerCenter}>
 							<a className={s.footerLogo}>Orkan<span>.js</span></a>
-							<Collection className={s.footerMenu} path='menu' renderItem={(item, i) => <li key={i}><a href={item.link}>{item.label}</a></li>}/>
+							<List className={s.footerMenu} path='objects/menu/items' renderItem={(item, i) => <li key={i}><a href={item.link}>{item.label}</a></li>}/>
 						</div>
 					</footer>
 				</div>
