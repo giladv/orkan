@@ -77,7 +77,7 @@ export default class App extends Component{
 					<footer className={s.footer}>
 						<div className={s.footerCenter}>
 							<a className={s.footerLogo}>Orkan<span>.js</span></a>
-							<List className={s.footerMenu} path='objects/menu/items' renderItem={(item, i) => <li key={i}><a href={item.link}>{item.label}</a></li>}/>
+							<List className={s.footerMenu} path='objects/menu/items' renderItem={(item, i) => <li key={i}><Link to={item.link}>{item.label}</Link></li>}/>
 						</div>
 					</footer>
 				</div>
