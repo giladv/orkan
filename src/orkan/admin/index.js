@@ -15,9 +15,9 @@ import Paths from '../paths';
 import Img from '../img';
 import UsersRequests from '../users-requests';
 import OrkanStore from '../orkan-store';
-import {SCHEMA_KEY_NAME, SCHEMA_PATH} from '../constants';
+import {SCHEMA_PATH} from '../constants';
 import SchemaEditor from '../schema-editor';
-import {getParentPath, toAbsolutePath} from '../utils/path-utils';
+import {toAbsolutePath} from '../utils/path-utils';
 import {createStyle} from '../utils/style-utils';
 
 import style from './style.scss';
@@ -38,18 +38,16 @@ export default class Admin extends Component{
 	componentWillMount(){
 		const {store, store2} = this.props;
 
-		store.init();
 		store2.init();
 
-		this.killAuthReaction = reaction(() => !store.isAdmin() && !store.isInitializing, isAuthRequired => {
-			isAuthRequired?store.openModal(Auth):store.clearModal();
+		this.killAuthReaction = reaction(() => !store2.isAdmin() && !store2.isInitializing, isAuthRequired => {
+			isAuthRequired?store2.openModal(Auth):store2.clearModal();
 		}, {fireImmediately: true});
 
 
 		keyboard.bind('escape', this.handleClose);
 
 		onDoublePress('shift', () => {
-			!store.activePath && store.setActivePath('.');
 			!store2.activePath && store2.setActivePath('.');
 		});
 	}
@@ -61,38 +59,35 @@ export default class Admin extends Component{
 
 	@autobind
 	handleClose(){
-		const {store, store2} = this.props;
-		store.activePath && store.clearActivePath();
+		const {store2} = this.props;
 		store2.activePath && store2.clearActivePath();
 		document.body.style.paddingLeft = '';
 	}
 
 	@autobind
 	handleLogout(){
-		const {store, store2} = this.props;
+		const {store2} = this.props;
 		this.handleClose();
-		store.logout();
 		store2.logout();
 	}
 
 	@autobind
 	handleDeclineUserRequest(uid){
-		const {store, store2} = this.props;
+		const {store2} = this.props;
 
 		if(!confirm('are you sure?')){
 			return;
 		}
 
-		store.declineUserRequest(uid);
 		store2.declineUserRequest(uid);
 	}
 
 	render() {
-		const {className, store, store2} = this.props;
+		const {className, store2} = this.props;
 		const {isResizing} = this.obState;
 
 
-		if(store.isInitializing){
+		if(store2.isInitializing){
 			return null;
 		}
 
@@ -160,7 +155,7 @@ export default class Admin extends Component{
 						</div>
 						<div className={s.footer}>
 							<div className={s.footerAuth}>
-								<Img className={s.footerAuthImg} src={store.user.photoURL}/>
+								<Img className={s.footerAuthImg} src={store2.user.photoURL}/>
 								<span onClick={this.handleLogout}>Logout</span>
 							</div>
 							<span/>

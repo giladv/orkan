@@ -19,9 +19,7 @@ import {
 } from '../constants';
 import Firestore from '../firestore';
 import {keyboard} from '../utils/keyboard-utils';
-import FirebaseStore from '../firebase-store';
 import Indicator from '../indicator';
-import OrkanStore from '../orkan-store';
 import OrkanStore2 from '../orkan-store2';
 
 import './style';
@@ -51,7 +49,6 @@ export default class Provider extends Component{
 			storageBucket: PropTypes.string,
 			messagingSenderId: PropTypes.string
 		}).isRequired,
-		basePath: PropTypes.string,
 		authProviders: PropTypes.arrayOf(PropTypes.oneOf(SUPPORTED_AUTH_PROVIDERS))
 	};
 
@@ -84,7 +81,7 @@ export default class Provider extends Component{
 			setActivePath: path => this.orkanStore2.setActivePath(path),
 			isEditMode: () => {
 				const {isActive, isModifierKeyDown} = this.obState;
-				return isActive && this.orkanStore.isAdmin() && isModifierKeyDown
+				return isActive && this.orkanStore2.isAdmin() && isModifierKeyDown
 			},
 			// is this making any sense??
 			openModal: (...props) => this.orkanStore2 && this.orkanStore2.openModal(...props)
@@ -92,17 +89,18 @@ export default class Provider extends Component{
 	}
 
 	componentWillMount(){
-		const {firebaseConfig, basePath} = this.props;
+		const {firebaseConfig} = this.props;
 		this.firebaseApp = firebase.initializeApp(firebaseConfig, FIREBASE_APP_NAME);
-		this.firebaseStore = new FirebaseStore(this.firebaseApp.database(), basePath);
 		this.fireStore = new Firestore(firebase.firestore(this.firebaseApp));
+
 		// this.fireStore.load('objects/home/features/list').then(users => console.log('load', users));
 		// this.fireStore.listen('orkanUsers', {where: {active: {'==': true}}});
-		this.fireStore.listen(path);
-		window.set = () => this.fireStore.setValue('orkanUsers/new', {blabla: 123, active: true});
-		window.remove = () => this.fireStore.remove('orkanUsers/new/active');
+		// this.fireStore.listen(path);
+		// window.set = () => this.fireStore.setValue('orkanUsers/new', {blabla: 123, active: true});
+		// window.remove = () => this.fireStore.remove('orkanUsers/new/active');
 		// this.fireStore.listen('orkanUsers');
 		// this.activate();
+
 		keyboard.bind('hold:1000:' + ACTIVATION_EVENT_KEY, this.activate);
 
 		document.addEventListener('keydown', this.handleKeyDown);
@@ -129,7 +127,6 @@ export default class Provider extends Component{
 			OrkanAdmin = window[ORKAN_ADMIN_GLOBAL].default;
 			delete window[ORKAN_ADMIN_GLOBAL];
 
-			this.orkanStore = new OrkanStore(this.firebaseStore, this.firebaseApp.auth());
 			window.s2 = this.orkanStore2 = new OrkanStore2(this.fireStore, this.firebaseApp.auth());
 			this.obState.isActive = true;
 		}catch(err){
@@ -139,8 +136,6 @@ export default class Provider extends Component{
 		setTimeout(() => {
 			this.obState.isBusy = false;
 		}, 500)
-
-		// window.a = this.orkanStore;
 	}
 
 	@autobind
@@ -166,19 +161,11 @@ export default class Provider extends Component{
 	render() {
 		const {children} = this.props;
 		const {isActive, isBusy} = this.obState;
-		console.log('!!!', this.fireStore.isLoading(path), this.fireStore.getValue(path))
+
 		return [
 			children,
-			(isActive || isBusy) && ReactDOM.createPortal(<Indicator isBusy={isBusy || (this.orkanStore && this.orkanStore.isInitializing)} />, document.body),
-			isActive && ReactDOM.createPortal(<OrkanAdmin store={this.orkanStore} store2={this.orkanStore2} />, document.body)
+			(isActive || isBusy) && ReactDOM.createPortal(<Indicator isBusy={isBusy || (this.orkanStore2 && this.orkanStore2.isInitializing)} />, document.body),
+			isActive && ReactDOM.createPortal(<OrkanAdmin store2={this.orkanStore2} />, document.body)
 		];
 	}
 }
-
-
-
-
-
-
-
-const path = 'objects/home/features/list';
