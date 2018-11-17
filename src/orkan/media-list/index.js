@@ -35,16 +35,16 @@ export default class MediaList extends Component{
 	};
 
 	render(){
-		const {className, classes, image = {}, video = {}, audio = {}, onRemove, onSelect, media} = this.props;
+		const {className, classes, onRemove, onSelect, media} = this.props;
 
 		const s = createStyle(style, className, classes);
 
 		return (
 			<div className={s.root}>
-				{map(media, (item, key) => (
-					<Thumbnail className={s.thumbnail} key={key} src={item.url} leftLabel={item.name} buttons={[
+				{media.map(item => (
+					<Thumbnail className={s.thumbnail} key={item.$key} src={item.url} leftLabel={item.name} buttons={[
 							{icon: 'v', onClick: () => onSelect(item)},
-							{icon: 'trash', onClick: () => onRemove(key, item)},
+							{icon: 'trash', onClick: () => onRemove(item.$key, item)},
 						]}/>
 				))}
 			</div>

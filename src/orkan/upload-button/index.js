@@ -4,6 +4,8 @@ import autobind from 'autobind-decorator';
 import {observer} from 'mobx-react';
 import {observable} from 'mobx';
 import firebase from 'firebase/app';
+import uuid from 'uuid/v4';
+import map from 'lodash/map';
 
 import Button from '../button';
 import {createStyle} from '../utils/style-utils';
@@ -34,16 +36,24 @@ export default class UploadButton extends Component {
 		e.stopPropagation();
 
 		this.obState.isBusy = true;
-		const file = this.input.files[0];
-		let fileRef = firebase.storage(firebase.app(FIREBASE_APP_NAME)).ref(file.name);
 
-		const snapshot = await fileRef.put(file);
+		const filesResult = await Promise.all(map(this.input.files, async file => {
+			const fileExt = file.name.split('.').slice(-1)[0];
+			const newFileName = uuid() + '.' + fileExt;
 
-		const {contentType, name, fullPath, size, timeCreated} = snapshot.metadata;
+			let fileRef = firebase.storage(firebase.app(FIREBASE_APP_NAME)).ref(newFileName);
 
-		const downloadUrl = await fileRef.getDownloadURL();
+			const snapshot = await fileRef.put(file);
 
-		onComplete({url: downloadUrl, mimeType: contentType, name, fullPath, size, timeCreated});
+			const {contentType, name, fullPath, size, timeCreated} = snapshot.metadata;
+
+			const downloadUrl = await fileRef.getDownloadURL();
+
+			return {url: downloadUrl, mimeType: contentType, name, fullPath, size, timeCreated};
+		}));
+
+
+		onComplete(filesResult);
 
 		this.obState.isBusy = false;
 		}catch(err){
@@ -59,7 +69,7 @@ export default class UploadButton extends Component {
 
 		return (
 			<Button className={s.root} isBusy={isBusy} primary onClick={() => this.input.click()}>
-				<input style={{display: 'none'}} ref={ref => this.input = ref} type="file" onChange={this.handleUpload}/>
+				<input multiple style={{display: 'none'}} ref={ref => this.input = ref} type="file" onChange={this.handleUpload}/>
 				upload
 			</Button>
 		);

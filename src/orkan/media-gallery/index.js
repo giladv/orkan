@@ -39,10 +39,10 @@ export default class MediaGallery extends Component{
 	}
 
 	@autobind
-	async handleUploadComplete(metaData){
+	async handleUploadComplete(filesMetaData){
 		const {orkan} = this.props;
 		this.obState.isBusy = true;
-		await orkan.store.setValue(MEDIA_KEY, metaData);
+		await Promise.all(filesMetaData.map(metaData => orkan.store.setValue(MEDIA_KEY, metaData)));
 		this.obState.isBusy = false;
 	}
 
@@ -55,8 +55,7 @@ export default class MediaGallery extends Component{
 		let fileRef = firebase.storage(firebase.app(FIREBASE_APP_NAME)).ref(media.fullPath);
 		fileRef.delete();
 
-		const path = MEDIA_KEY + '/' + this.getMediaType(media.mimeType) + '/' + key;
-		orkan.store.remove(path);
+		orkan.store.remove(MEDIA_KEY + '/' + key);
 
 	}
 
