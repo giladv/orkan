@@ -2,3 +2,4 @@ node_modules
 .idea
 dist/app.js
 dist/index.html
+coverage

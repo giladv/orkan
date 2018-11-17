@@ -59,7 +59,7 @@ export default class DataForm extends Component{
 
 	renderControl(path){
 		const {store} = this.props;
-		const {uiType, uiSize, dataSource, dataSourcePath, dataSourceLabel, dataSourceValue, dataSourceOptions, fromValue, toValue, isCodeFriendly} = store.getSettingsByPath(path) || {};
+		const {uiType, uiSize, dataSource, dataSourcePath, dataSourceLabel, dataSourceValue, dataSourceOptions, fromValue, toValue, isCodeFriendly} = store.getLiveSettingsByPath(path) || {};
 
 		const s = this.getStyle();
 

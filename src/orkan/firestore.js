@@ -73,9 +73,29 @@ export default class Firestore{
 	listeners = observable.map({});
 	collections = observable.map({});
 
-	constructor(api){
+	config = {
+		DocumentSnapshot: firebase.firestore.DocumentSnapshot,
+		QuerySnapshot: firebase.firestore.QuerySnapshot,
+		QueryDocumentSnapshot: firebase.firestore.QueryDocumentSnapshot,
+	};
+
+	constructor(api, options = {}){
 		this.api = api;
+		this.config = {
+			...this.config,
+			...options
+		};
+
+		// this.test();
 		window.a = () => console.log(this.map.toJS(), toJS(this.collections), toJS(this.listeners), toJS(this.pathsStatus))
+	}
+
+	async test(){
+		await this.api.collection('bla').doc('boo').set({a:123});
+		console.log(await this.api.collection('bla').doc('boo').get());
+		await this.api.collection('bla').doc('boo').delete();
+		console.log(await this.api.collection('bla').doc('boo').get());
+
 	}
 
 	getValue(path, options){
@@ -188,18 +208,16 @@ export default class Firestore{
 
 	@action handleNewSnapShot(path, options, snapshot){
 		const sanitizedPath = toQueryablePath(path);
-
-		if(isDocumentSnapshot(snapshot)){
-
+		// console.log('handle', snapshot, this.isDocumentSnapshot(snapshot), snapshot.exists)
+		if(this.isDocumentSnapshot(snapshot)){
 			if(snapshot.exists){
 				this.map.set(toDotPath(sanitizedPath), snapshot.data());
 			}else{
 				this.map.remove(toDotPath(sanitizedPath));
 			}
 
-		}else if(isCollectionSnapshot(snapshot)){
+		}else if(this.isCollectionSnapshot(snapshot)){
 			// no need to sanitize path because only collection paths end up here
-
 			const serializedQuery = serializeQuery(path, options);
 
 			snapshot.docChanges().forEach(change => {
@@ -237,9 +255,7 @@ export default class Firestore{
 
 	clearCache(path){
 		validPathInvariant(path);
-
-		const dotPath = path.split('/').join('.');
-		this.map.remove(dotPath);
+		this.map.remove(toDotPath(path));
 	}
 
 	setPathStatus(serializedQuery, status){
@@ -282,6 +298,16 @@ export default class Firestore{
 	generateKey(path){
 		collectionPathInvariant(path);
 		return this.api.collection(path).doc().id;
+	}
+
+	isDocumentSnapshot(snapshot){
+		return typeof snapshot.data == 'function';
+		return snapshot instanceof this.config.DocumentSnapshot || snapshot instanceof this.config.QueryDocumentSnapshot;
+	}
+
+	isCollectionSnapshot(snapshot){
+		return typeof snapshot.forEach == 'function';
+		return snapshot instanceof this.config.QuerySnapshot;
 	}
 }
 
@@ -347,8 +373,7 @@ export const toQueryablePath = path => path.split('/').slice(0,2).join('/');
 const isCollectionPath = path => path.split('/').length === 1;
 
 
-const isDocumentSnapshot = snapshot => snapshot instanceof firebase.firestore.DocumentSnapshot || snapshot instanceof firebase.firestore.QueryDocumentSnapshot;
-const isCollectionSnapshot = snapshot => snapshot instanceof firebase.firestore.QuerySnapshot;
+
 /*
 
 	schema editor

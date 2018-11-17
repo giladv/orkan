@@ -1,6 +1,5 @@
 import {isEmpty} from 'lodash';
 import {observable, computed, toJS} from 'mobx';
-import autobind from 'autobind-decorator';
 import isObject from 'lodash/isObject';
 import cloneDeep from 'lodash/cloneDeep';
 import get from 'lodash/get';
@@ -18,7 +17,7 @@ import {
 	USERS_KEY
 } from './constants';
 import {getParentPath, stripRootFromPath, toAbsolutePath} from './utils/path-utils';
-import {getSchemaCollectionPaths, schemaGet, toSchemaPath} from './utils/schema-utils';
+import {getSchemaIterablePaths, schemaGet, toSchemaPath} from './utils/schema-utils';
 
 const validPathInvariant = path => invariant(path.startsWith('.'), 'Invalid path structure. paths must start with `.`');
 
@@ -53,46 +52,54 @@ export default class OrkanStore{
 		return stripRootFromPath(this.activePath);
 	}
 
+	// tested
 	init(){
-		this.isInitializing = true;
-		this.authStore.onAuthStateChanged(async user => {
-			if(user){
-				let userPermissions;
-				try{
-					userPermissions = await this.dataStore.load(USERS_KEY + '/' + user.uid);
-				}catch(err){console.log(err)}
-
-				if(userPermissions){
-					this.user = user;
-					this.dataStore.listen(SCHEMA_PATH);
-					this.dataStore.listen(SCHEMA_SETTINGS_PATH);
+		return new Promise((resolve, reject) => {
+			this.isInitializing = true;
+			this.authStore.onAuthStateChanged(async firebaseUser => {
+				if(firebaseUser){
+					let orkanUser;
+					try{
+						orkanUser = await this.dataStore.load(USERS_KEY + '/' + firebaseUser.uid);
+					}catch(err){console.log(err)}
+					if(orkanUser){
+						this.user = orkanUser;
+						await this.dataStore.load(SCHEMA_PATH);
+						await this.dataStore.load(SCHEMA_SETTINGS_PATH);
+						this.dataStore.listen(SCHEMA_PATH);
+						this.dataStore.listen(SCHEMA_SETTINGS_PATH);
+					}else{
+						await this.createUserRequest(firebaseUser);
+						this.logout()
+					}
 				}else{
-					await this.createUserRequest(user);
-					this.logout()
+					this.user = null;
 				}
-			}else{
-				this.user = null;
-			}
-			this.isInitializing = false;
+				this.isInitializing = false;
+				resolve();
+			});
 		});
 	}
 
+	// tested
 	logout(){
 		this.dataStore.clearCache(USERS_KEY);
 		this.dataStore.clearCache(SCHEMA_PATH);
 		this.dataStore.clearCache(SCHEMA_SETTINGS_PATH);
+		this.user = null;
 		return this.authStore.signOut();
 	}
 
+	// tested
 	isAdmin(){
 		return !!this.user;
 	}
 
-
-	createUserRequest(user){
-		return this.dataStore.setValue(USER_REQUESTS_KEY + '/' + user.uid, {
-			email: user.email,
-			avatarUrl: user.photoURL
+	// tested
+	createUserRequest(firebaseUser){
+		return this.dataStore.setValue(USER_REQUESTS_KEY + '/' + firebaseUser.uid, {
+			email: firebaseUser.email,
+			avatarUrl: firebaseUser.photoURL
 		});
 	}
 
@@ -201,6 +208,8 @@ export default class OrkanStore{
 		}
 	}
 
+
+	// tested
 	async setActivePath(anyTypeOfPath){
 		// to enable components use relative paths (e.g something vs ./something)
 		const path = toAbsolutePath(anyTypeOfPath);
@@ -248,6 +257,7 @@ export default class OrkanStore{
 		setTimeout(() => this.dataFormStore.setClean(), 2);
 	}
 
+	// tested
 	async loadRequiredFieldsByPath(path){
 		const pathWithoutHome = stripRootFromPath(path);
 		if(!this.isPathCollection(path)){
@@ -258,12 +268,14 @@ export default class OrkanStore{
 		}
 	}
 
+	// tested
 	toSchemaPath(path){
 		validPathInvariant(path);
 		const schema = this.getSchema(true);
 		return toSchemaPath(schema, path);
 	}
 
+	// tested
 	getSchemaByPath(path, includeNative){
 		validPathInvariant(path);
 		const schema = this.getSchema(includeNative);
@@ -271,13 +283,14 @@ export default class OrkanStore{
 		return schemaPath && schemaGet(schema, schemaPath);
 	}
 
+	// tested
 	isPathPrimitive(path, includeNative){
 		validPathInvariant(path);
 		const pathSchema = this.getSchemaByPath(path, includeNative);
 		return !isObject(pathSchema);
-
 	}
 
+	// tested
 	getPrimitiveKeysByPath(path, includeNative){
 		validPathInvariant(path);
 
@@ -286,6 +299,7 @@ export default class OrkanStore{
 			.filter(key => !isObject(pathSchema[key]))
 	}
 
+	// tested
 	getNonPrimitiveKeysByPath(path, includeNative){
 		validPathInvariant(path);
 		const pathSchema = this.getSchemaByPath(path, includeNative);
@@ -298,31 +312,54 @@ export default class OrkanStore{
 		}
 	}
 
+	// tested
 	clearActivePath(){
 		this.activePath = null;
 		this.dataFormStore.reset();
 		this.clearSettingsPath();
 	}
 
+	// tested
 	clearSettingsPath(){
 		this.settingsFormStore.reset();
 		this.settingsPath = null;
 	}
 
-	getSettingsByPath(path){
+	// tested
+	getLiveSettingsByPath(path){
 		validPathInvariant(path);
-		// debugger;
-		const schemaSettings = this.getSchemaSettings(true);
 
 		const schemaPath = this.toSchemaPath(path);
+
+		if(!schemaPath){
+			return;
+		}
+
 		if(schemaPath === this.settingsPath){
 			return this.settingsFormStore.toJS();
-		}else if(schemaSettings){
-			const pathSchemaSettings = schemaGet(schemaSettings, schemaPath);
-			return this.isPathIterable(path) &&  pathSchemaSettings?pathSchemaSettings[1]:pathSchemaSettings;
+		}else{
+			return this.getSettingsByPath(path)
 		}
 	}
 
+	// tested
+	getSettingsByPath(path){
+		validPathInvariant(path);
+
+		const schemaSettings = this.getSchemaSettings(true);
+
+		const schemaPath = this.toSchemaPath(path);
+
+		if(!schemaPath){
+			return;
+		}
+
+		const pathSchemaSettings = schemaGet(schemaSettings, schemaPath);
+		return this.isPathIterable(path) &&  pathSchemaSettings?pathSchemaSettings[1]:pathSchemaSettings;
+
+	}
+
+	// tested
 	async submitSettings(){
 		const newValue = this.settingsFormStore.toJS();
 		const schemaSettingsClone = cloneDeep(this.getSchemaSettings());
@@ -341,20 +378,23 @@ export default class OrkanStore{
 		this.clearSettingsPath();
 	}
 
-
+	// tested
 	setSettingsPath(path){
 		validPathInvariant(path);
 
 		this.settingsPath = this.toSchemaPath(path);
 		const isPathIterable = this.isPathIterable(path);
+
 		const defaultSettings = isPathIterable?defaultCollectionSettings:defaultPrimitiveSettings;
 		this.settingsFormStore.reset({...defaultSettings, ...this.getSettingsByPath(path)});
 	}
 
+	// tested
 	isPathIterable(path){
 		return this.isPathCollection(path) || this.isPathArray(path);
 	}
 
+	// tested
 	isPathCollection(path){
 		const pathParts = path.split('/');
 
@@ -366,6 +406,7 @@ export default class OrkanStore{
 		return subSchema && Array.isArray(subSchema);
 	}
 
+	// tested
 	isPathArray(path){
 		const pathParts = path.split('/');
 
@@ -385,7 +426,7 @@ export default class OrkanStore{
 	}
 
 
-	async createArrayItem(path){
+	createArrayItem(path){
 		validPathInvariant(path);
 		const arr = this.dataStore.getValue(stripRootFromPath(path)) || [];
 		this.setActivePath(path + '/' + arr.length);
@@ -397,6 +438,7 @@ export default class OrkanStore{
 		return this.dataStore.remove(stripRootFromPath(path));
 	}
 
+	// tested
 	getSchema(includeNative = false){
 		return {
 			...this.dataStore.getValue(SCHEMA_PATH),
@@ -404,6 +446,7 @@ export default class OrkanStore{
 		};
 	}
 
+	// tested
 	getSchemaSettings(includeNative = false){
 		return {
 			...this.dataStore.getValue(SCHEMA_SETTINGS_PATH),
@@ -411,22 +454,22 @@ export default class OrkanStore{
 		};
 	}
 
-	getUserPermissions(){
-		return this.dataStore.getValue(USERS_KEY + '/' + this.user.uid);
-	}
-
-	getCollectionSchemaPaths(includeNative){
-		return getSchemaCollectionPaths(this.getSchema(includeNative));
+	// tested
+	getIterableSchemaPaths(includeNative){
+		return getSchemaIterablePaths(this.getSchema(includeNative));
 	}
 
 
+	// tested
 	async approveUserRequest(uid){
 		const userRequest = this.dataStore.getValue(USER_REQUESTS_KEY + '/'	+ uid);
-		await this.dataStore.remove(USER_REQUESTS_KEY + '/'	+ uid);
-		await this.dataStore.setValue(USERS_KEY + '/'	+ uid, {...userRequest, ...defaultUserPermissions});
+		if(userRequest){
+			await this.dataStore.remove(USER_REQUESTS_KEY + '/'	+ uid);
+			await this.dataStore.setValue(USERS_KEY + '/'	+ uid, {...userRequest, ...defaultUserPermissions});
+		}
 	}
 
-
+	// tested
 	declineUserRequest(uid){
 		return this.dataStore.remove(USER_REQUESTS_KEY + '/'	+ uid);
 	}

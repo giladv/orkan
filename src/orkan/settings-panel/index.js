@@ -85,7 +85,7 @@ export default class SettingsPanel extends Component{
 
 		const s = this.getStyle();
 
-		const collectionPathsOptions = store.getCollectionSchemaPaths().map(path => ({label: path, value: path}));
+		const collectionPathsOptions = store.getIterableSchemaPaths().map(path => ({label: path, value: path}));
 		let dataSourcePrimitivesOptions = [];
 
 		if(store.settingsFormStore.get('dataSource') === 'dynamic' && store.settingsFormStore.get('dataSourcePath')){

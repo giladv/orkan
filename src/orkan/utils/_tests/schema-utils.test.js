@@ -1,4 +1,4 @@
-import {schemaWalk, toSchemaPath, getSchemaCollectionPaths, schemaGet} from '../schema-utils';
+import {schemaWalk, toSchemaPath, getSchemaIterablePaths, schemaGet} from '../schema-utils';
 
 
 const schema = {
@@ -37,10 +37,10 @@ test('toSchemaPath', () => {
 });
 
 
-test('getSchemaCollectionPaths', () => {
-	expect(getSchemaCollectionPaths(schema)).toContain('./objects/home/features');
-	expect(getSchemaCollectionPaths(schema)).toContain('./docs');
-	expect(getSchemaCollectionPaths(schema)).toHaveLength(2);
+test('getSchemaIterablePaths', () => {
+	expect(getSchemaIterablePaths(schema)).toContain('./objects/home/features');
+	expect(getSchemaIterablePaths(schema)).toContain('./docs');
+	expect(getSchemaIterablePaths(schema)).toHaveLength(2);
 });
 
 test('schemaGet', () => {

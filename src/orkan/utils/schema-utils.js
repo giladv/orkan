@@ -43,7 +43,7 @@ export const toSchemaPath = (schema, path) => {
 	return schemaPathParts.join('/');
 };
 
-export const getSchemaCollectionPaths = (schema) => {
+export const getSchemaIterablePaths = (schema) => {
 	let collectionPaths = [];
 	schemaWalk(schema, (value, path) => {
 		if(Array.isArray(value)){

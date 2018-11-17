@@ -6426,6 +6426,11 @@ mobx@^4.6.0:
   resolved "https://registry.yarnpkg.com/mobx/-/mobx-4.6.0.tgz#88a8ed21ff81b8861778c4b0d38e3dcdd1a7ddde"
   integrity sha512-qoX4BsUpA37yLzYAmNsApPiRlpMr8uwt+KYVTJNv9IhpD8NQVMno/K3EqZKAsiWo9IEvPOuQ0B6z7Z7ISjULpA==
 
+mock-cloud-firestore@^0.8.2:
+  version "0.8.2"
+  resolved "https://registry.yarnpkg.com/mock-cloud-firestore/-/mock-cloud-firestore-0.8.2.tgz#387c6bf504265b5fced23130f500cdbd6f128a51"
+  integrity sha512-3kgBhTImSHPnGWcIkLjoSnc0XK+m1/gfQ20enSGj0WunxhXb9kG4Zu2oMmSPuefUmmYgGMTXrRo8MLoBbgkALw==
+
 move-concurrently@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/move-concurrently/-/move-concurrently-1.0.1.tgz#be2c005fda32e0b29af1f05d7c4b33214c701f92"
