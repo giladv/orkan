@@ -52,11 +52,11 @@ export default class Collection extends Component{
 			}
 		});
 
-		const cleanCollection = omitBy(collection, it => !it);
+		const cleanCollection = collection.filter(it => !!it);
 
 		return (
 			<div className={s.root}>
-				{map(cleanCollection, (item) => {
+				{cleanCollection.map(item => {
 					const renderedItem = renderItem(item, item.$key);
 					if(!renderedItem){
 						return null;

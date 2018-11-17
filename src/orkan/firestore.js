@@ -136,7 +136,7 @@ export default class Firestore{
 		return action(sanitizedValue);
 	}
 
-	addToCollection(serializedQuery, afterKey, key){
+	addToCollection(serializedQuery, index, key){
 		validPathInvariant(serializedQuery);
 
 		let collection = this.collections.get(serializedQuery);
@@ -145,12 +145,7 @@ export default class Firestore{
 			this.collections.set(serializedQuery, collection);
 		}
 
-		if(collection.indexOf(key) > -1){
-			return;
-		}
-
-		const prevIndex = collection.indexOf(afterKey);
-		collection.splice(prevIndex + 1, 0, key);
+		collection.splice(index, 0, key);
 	}
 
 	removeFromCollection(serializedQuery, key){

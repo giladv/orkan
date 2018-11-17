@@ -31,7 +31,7 @@ export default class Docs extends Component{
 						<List path='objects/docs/categories' orderByChild='priority' renderItem={category =>
 							<div>
 								<div className={s.sidebarHeader}>{category.label}</div>
-								<Collection className={s.sidebarPagesList} path='docs' where={{category: {'==': category.id}}} orderBy={{priority: 'desc'}} renderItem={page =>
+								<Collection className={s.sidebarPagesList} path='docs' where={{category: {'==': category.id}}} orderBy={{priority: 'asc'}} renderItem={page =>
 									<Link activeClassName={s.activeLink} to={`/docs/${page.$key}`}>{page.title}</Link>
 								}/>
 							</div>

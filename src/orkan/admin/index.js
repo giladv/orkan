@@ -155,7 +155,7 @@ export default class Admin extends Component{
 						</div>
 						<div className={s.footer}>
 							<div className={s.footerAuth}>
-								<Img className={s.footerAuthImg} src={store2.user.photoURL}/>
+								<Img className={s.footerAuthImg} src={store2.user.avatarUrl}/>
 								<span onClick={this.handleLogout}>Logout</span>
 							</div>
 							<span/>
