@@ -22,6 +22,15 @@ export default class Collection extends Component{
 		path: PropTypes.string.isRequired,
 		renderItem: PropTypes.func,
 		lightOverlay: PropTypes.bool,
+		orderBy: PropTypes.objectOf(PropTypes.oneOf(['asc', 'desc'])),
+		where: PropTypes.objectOf(
+			PropTypes.shape({
+				'==': PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+				'!=': PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+				'>=': PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+				'<=': PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+			})
+		)
 	};
 
 	static defaultProps = {

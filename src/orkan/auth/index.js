@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import {observer} from 'mobx-react';
 import {observable} from 'mobx';
 import autobind from 'autobind-decorator';
+import Header from '../header';
+import OrkanStore from '../orkan-store2';
 
 import Spinner from '../spinner';
 import FirebaseAuth from '../firebase-auth';
@@ -15,7 +17,7 @@ import style from './style.scss';
 export default class Auth extends Component{
 
 	static propTypes = {
-		auth: PropTypes.object.isRequired
+		store: PropTypes.instanceOf(OrkanStore)
 	};
 
 	static defaultProps = {
@@ -31,16 +33,22 @@ export default class Auth extends Component{
 	}
 
 	render(){
-		const {className, auth, classes} = this.props;
+		const {className, store, classes} = this.props;
 		const {isBusy} = this.obState;
 		const s = createStyle(style, className, classes);
 
 		return (
 			<div className={s.root}>
 				<h2 className={s.header}>Sign-in to Orkan</h2>
+				{store.isInvitationSent &&
+					<div className={s.invitationSent}>
+						<strong>Unauthorized</strong>
+						A request was sent to the admin.
+					</div>
+				}
 				{isBusy && <Spinner className={s.spinner}/>}
 				{!isBusy &&
-					<FirebaseAuth className={s.auth} auth={auth} onSuccess={this.handleSuccess}/>
+					<FirebaseAuth className={s.auth} onSuccess={this.handleSuccess}/>
 				}
 			</div>
 		);

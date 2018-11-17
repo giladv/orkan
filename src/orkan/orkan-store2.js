@@ -35,6 +35,7 @@ export default class OrkanStore{
 
 	@observable isLoadingActivePath = false;
 	@observable isInitializing = true;
+	@observable isInvitationSent = false;
 
 	@observable.ref user;
 
@@ -69,6 +70,7 @@ export default class OrkanStore{
 						this.dataStore.listen(SCHEMA_PATH);
 						this.dataStore.listen(SCHEMA_SETTINGS_PATH);
 					}else{
+						this.isInvitationSent = true;
 						await this.createUserRequest(firebaseUser);
 						this.logout()
 					}

@@ -16,14 +16,21 @@ export default class PropsTable extends Component{
 		descriptions: PropTypes.object
 	};
 
+	getStyle(){
+		const {className} = this.props;
+
+		return createStyle(style, className);
+
+	}
 	renderType(type){
+		const s = this.getStyle();
 		switch(type.name){
 			case 'shape':
 				return (
 					<div>
 						object {'{'}
 						{Object.keys(type.value).map(key =>
-							<div key={key}>{key}: {this.renderType(type.value[key].type)}</div>
+							<div key={key} className={classNames(s.typeColumn, s.typeIndent)}>'{key}':&nbsp;{this.renderType(type.value[key].type)}</div>
 						)}
 						{'}'}
 					</div>
@@ -31,11 +38,29 @@ export default class PropsTable extends Component{
 			case 'arrayOf':
 				return (
 					<div>
-						array[{this.renderType(type.value)}, ...]
+						array[
+						<div className={classNames(s.typeColumn, s.typeIndent)}>
+							{this.renderType(type.value)}, ...
+						</div>
+						]
+					</div>
+				);
+			case 'objectOf':
+				return (
+					<div>
+						object {'{'}
+							<div className={classNames(s.typeColumn, s.typeIndent)}>[any]: {this.renderType(type.value)}</div>
+						{'}'}
+			 		</div>
+			 	);
+			case 'oneOfType':
+				return (
+					<div>
+						{type.value.map(subType => this.renderType(subType)).join('|')}
 					</div>
 				);
 			case 'oneOf':
-				return type.value.join('|');
+				return type.value.map(item => typeof item === 'string'?"'" + item + "'":item).join('|');
 			case 'func':
 				return 'function';
 			default:
@@ -54,9 +79,9 @@ export default class PropsTable extends Component{
 		return JSON.stringify(defaultProp).replace(/\"/g, "'")
 	}
 	render(){
-		const {className, component, descriptions} = this.props;
+		const {component, descriptions} = this.props;
 
-		const s = createStyle(style, className);
+		const s = this.getStyle();
 
 
 		return (

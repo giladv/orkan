@@ -41,7 +41,7 @@ export default class Admin extends Component{
 		store2.init();
 
 		this.killAuthReaction = reaction(() => !store2.isAdmin() && !store2.isInitializing, isAuthRequired => {
-			isAuthRequired?store2.openModal(Auth):store2.clearModal();
+			isAuthRequired?store2.openModal(Auth, {store: store2}):store2.clearModal();
 		}, {fireImmediately: true});
 
 

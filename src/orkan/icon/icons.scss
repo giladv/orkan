@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'orkanicons';
-  src:  url('./fonts/orkanicons.eot?29j05l');
-  src:  url('./fonts/orkanicons.eot?29j05l#iefix') format('embedded-opentype'),
-    url('./fonts/orkanicons.ttf?29j05l') format('truetype'),
-    url('./fonts/orkanicons.woff?29j05l') format('woff'),
-    url('./fonts/orkanicons.svg?29j05l#orkanicons') format('svg');
+  src:  url('./fonts/orkanicons.eot?etqtc9');
+  src:  url('./fonts/orkanicons.eot?etqtc9#iefix') format('embedded-opentype'),
+    url('./fonts/orkanicons.ttf?etqtc9') format('truetype'),
+    url('./fonts/orkanicons.woff?etqtc9') format('woff'),
+    url('./fonts/orkanicons.svg?etqtc9#orkanicons') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -25,13 +25,19 @@
 }
 
 .icon-array:before {
-  content: "\e906";
+  content: "\e90d";
 }
 .icon-move:before {
-  content: "\e905";
+  content: "\e90c";
 }
 .icon-clone:before {
   content: "\e908";
+}
+.icon-github:before {
+  content: "\e906";
+}
+.icon-facebook:before {
+  content: "\e905";
 }
 .icon-dots:before {
   content: "\e903";
