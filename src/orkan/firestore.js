@@ -145,6 +145,7 @@ export default class Firestore{
 			this.collections.set(serializedQuery, collection);
 		}
 
+		collection.remove(key);
 		collection.splice(index, 0, key);
 	}
 
@@ -221,7 +222,6 @@ export default class Firestore{
 					case 'modified':
 						this.map.set(toDotPath(docPath), change.doc.data());
 						if(change.oldIndex > -1 && change.newIndex !== change.oldIndex){
-							this.removeFromCollection(serializedQuery, change.doc.id);
 							this.addToCollection(serializedQuery, change.newIndex, change.doc.id);
 						}
 						break;
