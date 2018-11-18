@@ -122,7 +122,7 @@ export default class Firestore{
 		}
 	}
 
-	setValue(path, value){
+	async setValue(path, value){
 		validPathInvariant(path);
 		settablePathInvariant(path);
 
@@ -133,7 +133,7 @@ export default class Firestore{
 
 		const query = this.createQuery(path);
 		const action = (query.add || query.set).bind(query);
-		return action(sanitizedValue);
+		return await action(sanitizedValue);
 	}
 
 	addToCollection(serializedQuery, index, key){
@@ -204,7 +204,6 @@ export default class Firestore{
 
 	@action handleNewSnapShot(path, options, snapshot){
 		const sanitizedPath = toQueryablePath(path);
-		// console.log('handle', snapshot, this.isDocumentSnapshot(snapshot), snapshot.exists)
 		if(this.isDocumentSnapshot(snapshot)){
 			if(snapshot.exists){
 				this.map.set(toDotPath(sanitizedPath), snapshot.data());
@@ -243,7 +242,7 @@ export default class Firestore{
 	remove(path){
 		validPathInvariant(path);
 		settablePathInvariant(path);
-
+		this.map.remove(toDotPath(path));
 		return this.createQuery(path).delete();
 	}
 

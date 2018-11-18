@@ -74,6 +74,7 @@
     "css-loader": "^0.28.1",
     "file-loader": "1.1.11",
     "firebase": "5.0.0",
+    "firebase-admin": "^6.1.0",
     "history": "^4.7.2",
     "jest": "^23.6.0",
     "loader-utils": "^1.1.0",

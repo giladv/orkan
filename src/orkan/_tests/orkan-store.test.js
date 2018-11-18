@@ -282,3 +282,35 @@ test('active path', async () => {
 	expect(orkanStore.settingsPath).toBe(null);
 	expect(orkanStore.dataFormStore.toJS()).toEqual({});
 });
+
+test('getValue', async () => {
+
+	const doc = await firestore.load('docs/d123');
+	expect(orkanStore.getValue('./docs/d123')).toEqual(doc);
+
+	await orkanStore.setActivePath('./docs/d123');
+	orkanStore.dataFormStore.set('/docs/d123.title', 'title2');
+	expect(orkanStore.getValue('./docs/d123/title')).toBe('title2');
+	expect(orkanStore.getValue('./docs/d123')).toEqual({...doc, title: 'title2'});
+
+	const meta = await firestore.load('objects/home/meta');
+	expect(orkanStore.getValue('./objects/home/meta')).toEqual(meta);
+
+	await orkanStore.setActivePath('./objects/home/meta');
+	orkanStore.dataFormStore.set('/objects/home/meta.background', 'background2');
+	expect(orkanStore.getValue('./objects/home/meta/background')).toBe('background2');
+	expect(orkanStore.getValue('./objects/home/meta')).toEqual({...meta, background: 'background2'});
+
+	orkanStore.clearActivePath();
+	expect(orkanStore.activePath).toBe(null);
+	expect(orkanStore.dataFormStore.toJS()).toEqual({});
+
+	const home = await firestore.load('objects/home');
+
+	await orkanStore.setActivePath('./objects/home/meta');
+	orkanStore.dataFormStore.set('/objects/home/meta.background', 'background2');
+	home.meta.background = 'background2';
+	expect(orkanStore.getValue('./objects/home')).toEqual(home);
+	expect(orkanStore.getValue('./docs/d123')).toEqual(doc);
+
+});

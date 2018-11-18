@@ -50,9 +50,9 @@ export default class Paths extends Component{
 	handleCreate(){
 		const {path, store} = this.props;
 		if(store.isPathCollection(path)){
-			store.createCollectionItem(path, this.createFormStore.get('key'));
+			store.createCollectionKey(path, this.createFormStore.get('key'));
 		}else{
-			store.createArrayItem(path);
+			store.createArrayKey(path);
 		}
 
 		this.createFormStore.reset();
@@ -72,7 +72,7 @@ export default class Paths extends Component{
 			return;
 		}
 
-		store.removeCollectionItem(path + '/' + key);
+		store.removeIterableItem(path + '/' + key);
 		e.stopPropagation();
 	}
 
@@ -87,14 +87,14 @@ export default class Paths extends Component{
 	}
 
 	@autobind
-	handleRemoveCollectionItem(key){
+	handleremoveIterableItem(key){
 		const {store} = this.props;
 
 		if(!confirm('are you sure?')){
 			return;
 		}
 
-		store.removeCollectionItem(key);
+		store.removeIterableItem(key);
 	}
 
 	getStyle(){

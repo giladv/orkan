@@ -131,7 +131,7 @@ export default class OrkanStore{
 		- solution: pick the field from the form and return
 
 	*/
-
+	// tested
 	getValue(anyTypeOfPath, options){
 		// to enable components use relative paths (e.g something vs ./something)
 		const path = toAbsolutePath(anyTypeOfPath);
@@ -420,22 +420,22 @@ export default class OrkanStore{
 		return subSchema && Array.isArray(subSchema);
 	}
 
-	async createCollectionItem(path, key){
+	async createCollectionKey(path, key){
 		validPathInvariant(path);
 
 		const finalKey = key || this.dataStore.generateKey(stripRootFromPath(path));
-		this.setActivePath(path + '/' + finalKey);
+		await this.setActivePath(path + '/' + finalKey);
 	}
 
 
-	createArrayItem(path){
+	async createArrayKey(path){
 		validPathInvariant(path);
 		const arr = this.dataStore.getValue(stripRootFromPath(path)) || [];
-		this.setActivePath(path + '/' + arr.length);
+		await this.setActivePath(path + '/' + arr.length);
 	}
 
 
-	removeCollectionItem(path){
+	removeIterableItem(path){
 		validPathInvariant(path);
 		return this.dataStore.remove(stripRootFromPath(path));
 	}
