@@ -103,13 +103,13 @@ export default class Paths extends Component{
 	}
 
 	renderPaths(){
-		const {store, path, value} = this.props;
+		const {store, path, value, isPathLoading} = this.props;
 
 		if(store.isPathCollection(path) || store.isPathArray(path)){
 			const {collectionMainLabel, collectionImage} = store.getSettingsByPath(path) || {};
 
 			if(!value || !value.length){
-				return <ListEmptyItem/>
+				return <ListEmptyItem isBusy={isPathLoading.value}/>
 			}
 
 			return map(value, (item, key) => {

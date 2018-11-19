@@ -26,11 +26,19 @@ export default class Wysiwyg extends Component {
 		value: PropTypes.bool,
 		disabled: PropTypes.bool,
 		onChange: PropTypes.func,
+		autoFocus: PropTypes.bool
 	};
 
 	static defaultProps = {
 		onChange: () => null,
 	};
+
+	componentDidMount(){
+		const {autoFocus} = this.props;
+			autoFocus && this.editor.focus();
+		setTimeout(() => {
+		}, 0)
+	}
 
 	@autobind
 	handleImage(){
@@ -50,6 +58,7 @@ export default class Wysiwyg extends Component {
 			<ReactQuill
 				{...otherProps}
 				ref={ref => this.editor = ref && ref.getEditor()}
+				tabIndex={-1}
 				className={s.root}
 				onChange={newValue => {
 					onChange(newValue);

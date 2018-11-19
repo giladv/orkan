@@ -1,4 +1,3 @@
-import {isEmpty} from 'lodash';
 import {observable, computed, toJS} from 'mobx';
 import isObject from 'lodash/isObject';
 import cloneDeep from 'lodash/cloneDeep';
@@ -31,6 +30,7 @@ export default class OrkanStore{
 	settingsFormStore = new FormStore({}, {});
 
 	@observable activePath;
+	@observable activePrimitive;
 	@observable settingsPath;
 
 	@observable isLoadingActivePath = false;
@@ -216,7 +216,13 @@ export default class OrkanStore{
 		// to enable components use relative paths (e.g something vs ./something)
 		const path = toAbsolutePath(anyTypeOfPath);
 
-		this.activePath = this.isPathPrimitive(path, true)?getParentPath(path):path;
+		if(this.isPathPrimitive(path, true)){
+			this.activePath = getParentPath(path);
+			this.activePrimitive = path;
+		}else{
+			this.activePath = path;
+			this.activePrimitive = null;
+		}
 
 		this.dataFormStore.reset();
 
@@ -317,6 +323,7 @@ export default class OrkanStore{
 	// tested
 	clearActivePath(){
 		this.activePath = null;
+		this.activePrimitive = null;
 		this.dataFormStore.reset();
 		this.clearSettingsPath();
 	}

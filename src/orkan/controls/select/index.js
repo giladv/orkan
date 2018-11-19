@@ -31,53 +31,26 @@ export default class Select extends Component {
 		handleLabel: option => option.label
 	};
 
-	@observable state = {
-		isOpen: false
-	};
-
-	@autobind
-	handleToggle(){
-		const {isOpen} = this.state;
-
-		if(!isOpen){
-			this.openOptions();
-		}else{
-			this.closeOptions();
-		}
-	}
-
-	@autobind
-	closeOptions(){
-		this.state.isOpen = false;
-	}
-
-	@autobind
-	openOptions(){
-		this.state.isOpen = true;
-	}
 
 	@autobind
 	handleSelect(option){
 		const {onChange} = this.props;
-		this.closeOptions();
 		onChange(option.value);
 	}
 
 	render(){
 		const {className, classes, value, options, handleLabel, placeholder, size, ...otherProps} = this.props;
-		const {isOpen} = this.state;
 
 		const selectedOption = options.find(option => option.value === value);
 
 		const s = createStyle(style, className, classes, style[size], {
 			root: {
-				open: isOpen,
 				noValue: !selectedOption
 			}
 		});
 
 		return (
-			<DropdownContainer {...otherProps} className={s.root} options={options} onSelect={this.handleSelect} isOpen={isOpen} onClose={this.closeOptions}>
+			<DropdownContainer {...otherProps} className={s.root} options={options} onSelect={this.handleSelect} initialActiveOptionIndex={options.indexOf(selectedOption)}>
 				<div className={s.selectedOption} onClick={this.handleToggle}>
 					{selectedOption?handleLabel(selectedOption):placeholder}
 				</div>

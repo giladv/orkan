@@ -62,29 +62,30 @@ export default class DataForm extends Component{
 		const {uiType, uiSize, dataSource, dataSourcePath, dataSourceLabel, dataSourceValue, dataSourceOptions, fromValue, toValue, isCodeFriendly} = store.getLiveSettingsByPath(path) || {};
 
 		const s = this.getStyle();
+		const autoFocus = store.activePrimitive === path;
 
 		switch(uiType){
 			default:
-				return <InputControl/>;
+				return <InputControl autoFocus={autoFocus}/>;
 			case 'textarea':
-				return <TextareaControl rows={uiSize || 3} codeFriendly={isCodeFriendly}/>;
+				return <TextareaControl rows={uiSize || 3} codeFriendly={isCodeFriendly} autoFocus={autoFocus} />;
 			case 'number':
-				return <InputControl type='number'/>;
+				return <InputControl type='number' autoFocus={autoFocus}/>;
 			case 'datetime':
-				return <DatePickerControl/>;
+				return <DatePickerControl autoFocus={autoFocus}/>;
 			case 'checkbox':
-				return <CheckboxControl/>;
+				return <CheckboxControl autoFocus={autoFocus}/>;
 			case 'switch':
-				return <SwitchControl/>;
+				return <SwitchControl autoFocus={autoFocus}/>;
 			case 'wysiwyg':
-				return <WysiwygControl style={{height: 42 + (uiSize || 3) * 15 + 'px'}}/>;
+				return <WysiwygControl style={{height: 42 + (uiSize || 3) * 15 + 'px'}} autoFocus={autoFocus}/>;
 			case 'slider':
-				return <SliderControl min={fromValue || 0} max={toValue || 10}/>;
+				return <SliderControl min={fromValue || 0} max={toValue || 10} autoFocus={autoFocus}/>;
 			case 'select':
 				if(dataSource === 'static'){
-					return <SelectControl options={dataSourceOptions}/>;
+					return <SelectControl options={dataSourceOptions} autoFocus={autoFocus}/>;
 				}else if(dataSource === 'dynamic'){
-					return <DynamicSelectControl optionsPath={dataSourcePath} optionsLabel={dataSourceLabel} optionsValue={dataSourceValue}/>;
+					return <DynamicSelectControl autoFocus={autoFocus} optionsPath={dataSourcePath} optionsLabel={dataSourceLabel} optionsValue={dataSourceValue}/>;
 				}else{
 					return null;
 				}

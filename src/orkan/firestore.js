@@ -268,10 +268,9 @@ export default class Firestore{
 		}
 	}
 
-	isLoading(serializedQuery, options){
+	isLoading(serializedQuery){
 		validPathInvariant(serializedQuery);
-		const pathWithQueryString = serializedQuery + '?' + serializeQueryOptions(options);
-		const currentStatus = this.pathsStatus.get(pathWithQueryString);
+		const currentStatus = this.pathsStatus.get(serializedQuery);
 		return currentStatus && currentStatus.isLoading;
 	}
 

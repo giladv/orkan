@@ -11,6 +11,7 @@ import Docs from './components/docs';
 import Home from './components/home';
 
 import './css/style.scss';
+import Uikit from './components/uikit';
 
 import OrkanProvider from './orkan/provider';
 
@@ -28,6 +29,7 @@ const config = {
 ReactDOM.render(
 	<OrkanProvider firebaseConfig={config}>
 		<Router history={browserHistory}>
+			<Route path="uikit" component={Uikit} />
 			<Route path="/" component={App}>
 				<IndexRoute component={Home}/>
 				<Route path="docs" component={Docs}>

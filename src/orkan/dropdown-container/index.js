@@ -17,32 +17,29 @@ export default class DropdownContainer extends Component {
 	static propTypes = {
 		options: PropTypes.array,
 		size: PropTypes.oneOf(['small', 'medium', 'large']),
-		isOpen: PropTypes.bool,
-		onClose: PropTypes.func,
 		renderOption: PropTypes.func,
+		initialActiveOptionIndex: PropTypes.number,
 		onSelect: PropTypes.func,
 	};
 
 	static defaultProps = {
 		size: 'medium',
 		options: [],
+		initialActiveOptionIndex: -1,
 		onSelect: option => null,
-		onClose: () => null,
 		renderOption: () => null
 	};
 
-	@observable state = {
-		selectedOptionIndex: -1
+	@observable obState = {
+		activeOptionIndex: -1,
+		isOpen: false,
+		isFocused: false
 	};
 
-	componentWillMount(){
-		this.props.isOpen && this.bindKeyboardEvents();
-	}
+	optionsElems = [];
 
-	componentWillReceiveProps(nextProps){
-		if(this.props.isOpen !== nextProps.isOpen){
-			nextProps.isOpen?this.bindKeyboardEvents():this.unbindKeyboardEvents();
-		}
+	componentWillMount(){
+		this.bindKeyboardEvents();
 	}
 
 	componentWillUnmount(){
@@ -50,33 +47,43 @@ export default class DropdownContainer extends Component {
 	}
 
 	scrollIntoView(){
-		const elem = this.refs['option'+this.state.selectedOptionIndex];
+		const elem = this.optionsElems[this.obState.activeOptionIndex];
 		elem && elem.scrollIntoView(false);
 	}
+
 	bindKeyboardEvents(){
 		keyboard.bind('up', this.handleUp);
 		keyboard.bind('down', this.handleDown);
 		keyboard.bind('enter', this.handleEnter);
-		keyboard.bind('escape', this.handleClose);
+		keyboard.bind('escape', this.handleEsc);
+		keyboard.bind('space', this.handleSpace);
 	}
 
 	unbindKeyboardEvents(){
 		keyboard.unbind('up', this.handleUp);
 		keyboard.unbind('down', this.handleDown);
 		keyboard.unbind('enter', this.handleEnter);
-		keyboard.unbind('escape', this.handleClose);
+		keyboard.unbind('escape', this.handleEsc);
+		keyboard.bind('space', this.handleSpace);
 	}
 
 	@autobind
 	handleUp(e){
 		const {options} = this.props;
-		const {selectedOptionIndex} = this.state;
+		const {activeOptionIndex, isFocused, isOpen} = this.obState;
 
-		if(selectedOptionIndex === 0){
-			this.state.selectedOptionIndex = options.length - 1;
+		if(!isFocused){return;}
+
+		if(isOpen){
+			if(activeOptionIndex === 0){
+				this.obState.activeOptionIndex = options.length - 1;
+			}else{
+				this.obState.activeOptionIndex--;
+			}
 		}else{
-			this.state.selectedOptionIndex--;
+			this.open();
 		}
+
 
 		this.scrollIntoView();
 
@@ -86,12 +93,19 @@ export default class DropdownContainer extends Component {
 	@autobind
 	handleDown(e){
 		const {options} = this.props;
-		const {selectedOptionIndex} = this.state;
+		const {activeOptionIndex, isFocused, isOpen} = this.obState;
 
-		if(selectedOptionIndex === options.length - 1){
-			this.state.selectedOptionIndex = 0;
+		if(!isFocused){return;}
+
+
+		if(isOpen){
+			if(activeOptionIndex === options.length - 1){
+				this.obState.activeOptionIndex = 0;
+			}else{
+				this.obState.activeOptionIndex++;
+			}
 		}else{
-			this.state.selectedOptionIndex++;
+			this.open();
 		}
 
 		this.scrollIntoView();
@@ -101,26 +115,67 @@ export default class DropdownContainer extends Component {
 
 	@autobind
 	handleEnter(e){
-		const {options, isOpen} = this.props;
-		const {selectedOptionIndex} = this.state;
-		if(!isOpen){
-			return;
+		const {isOpen, isFocused} = this.obState;
+
+		if(!isFocused){return;}
+
+		if(isOpen){
+			this.selectActiveOption();
 		}
-		this.selectOption(options[selectedOptionIndex]);
 		e.preventDefault();
 		e.stopPropagation();
 	}
 
 	@autobind
-	handleClose(e){
-		this.props.onClose();
-		e.preventDefault();
-		e.stopPropagation();
+	handleBlur(e){
+		this.obState.isFocused = false;
+		this.close();
 	}
 
 	@autobind
-	selectOption(option){
-		this.props.onSelect(option);
+	handleSpace(e){
+		const {isFocused, isOpen} = this.obState;
+
+		if(isFocused && !isOpen){
+			this.open();
+		}
+
+		if(isOpen){
+			this.selectActiveOption();
+		}
+	}
+
+	@autobind
+	handleEsc(e){
+		this.close();
+	}
+
+	@autobind
+	handleClick(e){
+		const {isOpen} = this.obState;
+		isOpen?this.close():this.open();
+	}
+
+	@autobind
+	selectOption(optionIndex){
+		const {options} = this.props;
+		this.props.onSelect(options[optionIndex]);
+		this.close();
+	}
+
+	selectActiveOption(){
+		const {activeOptionIndex} = this.obState;
+		activeOptionIndex > -1 && this.selectOption(activeOptionIndex);
+	}
+
+	open(){
+		this.obState.isOpen = true;
+		this.obState.activeOptionIndex = this.props.initialActiveOptionIndex;
+	}
+
+	close(){
+		this.obState.isOpen = false;
+		this.obState.activeOptionIndex = -1;
 	}
 
 	renderOption(option, isSelected){
@@ -130,8 +185,8 @@ export default class DropdownContainer extends Component {
 	}
 
 	render(){
-		const {className, children, options, isOpen, onSelect, size, ...otherProps} = this.props;
-		const {selectedOptionIndex} = this.state;
+		const {className, children, options, onSelect, size, ...otherProps} = this.props;
+		const {activeOptionIndex, isOpen} = this.obState;
 
 		const s = createStyle(style, className, style[size], {
 			root: {
@@ -140,16 +195,22 @@ export default class DropdownContainer extends Component {
 		});
 
 		return (
-			<div {...otherProps} className={s.root} tabIndex="0" onBlur={this.handleClose}>
+			<div
+				{...otherProps}
+				className={s.root}
+				tabIndex={0}
+				onClick={this.handleClick}
+				onBlur={this.handleBlur}
+				onFocus={() => this.obState.isFocused = true}>
 				{children}
 				{isOpen &&
 					<ul className={s.optionsList} onMouseDown={e => e.preventDefault()}>
 						{options.map((option, i) => (
 							<li
 								key={i}
-								ref={'option' + i}
-								onMouseDown={() => this.selectOption(option)}>
-									{this.renderOption(option, selectedOptionIndex === i)}
+								ref={ref => this.optionsElems[i] = ref}
+								onMouseDown={() => this.selectOption(i)}>
+									{this.renderOption(option, activeOptionIndex === i)}
 							</li>
 						))}
 						{!options.length &&

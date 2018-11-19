@@ -36,9 +36,10 @@ export default class Switch extends Component {
 				className={s.root}
 				offHandleColor='#cdd3df'
 				onHandleColor='#fa2849'
-				handleDiameter={12}
+				handleDiameter={13}
 				height={22}
 				width={40}
+
 				uncheckedIcon={false}
 				checkedIcon={false}
 				onChange={onChange}

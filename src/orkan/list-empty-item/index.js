@@ -5,6 +5,7 @@ import {observable} from 'mobx';
 import autobind from 'autobind-decorator';
 
 import ActionButton from '../action-button';
+import Spinner from '../spinner';
 import {typeOrFalse} from '../utils/prop-types-utils';
 import Img from '../img';
 import {createStyle} from '../utils/style-utils';
@@ -14,7 +15,8 @@ import style from './style.scss';
 @observer
 export default class ListEmptyItem extends Component{
 	static propTypes = {
-		message: PropTypes.string
+		message: PropTypes.string,
+		isBusy: PropTypes.bool,
 	};
 
 	static defaultProps = {
@@ -22,12 +24,13 @@ export default class ListEmptyItem extends Component{
 	};
 
 	render(){
-		const {className, classes, message, ...otherProps} = this.props;
+		const {className, classes, message, isBusy, ...otherProps} = this.props;
 		const s = createStyle(style, className, classes);
 
 		return (
 			<div {...otherProps} className={s.root}>
-				{message}
+				{!isBusy && message}
+				{isBusy && <Spinner/>}
 			</div>
 		);
 	}

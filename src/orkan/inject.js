@@ -87,7 +87,7 @@ export default function inject(mapPropsToPaths = () => ({}), config) {
 
 					mappedStatuses = mapValues(mappedQueries, query => {
 						const {path, pathOptions} = parseQuery(query);
-						store.isLoading(serializeQuery(path, pathOptions));
+						return store.isLoading(serializeQuery(path, pathOptions));
 					});
 				} catch (err) {
 					//React 14+ reports the error in "inject" with a wrong stack trace. It will write something about

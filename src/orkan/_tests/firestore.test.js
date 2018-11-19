@@ -1,4 +1,3 @@
-import {cloneDeep} from 'lodash';
 import * as firebase from 'firebase-admin';
 import 'firebase/firestore';
 

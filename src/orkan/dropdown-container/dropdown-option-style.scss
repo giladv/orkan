@@ -6,21 +6,22 @@
 }
 
 .root{
-	border-bottom: 1px solid $grey2;
-	font-weight: 400;
-	color: $gray;
+	border-bottom: 1px solid $grey-5;
+	//font-weight: 400;
+	@include normalFont;
+	color: $grey-2;
 	display: flex;
 	align-items: center;
 	padding: 0 10px;
 	white-space: nowrap;
-	&:hover{
-		background-color: $grey0;
+	&:hover:not(.selected){
+		background-color: $grey-6;
 	}
 
 }
 
 .selected{
-	background-color: $grey0;
+	background-color: $grey-5;
 }
 
 .small{

@@ -7,9 +7,10 @@
 		display: flex;
 		justify-content: flex-start;
 		flex-wrap: wrap;
-		border-color: #D1D4DE;
-		background-color: #F2F4F7;
+		border-color: $grey-4;
+		background-color: $grey-5;
 		border-radius: 3px 3px 0 0;
+		border-bottom: none;
 		:global(.ql-formats){
 			margin: 0;
 		}
@@ -18,10 +19,14 @@
 	:global(.ql-container){
 		flex: 1;
 		display: flex;
-		@include inputLike;
-		border-color: #D1D4DE;
-		border-radius: 0 0 3px 3px;
+		//border-color: #D1D4DE;
+		border: none;
 		:global(.ql-editor){
+			border-radius: 0 0 3px 3px;
+			@include inputLike;
+			&:focus{
+				@include inputLikeFocused;
+			}
 			flex: 1;
 			@include normalFont;
 			h1{

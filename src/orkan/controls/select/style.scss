@@ -24,16 +24,22 @@
 	cursor: default;
 	@include globalFont;
 	@include notSelectable;
+	&:focus{
+		.selectedOption{
+			@include inputLikeFocused;
+			color: $grey-1;
+		}
+	}
 }
 
 
 
 .selectedOption{
-	@include inputLike();
-	color: $gray;
-	background: #ffffff;
+	@include inputLike;
+	color: $grey-3;
 	border-radius: 3px;
 	resize: none;
+
 }
 
 .toggleButton{
@@ -46,14 +52,7 @@
 	cursor: pointer;
 	> *{
 		transform: rotateZ(90deg);
-		color: $grey6;
-	}
-}
-
-.open{
-	.selectedOption{
-		border-color: $aqua;
-		box-shadow: inset 0px 4px 0px 0px $aqua-1;
+		color: $grey-3;
 	}
 }
 
