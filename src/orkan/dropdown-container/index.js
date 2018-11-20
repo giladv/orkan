@@ -128,8 +128,8 @@ export default class DropdownContainer extends Component {
 
 	@autobind
 	handleBlur(e){
-		this.obState.isFocused = false;
-		this.close();
+		// this.obState.isFocused = false;
+		// this.close();
 	}
 
 	@autobind

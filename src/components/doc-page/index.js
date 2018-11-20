@@ -4,6 +4,7 @@ import {observer} from 'mobx-react';
 import WithValue from '../../orkan/with-value';
 
 import {createStyle} from '../../utils/style-utils';
+import Markdown from '../markdown';
 
 import style from './style';
 
@@ -20,7 +21,7 @@ export default class DocPage extends Component{
 			<WithValue path={`docs/${params.pageId}`} render={page =>
 				<div className={s.root}>
 					<h2>{page.title}</h2>
-					<div dangerouslySetInnerHTML={{__html: page.body}}/>
+					<Markdown value={page.body}/>
 				</div>
 			}/>
 		);

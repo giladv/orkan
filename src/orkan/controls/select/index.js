@@ -21,7 +21,8 @@ export default class Select extends Component {
 		handleLabel: PropTypes.func,
 		size: PropTypes.oneOf(['small', 'medium', 'large']),
 		onChange: PropTypes.func,
-		error: PropTypes.bool
+		error: PropTypes.bool,
+		autoFocus: PropTypes.bool
 	};
 
 	static defaultProps = {
@@ -30,6 +31,11 @@ export default class Select extends Component {
 		onChange: () => null,
 		handleLabel: option => option.label
 	};
+
+	componentDidMount(){
+		const {autoFocus} = this.props;
+		autoFocus && ReactDOM.findDOMNode(this.dropdownContainer).focus();
+	}
 
 
 	@autobind
@@ -50,7 +56,7 @@ export default class Select extends Component {
 		});
 
 		return (
-			<DropdownContainer {...otherProps} className={s.root} options={options} onSelect={this.handleSelect} initialActiveOptionIndex={options.indexOf(selectedOption)}>
+			<DropdownContainer {...otherProps} ref={ref => this.dropdownContainer = ref} className={s.root} options={options} onSelect={this.handleSelect} initialActiveOptionIndex={options.indexOf(selectedOption)}>
 				<div className={s.selectedOption} onClick={this.handleToggle}>
 					{selectedOption?handleLabel(selectedOption):placeholder}
 				</div>
