@@ -46,6 +46,18 @@
 	> * {
 		margin: 0 8px;
 	}
+
+	.demoButton{
+		cursor: pointer;
+		background: url('../../img/hero-button-bg.svg') no-repeat;
+		background-position: 0px 100px;
+		background-size: 100%;
+		transition: background-position .4s ease-out, transform .2s ease-out;
+		&:hover{
+			background-position: 0px 18px;
+			transform: scale(1.05);
+		}
+	}
 }
 
 

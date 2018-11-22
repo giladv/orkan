@@ -1,18 +1,22 @@
-## What is Orkan.js
-Orkan.js is a toolkit and an admin interface for building and managing dynamic react applications with ease.
-We use Firebase services such as Firestore, Authentication and Storage as a secure and scalable turn key back-end solution.
+__Orkan.js is a content management toolkit for building and managing dynamic React applications with ease.__
 
-Orkan.js differ from other CMS solutions by the fact that it integrates into your app and not the other way around. Why it's a plus?
-- Truely painless integration into existing React projects. 
-- No platform limitations - you can use any third party packages and any setup you like.
+It uses Firebase Firestore, Authentication and Storage as a secure and scalable turn key back-end solution.
 
-### The Toolkit
-The toolkit consists of a Mobx powered data store 
-and Components which enables the flow of the data into the application components.
+Orkan.js differ from other CMS solutions by the fact that it's embedded into your app and not the other way around. Why it's a plus?
+- Truly painless integration into existing React projects. 
+- No platform limitations - you can use any third party packages and setups you like.
+- Side by side realtime editing experience by design.
 
-### The Admin UI
-The admin UI is a completely optional but extrmely powerful tool, which enables to authorized users to manage the data in a CMS like fashion. It loads asyncronousely only when it's needed so it wont your app's load time at all.
+### In The Kit
+- Mobx powered data store and Components which enables the flow of the data into the application.
+- Admin interface which enables to authorized users to manage the data in a CMS like fashion.
+- Automatic Firebase integration, all you need is to provide the configuration object supplied by firebase.
 
-### The Back-End
-Orkan.js will interface with Firebase automatically for you, all you need is to provide the configuration object supplied by firebase and it takes care for the rest.
-__* Some configartions can only be set manually on Firebase's console/cli.__
+
+### The Admin Interface
+The admin interface is a completely optional but extremely powerful tool. 
+Customize it to suit your specific product in minutes, or disable it completely. 
+Either way It loads asyncronousely only when it's needed so it wont effect your app's load time at all.
+
+
+sounds good? [click here to get started](docs/getting-started).

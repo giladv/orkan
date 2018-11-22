@@ -35,7 +35,7 @@ export default class Home extends Component{
 							}/>
 
 							<WithValue lightOverlay path='objects/home/hero/secondaryCta' render={cta =>
-								<Button to={cta.link}>{cta.label}</Button>
+								<Button className={s.demoButton} to={cta.link}>{cta.label}</Button>
 							}/>
 						</div>
 				</div>

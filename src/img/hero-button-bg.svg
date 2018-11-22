@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="151px" height="34px" viewBox="0 0 151 34" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>Group 9</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#FFFFFF" stop-opacity="0" offset="0%"></stop>
+            <stop stop-color="#FFFFFF" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Page-3" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Desktop-HD" transform="translate(-730.000000, -403.000000)" fill="url(#linearGradient-1)">
+            <g id="hero" style="mix-blend-mode: color-burn;">
+                <g id="content" transform="translate(515.000000, 120.000000)">
+                    <g id="Group-9" transform="translate(119.000000, 283.000000)">
+                        <polygon id="Rectangle-9" points="97.2471077 0 111.316406 0 71.0692985 53 57 53"></polygon>
+                        <polygon id="Rectangle-9" points="125.247108 0 139.316406 0 99.0692985 53 85 53"></polygon>
+                        <polygon id="Rectangle-9" points="153.247108 0 167.316406 0 127.069299 53 113 53"></polygon>
+                        <polygon id="Rectangle-9" points="182.247108 0 196.316406 0 156.069299 53 142 53"></polygon>
+                        <polygon id="Rectangle-9" points="210.247108 0 224.316406 0 184.069299 53 170 53"></polygon>
+                        <polygon id="Rectangle-9" points="238.247108 0 252.316406 0 212.069299 53 198 53"></polygon>
+                        <polygon id="Rectangle-9" points="266.247108 0 280.316406 0 240.069299 53 226 53"></polygon>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

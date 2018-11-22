@@ -3,7 +3,7 @@
 
 .root{
 	color: $secondary;
-	h2, h3, p{
+	h2, h3, p, li{
 		@include normalFont;
 		margin: 0;
 	}
@@ -26,6 +26,18 @@
 			&:hover{
 				color: $primary;
 			}
+		}
+	}
+
+	strong{
+		@include mediumFont;
+	}
+
+	ul{
+		margin: 20px 0 0 0;
+		li{
+			color: $secondary-1;
+			line-height: 24px;
 		}
 	}
 
