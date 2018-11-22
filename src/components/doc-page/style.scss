@@ -21,11 +21,13 @@
 		margin-top: 20px;
 		color: $secondary-1;
 		line-height: 24px;
-		a{
-			color: $secondary;
-			&:hover{
-				color: $primary;
-			}
+
+	}
+
+	a{
+		color: $secondary;
+		&:hover{
+			color: $primary;
 		}
 	}
 

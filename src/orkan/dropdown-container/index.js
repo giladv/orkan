@@ -20,10 +20,12 @@ export default class DropdownContainer extends Component {
 		renderOption: PropTypes.func,
 		initialActiveOptionIndex: PropTypes.number,
 		onSelect: PropTypes.func,
+		disabled: PropTypes.bool
 	};
 
 	static defaultProps = {
 		size: 'medium',
+		tabIndex: 0,
 		options: [],
 		initialActiveOptionIndex: -1,
 		onSelect: option => null,
@@ -133,6 +135,18 @@ export default class DropdownContainer extends Component {
 	}
 
 	@autobind
+	handleFocus(e){
+		const {disabled} = this.props;
+		if(disabled){
+			e.preventDefault();
+			e.stopPropagation();
+		}else{
+			this.obState.isFocused = true;
+		}
+
+	}
+
+	@autobind
 	handleSpace(e){
 		const {isFocused, isOpen} = this.obState;
 
@@ -152,8 +166,9 @@ export default class DropdownContainer extends Component {
 
 	@autobind
 	handleClick(e){
+		const {disabled} = this.props;
 		const {isOpen} = this.obState;
-		isOpen?this.close():this.open();
+		disabled || isOpen?this.close():this.open();
 	}
 
 	@autobind
@@ -185,7 +200,7 @@ export default class DropdownContainer extends Component {
 	}
 
 	render(){
-		const {className, children, options, onSelect, size, ...otherProps} = this.props;
+		const {className, children, options, onSelect, size, disabled, tabIndex, ...otherProps} = this.props;
 		const {activeOptionIndex, isOpen} = this.obState;
 
 		const s = createStyle(style, className, style[size], {
@@ -198,10 +213,10 @@ export default class DropdownContainer extends Component {
 			<div
 				{...otherProps}
 				className={s.root}
-				tabIndex={0}
+				tabIndex={disabled?null:tabIndex}
 				onClick={this.handleClick}
 				onBlur={this.handleBlur}
-				onFocus={() => this.obState.isFocused = true}>
+				onFocus={this.handleFocus}>
 				{children}
 				{isOpen &&
 					<ul className={s.optionsList} onMouseDown={e => e.preventDefault()}>

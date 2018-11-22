@@ -51,6 +51,10 @@
 	}
 }
 
+.disabled{
+	opacity: .6;
+}
+
 
 .small{
 	@include size($controlHeightSmall, $controlFontSizeSmall);

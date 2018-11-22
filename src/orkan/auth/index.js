@@ -44,10 +44,12 @@ export default class Auth extends Component{
 					<div className={s.invitationSent}>
 						<strong>Unauthorized</strong>
 						A request was sent to the admin.
+						<br/>
+						<a>close</a>
 					</div>
 				}
 				{isBusy && <Spinner className={s.spinner}/>}
-				{!isBusy &&
+				{!isBusy && !store.isInvitationSent &&
 					<FirebaseAuth className={s.auth} onSuccess={this.handleSuccess}/>
 				}
 			</div>

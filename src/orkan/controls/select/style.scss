@@ -62,6 +62,14 @@
 	}
 }
 
+.disabled{
+	opacity: .6;
+	cursor: default;
+	* {
+		cursor: inherit;
+	}
+}
+
 .small{
 	@include size($smallConfig);
 }

@@ -170,7 +170,9 @@ export default class Firestore{
 			const destroy = query.onSnapshot(action(snapshot => {
 				this.handleNewSnapShot(path, options, snapshot);
 				this.setPathIsLoading(serializedQuery, false);
-			}));
+			}), err => {
+				console.log(err, path)
+			});
 
 			listener = observable({
 				listeners: 1,

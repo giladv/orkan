@@ -1,5 +1,3 @@
-## Getting Started
-
 Before we begin, make sure to read [what orkan.js is](docs/what-is-orkan).
 also, we assume you are familiar with React.js and have already created a Firebase account.
 
@@ -125,6 +123,6 @@ ReactDOM.render(
 Done!
 
 ### What next?
-- dome something
+- [Setup the admin](docs/setup-the-admin)
 - dome something
 - dome something

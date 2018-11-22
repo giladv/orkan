@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {observer} from 'mobx-react';
 import {observable} from 'mobx';
 import autobind from 'autobind-decorator';
+import {OBJECTS_KEY, USERS_KEY} from '../constants';
 
 import Form from '../form';
 import FormField from '../form-field';
@@ -19,6 +20,7 @@ import {SliderControl} from '../controls/slider';
 import {WysiwygControl} from '../controls/wysiwyg';
 import {DynamicSelectControl} from '../controls/dynamic-select';
 import OrkanStore2 from '../orkan-store2';
+import {toAbsolutePath} from '../utils/path-utils';
 import {createStyle} from '../utils/style-utils';
 
 import style from './style.scss';
@@ -47,13 +49,29 @@ export default class DataForm extends Component{
 		const {store} = this.props;
 
 		this.obState.isBusy = true;
-		await store.submitData();
+		try{
+			await store.submitData();
+		}catch(e){
+			console.log(e)
+		}
 		this.obState.isBusy = false;
 	}
 
 	getStyle(){
 		const {className, classes} = this.props;
 		return createStyle(style, className, classes);
+	}
+
+	hasPermissions(){
+		const {store} = this.props;
+		return store.activePath.startsWith(toAbsolutePath(USERS_KEY))
+			|| store.activePath.startsWith(toAbsolutePath(OBJECTS_KEY))
+			|| store.canEditData;
+	}
+
+	isSubmitDisabled(){
+		const {store} = this.props;
+		return !this.hasPermissions() || store.dataFormStore.isDirty;
 	}
 
 
@@ -106,7 +124,7 @@ export default class DataForm extends Component{
 		if(!store.isPathPrimitive(store.activePath, true)){
 			return store.getPrimitiveKeysByPath(store.activePath, true)
 				.map((key, i) => (
-					<FormField compact key={key} className={s.formField} label={'/' + key} name={`${store.activePath}.${key}`} onSettings={() => store.setSettingsPath(`${store.activePath}/${key}`)}>
+					<FormField compact disabled={!this.hasPermissions()} key={key} className={s.formField} label={'/' + key} name={`${store.activePath}.${key}`} onSettings={() => store.setSettingsPath(`${store.activePath}/${key}`)}>
 						{this.renderControl(`${store.activePath}/${key}`)}
 					</FormField>
 				))
@@ -114,7 +132,7 @@ export default class DataForm extends Component{
 		}else{
 			const activePathParts = store.activePath.split('/');
 			return (
-				<FormField compact key={store.activePath} className={s.formField} label={'/' + activePathParts[activePathParts.length-1]} name={store.activePath} onSettings={() => store.setSettingsPath(store.activePath)}>
+				<FormField compact disabled={!this.hasPermissions()} key={store.activePath} className={s.formField} label={'/' + activePathParts[activePathParts.length-1]} name={store.activePath} onSettings={() => store.setSettingsPath(store.activePath)}>
 					{this.renderControl(store.activePath)}
 				</FormField>
 			);
@@ -138,7 +156,7 @@ export default class DataForm extends Component{
 				<span/>
 				{this.renderFormFields()}
 				<div className={s.actions}>
-					<SubmitButton primary disabled={!store.dataFormStore.isDirty} isBusy={isBusy}>Save Changes</SubmitButton>
+					<SubmitButton primary disabled={this.isSubmitDisabled()} isBusy={isBusy}>Save Changes</SubmitButton>
 				</div>
 			</Form>
 		);

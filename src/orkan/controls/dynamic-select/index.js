@@ -28,7 +28,7 @@ export class DynamicSelect extends Component {
 	};
 
 	render(){
-		const {data, optionsLabel, optionsValue, ...otherProps} = this.props;
+		const {data, optionsLabel, optionsValue, disabled, ...otherProps} = this.props;
 
 
 		const options = !data?[]:map(data, (item, key) => ({
@@ -38,7 +38,7 @@ export class DynamicSelect extends Component {
 
 
 		return (
-			<Select {...otherProps} options={options} disabled={!data}/>
+			<Select {...otherProps} options={options} disabled={!data || disabled}/>
 		);
 	}
 }

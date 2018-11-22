@@ -37,7 +37,7 @@
 }
 
 .invitationSent{
-	margin: 20px 20px 0 20px;
+	margin: 20px;
 	background: #efefef;
 	padding: 10px;
 	font-size: 13px;
@@ -45,5 +45,16 @@
 	strong{
 		@include mediumFont;
 		display: block;
+		margin-bottom: 10px;
+	}
+
+	a{
+		margin-top: 20px;
+		cursor: pointer;
+		@include mediumFont;
+		display: inline-block;
+		&:hover{
+			text-decoration: underline;
+		}
 	}
 }

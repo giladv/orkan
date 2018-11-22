@@ -40,7 +40,7 @@ export default class Admin extends Component{
 
 		store2.init();
 
-		this.killAuthReaction = reaction(() => !store2.isAdmin() && !store2.isInitializing, isAuthRequired => {
+		this.killAuthReaction = reaction(() => !store2.isAdmin && !store2.isInitializing, isAuthRequired => {
 			isAuthRequired?store2.openModal(Auth, {store: store2}):store2.clearModal();
 		}, {fireImmediately: true});
 
@@ -117,7 +117,7 @@ export default class Admin extends Component{
 
 		return (
 			<div className={s.root}>
-				{store2.isAdmin() && store2.activePath &&
+				{store2.isAdmin && store2.activePath &&
 					<Sidebar
 						side='left'
 						initialSize={300}

@@ -58,7 +58,8 @@ export default class Input extends Component {
 			root: {
 				hasPreIcon: !!preIcon,
 				hasPostIcon: !!postIcon,
-				error
+				error,
+				disabled
 			}
 		});
 

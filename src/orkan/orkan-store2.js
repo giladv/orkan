@@ -12,7 +12,7 @@ import {
 	SCHEMA_KEY,
 	SCHEMA_PATH,
 	SCHEMA_SETTINGS_PATH,
-	SYSTEM_OBJECTS_KEY, USER_REQUESTS_KEY,
+	OBJECTS_KEY,
 	USERS_KEY
 } from './constants';
 import {getParentPath, stripRootFromPath, toAbsolutePath} from './utils/path-utils';
@@ -37,10 +37,11 @@ export default class OrkanStore{
 	@observable isInitializing = true;
 	@observable isInvitationSent = false;
 
-	@observable.ref user;
+	@observable.ref authenticatedUserId;
 
 	@observable.ref modal;
 	modalPromise;
+	disposables = [];
 
 	constructor(dataStore, authStore){
 		this.dataStore = dataStore;
@@ -53,6 +54,27 @@ export default class OrkanStore{
 		return stripRootFromPath(this.activePath);
 	}
 
+	@computed get user(){
+		return this.authenticatedUserId && this.dataStore.getValue(USERS_KEY + '/' + this.authenticatedUserId);
+	}
+
+	// tested
+	@computed get isAdmin(){
+		return this.user && this.user.active;
+	}
+
+	@computed get canEditData(){
+		return this.isAdmin && this.user.editData;
+	}
+
+	@computed get canEditPermissions(){
+		return this.isAdmin && this.user.editPermissions;
+	}
+
+	@computed get canEditSchema(){
+		return this.isAdmin && this.user.editSchema;
+	}
+
 	// tested
 	init(){
 		return new Promise((resolve, reject) => {
@@ -60,22 +82,29 @@ export default class OrkanStore{
 			this.authStore.onAuthStateChanged(async firebaseUser => {
 				if(firebaseUser){
 					let orkanUser;
+					this.authenticatedUserId = firebaseUser.uid;
+
 					try{
 						orkanUser = await this.dataStore.load(USERS_KEY + '/' + firebaseUser.uid);
-					}catch(err){console.log(err)}
+					}catch(err){}
+
 					if(orkanUser){
-						this.user = orkanUser;
-						await this.dataStore.load(SCHEMA_PATH);
-						await this.dataStore.load(SCHEMA_SETTINGS_PATH);
-						this.dataStore.listen(SCHEMA_PATH);
-						this.dataStore.listen(SCHEMA_SETTINGS_PATH);
+						this.disposables.push(this.dataStore.listen(USERS_KEY + '/' + firebaseUser.uid));
+
+						if(orkanUser.active){
+							await this.dataStore.load(SCHEMA_PATH);
+							await this.dataStore.load(SCHEMA_SETTINGS_PATH);
+							this.disposables.push(this.dataStore.listen(SCHEMA_PATH));
+							this.disposables.push(this.dataStore.listen(SCHEMA_SETTINGS_PATH));
+						}else{
+							this.isInvitationSent = true;
+						}
 					}else{
 						this.isInvitationSent = true;
 						await this.createUserRequest(firebaseUser);
-						this.logout()
 					}
 				}else{
-					this.user = null;
+					this.authenticatedUserId = null;
 				}
 				this.isInitializing = false;
 				resolve();
@@ -85,6 +114,7 @@ export default class OrkanStore{
 
 	// tested
 	logout(){
+		this.disposables.forEach(dispose => dispose());
 		this.dataStore.clearCache(USERS_KEY);
 		this.dataStore.clearCache(SCHEMA_PATH);
 		this.dataStore.clearCache(SCHEMA_SETTINGS_PATH);
@@ -92,16 +122,17 @@ export default class OrkanStore{
 		return this.authStore.signOut();
 	}
 
-	// tested
-	isAdmin(){
-		return !!this.user;
-	}
+
 
 	// tested
 	createUserRequest(firebaseUser){
-		return this.dataStore.setValue(USER_REQUESTS_KEY + '/' + firebaseUser.uid, {
+
+		return this.dataStore.setValue(USERS_KEY + '/' + firebaseUser.uid, {
+			uid: firebaseUser.uid,
 			email: firebaseUser.email,
-			avatarUrl: firebaseUser.photoURL
+			avatarUrl: firebaseUser.photoURL,
+			active: false,
+			...defaultUserPermissions
 		});
 	}
 
@@ -249,7 +280,7 @@ export default class OrkanStore{
 		const queryablePath = toQueryablePath(this.activePathWithoutRoot);
 		const {innerPath} = breakPath(this.activePathWithoutRoot);
 
-		const formValue = omitBy(this.dataFormStore.get(this.activePath), val => !val);
+		const formValue = omitBy(this.dataFormStore.get(this.activePath), val => val === undefined);
 		const currentValue = this.dataStore.getValue(stripRootFromPath(this.activePath)) || {};
 		const finalValue = {...currentValue, ...formValue};
 
@@ -451,7 +482,7 @@ export default class OrkanStore{
 	getSchema(includeNative = false){
 		return {
 			...this.dataStore.getValue(SCHEMA_PATH),
-			...includeNative?orkanSchema:{}
+			...includeNative?this.getNativeSchema():{}
 		};
 	}
 
@@ -471,16 +502,19 @@ export default class OrkanStore{
 
 	// tested
 	async approveUserRequest(uid){
-		const userRequest = this.dataStore.getValue(USER_REQUESTS_KEY + '/'	+ uid);
+		const userRequest = this.dataStore.getValue(USERS_KEY + '/'	+ uid);
 		if(userRequest){
-			await this.dataStore.remove(USER_REQUESTS_KEY + '/'	+ uid);
-			await this.dataStore.setValue(USERS_KEY + '/'	+ uid, {...userRequest, ...defaultUserPermissions});
+			await this.dataStore.setValue(USERS_KEY + '/'	+ uid, {
+				...userRequest,
+				...defaultUserPermissions,
+				active: true
+			});
 		}
 	}
 
 	// tested
 	declineUserRequest(uid){
-		return this.dataStore.remove(USER_REQUESTS_KEY + '/'	+ uid);
+		return this.dataStore.remove(USERS_KEY + '/'	+ uid);
 	}
 
 	openModal(Component, props = {}){
@@ -508,6 +542,28 @@ export default class OrkanStore{
 	clearModal(){
 		this.rejectModal && this.rejectModal();
 	}
+
+	getNativeSchema(){
+		const nativeSchema = {};
+
+		if(this.canEditPermissions){
+			nativeSchema[USERS_KEY] = [
+				{
+					editData: true,
+					editPermissions: true,
+					editSchema: true,
+				}
+			];
+		}
+
+		if(this.canEditSchema){
+			nativeSchema[OBJECTS_KEY] = {
+				[SCHEMA_KEY]: {},
+			};
+		}
+
+		return nativeSchema;
+	}
 }
 
 
@@ -515,7 +571,7 @@ export default class OrkanStore{
 
 
 const orkanSchema = {
-	[SYSTEM_OBJECTS_KEY]: {
+	[OBJECTS_KEY]: {
 		[SCHEMA_KEY]: {},
 	},
 	[USERS_KEY]: [
@@ -550,7 +606,9 @@ const orkanSchemaSettings = {
 
 
 const defaultUserPermissions = {
-	editData: true
+	editData: false,
+	editSchema: false,
+	editPermissions: false
 };
 
 

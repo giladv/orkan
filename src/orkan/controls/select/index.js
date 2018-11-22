@@ -22,7 +22,8 @@ export default class Select extends Component {
 		size: PropTypes.oneOf(['small', 'medium', 'large']),
 		onChange: PropTypes.func,
 		error: PropTypes.bool,
-		autoFocus: PropTypes.bool
+		autoFocus: PropTypes.bool,
+		disabled: PropTypes.bool,
 	};
 
 	static defaultProps = {
@@ -45,18 +46,19 @@ export default class Select extends Component {
 	}
 
 	render(){
-		const {className, classes, value, options, handleLabel, placeholder, size, ...otherProps} = this.props;
+		const {className, classes, value, options, handleLabel, placeholder, size, disabled, ...otherProps} = this.props;
 
 		const selectedOption = options.find(option => option.value === value);
 
 		const s = createStyle(style, className, classes, style[size], {
 			root: {
-				noValue: !selectedOption
+				noValue: !selectedOption,
+				disabled
 			}
 		});
 
 		return (
-			<DropdownContainer {...otherProps} ref={ref => this.dropdownContainer = ref} className={s.root} options={options} onSelect={this.handleSelect} initialActiveOptionIndex={options.indexOf(selectedOption)}>
+			<DropdownContainer {...otherProps} disabled={disabled} ref={ref => this.dropdownContainer = ref} className={s.root} options={options} onSelect={this.handleSelect} initialActiveOptionIndex={options.indexOf(selectedOption)}>
 				<div className={s.selectedOption} onClick={this.handleToggle}>
 					{selectedOption?handleLabel(selectedOption):placeholder}
 				</div>

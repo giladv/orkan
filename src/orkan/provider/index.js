@@ -81,7 +81,7 @@ export default class Provider extends Component{
 			setActivePath: path => this.orkanStore2.setActivePath(path),
 			isEditMode: () => {
 				const {isActive, isModifierKeyDown} = this.obState;
-				return isActive && this.orkanStore2.isAdmin() && isModifierKeyDown
+				return isActive && this.orkanStore2.isAdmin && isModifierKeyDown
 			},
 			// is this making any sense??
 			openModal: (...props) => this.orkanStore2 && this.orkanStore2.openModal(...props)

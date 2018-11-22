@@ -2,7 +2,7 @@
 import {cloneDeep} from 'lodash';
 import DocumentSnapshot from 'mock-cloud-firestore/src/firebase/firestore/document-snapshot';
 import QuerySnapshot from 'mock-cloud-firestore/src/firebase/firestore/query-snapshot';
-import {SCHEMA_KEY, SCHEMA_SETTINGS_KEY, SYSTEM_OBJECTS_KEY, USER_REQUESTS_KEY, USERS_KEY} from '../constants';
+import {SCHEMA_KEY, SCHEMA_SETTINGS_KEY, OBJECTS_KEY, USERS_KEY} from '../constants';
 import Firestore from '../firestore';
 import OrkanStore from '../orkan-store2';
 import MockFirebase from 'mock-cloud-firestore';
@@ -13,14 +13,23 @@ import 'firebase/firestore';
 const firebaseUser = {
 	uid: 'u123',
 	email: 'a@a.com',
-	photoURL: 'bla.jpg'
+	photoURL: 'bla.jpg',
 };
 
 const userRequest = {
+	uid: 'u123',
+	active: false,
 	email: 'a@a.com',
 	avatarUrl: 'bla.jpg'
 };
 
+const approvedUser = {
+	uid: 'u123',
+	email: 'a@a.com',
+	avatarUrl: 'bla.jpg',
+	editData: true,
+	active: true
+};
 
 const orkanUser = {
 	uid: 'u123',
@@ -32,11 +41,7 @@ const orkanUser = {
 };
 
 
-const approvedOrkanUser = {
-	email: 'a@a.com',
-	avatarUrl: 'bla.jpg',
-	editData: true,
-};
+
 
 const schema = {
 	objects: {
@@ -103,7 +108,7 @@ const mockData = {
 				u123: {...orkanUser}
 			}
 		},
-		[SYSTEM_OBJECTS_KEY]: {
+		[OBJECTS_KEY]: {
 			__doc__: {
 				[SCHEMA_KEY]: schema,
 				[SCHEMA_SETTINGS_KEY]: schemaSettings
@@ -134,9 +139,9 @@ test('authentication', async () => {
 	await orkanStore.init();
 	expect(orkanStore.user).toEqual(orkanUser);
 	expect(orkanStore.isInitializing).toBe(false);
-	expect(orkanStore.isAdmin()).toBe(true);
+	expect(orkanStore.isAdmin).toBe(true);
 	orkanStore.logout();
-	expect(orkanStore.isAdmin()).toBe(false);
+	expect(orkanStore.isAdmin).toBe(false);
 	expect(orkanStore.user).toBe(null);
 	await orkanStore.init();
 });
@@ -238,22 +243,19 @@ test('utils', () => {
 
 test('users requests', async () => {
 
-	expect(firestore.getValue(USER_REQUESTS_KEY)).toEqual([]);
+	expect(firestore.getValue(USERS_KEY)).toEqual([]);
 	await orkanStore.createUserRequest(firebaseUser);
-	expect(await firestore.load(USER_REQUESTS_KEY + '/' + firebaseUser.uid)).toEqual(userRequest);
+	expect(await firestore.load(USERS_KEY + '/' + firebaseUser.uid)).toEqual(userRequest);
 
 	// this is first otherwise the users will be contaminated by the approve request part
 	await orkanStore.declineUserRequest(firebaseUser.uid);
-	expect(await firestore.load(USER_REQUESTS_KEY + '/' + firebaseUser.uid)).toEqual(undefined);
-	expect(await firestore.load(USERS_KEY + '/' + firebaseUser.uid)).toEqual(orkanUser);
+	expect(await firestore.load(USERS_KEY + '/' + firebaseUser.uid)).toBe(undefined);
 
 	// this is second
 	await orkanStore.createUserRequest(firebaseUser);
-	expect(await firestore.load(USER_REQUESTS_KEY + '/' + firebaseUser.uid)).toEqual(userRequest);
+	expect(await firestore.load(USERS_KEY + '/' + firebaseUser.uid)).toEqual(userRequest);
 	await orkanStore.approveUserRequest(firebaseUser.uid);
-	expect(await firestore.load(USER_REQUESTS_KEY + '/' + firebaseUser.uid)).toEqual(undefined);
-	expect(await firestore.load(USERS_KEY + '/' + firebaseUser.uid)).toEqual(approvedOrkanUser);
-
+	expect(await firestore.load(USERS_KEY + '/' + firebaseUser.uid)).toEqual(approvedUser);
 });
 
 

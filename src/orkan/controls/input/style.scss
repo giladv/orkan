@@ -51,7 +51,7 @@
 	margin: 0;
 	border-radius: 3px;
 	resize: none;
-	color: $grey-2;
+	color: $grey-3;
 	height: auto;
 	&::placeholder{
 		color: $grey5;
@@ -71,7 +71,9 @@
 	width: auto;
 }
 
-
+.disabled {
+	opacity: .6;
+}
 
 .error{
 	.input{

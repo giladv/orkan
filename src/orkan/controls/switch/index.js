@@ -39,7 +39,6 @@ export default class Switch extends Component {
 				handleDiameter={13}
 				height={22}
 				width={40}
-
 				uncheckedIcon={false}
 				checkedIcon={false}
 				onChange={onChange}
