@@ -34,8 +34,8 @@ export default class Media extends Component {
 				{...otherProps}
 				className={s.root}
 				buttons={[
-					{icon: 'picture', onClick: () => orkan.openModal(MediaGallery).then(value => onChange(value)).catch(err => null)},
-					value && {icon: 'clear', onClick: () => onChange(null)},
+					{icon: 'picture', tooltip: 'Select', onClick: () => orkan.openModal(MediaGallery).then(value => onChange(value)).catch(err => null)},
+					value && {icon: 'clear', tooltip: 'Clear', onClick: () => onChange(null)},
 				]}
 				src={value || undefined}/>
 		);

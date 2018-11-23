@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {observer} from 'mobx-react';
 import {observable} from 'mobx';
 import autobind from 'autobind-decorator';
+import Tooltip from '../tooltip';
 
 import {createStyle} from '../utils/style-utils';
 import Icon from '../icon';
@@ -15,13 +16,14 @@ export default class ActionButton extends Component{
 		icon: PropTypes.string,
 		active: PropTypes.bool,
 		disabled: PropTypes.bool,
+		tooltip: PropTypes.node
 	};
 
 	static defaultProps = {
 	};
 
 	render(){
-		const {className, icon, active, disabled, ...otherProps} = this.props;
+		const {className, icon, active, disabled, tooltip, ...otherProps} = this.props;
 		const s = createStyle(style, className, {
 			root: {
 				active,
@@ -30,7 +32,9 @@ export default class ActionButton extends Component{
 		});
 
 		return (
-			<Icon {...otherProps} className={s.root} type={icon} />
+			<Tooltip content={tooltip} disabled={!tooltip || disabled}>
+				<Icon {...otherProps} className={s.root} type={icon} />
+			</Tooltip>
 		);
 	}
 }

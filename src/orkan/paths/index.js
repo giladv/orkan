@@ -16,6 +16,7 @@ import Icon from '../icon';
 import {SubmitButton} from '../button';
 import DropdownContainer from '../dropdown-container';
 import OrkanStore2 from '../orkan-store2';
+import Tooltip from '../tooltip';
 import {stripRootFromPath} from '../utils/path-utils';
 import {createStyle} from '../utils/style-utils';
 
@@ -38,10 +39,6 @@ export default class Paths extends Component{
 
 	static defaultProps = {
 		showHeader: true
-	};
-
-	@observable obState = {
-		isOptionsOpen: false
 	};
 
 	createFormStore = new FormStore({}, {});
@@ -77,16 +74,6 @@ export default class Paths extends Component{
 	}
 
 	@autobind
-	handleSelectOption(option){
-		const {store, path} = this.props;
-		this.obState.isOptionsOpen = false;
-		switch(option.value){
-			case 'settings':
-				store.setSettingsPath(path);
-		}
-	}
-
-	@autobind
 	handleremoveIterableItem(key){
 		const {store} = this.props;
 
@@ -119,8 +106,8 @@ export default class Paths extends Component{
 					image={collectionImage && value[key][collectionImage]}
 					onClick={() => this.handleClickPath(itemKey)}
 					buttons={[
-						{icon: 'clone', onClick: (e) => this.handleRemove(e, itemKey)},
-						{icon: 'trash', onClick: (e) => this.handleRemove(e, itemKey)},
+						{icon: 'clone', onClick: (e) => this.handleRemove(e, itemKey), tooltip: 'Clone'},
+						{icon: 'trash', onClick: (e) => this.handleRemove(e, itemKey), tooltip: 'Remove'},
 					]}>
 
 					{collectionMainLabel ? value[key][collectionMainLabel] : '/' + itemKey}
@@ -135,12 +122,6 @@ export default class Paths extends Component{
 
 	render(){
 		const {store, path, showHeader} = this.props;
-		const {isOptionsOpen} = this.obState;
-
-		const options = [
-			{label: 'Settings', value: 'settings'},
-			{label: 'Clear collection', value: 'clear'},
-		];
 
 		const isPathCollection = store.isPathCollection(path);
 		const isPathArray = store.isPathArray(path);
@@ -156,15 +137,9 @@ export default class Paths extends Component{
 				}
 				{(isPathCollection || isPathArray) &&
 					<div className={s.collectionHeader}>
-						<DropdownContainer
-							className={s.collectionHeaderDropdown}
-							options={options}
-							isOpen={isOptionsOpen}
-							onSelect={this.handleSelectOption}
-							onClose={() => this.obState.isOptionsOpen = false}
-							onFocus={() => this.obState.isOptionsOpen = true}>
-							<Icon className={s.collectionHeaderDropdownIcon} type='dots'/>
-						</DropdownContainer>
+						<Tooltip content='Settings'>
+							<Icon className={s.collectionHeaderSettingsIcon} type='dots' onClick={() => store.setSettingsPath(path)}/>
+						</Tooltip>
 						<Form store={this.createFormStore} onSubmit={this.handleCreate} className={s.createForm}>
 							{isPathCollection &&
 								<InputControl className={s.createFormInput} placeholder='key (optional)' name='key'/>

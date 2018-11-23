@@ -169,10 +169,11 @@ export default class SchemaEditor extends Component{
 
 						<div className={s.fieldActions}>
 							{currentPath &&
-								<ActionButton className={s.fieldActionButton} icon='trash' onClick={() => this.handleRemoveField(currentPath)}/>
+								<ActionButton className={s.fieldActionButton} tooltip='Remove' icon='trash' onClick={() => this.handleRemoveField(currentPath)}/>
 							}
 							<ActionButton
 								icon='plus'
+								tooltip='Add child'
 								className={s.fieldActionButton}
 								onClick={() => {
 									this.obState.createPath = isArray?currentPath + '.0':currentPath;
@@ -180,6 +181,7 @@ export default class SchemaEditor extends Component{
 								}}/>
 							{parentPath !== 'objects' &&
 								<ActionButton
+									tooltip='Toggle array'
 									className={classNames(s.fieldActionButton, isArray && s.persistentAction)}
 									icon='array'
 									onClick={() => this.handleToggleArray(currentPath)}

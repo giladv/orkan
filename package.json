@@ -36,6 +36,7 @@
     "mobx-react": "^5.0.0",
     "node-uuid": "^1.4.8",
     "parse-prop-types": "^0.3.0",
+    "popper.js": "^1.14.5",
     "prop-types": "^15.6.0",
     "quill-image-resize-module": "^3.0.0",
     "rc-slider": "^8.6.3",
