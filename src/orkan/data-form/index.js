@@ -71,7 +71,7 @@ export default class DataForm extends Component{
 
 	isSubmitDisabled(){
 		const {store} = this.props;
-		return !this.hasPermissions() || store.dataFormStore.isDirty;
+		return !this.hasPermissions() || !store.dataFormStore.isDirty;
 	}
 
 

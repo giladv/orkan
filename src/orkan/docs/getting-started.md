@@ -122,7 +122,4 @@ ReactDOM.render(
 
 Done!
 
-### What next?
-- [Setup the admin](docs/setup-the-admin)
-- dome something
-- dome something
+### Next - [Setup the admin](docs/admin-setup).
