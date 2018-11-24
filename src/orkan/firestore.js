@@ -86,16 +86,7 @@ export default class Firestore{
 			...options
 		};
 
-		// this.test();
 		window.a = () => console.log(this.map.toJS(), toJS(this.collections), toJS(this.listeners), toJS(this.pathsStatus))
-	}
-
-	async test(){
-		await this.api.collection('bla').doc('boo').set({a:123});
-		console.log(await this.api.collection('bla').doc('boo').get());
-		await this.api.collection('bla').doc('boo').delete();
-		console.log(await this.api.collection('bla').doc('boo').get());
-
 	}
 
 	getValue(path, options){

@@ -85,12 +85,11 @@
 	@include smallListItemAnimation(false);
 	height: 35px;
 	display: flex;
+	flex-direction: row;
 	align-items: center;
 }
 
-
-
-.fieldCreateInput{
+.fieldCreateField{
 	flex: 1;
 }
 

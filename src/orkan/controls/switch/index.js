@@ -41,7 +41,7 @@ export default class Switch extends Component {
 				width={40}
 				uncheckedIcon={false}
 				checkedIcon={false}
-				onChange={onChange}
+				onChange={value => onChange(value)} // react switch passes a second param and screws with 'ignoreChange'
 				checked={value}/>
 		);
 	}

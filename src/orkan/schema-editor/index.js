@@ -14,8 +14,12 @@ import omit from 'lodash/omit';
 import classNames from 'classnames';
 
 import ActionButton from '../action-button';
-import Input from '../controls/input';
+import Input, {InputControl} from '../controls/input';
 import {toDotPath} from '../firestore';
+import Form from '../form';
+import FormField from '../form-field';
+import {validFirestoreKey} from '../form-validators';
+import FormStore from '../form/form-store';
 import Header from '../header';
 import Icon from '../icon';
 import {getParentPath} from '../utils/path-utils';
@@ -32,32 +36,25 @@ export default class SchemaEditor extends Component{
 
 	@observable obState = {
 		createPath: null,
-		createValue: null,
 		openPaths: ['']
 	};
 
+	createFormStore = new FormStore({}, {key: [validFirestoreKey()]});
+
 	@autobind
 	handleKeyPress(e){
-		const {onChange, value} = this.props;
-		const {createPath, createValue} = this.obState;
+		const {createPath} = this.obState;
 
-		if(e.key === 'Enter'){
-			const clone = cloneDeep(value);
-			const fullPath = [createPath, createValue].filter(it => !!it).join('.'); // createPath might be empty for root
-			set(clone, fullPath, createPath === ''?[{}]:true);
-
-			onChange(clone);
-			this.obState.createValue = null;
-		}else if(e.key === 'Esc'){
+		if(e.key === 'Esc'){
 			this.obState.createPath = null;
-			this.obState.createValue = null;
+			this.createFormStore.reset({});
 		}
 	}
 
 	@autobind
 	handleBlur(){
-		this.obState.createPath = null;
-		this.obState.createValue = null;
+		// this.obState.createPath = null;
+		this.createFormStore.reset({});
 	}
 
 
@@ -79,7 +76,7 @@ export default class SchemaEditor extends Component{
 
 		onChange(clone);
 		this.obState.createPath = null;
-		this.obState.createValue = null;
+		this.createFormStore.reset({});
 	}
 
 	@autobind
@@ -123,24 +120,35 @@ export default class SchemaEditor extends Component{
 		return createStyle(style, className, classes);
 	}
 
+	@autobind
+	handleCreateFormSubmit(){
+		const {onChange, value} = this.props;
+		const {createPath} = this.obState;
+		const createValue = this.createFormStore.get('key');
+		const clone = cloneDeep(value);
+		const fullPath = [createPath, createValue].filter(it => !!it).join('.'); // createPath might be empty for root
+		set(clone, fullPath, createPath === ''?[{}]:true);
+
+		onChange(clone);
+		this.createFormStore.reset({});
+	}
+
 	renderCreate(placeholder = 'Field name'){
-		const {createValue} = this.obState;
 		const s = this.getStyle();
 		return (
-			<div className={s.fieldCreate}>
-				<Input autoFocus
-					   className={s.fieldCreateInput}
-					   placeholder={placeholder}
-					   value={createValue}
-					   onChange={value => this.obState.createValue = value}
-					   onKeyPress={this.handleKeyPress}
-					   onBlur={this.handleBlur}/>
-			</div>
+			<Form className={s.fieldCreate} store={this.createFormStore} onSubmit={this.handleCreateFormSubmit}>
+				<FormField name='key' className={s.fieldCreateField}>
+					<InputControl autoFocus
+						   placeholder={placeholder}
+						   onKeyPress={this.handleKeyPress}
+						   onBlur={this.handleBlur}/>
+				</FormField>
+			</Form>
 		);
 	}
 
 	renderField(key, field, parentPath){
-		const {createPath, createValue, openPaths} = this.obState;
+		const {createPath, openPaths} = this.obState;
 
 		const isArray = Array.isArray(field);
 

@@ -64,9 +64,13 @@ export default class DataForm extends Component{
 
 	hasPermissions(){
 		const {store} = this.props;
-		return store.activePath.startsWith(toAbsolutePath(USERS_KEY))
-			|| store.activePath.startsWith(toAbsolutePath(OBJECTS_KEY))
-			|| store.canEditData;
+		if(store.activePath.startsWith(toAbsolutePath(USERS_KEY))){
+			return store.canEditPermissions;
+		}else if(store.activePath.startsWith(toAbsolutePath(OBJECTS_KEY))){
+			return store.canEditSchema;
+		}else{
+			return store.canEditData;
+		}
 	}
 
 	isSubmitDisabled(){
@@ -124,7 +128,7 @@ export default class DataForm extends Component{
 		if(!store.isPathPrimitive(store.activePath, true)){
 			return store.getPrimitiveKeysByPath(store.activePath, true)
 				.map((key, i) => (
-					<FormField compact disabled={!this.hasPermissions()} key={key} className={s.formField} label={'/' + key} name={`${store.activePath}.${key}`} onSettings={() => store.setSettingsPath(`${store.activePath}/${key}`)}>
+					<FormField compact disabled={!this.hasPermissions()} key={key} className={s.formField} label={'/' + key} name={`${store.activePath}.${key}`} onSettings={store.canEditSchema && (() => store.setSettingsPath(`${store.activePath}/${key}`))}>
 						{this.renderControl(`${store.activePath}/${key}`)}
 					</FormField>
 				))
@@ -132,7 +136,7 @@ export default class DataForm extends Component{
 		}else{
 			const activePathParts = store.activePath.split('/');
 			return (
-				<FormField compact disabled={!this.hasPermissions()} key={store.activePath} className={s.formField} label={'/' + activePathParts[activePathParts.length-1]} name={store.activePath} onSettings={() => store.setSettingsPath(store.activePath)}>
+				<FormField compact disabled={!this.hasPermissions()} key={store.activePath} className={s.formField} label={'/' + activePathParts[activePathParts.length-1]} name={store.activePath} onSettings={store.canEditSchema && (() => store.setSettingsPath(store.activePath))}>
 					{this.renderControl(store.activePath)}
 				</FormField>
 			);
