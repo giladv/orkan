@@ -170,16 +170,16 @@ test('schema settings', async () => {
 
 	orkanStore.setSettingsPath('./docs');
 	expect(orkanStore.getSettingsByPath('./docs')).toEqual(undefined);
-	orkanStore.settingsFormStore.set('collectionMainLabel', 'title');
+	orkanStore.settingsFormStore.set('labelField', 'title');
 	expect(orkanStore.getSettingsByPath('./docs')).toEqual(undefined);
-	expect(orkanStore.getLiveSettingsByPath('./docs')).toEqual({collectionMainLabel: 'title'});
+	expect(orkanStore.getLiveSettingsByPath('./docs')).toEqual({labelField: 'title'});
 
 	await orkanStore.submitSettings();
 	// using timeout to simulate update time from server
 	setTimeout(() => {
 
 		const newSchemaSettings = cloneDeep(schemaSettings);
-		newSchemaSettings.docs[1] = {collectionMainLabel: 'title'};
+		newSchemaSettings.docs[1] = {labelField: 'title'};
 		newSchemaSettings.objects.home.title.uiType = 'textarea';
 
 		expect(orkanStore.getSchemaSettings()).toEqual(newSchemaSettings);
@@ -285,23 +285,23 @@ test('active path', async () => {
 	expect(orkanStore.dataFormStore.toJS()).toEqual({});
 });
 
-test('getValue', async () => {
+test('getLiveValue', async () => {
 
 	const doc = await firestore.load('docs/d123');
-	expect(orkanStore.getValue('./docs/d123')).toEqual(doc);
+	expect(orkanStore.getLiveValue('./docs/d123')).toEqual(doc);
 
 	await orkanStore.setActivePath('./docs/d123');
 	orkanStore.dataFormStore.set('/docs/d123.title', 'title2');
-	expect(orkanStore.getValue('./docs/d123/title')).toBe('title2');
-	expect(orkanStore.getValue('./docs/d123')).toEqual({...doc, title: 'title2'});
+	expect(orkanStore.getLiveValue('./docs/d123/title')).toBe('title2');
+	expect(orkanStore.getLiveValue('./docs/d123')).toEqual({...doc, title: 'title2'});
 
 	const meta = await firestore.load('objects/home/meta');
-	expect(orkanStore.getValue('./objects/home/meta')).toEqual(meta);
+	expect(orkanStore.getLiveValue('./objects/home/meta')).toEqual(meta);
 
 	await orkanStore.setActivePath('./objects/home/meta');
 	orkanStore.dataFormStore.set('/objects/home/meta.background', 'background2');
-	expect(orkanStore.getValue('./objects/home/meta/background')).toBe('background2');
-	expect(orkanStore.getValue('./objects/home/meta')).toEqual({...meta, background: 'background2'});
+	expect(orkanStore.getLiveValue('./objects/home/meta/background')).toBe('background2');
+	expect(orkanStore.getLiveValue('./objects/home/meta')).toEqual({...meta, background: 'background2'});
 
 	orkanStore.clearActivePath();
 	expect(orkanStore.activePath).toBe(null);
@@ -312,7 +312,7 @@ test('getValue', async () => {
 	await orkanStore.setActivePath('./objects/home/meta');
 	orkanStore.dataFormStore.set('/objects/home/meta.background', 'background2');
 	home.meta.background = 'background2';
-	expect(orkanStore.getValue('./objects/home')).toEqual(home);
-	expect(orkanStore.getValue('./docs/d123')).toEqual(doc);
+	expect(orkanStore.getLiveValue('./objects/home')).toEqual(home);
+	expect(orkanStore.getLiveValue('./docs/d123')).toEqual(doc);
 
 });

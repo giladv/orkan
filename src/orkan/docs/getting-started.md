@@ -29,11 +29,11 @@ import ReactDOM from 'react-dom';
 
 class App extends PureComponent {
    render() {
-      return (
-         <div>
-             Hello World
-         </div>
-      );
+	  return (
+		 <div>
+			 Hello World
+		 </div>
+	  );
    }
 }
 
@@ -75,11 +75,11 @@ and replace that hard coded greeting with something dynamic
 ```jsx
 class App extends React.Component {
    render() {
-      return (
-         <div>
-             <Value path='objects/home/greeting'/>
-         </div>
-      );
+	  return (
+		 <div>
+			 <Value path='objects/home/greeting'/>
+		 </div>
+	  );
    }
 }
 ```
@@ -103,11 +103,11 @@ const firebaseConfig = {
 
 class App extends React.Component {
    render() {
-      return (
-         <div>
-             <Value path='objects/home/greeting'/>
-         </div>
-      );
+	  return (
+		 <div>
+			 <Value path='objects/home/greeting'/>
+		 </div>
+	  );
    }
 }
 

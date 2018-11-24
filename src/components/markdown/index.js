@@ -20,13 +20,13 @@ export default class Markdown extends Component{
 	};
 
 	render(){
-		const {className, value, ...otherProps} = this.props;
-		const s = createStyle(style, className);
+		const {className, value, classes, ...otherProps} = this.props;
+		const s = createStyle(style, className, classes);
 		return (
-			<ReactMarkdown source={value} renderers={{
-					code: CodeBlock,
+			<ReactMarkdown {...otherProps} source={value} renderers={{
+				code: props => <CodeBlock {...props} className={s.code}/>,
 				link: ({href, children}) => <Link to={href}>{children}</Link>
-				}}/>
+			}}/>
 		);
 	}
 }

@@ -16,11 +16,13 @@ export default class Tooltip extends Component {
     static propTypes = {
         content: PropTypes.node,
 		position: PropTypes.oneOf(['top', 'bottom', 'left', 'right']),
-		disabled: PropTypes.bool
+		disabled: PropTypes.bool,
+		trigger: PropTypes.oneOf(['hover', 'focus'])
     };
 
     static defaultProps = {
-    	position: 'top'
+    	position: 'top',
+		trigger: 'hover'
 	};
 
     @observable obState = {
@@ -32,11 +34,6 @@ export default class Tooltip extends Component {
 
     @autobind
 	handleMouseOver(e){
-    	const {disabled} = this.props;
-    	if(disabled){
-    		return;
-		}
-
         this.obState.isOpen = true;
     }
 
@@ -90,19 +87,34 @@ export default class Tooltip extends Component {
 	}
 
     render() {
-        const {className, children, content} = this.props;
+        const {className, children, content, trigger, disabled} = this.props;
         const {isOpen, tooltipStyle, finalPosition, tipStyle} = this.obState;
 
         const s = createStyle(style, className, children.props.className);
 
+        let triggerProps = {};
+
+        if(trigger === 'hover'){
+			triggerProps = {
+				onMouseOver: this.handleMouseOver,
+				onMouseLeave: this.handleMouseLeave,
+			};
+		}else if(trigger === 'focus'){
+			triggerProps = {
+				onFocus: this.handleMouseOver,
+				onBlur: this.handleMouseLeave,
+			};
+		}else{
+        	throw new Error('No valid trigger type supplied "' + trigger + '"');
+		}
+
         return [
             cloneElement(children, {
             	className: s.root,
-				onMouseOver: this.handleMouseOver,
-				onMouseLeave: this.handleMouseLeave,
-				ref: ref => this.elem = ReactDOM.findDOMNode(ref)
+				ref: ref => this.elem = ReactDOM.findDOMNode(ref),
+				...triggerProps
             }),
-            isOpen && ReactDOM.createPortal(
+            isOpen && !disabled && ReactDOM.createPortal(
 				<Bubble style={tooltipStyle} tipStyle={tipStyle} className={s.tooltip} position={finalPosition} ref={this.handleTooltipRef} tipRef={ref => this.tipElem = ref}>{content}</Bubble>,
 				document.body
 			)

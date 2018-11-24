@@ -6,6 +6,8 @@ import autobind from 'autobind-decorator';
 import map from 'lodash/map';
 
 import Form from '../form';
+import FormField from '../form-field';
+import {validFirestoreKey} from '../form-validators';
 import FormStore from '../form/form-store';
 import Header from '../header';
 import {InputControl} from '../controls/input';
@@ -41,7 +43,7 @@ export default class Paths extends Component{
 		showHeader: true
 	};
 
-	createFormStore = new FormStore({}, {});
+	createFormStore = new FormStore({}, {key: [validFirestoreKey()]});
 
 	@autobind
 	handleCreate(){
@@ -93,7 +95,7 @@ export default class Paths extends Component{
 		const {store, path, value, isPathLoading} = this.props;
 
 		if(store.isPathCollection(path) || store.isPathArray(path)){
-			const {collectionMainLabel, collectionImage} = store.getSettingsByPath(path) || {};
+			const {labelField, imageField} = store.getSettingsByPath(path) || {};
 
 			if(!value || !value.length){
 				return <ListEmptyItem isBusy={isPathLoading.value}/>
@@ -103,14 +105,14 @@ export default class Paths extends Component{
 				const itemKey = item.$key || key;
 				return <ListItem
 					key={itemKey}
-					image={collectionImage && value[key][collectionImage]}
+					image={imageField && value[key][imageField]}
 					onClick={() => this.handleClickPath(itemKey)}
 					buttons={[
 						{icon: 'clone', onClick: (e) => this.handleRemove(e, itemKey), tooltip: 'Clone'},
 						{icon: 'trash', onClick: (e) => this.handleRemove(e, itemKey), tooltip: 'Remove'},
 					]}>
 
-					{collectionMainLabel ? value[key][collectionMainLabel] : '/' + itemKey}
+					{labelField ? value[key][labelField] : '/' + itemKey}
 				</ListItem>
 			})
 		}else{
@@ -142,7 +144,9 @@ export default class Paths extends Component{
 						</Tooltip>
 						<Form store={this.createFormStore} onSubmit={this.handleCreate} className={s.createForm}>
 							{isPathCollection &&
-								<InputControl className={s.createFormInput} placeholder='key (optional)' name='key'/>
+								<FormField name='key' className={s.createFormInput}>
+									<InputControl placeholder='key (optional)'/>
+								</FormField>
 							}
 							<SubmitButton primary>create</SubmitButton>
 						</Form>

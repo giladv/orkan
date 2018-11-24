@@ -2,6 +2,7 @@ import React, {Component, cloneElement} from 'react';
 import PropTypes from 'prop-types';
 import {observer} from 'mobx-react';
 import autobind from 'autobind-decorator';
+import Tooltip from '../tooltip';
 
 import {createStyle} from '../utils/style-utils';
 import {formInput} from '../form';
@@ -41,16 +42,14 @@ export default class FormField extends Component {
 			<div {...otherProps} className={s.root}>
 				{onSettings && !disabled && <a onClick={onSettings} className={s.settings}>Settings</a>}
 
-				<label className={s.label} htmlFor={name}>{label}</label>
+				{label && <label className={s.label} htmlFor={name}>{label}</label>}
 
 				{children &&
 					<div className={s.input}>
-						{cloneElement(children, {name, disabled})}
+						<Tooltip content={error} disabled={!error} trigger='focus'>
+							{cloneElement(children, {name, disabled})}
+						</Tooltip>
 					</div>
-				}
-
-				{error &&
-					<div className={s.error}>{error}</div>
 				}
 			</div>
 

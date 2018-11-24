@@ -163,7 +163,7 @@ export default class OrkanStore{
 
 	*/
 	// tested
-	getValue(anyTypeOfPath, options){
+	getLiveValue(anyTypeOfPath, options){
 		// to enable components use relative paths (e.g something vs ./something)
 		const path = toAbsolutePath(anyTypeOfPath);
 
@@ -598,8 +598,8 @@ const orkanSchemaSettings = {
 			}
 		},
 		{
-			collectionMainLabel: 'email',
-			collectionImage: 'avatarUrl'
+			labelField: 'email',
+			imageField: 'avatarUrl'
 		}
 	]
 };
@@ -617,7 +617,8 @@ const defaultPrimitiveSettings = {
 };
 
 const defaultCollectionSettings = {
-	// collectionMainLabel: ''
+	// labelField: null,
+	// imageField: null
 };
 
 

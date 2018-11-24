@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {observer} from 'mobx-react';
-import {observable} from 'mobx';
+import {computed, observable} from 'mobx';
 import autobind from 'autobind-decorator';
 import {SwitchControl} from '../controls/switch';
 
@@ -13,6 +13,7 @@ import {InputControl} from '../controls/input';
 import Header from '../header';
 import {SliderControl} from '../controls/slider';
 import OrkanStore2 from '../orkan-store2';
+import {toAbsolutePath} from '../utils/path-utils';
 import {createStyle} from '../utils/style-utils';
 
 import style from './style.scss';
@@ -46,16 +47,44 @@ export default class SettingsPanel extends Component{
 		return createStyle(style, className, classes);
 	}
 
+	@computed get isOptionsUiSelected(){
+		const {store} = this.props;
+		return ['select', 'radio'].includes(store.settingsFormStore.get('uiType'));
+	}
+
+	@computed get dataSourcePrimitivesOptions(){
+		const {store} = this.props;
+
+		const dataSourcePath = store.settingsFormStore.get('dataSourcePath');
+		const isDynamicSourceSelected = store.settingsFormStore.get('dataSource') === 'dynamic';
+		const isCollectionOfPrimitives = !store.isPathPrimitive(toAbsolutePath(dataSourcePath + '/0'));
+
+		if(this.isOptionsUiSelected && isDynamicSourceSelected && dataSourcePath && isCollectionOfPrimitives){
+			const dataSourcePrimitivesOptions = store.getPrimitiveKeysByPath(dataSourcePath + '/0').map(primitive => ({
+				label: primitive,
+				value: primitive
+			}));
+
+			dataSourcePrimitivesOptions.unshift({label: '$key', value: '$key'});
+			dataSourcePrimitivesOptions.unshift({label: '$value', value: '$value'});
+
+			return dataSourcePrimitivesOptions;
+		}
+
+		return [];
+	}
+
 	renderCollectionSettings(){
 		const {store} = this.props;
 		const {isBusy} = this.obState;
 
-		let collectionMainLabelOption = store.getPrimitiveKeysByPath(store.settingsPath + '/0').map(primitive => ({
+		const iterableFieldsOptions = store.getPrimitiveKeysByPath(store.settingsPath + '/0').map(primitive => ({
 			label: primitive,
 			value: primitive
 		}));
 
-		collectionMainLabelOption.unshift({label: '$key', value: ''});
+		const labelFieldOptions = [{label: '$key (default)', value: null}, ...iterableFieldsOptions];
+		const imageFieldOptions = [{label: 'none (default)', value: null}, ...iterableFieldsOptions];
 
 		const s = this.getStyle();
 
@@ -63,12 +92,12 @@ export default class SettingsPanel extends Component{
 			<Form className={s.form} store={store.settingsFormStore} onSubmit={this.handleSubmit}>
 				<span/>
 
-				<FormField className={s.formField} name='collectionMainLabel' label='Main label key'>
-					<SelectControl options={collectionMainLabelOption}/>
+				<FormField className={s.formField} name='labelField' label='Label field'>
+					<SelectControl options={labelFieldOptions} defaultValue={labelFieldOptions[0].value}/>
 				</FormField>
 
-				<FormField className={s.formField} name='collectionImage' label='Image key'>
-					<SelectControl options={collectionMainLabelOption}/>
+				<FormField className={s.formField} name='imageField' label='Image field'>
+					<SelectControl options={imageFieldOptions} defaultValue={imageFieldOptions[0].value}/>
 				</FormField>
 
 				<div className={s.actions}>
@@ -86,21 +115,10 @@ export default class SettingsPanel extends Component{
 		const s = this.getStyle();
 
 		const collectionPathsOptions = store.getIterableSchemaPaths().map(path => ({label: path, value: path}));
-		let dataSourcePrimitivesOptions = [];
-
-		if(store.settingsFormStore.get('dataSource') === 'dynamic' && store.settingsFormStore.get('dataSourcePath')){
-			if(!store.isPathPrimitive(store.settingsFormStore.get('dataSourcePath') + '/0')){
-				dataSourcePrimitivesOptions = store.getPrimitiveKeysByPath(store.settingsFormStore.get('dataSourcePath') + '/0').map(primitive => ({
-					label: primitive,
-					value: primitive
-				}));
-			}
-
-			dataSourcePrimitivesOptions.unshift({label: '$key', value: '$key'});
-			dataSourcePrimitivesOptions.unshift({label: '$value', value: '$value'});
-		}
 
 		const isOptionsUiSelected = ['select', 'radio'].includes(store.settingsFormStore.get('uiType'));
+
+
 
 		return (
 			<Form className={s.form} store={store.settingsFormStore} onSubmit={this.handleSubmit}>
@@ -137,25 +155,25 @@ export default class SettingsPanel extends Component{
 
 				{isOptionsUiSelected &&
 					<FormField className={s.formField} name='dataSource' label='Data Source'>
-						<SelectControl options={dataSourceOptions}/>
+						<SelectControl options={dataSourceOptions} defaultValue={dataSourceOptions[0].value}/>
 					</FormField>
 				}
 
 				{isOptionsUiSelected && store.settingsFormStore.get('dataSource') === 'dynamic' &&
-					<FormField className={s.formField} name='dataSourcePath' label='Data Source Path'>
+					<FormField className={s.formField} name='dataSourcePath' label='Iterable Path'>
 						<SelectControl options={collectionPathsOptions}/>
 					</FormField>
 				}
 
 				{isOptionsUiSelected && store.settingsFormStore.get('dataSource') === 'dynamic' &&
-					<FormField className={s.formField} name='dataSourceLabel' label='Data Source Label'>
-						<SelectControl options={dataSourcePrimitivesOptions}/>
+					<FormField className={s.formField} name='dataSourceLabel' label='Label'>
+						<SelectControl options={this.dataSourcePrimitivesOptions} defaultValue={this.dataSourcePrimitivesOptions.length && this.dataSourcePrimitivesOptions[1].value}/>
 					</FormField>
 				}
 
 				{isOptionsUiSelected && store.settingsFormStore.get('dataSource') === 'dynamic' &&
-					<FormField className={s.formField} name='dataSourceValue' label='Data Source Value'>
-						<SelectControl options={dataSourcePrimitivesOptions}/>
+					<FormField className={s.formField} name='dataSourceValue' label='Value'>
+						<SelectControl options={this.dataSourcePrimitivesOptions} defaultValue={this.dataSourcePrimitivesOptions.length && this.dataSourcePrimitivesOptions[1].value}/>
 					</FormField>
 				}
 

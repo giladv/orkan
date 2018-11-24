@@ -53,16 +53,16 @@ test('loading', async () => {
 
 test('reading and listening', async () => {
 	const kill = firestore.listen('test/doc1');
-	expect(firestore.getValue('test/doc1')).toBe(undefined);
-	expect(firestore.getValue('test/doc2')).toBe(undefined);
+	expect(firestore.getLiveValue('test/doc1')).toBe(undefined);
+	expect(firestore.getLiveValue('test/doc2')).toBe(undefined);
 	await firestoreInst.doc('test/doc1').set(doc1);
 	await sleep(500);
-	expect(firestore.getValue('test/doc1')).toEqual(doc1);
-	expect(firestore.getValue('test/doc2')).toBe(undefined);
+	expect(firestore.getLiveValue('test/doc1')).toEqual(doc1);
+	expect(firestore.getLiveValue('test/doc2')).toBe(undefined);
 	await firestoreInst.doc('test/doc1').delete();
 	await sleep(500);
-	expect(firestore.getValue('test/doc1')).toBe(undefined);
-	expect(firestore.getValue('test/doc2')).toBe(undefined);
+	expect(firestore.getLiveValue('test/doc1')).toBe(undefined);
+	expect(firestore.getLiveValue('test/doc2')).toBe(undefined);
 
 	kill();
 });

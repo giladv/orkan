@@ -10,8 +10,12 @@ import Select from '../select';
 
 
 @inject(({optionsPath}) => {
+	if(!optionsPath){
+		return {};
+	}
+
 	return {
-		data: optionsPath && stripRootFromPath(optionsPath)
+		data: optionsPath.split('/').length === 1?{path: optionsPath}:stripRootFromPath(optionsPath)
 	};
 })
 @observer
@@ -32,8 +36,8 @@ export class DynamicSelect extends Component {
 
 
 		const options = !data?[]:map(data, (item, key) => ({
-			label: getWithFlags(key, item, optionsLabel),
-			value: getWithFlags(key, item, optionsValue)
+			label: getWithFlags(item.$key || key, item, optionsLabel),
+			value: getWithFlags(item.$key || key, item, optionsValue)
 		}));
 
 

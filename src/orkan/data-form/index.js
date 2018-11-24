@@ -103,7 +103,7 @@ export default class DataForm extends Component{
 				if(dataSource === 'static'){
 					return <SelectControl options={dataSourceOptions} autoFocus={autoFocus}/>;
 				}else if(dataSource === 'dynamic'){
-					return <DynamicSelectControl autoFocus={autoFocus} optionsPath={dataSourcePath} optionsLabel={dataSourceLabel} optionsValue={dataSourceValue}/>;
+					return <DynamicSelectControl autoFocus={autoFocus} optionsPath={dataSourcePath} optionsLabel={dataSourceLabel || '$key'} optionsValue={dataSourceValue || '$key'}/>;
 				}else{
 					return null;
 				}

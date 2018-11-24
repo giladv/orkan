@@ -12,6 +12,7 @@
 	}
 
 	h3{
+		color: $secondary;
 		font-size: 20px;
 		@include normalFont;
 		margin: 40px 0 20px 0;
@@ -42,4 +43,9 @@
 	strong{
 		@include mediumFont;
 	}
+}
+
+.codeBlock{
+	margin-top: 15px;
+	max-height: 400px;
 }

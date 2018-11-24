@@ -21,7 +21,7 @@ export default class DocPage extends Component{
 			<WithValue path={`docs/${params.pageId}`} render={page =>
 				<div className={s.root}>
 					<h2>{page.title}</h2>
-					<Markdown value={page.body}/>
+					<Markdown value={page.body} classes={{code: s.codeBlock}}/>
 				</div>
 			}/>
 		);

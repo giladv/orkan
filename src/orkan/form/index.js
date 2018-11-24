@@ -126,7 +126,7 @@ export function formInput(mapProps){
 
 
 			mapProps({value, onChange, error}){
-				return {value, onChange, error: !!error};
+				return {value, onChange, error: error};
 			}
 
 			@autobind

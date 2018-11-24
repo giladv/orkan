@@ -16,6 +16,7 @@ export default class Select extends Component {
 
 	static propTypes = {
 		value: PropTypes.any,
+		defaultValue: PropTypes.any,
 		options: PropTypes.array,
 		placeholder: PropTypes.string,
 		handleLabel: PropTypes.func,
@@ -24,6 +25,7 @@ export default class Select extends Component {
 		error: PropTypes.bool,
 		autoFocus: PropTypes.bool,
 		disabled: PropTypes.bool,
+
 	};
 
 	static defaultProps = {
@@ -46,9 +48,10 @@ export default class Select extends Component {
 	}
 
 	render(){
-		const {className, classes, value, options, handleLabel, placeholder, size, disabled, ...otherProps} = this.props;
+		const {className, classes, value, options, handleLabel, placeholder, size, disabled, defaultValue, ...otherProps} = this.props;
 
-		const selectedOption = options.find(option => option.value === value);
+		const finalValue = value === undefined?defaultValue:value;
+		const selectedOption = options.find(option => option.value === finalValue);
 
 		const s = createStyle(style, className, classes, style[size], {
 			root: {
@@ -56,6 +59,7 @@ export default class Select extends Component {
 				disabled
 			}
 		});
+
 
 		return (
 			<DropdownContainer {...otherProps} disabled={disabled} ref={ref => this.dropdownContainer = ref} className={s.root} options={options} onSelect={this.handleSelect} initialActiveOptionIndex={options.indexOf(selectedOption)}>
