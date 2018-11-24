@@ -4,8 +4,8 @@ $secondary: #121e20;
 
 
 .root{
-	background: #1D2234;
-	padding: 30px 40px;
+	background: $secondary;
+	padding: 20px 30px;
 	border-radius: 5px;
 	overflow: auto;
 	pre{
@@ -94,7 +94,7 @@ $secondary: #121e20;
 	.token.char,
 	.token.builtin,
 	.token.inserted {
-		color: #A6E22E;
+		color: #95d0d7;
 	}
 
 	.token.operator,
