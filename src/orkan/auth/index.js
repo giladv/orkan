@@ -4,7 +4,7 @@ import {observer} from 'mobx-react';
 import {observable} from 'mobx';
 import autobind from 'autobind-decorator';
 import Header from '../header';
-import OrkanStore from '../orkan-store2';
+import OrkanStore from '../orkan-store';
 
 import Spinner from '../spinner';
 import FirebaseAuth from '../firebase-auth';

@@ -216,12 +216,12 @@ export default class SchemaEditor extends Component{
 
 		return (
 			<div className={s.root}>
-				<Header title='Objects' actionIcon='plus' onActionClick={() => this.obState.createPath = 'objects'}/>
+				<Header title='Objects' actionIcon='plus' onActionClick={() => this.obState.createPath = 'objects'} actionTooltip='Add object'/>
 				{createPath === 'objects' && <div className={s.rootCreate}>{this.renderCreate('Object name')}</div>}
 				<div>
 					{map(value.objects, (field, key) => this.renderField(key, field, 'objects'))}
 				</div>
-				<Header title='Collections' actionIcon='plus' onActionClick={() => this.obState.createPath = ''}/>
+				<Header title='Collections' actionIcon='plus' onActionClick={() => this.obState.createPath = ''} actionTooltip='Add collection'/>
 				{createPath === '' && <div className={s.rootCreate}>{this.renderCreate('Collection name')}</div>}
 				<div>
 					{map(omit(value, 'objects'), (field, key) => this.renderField(key, field, null))}

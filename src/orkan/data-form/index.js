@@ -19,7 +19,7 @@ import {SwitchControl} from '../controls/switch';
 import {SliderControl} from '../controls/slider';
 import {WysiwygControl} from '../controls/wysiwyg';
 import {DynamicSelectControl} from '../controls/dynamic-select';
-import OrkanStore2 from '../orkan-store2';
+import OrkanStore from '../orkan-store';
 import {toAbsolutePath} from '../utils/path-utils';
 import {createStyle} from '../utils/style-utils';
 
@@ -30,7 +30,7 @@ import style from './style.scss';
 export default class DataForm extends Component{
 
 	static propTypes = {
-		store: PropTypes.instanceOf(OrkanStore2).isRequired,
+		store: PropTypes.instanceOf(OrkanStore).isRequired,
 	};
 
 	static defaultProps = {

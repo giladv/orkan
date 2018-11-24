@@ -14,7 +14,7 @@ import Spinner from '../spinner';
 import Paths from '../paths';
 import Img from '../img';
 import UsersRequests from '../users-requests';
-import OrkanStore2 from '../orkan-store2';
+import OrkanStore from '../orkan-store';
 import {SCHEMA_PATH} from '../constants';
 import SchemaEditor from '../schema-editor';
 import {toAbsolutePath} from '../utils/path-utils';
@@ -27,7 +27,7 @@ import style from './style.scss';
 export default class Admin extends Component{
 
 	static propTypes = {
-		store: PropTypes.instanceOf(OrkanStore2).isRequired
+		store: PropTypes.instanceOf(OrkanStore).isRequired
 	};
 
 
@@ -36,19 +36,19 @@ export default class Admin extends Component{
 	};
 
 	componentWillMount(){
-		const {store2} = this.props;
+		const {store} = this.props;
 
-		store2.init();
+		store.init();
 
-		this.killAuthReaction = reaction(() => !store2.isAdmin && !store2.isInitializing, isAuthRequired => {
-			isAuthRequired?store2.openModal(Auth, {store: store2}):store2.clearModal();
+		this.killAuthReaction = reaction(() => !store.isAdmin && !store.isInitializing, isAuthRequired => {
+			isAuthRequired?store.openModal(Auth, {store: store}):store.clearModal();
 		}, {fireImmediately: true});
 
 
 		keyboard.bind('escape', this.handleClose);
 
 		onDoublePress('shift', () => {
-			!store2.activePath && store2.setActivePath('.');
+			!store.activePath && store.setActivePath('.');
 		});
 	}
 
@@ -59,35 +59,35 @@ export default class Admin extends Component{
 
 	@autobind
 	handleClose(){
-		const {store2} = this.props;
-		store2.activePath && store2.clearActivePath();
+		const {store} = this.props;
+		store.activePath && store.clearActivePath();
 		document.body.style.paddingLeft = '';
 	}
 
 	@autobind
 	handleLogout(){
-		const {store2} = this.props;
+		const {store} = this.props;
 		this.handleClose();
-		store2.logout();
+		store.logout();
 	}
 
 	@autobind
 	handleDeclineUserRequest(uid){
-		const {store2} = this.props;
+		const {store} = this.props;
 
 		if(!confirm('are you sure?')){
 			return;
 		}
 
-		store2.declineUserRequest(uid);
+		store.declineUserRequest(uid);
 	}
 
 	render() {
-		const {className, store2} = this.props;
+		const {className, store} = this.props;
 		const {isResizing} = this.obState;
 
 
-		if(store2.isInitializing){
+		if(store.isInitializing){
 			return null;
 		}
 
@@ -100,15 +100,15 @@ export default class Admin extends Component{
 		let headerParts;
 		let headerTitle;
 
-		if(store2.activePath){
-			headerParts = store2.activePath.split('/');
+		if(store.activePath){
+			headerParts = store.activePath.split('/');
 
-			if(store2.isPathPrimitive(store2.activePath, true)){
+			if(store.isPathPrimitive(store.activePath, true)){
 				headerParts = headerParts.slice(0, -1);
 			}
 
 			headerTitle = headerParts.map((part, i) => [
-				<span className={s.titlePart} key={i} onClick={() => store2.setActivePath(headerParts.slice(0, i+1).join('/'))}>{i === 0 && headerParts.length === 1?'Root':part}</span>,
+				<span className={s.titlePart} key={i} onClick={() => store.setActivePath(headerParts.slice(0, i+1).join('/'))}>{i === 0 && headerParts.length === 1?'Root':part}</span>,
 				i < headerParts.length - 1 && '/'
 			]);
 		}
@@ -117,7 +117,7 @@ export default class Admin extends Component{
 
 		return (
 			<div className={s.root}>
-				{store2.isAdmin && store2.activePath &&
+				{store.isAdmin && store.activePath &&
 					<Sidebar
 						side='left'
 						initialSize={300}
@@ -126,36 +126,36 @@ export default class Admin extends Component{
 						onResizeEnd={() => this.obState.isResizing = false}
 						onResize={size => document.body.style.paddingLeft = size + 'px'}>
 
-						<UsersRequests onApprove={uid => store2.approveUserRequest(uid)} onDecline={this.handleDeclineUserRequest}/>
+						<UsersRequests onApprove={uid => store.approveUserRequest(uid)} onDecline={this.handleDeclineUserRequest}/>
 
 						<Header primary title={headerTitle} onActionClick={this.handleClose}/>
 
-						{store2.isLoadingActivePath && <Spinner className={s.spinner}/>}
+						{store.isLoadingActivePath && <Spinner className={s.spinner}/>}
 
 
 						<div className={s.scrollContainer}>
-							{!store2.isLoadingActivePath &&
+							{!store.isLoadingActivePath &&
 								<DataForm
 									className={s.dataForm}
-									path={store2.activePath}
-									store={store2}/>
+									path={store.activePath}
+									store={store}/>
 							}
 
-							{!store2.isLoadingActivePath &&
+							{!store.isLoadingActivePath &&
 								<Paths
-									path={store2.activePath}
-									store={store2} />
+									path={store.activePath}
+									store={store} />
 							}
 
-							{store2.activePath === toAbsolutePath(SCHEMA_PATH) &&
+							{store.activePath === toAbsolutePath(SCHEMA_PATH) &&
 								<SchemaEditor
-									value={store2.getSchema()}
-									onChange={value => store2.dataStore.setValue(SCHEMA_PATH, value)}/>
+									value={store.getSchema()}
+									onChange={value => store.dataStore.setValue(SCHEMA_PATH, value)}/>
 							}
 						</div>
 						<div className={s.footer}>
 							<div className={s.footerAuth}>
-								<Img className={s.footerAuthImg} src={store2.user.avatarUrl}/>
+								<Img className={s.footerAuthImg} src={store.user.avatarUrl}/>
 								<span onClick={this.handleLogout}>Logout</span>
 							</div>
 							<span/>
@@ -164,13 +164,13 @@ export default class Admin extends Component{
 					</Sidebar>
 				}
 
-				{store2.settingsPath &&
+				{store.settingsPath &&
 					<SettingsPanel
 						className={s.settingsPanel}
-						store={store2}/>
+						store={store}/>
 				}
 
-				{store2.modal && <store2.modal.Component {...store2.modal.props} className={s.modal}/>}
+				{store.modal && <store.modal.Component {...store.modal.props} className={s.modal}/>}
 			</div>
 		);
 	}

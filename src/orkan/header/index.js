@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {observer} from 'mobx-react';
 
 import Icon from '../icon';
+import Tooltip from '../tooltip';
 import {createStyle} from '../utils/style-utils';
 
 import style from './style.scss';
@@ -14,7 +15,8 @@ export default class Header extends Component{
 		primary: PropTypes.bool,
 		title: PropTypes.any,
 		actionIcon: PropTypes.string,
-		onActionClick: PropTypes.string,
+		onActionClick: PropTypes.func,
+		actionTooltip: PropTypes.string
 	};
 
 	static defaultProps = {
@@ -22,7 +24,7 @@ export default class Header extends Component{
 	};
 
 	render(){
-		const {className, onActionClick, actionIcon, title, primary} = this.props;
+		const {className, onActionClick, actionIcon, title, primary, actionTooltip, ...otherProps} = this.props;
 
 		const s = createStyle(style, className, {
 			root: {
@@ -31,9 +33,13 @@ export default class Header extends Component{
 		});
 
 		return (
-			<h2 className={s.root}>
+			<h2 {...otherProps} className={s.root}>
 				<div className={s.title}>{title}</div>
-				{onActionClick && <Icon className={s.icon} type={actionIcon} onClick={onActionClick}/>}
+				{onActionClick &&
+					<Tooltip content={actionTooltip} disabled={!actionTooltip}>
+						<Icon className={s.icon} type={actionIcon} onClick={onActionClick}/>
+					</Tooltip>
+				}
 			</h2>
 		);
 	}

@@ -64,14 +64,14 @@ export default function inject(mapPropsToPaths = () => ({}), config) {
 			}
 
 			getValue(path, pathOptions){
-				const {store, getValue} = this.getContext();
-				return options.liveEditedData
-					?getValue(path, pathOptions)
+				const {store, getLiveValue, isAdminOpen} = this.getContext();
+				return options.liveEditedData && isAdminOpen()
+					?getLiveValue(path, pathOptions)
 					:store.getValue(path, pathOptions);
 			}
 
 			render() {
-				const {store, getValue} = this.getContext();
+				const {store} = this.getContext();
 				const {injectedProps = []} = this.props;
 				let mappedQueries;
 				let mappedValues = {};

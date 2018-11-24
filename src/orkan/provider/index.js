@@ -20,7 +20,7 @@ import {
 import Firestore from '../firestore';
 import {keyboard} from '../utils/keyboard-utils';
 import Indicator from '../indicator';
-import OrkanStore2 from '../orkan-store2';
+import OrkanStore from '../orkan-store';
 
 import './style';
 
@@ -77,29 +77,25 @@ export default class Provider extends Component{
 
 		return {[REACT_CONTEXT_NAME]: {
 			store: this.fireStore,
-			getValue: (path, options) => this.orkanStore2?this.orkanStore2.getLiveValue(path, options):this.fireStore.getValue(path, options),
-			setActivePath: path => this.orkanStore2.setActivePath(path),
+			getLiveValue: (...args) => this.orkanStore && this.orkanStore.isAdmin && this.orkanStore.getLiveValue(...args),
+			setActivePath: (...args) => this.orkanStore && this.orkanStore.isAdmin && this.orkanStore.setActivePath(...args),
 			isEditMode: () => {
 				const {isActive, isModifierKeyDown} = this.obState;
-				return isActive && this.orkanStore2.isAdmin && isModifierKeyDown
+				return isActive && this.orkanStore.isAdmin && isModifierKeyDown
 			},
+			isAdminOpen: () => this.orkanStore && this.orkanStore.activePath,
+
 			// is this making any sense??
-			openModal: (...props) => this.orkanStore2 && this.orkanStore2.openModal(...props)
+			openModal: (...props) => this.orkanStore && this.orkanStore.openModal(...props)
 		}};
 	}
 
 	componentWillMount(){
 		const {firebaseConfig} = this.props;
 		this.firebaseApp = firebase.initializeApp(firebaseConfig, FIREBASE_APP_NAME);
-		this.fireStore = new Firestore(firebase.firestore(this.firebaseApp));
-
-		// this.fireStore.load('objects/home/features/list').then(users => console.log('load', users));
-		// this.fireStore.listen('orkanUsers', {where: {active: {'==': true}}});
-		// this.fireStore.listen(path);
-		// window.set = () => this.fireStore.setValue('orkanUsers/new', {blabla: 123, active: true});
-		// window.remove = () => this.fireStore.remove('orkanUsers/new/active');
-		// this.fireStore.listen('orkanUsers');
-		// this.activate();
+		const nativeFirestore = firebase.firestore(this.firebaseApp);
+		nativeFirestore.settings({timestampsInSnapshots: true});
+		this.fireStore = new Firestore(nativeFirestore);
 
 		keyboard.bind('hold:1000:' + ACTIVATION_EVENT_KEY, this.activate);
 
@@ -127,7 +123,7 @@ export default class Provider extends Component{
 			OrkanAdmin = window[ORKAN_ADMIN_GLOBAL].default;
 			delete window[ORKAN_ADMIN_GLOBAL];
 
-			window.s2 = this.orkanStore2 = new OrkanStore2(this.fireStore, this.firebaseApp.auth());
+			this.orkanStore = new OrkanStore(this.fireStore, this.firebaseApp.auth());
 			this.obState.isActive = true;
 		}catch(err){
 			console.error(err);
@@ -164,8 +160,8 @@ export default class Provider extends Component{
 
 		return [
 			children,
-			(isActive || isBusy) && ReactDOM.createPortal(<Indicator isBusy={isBusy || (this.orkanStore2 && this.orkanStore2.isInitializing)} />, document.body),
-			isActive && ReactDOM.createPortal(<OrkanAdmin store2={this.orkanStore2} />, document.body)
+			(isActive || isBusy) && ReactDOM.createPortal(<Indicator isBusy={isBusy || (this.orkanStore && this.orkanStore.isInitializing)} />, document.body),
+			isActive && ReactDOM.createPortal(<OrkanAdmin store={this.orkanStore} />, document.body)
 		];
 	}
 }

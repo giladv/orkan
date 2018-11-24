@@ -111,11 +111,12 @@ export default class Tooltip extends Component {
         return [
             cloneElement(children, {
             	className: s.root,
+				key: 0,
 				ref: ref => this.elem = ReactDOM.findDOMNode(ref),
 				...triggerProps
             }),
             isOpen && !disabled && ReactDOM.createPortal(
-				<Bubble style={tooltipStyle} tipStyle={tipStyle} className={s.tooltip} position={finalPosition} ref={this.handleTooltipRef} tipRef={ref => this.tipElem = ref}>{content}</Bubble>,
+				<Bubble key={1} style={tooltipStyle} tipStyle={tipStyle} className={s.tooltip} position={finalPosition} ref={this.handleTooltipRef} tipRef={ref => this.tipElem = ref}>{content}</Bubble>,
 				document.body
 			)
         ];

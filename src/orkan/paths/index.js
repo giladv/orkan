@@ -4,6 +4,7 @@ import {observer} from 'mobx-react';
 import {observable} from 'mobx';
 import autobind from 'autobind-decorator';
 import map from 'lodash/map';
+import {OBJECTS_KEY} from '../constants';
 
 import Form from '../form';
 import FormField from '../form-field';
@@ -17,7 +18,7 @@ import ListItem from '../list-item';
 import Icon from '../icon';
 import {SubmitButton} from '../button';
 import DropdownContainer from '../dropdown-container';
-import OrkanStore2 from '../orkan-store2';
+import OrkanStore from '../orkan-store';
 import Tooltip from '../tooltip';
 import {stripRootFromPath} from '../utils/path-utils';
 import {createStyle} from '../utils/style-utils';
@@ -27,6 +28,9 @@ import style from './style.scss';
 
 @inject(({path}) => {
 	const sanitizedPath = stripRootFromPath(path);
+	if(sanitizedPath === OBJECTS_KEY){
+		return {};
+	}
 	return {value: sanitizedPath};
 
 }, {liveEditedData: false})
@@ -36,7 +40,7 @@ export default class Paths extends Component{
 	static propTypes = {
 		path: PropTypes.string.isRequired,
 		showHeader: PropTypes.bool,
-		store: PropTypes.instanceOf(OrkanStore2).isRequired,
+		store: PropTypes.instanceOf(OrkanStore).isRequired,
 	};
 
 	static defaultProps = {

@@ -162,7 +162,7 @@ export default class Firestore{
 				this.handleNewSnapShot(path, options, snapshot);
 				this.setPathIsLoading(serializedQuery, false);
 			}), err => {
-				console.log(err, path)
+				console.error(err)
 			});
 
 			listener = observable({

@@ -4,7 +4,7 @@ import DocumentSnapshot from 'mock-cloud-firestore/src/firebase/firestore/docume
 import QuerySnapshot from 'mock-cloud-firestore/src/firebase/firestore/query-snapshot';
 import {SCHEMA_KEY, SCHEMA_SETTINGS_KEY, OBJECTS_KEY, USERS_KEY} from '../constants';
 import Firestore from '../firestore';
-import OrkanStore from '../orkan-store2';
+import OrkanStore from '../orkan-store';
 import MockFirebase from 'mock-cloud-firestore';
 
 import 'firebase/firestore';
