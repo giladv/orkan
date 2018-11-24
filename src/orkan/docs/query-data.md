@@ -43,7 +43,36 @@ In Orkan.js there are 3 ways of accessing your data.
 	```
 2. ### Higher order component aka injection
 	If you need the data in the react's lifecycle functions, you can inject them directly with ease.
-	here are a few examples:
+	here is how you do it:
+	```jsx
+	    @inject(props => ({
+	        posts: {path: 'blogPosts', where: {status: {'==': 'published'}}}, // for collections only!
+	        title: 'objects/blog/title' // for documents / primitives
+	    }))
+	    class Blog extends PureComponent{
+	        render(){
+	            const {posts, title, isPathLoading} = this.props;
+	            
+	            if(isPathLoading.posts || isPathLoading.title){
+	                return <Spinner/>;
+	            }
+	            
+	            return (
+	                <div className='Blog'>
+	                    <h2>{title}</h2>
+	                    <ul>
+	                        {posts.map(post => (
+                                <li key={post.$key}>
+                                    <h3>{post.title}</h3>
+                                    <p>{post.body}</p>
+                                </li>
+                            ))}
+	                    </ul>
+	                </div>
+	            );
+	        }
+	    }
+	```
 	
 3. ### Store API
 	The store provides access to the lowest level api available. for those really custom jobs.

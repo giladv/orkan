@@ -3,6 +3,7 @@ import {withRouter} from 'react-router';
 import {observer} from 'mobx-react';
 
 import Collection from '../../orkan/collection';
+import Firestore from '../../orkan/firestore';
 import inject from '../../orkan/inject';
 import Value from '../../orkan/value';
 import List from '../../orkan/list';
@@ -100,6 +101,13 @@ const apiMap = {
 			path: 'the path the data in the database.',
 			lightOverlay: 'will render the edit overlay in alternate colors to support different color schemes.',
 			renderItem: 'will be called when the data is available, expects it to return a renderable value. (collectionItem) => ReactNode'
+		}
+	},
+	Firestore: {
+		description: 'A Mobx store wrapping Firestore\' SDK.',
+		name: 'Firestore',
+		entity: Firestore,
+		props: {
 		}
 	}
 };

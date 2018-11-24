@@ -43,6 +43,7 @@ export default class Docs extends Component{
 						<Link activeClassName={s.activeLink} to='docs/api/List'>List</Link>
 						<Link activeClassName={s.activeLink} to='docs/api/Collection'>Collection</Link>
 						<Link activeClassName={s.activeLink} to='docs/api/inject'>inject</Link>
+						<Link activeClassName={s.activeLink} to='docs/api/Firestore'>Firestore</Link>
 					</div>
 
 					<div className={s.content}>
