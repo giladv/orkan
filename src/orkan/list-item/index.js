@@ -17,7 +17,8 @@ export default class ListItem extends Component{
 		image: PropTypes.string,
 		buttons: PropTypes.arrayOf(typeOrFalse(PropTypes.shape({
 			icon: PropTypes.string,
-			onClick: PropTypes.func
+			onClick: PropTypes.func,
+			tooltip: PropTypes.node
 		})))
 	};
 
@@ -39,7 +40,7 @@ export default class ListItem extends Component{
 				{image && <Img className={s.img} mode='cover' src={image}/>}
 				<div className={s.label}>{children}</div>
 				{buttons.filter(it => !!it).map((button, i) => (
-					<ActionButton className={s.actionButton} key={i} icon={button.icon} onClick={e => this.handleButtonClick(e, button)} />
+					<ActionButton className={s.actionButton} key={i} icon={button.icon} onClick={e => this.handleButtonClick(e, button)} tooltip={button.tooltip} />
 				))}
 			</div>
 		);

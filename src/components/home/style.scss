@@ -45,6 +45,22 @@
 	margin-top: 30px;
 	> * {
 		margin: 0 8px;
+		transition: transform .2s ease-out;
+		&:hover{
+			transform: scale(1.05);
+		}
+	}
+
+	.demoButton{
+		cursor: pointer;
+		background: url('../../img/hero-button-bg.svg') no-repeat;
+		background-position: 0px 100px;
+		background-size: 100%;
+		transition: background-position .4s ease-out, transform .2s ease-out;
+		&:hover{
+			background-position: 0px 14px;
+			transform: scale(1.05);
+		}
 	}
 }
 
@@ -157,8 +173,6 @@
 	margin-left: 93px;
 	width: 610px;
 	background: #1D2234;
-	padding: 30px 40px;
-	border-radius: 5px;
 }
 
 .exampleInfo{

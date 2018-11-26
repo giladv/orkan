@@ -33,16 +33,15 @@
 	display: block;
 	width: 100%;
 	margin: 0;
-	border: 1px solid $lightGray2;
 	border-radius: 3px;
 	resize: none;
-	transition: border-color linear .2s;
-	box-shadow: inset 0px 3px 0px 0px darken($lightGray, 1%);
-	color: $gray;
+	color: $grey-2;
+	@include inputLike;
 	tab-size: 3;
 	&:focus{
-		border-color: $aqua;
-		box-shadow: inset 0px 4px 0px 0px $aqua-1;
+		@include inputLikeFocused;
+		color: $grey-1;
+		outline: none;
 	}
 }
 
@@ -50,6 +49,10 @@
 	.input{
 		@include monoFont;
 	}
+}
+
+.disabled{
+	opacity: .6;
 }
 
 

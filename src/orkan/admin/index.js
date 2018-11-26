@@ -15,9 +15,9 @@ import Paths from '../paths';
 import Img from '../img';
 import UsersRequests from '../users-requests';
 import OrkanStore from '../orkan-store';
-import { SCHEMA_KEY_NAME} from '../constants';
+import {SCHEMA_PATH} from '../constants';
 import SchemaEditor from '../schema-editor';
-import {getParentPath} from '../utils/path-utils';
+import {toAbsolutePath} from '../utils/path-utils';
 import {createStyle} from '../utils/style-utils';
 
 import style from './style.scss';
@@ -40,8 +40,8 @@ export default class Admin extends Component{
 
 		store.init();
 
-		this.killAuthReaction = reaction(() => !store.isAdmin() && !store.isInitializing, isAuthRequired => {
-			isAuthRequired?store.openModal(Auth):store.clearModal();
+		this.killAuthReaction = reaction(() => !store.isAdmin && !store.isInitializing, isAuthRequired => {
+			isAuthRequired?store.openModal(Auth, {store: store}):store.clearModal();
 		}, {fireImmediately: true});
 
 
@@ -117,7 +117,7 @@ export default class Admin extends Component{
 
 		return (
 			<div className={s.root}>
-				{store.isAdmin() && store.activePath &&
+				{store.isAdmin && store.activePath &&
 					<Sidebar
 						side='left'
 						initialSize={300}
@@ -128,17 +128,12 @@ export default class Admin extends Component{
 
 						<UsersRequests onApprove={uid => store.approveUserRequest(uid)} onDecline={this.handleDeclineUserRequest}/>
 
-						<Header primary title={headerTitle} onClose={this.handleClose}/>
+						<Header primary title={headerTitle} onActionClick={this.handleClose}/>
 
 						{store.isLoadingActivePath && <Spinner className={s.spinner}/>}
 
 
 						<div className={s.scrollContainer}>
-							{/*{store.isPathCollection(getParentPath(store.activePath)) &&*/}
-								{/*<div className={s.collectionItemHeader}>*/}
-									{/*hello*/}
-								{/*</div>*/}
-							{/*}*/}
 							{!store.isLoadingActivePath &&
 								<DataForm
 									className={s.dataForm}
@@ -152,15 +147,15 @@ export default class Admin extends Component{
 									store={store} />
 							}
 
-							{store.activePath === './' + SCHEMA_KEY_NAME &&
+							{store.activePath === toAbsolutePath(SCHEMA_PATH) &&
 								<SchemaEditor
 									value={store.getSchema()}
-									onChange={value => store.dataStore.setValue(SCHEMA_KEY_NAME, value)}/>
+									onChange={value => store.dataStore.setValue(SCHEMA_PATH, value)}/>
 							}
 						</div>
 						<div className={s.footer}>
 							<div className={s.footerAuth}>
-								<Img className={s.footerAuthImg} src={store.user.photoURL}/>
+								<Img className={s.footerAuthImg} src={store.user.avatarUrl}/>
 								<span onClick={this.handleLogout}>Logout</span>
 							</div>
 							<span/>

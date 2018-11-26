@@ -11,9 +11,9 @@ import inject from '../inject';
 import style from './style';
 import {createStyle} from '../utils/style-utils';
 
-@inject(({path, orderByChild}) => {
+@inject(({path, orderBy, where}) => {
 	return {
-		collection: {path, orderByChild}
+		collection: {path, orderBy, where}
 	};
 })
 @observer
@@ -22,6 +22,15 @@ export default class Collection extends Component{
 		path: PropTypes.string.isRequired,
 		renderItem: PropTypes.func,
 		lightOverlay: PropTypes.bool,
+		orderBy: PropTypes.objectOf(PropTypes.oneOf(['asc', 'desc'])),
+		where: PropTypes.objectOf(
+			PropTypes.shape({
+				'==': PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+				'!=': PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+				'>=': PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+				'<=': PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+			})
+		)
 	};
 
 	static defaultProps = {
@@ -52,11 +61,11 @@ export default class Collection extends Component{
 			}
 		});
 
-		const cleanCollection = omitBy(collection, it => !it);
+		const cleanCollection = collection.filter(it => !!it);
 
 		return (
 			<div className={s.root}>
-				{map(cleanCollection, (item) => {
+				{cleanCollection.map(item => {
 					const renderedItem = renderItem(item, item.$key);
 					if(!renderedItem){
 						return null;

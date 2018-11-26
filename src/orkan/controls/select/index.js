@@ -16,12 +16,16 @@ export default class Select extends Component {
 
 	static propTypes = {
 		value: PropTypes.any,
+		defaultValue: PropTypes.any,
 		options: PropTypes.array,
 		placeholder: PropTypes.string,
 		handleLabel: PropTypes.func,
 		size: PropTypes.oneOf(['small', 'medium', 'large']),
 		onChange: PropTypes.func,
-		error: PropTypes.bool
+		error: PropTypes.bool,
+		autoFocus: PropTypes.bool,
+		disabled: PropTypes.bool,
+
 	};
 
 	static defaultProps = {
@@ -31,53 +35,34 @@ export default class Select extends Component {
 		handleLabel: option => option.label
 	};
 
-	@observable state = {
-		isOpen: false
-	};
-
-	@autobind
-	handleToggle(){
-		const {isOpen} = this.state;
-
-		if(!isOpen){
-			this.openOptions();
-		}else{
-			this.closeOptions();
-		}
+	componentDidMount(){
+		const {autoFocus} = this.props;
+		autoFocus && ReactDOM.findDOMNode(this.dropdownContainer).focus();
 	}
 
-	@autobind
-	closeOptions(){
-		this.state.isOpen = false;
-	}
-
-	@autobind
-	openOptions(){
-		this.state.isOpen = true;
-	}
 
 	@autobind
 	handleSelect(option){
 		const {onChange} = this.props;
-		this.closeOptions();
 		onChange(option.value);
 	}
 
 	render(){
-		const {className, classes, value, options, handleLabel, placeholder, size, ...otherProps} = this.props;
-		const {isOpen} = this.state;
+		const {className, classes, value, options, handleLabel, placeholder, size, disabled, defaultValue, ...otherProps} = this.props;
 
-		const selectedOption = options.find(option => option.value === value);
+		const finalValue = value === undefined?defaultValue:value;
+		const selectedOption = options.find(option => option.value === finalValue);
 
 		const s = createStyle(style, className, classes, style[size], {
 			root: {
-				open: isOpen,
-				noValue: !selectedOption
+				noValue: !selectedOption,
+				disabled
 			}
 		});
 
+
 		return (
-			<DropdownContainer {...otherProps} className={s.root} options={options} onSelect={this.handleSelect} isOpen={isOpen} onClose={this.closeOptions}>
+			<DropdownContainer {...otherProps} disabled={disabled} ref={ref => this.dropdownContainer = ref} className={s.root} options={options} onSelect={this.handleSelect} initialActiveOptionIndex={options.indexOf(selectedOption)}>
 				<div className={s.selectedOption} onClick={this.handleToggle}>
 					{selectedOption?handleLabel(selectedOption):placeholder}
 				</div>

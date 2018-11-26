@@ -3,8 +3,10 @@ import {withRouter} from 'react-router';
 import {observer} from 'mobx-react';
 
 import Collection from '../../orkan/collection';
+import Firestore from '../../orkan/firestore';
 import inject from '../../orkan/inject';
 import Value from '../../orkan/value';
+import List from '../../orkan/list';
 import WithValue from '../../orkan/with-value';
 import Provider from '../../orkan/provider';
 import {createStyle} from '../../utils/style-utils';
@@ -87,7 +89,25 @@ const apiMap = {
 		props: {
 			path: 'the path the data in the database.',
 			lightOverlay: 'will render the edit overlay in alternate colors to support different color schemes.',
+			renderItem: 'will be called when the data is available, expects it to return a renderable value. (collectionItem) => ReactNode',
+
+		}
+	},
+	List: {
+		description: 'A component for rendering lists. expects a path and a render function. the render function receives the collection item as an argument.',
+		name: 'List',
+		entity: List.decoratedComponent,
+		props: {
+			path: 'the path the data in the database.',
+			lightOverlay: 'will render the edit overlay in alternate colors to support different color schemes.',
 			renderItem: 'will be called when the data is available, expects it to return a renderable value. (collectionItem) => ReactNode'
+		}
+	},
+	Firestore: {
+		description: 'A Mobx store wrapping Firestore\' SDK.',
+		name: 'Firestore',
+		entity: Firestore,
+		props: {
 		}
 	}
 };

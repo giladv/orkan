@@ -22,7 +22,8 @@ export default class Thumbnail extends Component {
 		size: PropTypes.oneOf(['small', 'medium', 'large']),
 		buttons: PropTypes.arrayOf(PropTypes.shape({
 			icon: PropTypes.string,
-			onClick: PropTypes.func
+			onClick: PropTypes.func,
+			tooltip: PropTypes.node,
 		})),
 	};
 
@@ -65,7 +66,7 @@ export default class Thumbnail extends Component {
 					{cleanButtons.length > 0 &&
 						<div className={s.actions}>
 							{cleanButtons.map((button, i) => (
-								<ActionButton className={s.actionButton} key={i} icon={button.icon} onClick={button.onClick}/>
+								<ActionButton className={s.actionButton} key={i} icon={button.icon} onClick={button.onClick} tooltip={button.tooltip}/>
 							))}
 						</div>
 					}

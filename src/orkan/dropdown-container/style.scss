@@ -14,6 +14,9 @@
 	-webkit-user-select: none;
 	&:focus{
 		outline: none;
+		.optionsList{
+			border-color: $grey-3;
+		}
 	}
 }
 
@@ -31,10 +34,8 @@
 	}
 	min-width: 100%;
 	z-index: 1000000;
-	box-shadow: 0 3px 0 0 $lightGray1,
-	0 3px 0 1px $lightGray3,
-	0 0 0 1px $grey4;
-
+	border: 1px solid $grey-4;
+	box-shadow: 0 2px 0 2px rgba($grey-4, .2);
 }
 
 .option{

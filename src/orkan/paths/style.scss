@@ -25,11 +25,8 @@
 	}
 }
 
-.collectionHeaderDropdown{
+.collectionHeaderSettingsIcon{
 	margin-right: 5px;
-}
-
-.collectionHeaderDropdownIcon{
 	font-size: 13px;
 	width: 13px;
 	height: 29px;
@@ -46,6 +43,7 @@
 	flex: 1;
 	flex-direction: row;
 	align-items: center;
+	justify-content: flex-end;
 }
 .createFormInput{
 	flex: 1;

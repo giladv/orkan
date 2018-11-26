@@ -23,8 +23,8 @@ export default class PageHeader extends Component{
 
 		return (
 			<div {...otherProps} className={s.root}>
-				<WithValue path={`${basePath}/header/background`} lightOverlay render={value => <Img className={s.img} mode='cover' src={value}/>}/>
-				<h2 className={s.title}><Value html lightOverlay path={`${basePath}/header/title`}/></h2>
+				<WithValue path={`${basePath}/background`} lightOverlay render={value => <Img className={s.img} mode='cover' src={value}/>}/>
+				<h2 className={s.title}><Value html lightOverlay path={`${basePath}/title`}/></h2>
 			</div>
 		);
 	}

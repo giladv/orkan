@@ -1,0 +1,66 @@
+@import '../globals';
+
+$gap: 15px;
+
+.root{
+	background: $grey;
+	padding: 7px 9px;
+	font-size: 11px;
+	@include globalFont;
+	@include lightFont;
+	color: #ffffff;
+	border-radius: 5px;
+	box-shadow: 0 1px 0 1px rgba(0, 0, 0, 0.1), 0 2px 8px 4px rgba(0,0,0,.1);
+}
+
+
+.tip{
+	transform-origin: center center;
+	position: absolute;
+	&:after{
+		content: '';
+		border: {
+			top: 6px solid $grey;
+			right: 4px solid transparent;
+			left: 4px solid transparent;
+			bottom: 0;
+		}
+		display: block;
+		width: 0;
+		height: 0;
+
+	}
+}
+
+
+
+.top{
+	margin-bottom: $gap;
+	.tip{
+		top: 100%;
+	}
+}
+
+.bottom{
+	margin-top: $gap;
+	.tip{
+		transform: rotateZ(180deg);
+		bottom: 100%;
+	}
+}
+
+.right{
+	margin-left: $gap;
+	.tip{
+		transform: rotateZ(90deg);
+		right: calc(100% - 1px);
+	}
+}
+
+.left{
+	margin-right: $gap;
+	.tip{
+		transform: rotateZ(-90deg);
+		left: calc(100% - 1px);
+	}
+}

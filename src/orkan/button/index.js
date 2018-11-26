@@ -27,7 +27,7 @@ export default class Button extends Component{
 
 
 	render(){
-		const {className, classes, primary, secondary, important, square, isBusy, disabled, size, ...otherProps} = this.props;
+		const {className, classes, primary, secondary, important, square, isBusy, disabled, size, onClick, ...otherProps} = this.props;
 
 		const s = createStyle(style, className, classes, style[size], {
 			root: {
@@ -41,7 +41,7 @@ export default class Button extends Component{
 		});
 
 		return (
-			<a {...otherProps} className={s.root} tabIndex="0">
+			<a {...otherProps} className={s.root} tabIndex="0" onClick={e => !disabled && onClick(e)}>
 				<Spinner className={s.spinner} size={2}/>
 				<div className={s.label}>{this.props.children}</div>
 			</a>

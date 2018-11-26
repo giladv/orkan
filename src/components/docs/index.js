@@ -7,6 +7,7 @@ import pickBy from 'lodash/pickBy';
 import map from 'lodash/map';
 
 import Collection from '../../orkan/collection';
+import List from '../../orkan/list';
 import WithValue from '../../orkan/with-value';
 import {createStyle} from '../../utils/style-utils';
 import PageHeader from '../page-header';
@@ -24,14 +25,14 @@ export default class Docs extends Component{
 		});
 		return (
 			<div className={s.root}>
-				<PageHeader className={s.header} basePath='docs'/>
+				<PageHeader className={s.header} basePath='objects/docs'/>
 				<div className={s.columnsContainer}>
 					<div className={s.sidebar}>
-						<Collection path='docs/categories' orderByChild='priority' renderItem={category =>
+						<List path='objects/docs/categories' orderByChild='priority' renderItem={category =>
 							<div>
 								<div className={s.sidebarHeader}>{category.label}</div>
-								<Collection className={s.sidebarPagesList} path={`docs/categories/${category.$key}/pages`} orderByChild='priority' renderItem={page =>
-									<Link activeClassName={s.activeLink} to={`/docs/${category.$key}/${page.$key}`}>{page.title}</Link>
+								<Collection className={s.sidebarPagesList} path='docs' where={{category: {'==': category.id}}} orderBy={{priority: 'asc'}} renderItem={page =>
+									<Link activeClassName={s.activeLink} to={`/docs/${page.$key}`}>{page.title}</Link>
 								}/>
 							</div>
 						}/>
@@ -39,8 +40,10 @@ export default class Docs extends Component{
 						<Link activeClassName={s.activeLink} to='docs/api/Provider'>Provider</Link>
 						<Link activeClassName={s.activeLink} to='docs/api/Value'>Value</Link>
 						<Link activeClassName={s.activeLink} to='docs/api/WithValue'>WithValue</Link>
+						<Link activeClassName={s.activeLink} to='docs/api/List'>List</Link>
 						<Link activeClassName={s.activeLink} to='docs/api/Collection'>Collection</Link>
 						<Link activeClassName={s.activeLink} to='docs/api/inject'>inject</Link>
+						<Link activeClassName={s.activeLink} to='docs/api/Firestore'>Firestore</Link>
 					</div>
 
 					<div className={s.content}>

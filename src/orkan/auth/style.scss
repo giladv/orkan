@@ -4,19 +4,18 @@
 .root{
 	display: flex;
 	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	padding: 20px;
+	align-items: stretch;
 	background: #ffffff;
 	border-bottom-left-radius: 5px;
 	border-bottom-right-radius: 5px;
 	box-shadow: 0 12px 40px rgba(0,0,0,.3);
-
-
+	width: 260px;
 }
 
 .auth{
-	margin: 20px 0 0 0;
+	margin: 20px;
+	align-self: center;
+	width: 200px;
 }
 
 .header{
@@ -24,10 +23,38 @@
 	font-size: 15px;
 	padding: 0;
 	margin: 0;
-	text-align: center;
 	font-weight: 400;
+	background: $pink;
+	height: $headerSize;
+	color: #ffffff;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 .spinner{
 	margin-top: 20px;
+}
+
+.invitationSent{
+	margin: 20px;
+	background: #efefef;
+	padding: 10px;
+	font-size: 13px;
+	text-align: center;
+	strong{
+		@include mediumFont;
+		display: block;
+		margin-bottom: 10px;
+	}
+
+	a{
+		margin-top: 20px;
+		cursor: pointer;
+		@include mediumFont;
+		display: inline-block;
+		&:hover{
+			text-decoration: underline;
+		}
+	}
 }

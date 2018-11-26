@@ -1,0 +1,19 @@
+@import '../globals';
+
+
+
+.root{
+	@include smallListItemAnimation();
+	cursor: pointer;
+	padding: 0 15px;
+	height: $headerSize * 3;
+	background: white;
+	font-size: 13px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: #71778A;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+}

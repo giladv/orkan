@@ -9,6 +9,7 @@ import * as mobx from 'mobx';
 
 import firebase from 'firebase/app';
 import 'firebase/database';
+import 'firebase/firestore';
 import 'firebase/auth'
 import 'firebase/storage'
 
@@ -16,8 +17,8 @@ import {
 	ACTIVATION_EVENT_KEY, DEFAULT_BASE_PATH, FIREBASE_APP_NAME, ORKAN_ADMIN_GLOBAL, REACT_CONTEXT_NAME,
 	SUPPORTED_AUTH_PROVIDERS,
 } from '../constants';
+import Firestore from '../firestore';
 import {keyboard} from '../utils/keyboard-utils';
-import FirebaseStore from '../firebase-store';
 import Indicator from '../indicator';
 import OrkanStore from '../orkan-store';
 
@@ -34,6 +35,8 @@ window.autobind = autobind;
 window.firebase = firebase;
 
 
+
+
 @observer
 export default class Provider extends Component{
 
@@ -46,7 +49,6 @@ export default class Provider extends Component{
 			storageBucket: PropTypes.string,
 			messagingSenderId: PropTypes.string
 		}).isRequired,
-		basePath: PropTypes.string,
 		authProviders: PropTypes.arrayOf(PropTypes.oneOf(SUPPORTED_AUTH_PROVIDERS))
 	};
 
@@ -74,24 +76,27 @@ export default class Provider extends Component{
 	getChildContext() {
 
 		return {[REACT_CONTEXT_NAME]: {
-			store: this.firebaseStore,
-			getValue: (path, options) => this.orkanStore?this.orkanStore.getValue(path, options):this.firebaseStore.getValue(path, options),
-			setActivePath: path => this.orkanStore.setActivePath(path),
+			store: this.fireStore,
+			getLiveValue: (...args) => this.orkanStore && this.orkanStore.isAdmin && this.orkanStore.getLiveValue(...args),
+			setActivePath: (...args) => this.orkanStore && this.orkanStore.isAdmin && this.orkanStore.setActivePath(...args),
 			isEditMode: () => {
 				const {isActive, isModifierKeyDown} = this.obState;
-				return isActive && this.orkanStore.isAdmin() && isModifierKeyDown
+				return isActive && this.orkanStore.isAdmin && isModifierKeyDown
 			},
+			isAdminOpen: () => this.orkanStore && this.orkanStore.activePath,
+
 			// is this making any sense??
 			openModal: (...props) => this.orkanStore && this.orkanStore.openModal(...props)
 		}};
 	}
 
 	componentWillMount(){
-		const {firebaseConfig, basePath} = this.props;
+		const {firebaseConfig} = this.props;
 		this.firebaseApp = firebase.initializeApp(firebaseConfig, FIREBASE_APP_NAME);
-		this.firebaseStore = new FirebaseStore(this.firebaseApp.database(), basePath);
+		const nativeFirestore = firebase.firestore(this.firebaseApp);
+		nativeFirestore.settings({timestampsInSnapshots: true});
+		this.fireStore = new Firestore(nativeFirestore);
 
-		// this.activate();
 		keyboard.bind('hold:1000:' + ACTIVATION_EVENT_KEY, this.activate);
 
 		document.addEventListener('keydown', this.handleKeyDown);
@@ -118,7 +123,7 @@ export default class Provider extends Component{
 			OrkanAdmin = window[ORKAN_ADMIN_GLOBAL].default;
 			delete window[ORKAN_ADMIN_GLOBAL];
 
-			this.orkanStore = new OrkanStore(this.firebaseStore, this.firebaseApp.auth());
+			this.orkanStore = new OrkanStore(this.fireStore, this.firebaseApp.auth());
 			this.obState.isActive = true;
 		}catch(err){
 			console.error(err);
@@ -127,8 +132,6 @@ export default class Provider extends Component{
 		setTimeout(() => {
 			this.obState.isBusy = false;
 		}, 500)
-
-		// window.a = this.orkanStore;
 	}
 
 	@autobind

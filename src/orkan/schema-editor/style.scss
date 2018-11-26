@@ -3,15 +3,35 @@
 
 .root{
 	font-size: 13px;
-	padding: 0 15px;
+	//padding: 0 15px;
 }
 
 .field{
+	display: flex;
+	flex-direction: column;
+}
 
+.rootField{
+	padding: 9px 15px;
+	border-bottom: 1px solid #D0D2D6;
+	&:last-child:not(:first-child){
+		border-bottom: none;
+	}
+}
+
+.rootCreate{
+	height: $headerSize;
+	display: flex;
+	align-items: center;
+	padding: 0 10px;
+	border-bottom: 1px solid #D0D2D6;
+	> * {
+		flex: 1;
+	}
 }
 
 .fieldContent{
-	height: 27px;
+	height: 30px;
 	display: flex;
 	align-items: center;
 	&:hover{
@@ -19,7 +39,9 @@
 			color: #000000;
 		}
 		.fieldActions{
-			display: flex;
+			> :not(.persistentAction){
+				display: flex;
+			}
 		}
 	}
 }
@@ -42,8 +64,11 @@
 
 
 .fieldActions{
-	display: none;
+	display: flex;
 	flex: 0 0 auto;
+	> :not(.persistentAction) {
+		display: none;
+	}
 }
 
 .fieldActionButton{
@@ -60,10 +85,11 @@
 	@include smallListItemAnimation(false);
 	height: 35px;
 	display: flex;
+	flex-direction: row;
 	align-items: center;
 }
 
-.fieldCreateInput{
+.fieldCreateField{
 	flex: 1;
 }
 

@@ -1,21 +1,26 @@
-import {isEmpty} from 'lodash';
-import {observable, computed} from 'mobx';
-import autobind from 'autobind-decorator';
+import {observable, computed, toJS} from 'mobx';
 import isObject from 'lodash/isObject';
 import cloneDeep from 'lodash/cloneDeep';
 import get from 'lodash/get';
-import isEqualWith from 'lodash/isEqualWith';
+import set from 'lodash/set';
+import omitBy from 'lodash/omitBy';
 import invariant from 'invariant';
+import {breakPath, toDotPath, toQueryablePath} from './firestore';
 
 import FormStore from './form/form-store';
 import {
-	COLLECTION_KEY, SCHEMA_KEY_NAME, SCHEMA_SETTINGS_KEY_NAME, USER_REQUESTS_KEY_NAME,
-	USERS_KEY_NAME
+	SCHEMA_KEY,
+	SCHEMA_PATH,
+	SCHEMA_SETTINGS_PATH,
+	OBJECTS_KEY,
+	USERS_KEY
 } from './constants';
-import {stripRootFromPath, toAbsolutePath} from './utils/path-utils';
-import {getSchemaCollectionPaths, schemaGet, toSchemaPath} from './utils/schema-utils';
+import {getParentPath, stripRootFromPath, toAbsolutePath} from './utils/path-utils';
+import {getSchemaIterablePaths, schemaGet, toSchemaPath} from './utils/schema-utils';
 
 const validPathInvariant = path => invariant(path.startsWith('.'), 'Invalid path structure. paths must start with `.`');
+
+
 
 export default class OrkanStore{
 	dataStore;
@@ -25,65 +30,109 @@ export default class OrkanStore{
 	settingsFormStore = new FormStore({}, {});
 
 	@observable activePath;
+	@observable activePrimitive;
 	@observable settingsPath;
 
 	@observable isLoadingActivePath = false;
 	@observable isInitializing = true;
+	@observable isInvitationSent = false;
 
-	@observable.ref user;
+	@observable.ref authenticatedUserId;
 
 	@observable.ref modal;
 	modalPromise;
+	disposables = [];
 
 	constructor(dataStore, authStore){
 		this.dataStore = dataStore;
 		this.authStore = authStore;
+
+		window.s = () => toJS(this);
 	}
 
 	@computed get activePathWithoutRoot(){
 		return stripRootFromPath(this.activePath);
 	}
 
-	init(){
-		this.isInitializing = true;
-		this.authStore.onAuthStateChanged(async user => {
-			if(user){
-				let userPermissions;
-				try{
-					userPermissions = await this.dataStore.load(USERS_KEY_NAME + '/' + user.uid);
-				}catch(err){}
+	@computed get user(){
+		return this.authenticatedUserId && this.dataStore.getValue(USERS_KEY + '/' + this.authenticatedUserId);
+	}
 
-				if(userPermissions){
-					this.user = user;
-					this.dataStore.listen(SCHEMA_KEY_NAME);
-					this.dataStore.listen(SCHEMA_SETTINGS_KEY_NAME);
+	// tested
+	@computed get isAdmin(){
+		return this.user && this.user.active;
+	}
+
+	@computed get canEditData(){
+		return this.isAdmin && this.user.editData;
+	}
+
+	@computed get canEditPermissions(){
+		return this.isAdmin && this.user.editPermissions;
+	}
+
+	@computed get canEditSchema(){
+		return this.isAdmin && this.user.editSchema;
+	}
+
+	// tested
+	init(){
+		return new Promise((resolve, reject) => {
+			this.isInitializing = true;
+			this.authStore.onAuthStateChanged(async firebaseUser => {
+				if(firebaseUser){
+					let orkanUser;
+					this.authenticatedUserId = firebaseUser.uid;
+
+					try{
+						orkanUser = await this.dataStore.load(USERS_KEY + '/' + firebaseUser.uid);
+					}catch(err){}
+
+					if(orkanUser){
+						this.disposables.push(this.dataStore.listen(USERS_KEY + '/' + firebaseUser.uid));
+
+						if(orkanUser.active){
+							await this.dataStore.load(SCHEMA_PATH);
+							await this.dataStore.load(SCHEMA_SETTINGS_PATH);
+							this.disposables.push(this.dataStore.listen(SCHEMA_PATH));
+							this.disposables.push(this.dataStore.listen(SCHEMA_SETTINGS_PATH));
+						}else{
+							this.isInvitationSent = true;
+						}
+					}else{
+						this.isInvitationSent = true;
+						await this.createUserRequest(firebaseUser);
+					}
 				}else{
-					await this.createUserRequest(user);
-					this.logout()
+					this.authenticatedUserId = null;
 				}
-			}else{
-				this.user = null;
-			}
-			this.isInitializing = false;
+				this.isInitializing = false;
+				resolve();
+			});
 		});
 	}
 
+	// tested
 	logout(){
-		this.dataStore.clearCache(USERS_KEY_NAME);
-		this.dataStore.clearCache(SCHEMA_SETTINGS_KEY_NAME);
-		this.dataStore.clearCache(SCHEMA_KEY_NAME);
+		this.disposables.forEach(dispose => dispose());
+		this.dataStore.clearCache(USERS_KEY);
+		this.dataStore.clearCache(SCHEMA_PATH);
+		this.dataStore.clearCache(SCHEMA_SETTINGS_PATH);
+		this.user = null;
 		return this.authStore.signOut();
 	}
 
-	isAdmin(){
-		return !!this.user;
-	}
 
 
-	createUserRequest(user){
-		return this.dataStore.setValue(USER_REQUESTS_KEY_NAME + '/' + user.uid, {
-			email: user.email,
-			avatarUrl: user.photoURL
+	// tested
+	createUserRequest(firebaseUser){
+
+		return this.dataStore.setValue(USERS_KEY + '/' + firebaseUser.uid, {
+			uid: firebaseUser.uid,
+			email: firebaseUser.email,
+			avatarUrl: firebaseUser.photoURL,
+			active: false,
+			...defaultUserPermissions
 		});
 	}
 
@@ -113,12 +162,12 @@ export default class OrkanStore{
 		- solution: pick the field from the form and return
 
 	*/
-
-	getValue(anyTypeOfPath, options){
+	// tested
+	getLiveValue(anyTypeOfPath, options){
 		// to enable components use relative paths (e.g something vs ./something)
 		const path = toAbsolutePath(anyTypeOfPath);
 
-		if(!this.activePath || this.isInitializing || this.dataStore.isPathLoading(SCHEMA_KEY_NAME) || this.isLoadingActivePath){
+		if(!this.activePath || this.isInitializing || this.dataStore.isLoading(SCHEMA_KEY) || this.isLoadingActivePath){
 			return this.dataStore.getValue(stripRootFromPath(anyTypeOfPath), options);
 		}
 
@@ -126,9 +175,7 @@ export default class OrkanStore{
 		// case #3
 		console.log('@case #3', path);
 
-			if(this.isPathPrimitive(path, true)){
-				return this.dataFormStore.get(this.activePath)
-			}else if(this.isPathCollection(path)){
+			if(this.isPathCollection(path)){
 				return this.dataStore.getValue(stripRootFromPath(anyTypeOfPath), options);
 			}else{
 				return {
@@ -157,12 +204,21 @@ export default class OrkanStore{
 		// case #1
 		console.log('@case #1', path);
 
-			const dataStoreValue = this.dataStore.getValue(stripRootFromPath(anyTypeOfPath), options);
+		const dataStoreValue = this.dataStore.getValue(stripRootFromPath(anyTypeOfPath), options);
 			let clonedData = cloneDeep(dataStoreValue);
 			if(Array.isArray(dataStoreValue)){
 				const pathParts = this.activePath.replace(path + '/', '').split('/');
 				const firstKey = pathParts.shift();
-				const collectionItem = clonedData.find(item => item.$key === firstKey);
+				const isPathCollection = this.isPathCollection(anyTypeOfPath);
+
+				let collectionItem;
+				if(isPathCollection){
+					collectionItem = clonedData.find((item, key) => item.$key === firstKey);
+				}else{
+					collectionItem = clonedData[firstKey];
+				}
+
+
 				if(collectionItem){
 					const propertyToOverride = pathParts.length?get(collectionItem, pathParts):collectionItem;
 
@@ -185,24 +241,35 @@ export default class OrkanStore{
 		}
 	}
 
+
+	// tested
 	async setActivePath(anyTypeOfPath){
 		// to enable components use relative paths (e.g something vs ./something)
 		const path = toAbsolutePath(anyTypeOfPath);
 
-		this.isLoadingActivePath = true;
+		if(this.isPathPrimitive(path, true)){
+			this.activePath = getParentPath(path);
+			this.activePrimitive = path;
+		}else{
+			this.activePath = path;
+			this.activePrimitive = null;
+		}
 
-		this.activePath = path;
 		this.dataFormStore.reset();
 
-		await this.loadRequiredFieldsByPath(path);
-		this.isLoadingActivePath = false;
-		const storeValue = this.dataStore.getValue(stripRootFromPath(anyTypeOfPath)) || {};
+		if(path === '.'){
+			return;
+		}
 
-		if(this.isPathPrimitive(path, true)){
-			this.dataFormStore.set(path, storeValue);
-		}else if(!this.isPathCollection(path)){
-			this.getPrimitiveKeysByPath(path, true).forEach(key => {
-				this.dataFormStore.set(`${path}.${key}`, storeValue[key]);
+		this.isLoadingActivePath = true;
+		await this.loadRequiredFieldsByPath(this.activePath);
+		this.isLoadingActivePath = false;
+		const storeValue = this.dataStore.getValue(stripRootFromPath(this.activePath)) || {};
+
+		if(!this.isPathCollection(this.activePath)){
+
+			this.getPrimitiveKeysByPath(this.activePath, true).forEach(key => {
+				this.dataFormStore.set(`${this.activePath}.${key}`, storeValue[key]);
 			});
 		}
 
@@ -210,37 +277,44 @@ export default class OrkanStore{
 	}
 
 	async submitData(){
-		const newValue = this.dataFormStore.get(this.activePath);
-		const currentValue = this.dataStore.getValue(this.activePathWithoutRoot);
+		const queryablePath = toQueryablePath(this.activePathWithoutRoot);
+		const {innerPath} = breakPath(this.activePathWithoutRoot);
 
+		const formValue = omitBy(this.dataFormStore.get(this.activePath), val => val === undefined);
+		const currentValue = this.dataStore.getValue(stripRootFromPath(this.activePath)) || {};
+		const finalValue = {...currentValue, ...formValue};
 
-		if(isObject(newValue) && isObject(currentValue)){
-			await this.dataStore.setValue(this.activePathWithoutRoot, {...currentValue, ...newValue});
+		let document = cloneDeep(this.dataStore.getValue(queryablePath) || {});
+
+		if(innerPath){
+			set(document, toDotPath(innerPath), finalValue);
 		}else{
-			await this.dataStore.setValue(this.activePathWithoutRoot, newValue);
+			Object.assign(document, finalValue);
 		}
 
+		await this.dataStore.setValue(queryablePath, document);
 		setTimeout(() => this.dataFormStore.setClean(), 2);
 	}
 
+	// tested
 	async loadRequiredFieldsByPath(path){
 		const pathWithoutHome = stripRootFromPath(path);
-		if(this.isPathPrimitive(path, true)){
-			return await this.dataStore.load(pathWithoutHome);
-		}else if(!this.isPathCollection(path)){
-			return await Promise.all(this.isPathCollection(path)?[]:this.getPrimitiveKeysByPath(path, true)
+		if(!this.isPathCollection(path)){
+			return await Promise.all(this.getPrimitiveKeysByPath(path, true)
 				.filter(key => this.dataStore.getValue(pathWithoutHome + '/' + key) === undefined)
 				.map(key => this.dataStore.load(pathWithoutHome + '/' + key))
 			);
 		}
 	}
 
+	// tested
 	toSchemaPath(path){
 		validPathInvariant(path);
 		const schema = this.getSchema(true);
 		return toSchemaPath(schema, path);
 	}
 
+	// tested
 	getSchemaByPath(path, includeNative){
 		validPathInvariant(path);
 		const schema = this.getSchema(includeNative);
@@ -248,19 +322,14 @@ export default class OrkanStore{
 		return schemaPath && schemaGet(schema, schemaPath);
 	}
 
-	isSchemaCompatible(path, toPath){
-		const pathSchema = this.getSchemaByPath(path);
-		const toPathSchema = this.getSchemaByPath(toPath);
-		return isSchemaCompatible(pathSchema, toPathSchema);
-	}
-
+	// tested
 	isPathPrimitive(path, includeNative){
 		validPathInvariant(path);
 		const pathSchema = this.getSchemaByPath(path, includeNative);
 		return !isObject(pathSchema);
-
 	}
 
+	// tested
 	getPrimitiveKeysByPath(path, includeNative){
 		validPathInvariant(path);
 
@@ -269,6 +338,7 @@ export default class OrkanStore{
 			.filter(key => !isObject(pathSchema[key]))
 	}
 
+	// tested
 	getNonPrimitiveKeysByPath(path, includeNative){
 		validPathInvariant(path);
 		const pathSchema = this.getSchemaByPath(path, includeNative);
@@ -281,145 +351,170 @@ export default class OrkanStore{
 		}
 	}
 
+	// tested
 	clearActivePath(){
 		this.activePath = null;
+		this.activePrimitive = null;
 		this.dataFormStore.reset();
 		this.clearSettingsPath();
 	}
 
+	// tested
 	clearSettingsPath(){
 		this.settingsFormStore.reset();
 		this.settingsPath = null;
 	}
 
-	getSettingsByPath(path){
+	// tested
+	getLiveSettingsByPath(path){
 		validPathInvariant(path);
-		const schema = this.getSchema(true);
-		const schemaSettings = this.getSchemaSettings();
 
-		const schemaPath = toSchemaPath(schema, path);
+		const schemaPath = this.toSchemaPath(path);
+
+		if(!schemaPath){
+			return;
+		}
+
 		if(schemaPath === this.settingsPath){
 			return this.settingsFormStore.toJS();
-		}else if(schemaSettings){
-			return schemaGet(schemaSettings, schemaPath);
+		}else{
+			return this.getSettingsByPath(path)
 		}
 	}
 
+	// tested
+	getSettingsByPath(path){
+		validPathInvariant(path);
+
+		const schemaSettings = this.getSchemaSettings(true);
+
+		const schemaPath = this.toSchemaPath(path);
+
+		if(!schemaPath){
+			return;
+		}
+
+		const pathSchemaSettings = schemaGet(schemaSettings, schemaPath);
+		return this.isPathIterable(path) &&  pathSchemaSettings?pathSchemaSettings[1]:pathSchemaSettings;
+
+	}
+
+	// tested
 	async submitSettings(){
 		const newValue = this.settingsFormStore.toJS();
+		const schemaSettingsClone = cloneDeep(this.getSchemaSettings());
 
-		await this.dataStore.setValue(SCHEMA_SETTINGS_KEY_NAME + '/' + this.settingsPath, newValue);
 
+		if(this.isPathIterable(this.settingsPath)){
+			const pathSchemaSettings = get(schemaSettingsClone, toDotPath(stripRootFromPath(this.settingsPath))) || [];
+			pathSchemaSettings[0] = pathSchemaSettings[0] || {};
+			pathSchemaSettings[1] = newValue;
+			set(schemaSettingsClone, toDotPath(stripRootFromPath(this.settingsPath)), pathSchemaSettings);
+		}else{
+			set(schemaSettingsClone, toDotPath(stripRootFromPath(this.settingsPath)), newValue);
+		}
+
+		await this.dataStore.setValue(SCHEMA_SETTINGS_PATH, schemaSettingsClone);
 		this.clearSettingsPath();
 	}
 
-
+	// tested
 	setSettingsPath(path){
 		validPathInvariant(path);
 
-		const schema = this.getSchema(true);
-		const schemaSettings = this.getSchemaSettings();
+		this.settingsPath = this.toSchemaPath(path);
+		const isPathIterable = this.isPathIterable(path);
 
-		const schemaPath = toSchemaPath(schema, path);
-		this.settingsPath = schemaPath;
+		const defaultSettings = isPathIterable?defaultCollectionSettings:defaultPrimitiveSettings;
+		this.settingsFormStore.reset({...defaultSettings, ...this.getSettingsByPath(path)});
+	}
 
-		let defaultSettings;
+	// tested
+	isPathIterable(path){
+		return this.isPathCollection(path) || this.isPathArray(path);
+	}
 
-		if(this.isPathCollection(path)){
-			defaultSettings = {
-				collectionMainLabel: ''
-			};
-		}else{
-			defaultSettings = {
-				uiType: 'text'
-			};
+	// tested
+	isPathCollection(path){
+		const pathParts = path.split('/');
+
+		if(pathParts.length !== 2){
+			return false;
 		}
 
-		this.settingsFormStore.reset({...defaultSettings, ...schemaGet(schemaSettings, schemaPath)});
-	}
-
-	isPathCollection(path){
 		const subSchema = this.getSchemaByPath(path, true);
-		return subSchema && !!subSchema[COLLECTION_KEY];
+		return subSchema && Array.isArray(subSchema);
 	}
 
-	async createCollectionItem(path, key){
+	// tested
+	isPathArray(path){
+		const pathParts = path.split('/');
+
+		if(pathParts.length <= 2){
+			return false;
+		}
+
+		const subSchema = this.getSchemaByPath(path, true);
+		return subSchema && Array.isArray(subSchema);
+	}
+
+	async createCollectionKey(path, key){
 		validPathInvariant(path);
 
-		const finalKey = key || this.dataStore.push(this.activePathWithoutRoot).key;
-		this.setActivePath(path + '/' + finalKey);
+		const finalKey = key || this.dataStore.generateKey(stripRootFromPath(path));
+		await this.setActivePath(path + '/' + finalKey);
 	}
 
 
-	removeCollectionItem(path){
+	async createArrayKey(path){
+		validPathInvariant(path);
+		const arr = this.dataStore.getValue(stripRootFromPath(path)) || [];
+		await this.setActivePath(path + '/' + arr.length);
+	}
+
+
+	removeIterableItem(path){
 		validPathInvariant(path);
 		return this.dataStore.remove(stripRootFromPath(path));
 	}
 
+	// tested
 	getSchema(includeNative = false){
 		return {
-			...this.dataStore.getValue(SCHEMA_KEY_NAME),
-			...includeNative?orkanSchema:{}
+			...this.dataStore.getValue(SCHEMA_PATH),
+			...includeNative?this.getNativeSchema():{}
 		};
 	}
 
-	getSchemaSettings(){
+	// tested
+	getSchemaSettings(includeNative = false){
 		return {
-			...this.dataStore.getValue(SCHEMA_SETTINGS_KEY_NAME),
-			...orkanSchemaSettings
+			...this.dataStore.getValue(SCHEMA_SETTINGS_PATH),
+			...includeNative?orkanSchemaSettings:{}
 		};
 	}
 
-	getUserPermissions(){
-		return this.dataStore.getValue(USERS_KEY_NAME + '/' + this.user.uid);
+	// tested
+	getIterableSchemaPaths(includeNative){
+		return getSchemaIterablePaths(this.getSchema(includeNative));
 	}
 
-	getCollectionSchemaPaths(includeNative){
-		return getSchemaCollectionPaths(this.getSchema(includeNative));
-	}
 
-	/*
-		0: "./blog/posts"
-		1: "./docs/categories"
-		2: "./docs/categories/_/pages"
-		3: "./home/examples/list"
-		4: "./home/features/list"
-		5: "./menu"
-
-
-	*/
-	getCollectionPaths(includeNative){
-		const collectionSchemaPaths = this.getCollectionSchemaPaths(includeNative);
-		collectionSchemaPaths.map(path => {
-			if(!path.includes('/' + COLLECTION_KEY + '/')){
-				return path;
-			}
-
-			const pathParts = path.split()
-
-		})
-	}
-
-	getPathsFromSchemaPaths(schemaPaths){
-		schemaPaths.map(schemaPath => {
-			if(!schemaPath.includes('/' + COLLECTION_KEY + '/')){
-				return schemaPath;
-			}
-
-			const pathParts = schemaPath.split()
-
-		})
-	}
-
+	// tested
 	async approveUserRequest(uid){
-		const userRequest = this.dataStore.getValue(USER_REQUESTS_KEY_NAME + '/'	+ uid);
-		await this.dataStore.remove(USER_REQUESTS_KEY_NAME + '/'	+ uid);
-		await this.dataStore.setValue(USERS_KEY_NAME + '/'	+ uid, {...userRequest, ...defaultUserPermissions});
+		const userRequest = this.dataStore.getValue(USERS_KEY + '/'	+ uid);
+		if(userRequest){
+			await this.dataStore.setValue(USERS_KEY + '/'	+ uid, {
+				...userRequest,
+				...defaultUserPermissions,
+				active: true
+			});
+		}
 	}
 
-
+	// tested
 	declineUserRequest(uid){
-		return this.dataStore.remove(USER_REQUESTS_KEY_NAME + '/'	+ uid);
+		return this.dataStore.remove(USERS_KEY + '/'	+ uid);
 	}
 
 	openModal(Component, props = {}){
@@ -447,6 +542,28 @@ export default class OrkanStore{
 	clearModal(){
 		this.rejectModal && this.rejectModal();
 	}
+
+	getNativeSchema(){
+		const nativeSchema = {};
+
+		if(this.canEditPermissions){
+			nativeSchema[USERS_KEY] = [
+				{
+					editData: true,
+					editPermissions: true,
+					editSchema: true,
+				}
+			];
+		}
+
+		if(this.canEditSchema){
+			nativeSchema[OBJECTS_KEY] = {
+				[SCHEMA_KEY]: {},
+			};
+		}
+
+		return nativeSchema;
+	}
 }
 
 
@@ -454,22 +571,22 @@ export default class OrkanStore{
 
 
 const orkanSchema = {
-	[SCHEMA_KEY_NAME]: {},
-	[USERS_KEY_NAME]: {
-		[COLLECTION_KEY]: {
-			editData: 'string',
-			editPermissions: 'string',
-			editSchema: 'string',
+	[OBJECTS_KEY]: {
+		[SCHEMA_KEY]: {},
+	},
+	[USERS_KEY]: [
+		{
+			editData: true,
+			editPermissions: true,
+			editSchema: true,
 		}
-	}
+	]
 };
 
 
 const orkanSchemaSettings = {
-	[USERS_KEY_NAME]: {
-		collectionMainLabel: 'email',
-		collectionImage: 'avatarUrl',
-		[COLLECTION_KEY]: {
+	[USERS_KEY]: [
+		{
 			editData: {
 				uiType: 'switch'
 			},
@@ -479,29 +596,123 @@ const orkanSchemaSettings = {
 			editSchema: {
 				uiType: 'switch'
 			}
+		},
+		{
+			labelField: 'email',
+			imageField: 'avatarUrl'
 		}
-	}
+	]
 };
 
 
 const defaultUserPermissions = {
-	editData: true
+	editData: false,
+	editSchema: false,
+	editPermissions: false
 };
 
 
-
-
-
-const isSchemaCompatible = (schema, toSchema) => {
-	const schemaKeys = Object.keys(schema)
-	return !schemaKeys.find(key => {
-		if(typeof schema[key] !== typeof toSchema[key]){
-			return true;
-		}
-		if(isObject(schema[key])){
-			return !isSchemaCompatible(schema[key], toSchema[key]);
-		}else{
-			return schema[key] !== toSchema[key];
-		}
-	});
+const defaultPrimitiveSettings = {
+	uiType: 'text'
 };
+
+const defaultCollectionSettings = {
+	// labelField: null,
+	// imageField: null
+};
+
+
+/*
+
+	# schema
+	{
+		objects; {
+			home: {
+				features: {
+					title,
+					list: [{
+						title, body, img
+					}]
+				}
+			}
+		}
+		docs; [{
+			title, body
+		}]
+
+	}
+
+	# schema settings
+	{
+		objects__home__features__title: {uiTypes}
+		objects__home__features__list: {uiTypes}
+		objects__home__features__list__: {uiTypes}
+	}
+
+	{
+		objects: {
+			home: {
+				features: {
+					title: {uiType}
+					list: {
+						$settings: {
+							labelField,
+							imageField,
+						}
+						title: {uiTypes}
+						body: {uiTypes}
+						img: {uiTypes}
+					}
+
+					list: [
+						{
+							title: {uiTypes}
+							body: {uiTypes}
+							img: {uiTypes}
+						},
+						{
+							labelField,
+							imageField,
+						}
+					]
+				}
+			}
+		}
+	}
+
+
+
+
+{
+	objects: {
+		type: 'object',
+		children: {
+			home: {
+				type: 'object',
+				children: {
+					features: {
+						type: 'object',
+						children: {
+							list: {
+								type: 'array',
+								of: {
+									type: 'object'
+									children: {..}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	docs: {
+
+	}
+}
+
+
+#### create the entire changed document from the root and then merge it
+
+
+*/

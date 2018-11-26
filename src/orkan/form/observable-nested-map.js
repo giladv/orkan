@@ -71,10 +71,19 @@ export class ObservableNestedMap{
 		var part = parts.shift();
 
 		if(!parts.length){
-			return this.map.delete(part);
+			return this.shallowRemove(ctx, part)
 		}
 
-		return this.remove(parts.join('.'), this.get(part, ctx));
+		this.remove(parts.join('.'), this.get(part, ctx));
+	}
+
+	@action shallowRemove(ctx, key){
+
+		if(isObservableMap(ctx)){
+			ctx.delete(key);
+		}else if(isObservableArray(ctx)){
+			ctx.splice(key, 1);
+		}
 	}
 
 	@action merge(value){
