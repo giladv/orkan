@@ -4,7 +4,7 @@ import {observer} from 'mobx-react';
 import {observable} from 'mobx';
 
 import style from './style';
-import {createStyle} from '../utils/style-utils';
+import {createStyle} from '../../utils/style-utils';
 
 @observer
 export default class Img extends Component {

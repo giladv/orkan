@@ -3,9 +3,9 @@ import {observer} from 'mobx-react';
 import PropTypes from 'prop-types';
 import map from 'lodash/map';
 import parsePropTypes from 'parse-prop-types'
-import Icon from '../../orkan/icon';
 
 import {createStyle} from '../../utils/style-utils';
+import Icon from '../icon';
 
 import style from './style';
 

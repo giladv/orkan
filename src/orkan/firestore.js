@@ -3,9 +3,8 @@ import invariant from 'invariant';
 import omitBy from 'lodash/omitBy';
 import forEach from 'lodash/forEach';
 import {observable, isObservable, toJS, action} from 'mobx';
+import ObservableNestedMap from 'observable-nested-map';
 import nodePath from 'path';
-
-import {ObservableNestedMap} from './form/observable-nested-map';
 
 const validPathInvariant = path => {
 	invariant(!!path.length, 'Invalid path, expected a non empty string');

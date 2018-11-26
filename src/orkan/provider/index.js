@@ -33,6 +33,7 @@ window.PropTypes = PropTypes;
 window.classNames = classNames;
 window.autobind = autobind;
 window.firebase = firebase;
+window.firebase = firebase;
 
 
 
@@ -71,22 +72,22 @@ export default class Provider extends Component{
 		isBusy: false,
 	};
 
-	@observable.ref orkanStore;
+	@observable.ref adminStore;
 
 	getChildContext() {
 
 		return {[REACT_CONTEXT_NAME]: {
 			store: this.fireStore,
-			getLiveValue: (...args) => this.orkanStore && this.orkanStore.isAdmin && this.orkanStore.getLiveValue(...args),
-			setActivePath: (...args) => this.orkanStore && this.orkanStore.isAdmin && this.orkanStore.setActivePath(...args),
+			getLiveValue: (...args) => this.adminStore && this.adminStore.isAdmin && this.adminStore.getLiveValue(...args),
+			setActivePath: (...args) => this.adminStore && this.adminStore.isAdmin && this.adminStore.setActivePath(...args),
 			isEditMode: () => {
 				const {isActive, isModifierKeyDown} = this.obState;
-				return isActive && this.orkanStore.isAdmin && isModifierKeyDown
+				return isActive && this.adminStore.isAdmin && isModifierKeyDown
 			},
-			isAdminOpen: () => this.orkanStore && this.orkanStore.activePath,
+			isAdminOpen: () => this.adminStore && this.adminStore.activePath,
 
 			// is this making any sense??
-			openModal: (...props) => this.orkanStore && this.orkanStore.openModal(...props)
+			openModal: (...props) => this.adminStore && this.adminStore.openModal(...props)
 		}};
 	}
 
@@ -123,7 +124,6 @@ export default class Provider extends Component{
 			OrkanAdmin = window[ORKAN_ADMIN_GLOBAL].default;
 			delete window[ORKAN_ADMIN_GLOBAL];
 
-			this.orkanStore = new OrkanStore(this.fireStore, this.firebaseApp.auth());
 			this.obState.isActive = true;
 		}catch(err){
 			console.error(err);
@@ -160,8 +160,8 @@ export default class Provider extends Component{
 
 		return [
 			children,
-			(isActive || isBusy) && ReactDOM.createPortal(<Indicator isBusy={isBusy || (this.orkanStore && this.orkanStore.isInitializing)} />, document.body),
-			isActive && ReactDOM.createPortal(<OrkanAdmin store={this.orkanStore} />, document.body)
+			(isActive || isBusy) && ReactDOM.createPortal(<Indicator isBusy={isBusy || (this.adminStore && this.adminStore.isInitializing)} />, document.body),
+			isActive && ReactDOM.createPortal(<OrkanAdmin dataStore={this.fireStore} onStoreReady={store => this.adminStore = store} />, document.body)
 		];
 	}
 }

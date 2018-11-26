@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
-import {createStyle} from '../utils/style-utils';
+import {createStyle} from '../../utils/style-utils';
 
 import style from './style.scss';
 

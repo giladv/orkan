@@ -4,13 +4,13 @@ import {Link, withRouter} from 'react-router';
 import {observable} from 'mobx';
 import {observer} from 'mobx-react';
 
-import Img from '../../orkan/img';
 import Value from '../../orkan/value';
 import WithValue from '../../orkan/with-value';
 import Button from '../button';
 import CodeBlock from '../code-block';
 import {createStyle} from '../../utils/style-utils';
 import List from '../../orkan/list';
+import Img from '../img';
 
 import style from './style';
 

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import style from './style.scss';
 import icons from './icons.scss';
 
-import {createStyle} from '../utils/style-utils';
+import {createStyle} from '../../utils/style-utils';
 
 export default class Icon extends Component {
     static propTypes = {

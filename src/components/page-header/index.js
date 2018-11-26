@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Img from '../../orkan/img';
 import Value from '../../orkan/value';
 import WithValue from '../../orkan/with-value';
 
 import {createStyle} from '../../utils/style-utils';
-import Button from '../button';
+import Img from '../img';
 
 import style from './style';
 
