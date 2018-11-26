@@ -20,7 +20,7 @@ import {
 import Firestore from '../firestore';
 import {keyboard} from '../utils/keyboard-utils';
 import Indicator from '../indicator';
-import OrkanStore from '../orkan-store';
+import inject from '../inject';
 
 import './style';
 
@@ -33,7 +33,8 @@ window.PropTypes = PropTypes;
 window.classNames = classNames;
 window.autobind = autobind;
 window.firebase = firebase;
-window.firebase = firebase;
+window.Firestore = Firestore;
+window.inject = inject;
 
 
 
@@ -82,7 +83,7 @@ export default class Provider extends Component{
 			setActivePath: (...args) => this.adminStore && this.adminStore.isAdmin && this.adminStore.setActivePath(...args),
 			isEditMode: () => {
 				const {isActive, isModifierKeyDown} = this.obState;
-				return isActive && this.adminStore.isAdmin && isModifierKeyDown
+				return isActive && this.adminStore && this.adminStore.isAdmin && isModifierKeyDown
 			},
 			isAdminOpen: () => this.adminStore && this.adminStore.activePath,
 

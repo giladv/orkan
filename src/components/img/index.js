@@ -27,7 +27,7 @@ export default class Img extends Component {
 		onError: ()=>null
     };
 
-    @observable state = {
+    @observable obState = {
         isLoading: true
     };
 
@@ -46,11 +46,11 @@ export default class Img extends Component {
     updateImage({src, onLoad, onError}) {
         this.loadImage(src)
             .then(image => {
-				this.state.isLoading = false;
+				this.obState.isLoading = false;
                 !this.isUnmounted && onLoad(image);
             })
             .catch(err => {
-                this.state.isLoading = false;
+                this.obState.isLoading = false;
                 !this.isUnmounted && onError(err)
 			});
     }
@@ -73,7 +73,7 @@ export default class Img extends Component {
 
     render() {
         const {className, classes, simple, src, alt, mode, align, ratio, ...otherProps} = this.props;
-        const {isLoading} = this.state;
+        const {isLoading} = this.obState;
 
         const s = createStyle(style, className, classes, {
             root: {
