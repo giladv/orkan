@@ -30,7 +30,7 @@
     "prop-types": "^15.6.0",
     "react-addons-shallow-compare": "^15.6.2"
   },
-  "peerDependencies": {```
+  "peerDependencies": {
     "mobx": "^4.6.0",
     "mobx-react": "^5.0.0",
     "react": "^16.6.3",

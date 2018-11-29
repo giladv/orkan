@@ -3,3 +3,5 @@ node_modules
 dist/app.js
 dist/index.html
 coverage
+yarn.lock
+yarn-error.lock
