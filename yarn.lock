@@ -6409,8 +6409,8 @@ object.pick@^1.3.0:
     isobject "^3.0.1"
 
 "observable-nested-map@https://github.com/giladv/observable-nested-map.git":
-  version "0.0.1"
-  resolved "https://github.com/giladv/observable-nested-map.git#78776e5f295b685a5572afee132780e18ae54794"
+  version "0.0.2"
+  resolved "https://github.com/giladv/observable-nested-map.git#20d483d48f4280c3d4ac505693c93b084fe49b39"
   dependencies:
     invariant "^2.2.4"
     lodash "^4.17.5"

@@ -30,17 +30,13 @@
     "prop-types": "^15.6.0",
     "react-addons-shallow-compare": "^15.6.2"
   },
-  "peerDependencies": {
+  "peerDependencies": {```
     "mobx": "^4.6.0",
     "mobx-react": "^5.0.0",
     "react": "^16.6.3",
     "react-dom": "^16.6.3"
   },
   "devDependencies": {
-    "mobx": "^4.6.0",
-    "mobx-react": "^5.0.0",
-    "react": "^16.6.3",
-    "react-dom": "^16.6.3",
     "copy-webpack-plugin": "^4.3.1",
     "css-loader": "^0.28.1",
     "file-loader": "1.1.11",
@@ -49,9 +45,13 @@
     "history": "^4.7.2",
     "jest": "^23.6.0",
     "loader-utils": "^1.1.0",
+    "mobx": "^4.6.0",
+    "mobx-react": "^5.0.0",
     "mobx-react-devtools": "^4.2.3",
     "mock-cloud-firestore": "^0.8.2",
     "node-sass": "^4.7.2",
+    "react": "^16.6.3",
+    "react-dom": "^16.6.3",
     "regenerator-runtime": "^0.12.1",
     "sass-loader": "^6.0.7",
     "style-loader": "^0.13.2",

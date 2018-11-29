@@ -7,7 +7,7 @@ module.exports = (env, argv) => {
 
 	return {
 		entry: {
-			orkan: './src/orkan/index.js',
+			orkan: './src/index.js',
 		},
 		output: {
 			path: getDistPath(),
