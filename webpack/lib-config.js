@@ -64,7 +64,7 @@ module.exports = (env, argv) => {
 			extensions: ['.ts', '.tsx', '.js', '.json', '.scss', '.css']
 		},
 		optimization: {
-			// minimize: false
+			minimize: false
 		},
 
 
