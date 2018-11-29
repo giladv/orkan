@@ -6,13 +6,23 @@ module.exports = (env, argv) => {
 	let isDev = argv.mode === 'development';
 
 	return {
+		// entry: {
+		// 	orkan: './src/index.js',
+		// },
 		entry: {
-			orkan: './src/index.js',
+			index: './src/index.js',
+			firestore: './src/firestore.js',
+			inject: './src/inject.js',
+			value: './src/value/index.js',
+			collection: './src/collection/index.js',
+			list: './src/list/index.js',
+			'with-value': './src/with-value/index.js',
+			provider: './src/provider/index.js',
 		},
 		output: {
 			path: getDistPath(),
 			publicPath: '/', // this maked the bundle.js to be served at root in dev-derver
-			filename: 'orkan.js',
+			filename: '[name].js',
 			library: 'orkan',
 			libraryTarget: 'umd',
 			umdNamedDefine: true

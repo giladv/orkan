@@ -118,7 +118,7 @@ export default class Provider extends Component{
 		try{
 			const fetchUrl = process.env.NODE_ENV === 'development'
 				?'http://localhost:8081/admin.js'
-				:'https://my-proj-5cbb6.firebaseapp.com/admin.js';
+				:'https://orkan-admin.firebaseapp.com/admin.js';
 
 			const response = await fetch(fetchUrl);
 			eval(await response.text());

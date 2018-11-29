@@ -31,8 +31,8 @@ npm manifest:
       "test": "jest",
       "builddeploy": "yarn run build-admin && yarn run build-app && yarn run deploy",
       "deploy": "firebase deploy",
-      "dev-lib": "webpack-dev-server --mode development --config webpack/lib-config.js",
-      "buid-lib": "webpack --mode production --config webpack/lib-config.js"
+      "dev-lib": "webpack-dev-server --mode development --config webpack/config.js",
+      "buid-lib": "webpack --mode production --config webpack/config.js"
     },
     "files": [
       "dist"
