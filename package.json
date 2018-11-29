@@ -23,24 +23,24 @@
   "dependencies": {
     "autobind-decorator": "^1.4.3",
     "classnames": "^2.2.5",
+    "humaninput": "^1.1.15",
     "invariant": "^2.2.4",
     "lodash": "^4.17.5",
     "observable-nested-map": "https://github.com/giladv/observable-nested-map.git",
-    "parse-prop-types": "^0.3.0",
     "prop-types": "^15.6.0",
-    "react-highlight": "^0.12.0",
-    "react-markdown": "^4.0.3",
-    "react-refractor": "^1.0.1",
-    "react-spinners": "^0.4.6",
-    "refractor": "^2.6.1"
+    "react-addons-shallow-compare": "^15.6.2"
   },
   "peerDependencies": {
-    "react": "^16.2.0",
-    "react-dom": "^16.2.0",
     "mobx": "^4.6.0",
-    "mobx-react": "^5.0.0"
+    "mobx-react": "^5.0.0",
+    "react": "^16.6.3",
+    "react-dom": "^16.6.3"
   },
   "devDependencies": {
+    "mobx": "^4.6.0",
+    "mobx-react": "^5.0.0",
+    "react": "^16.6.3",
+    "react-dom": "^16.6.3",
     "copy-webpack-plugin": "^4.3.1",
     "css-loader": "^0.28.1",
     "file-loader": "1.1.11",
