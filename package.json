@@ -1,7 +1,7 @@
 {
   "name": "orkan",
   "version": "0.0.2",
-  "private": true,
+  "private": false,
   "scripts": {
     "test": "jest",
     "builddeploy": "yarn run build-admin && yarn run build-app && yarn run deploy",
