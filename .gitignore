@@ -4,4 +4,4 @@ dist/app.js
 dist/index.html
 coverage
 yarn.lock
-yarn-error.lock
+yarn-error.log

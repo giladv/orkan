@@ -1,11 +1,11 @@
 {
   "name": "orkan",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "private": false,
   "scripts": {
     "test": "jest",
     "builddeploy": "yarn run build && yarn run deploy",
-    "deploy": "firebase deploy",
+    "deploy": "yarn publish",
     "dev": "webpack-dev-server --mode development --config webpack/config.js",
     "buid": "webpack --mode production --config webpack/config.js"
   },
