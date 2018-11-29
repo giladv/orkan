@@ -6,9 +6,6 @@ module.exports = (env, argv) => {
 	let isDev = argv.mode === 'development';
 
 	return {
-		// entry: {
-		// 	orkan: './src/index.js',
-		// },
 		entry: {
 			index: './src/index.js',
 			firestore: './src/firestore.js',
