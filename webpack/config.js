@@ -8,27 +8,19 @@ module.exports = (env, argv) => {
 	return {
 		entry: {
 			index: './src/index.js',
-			firestore: './src/firestore.js',
-			inject: './src/inject.js',
-			value: './src/value/index.js',
-			collection: './src/collection/index.js',
-			list: './src/list/index.js',
-			'with-value': './src/with-value/index.js',
-			provider: './src/provider/index.js',
 		},
 		output: {
 			path: getDistPath(),
-			publicPath: '/', // this maked the bundle.js to be served at root in dev-derver
+			publicPath: '/', // this make the bundle.js to be served at root in dev-derver
 			filename: '[name].js',
 			library: 'orkan',
 			libraryTarget: 'umd',
-			umdNamedDefine: true
+			umdNamedDefine: true,
 		},
 		module: {
 			rules: [
 				{
 					test: /\.(js|ts|tsx)$/,
-					// use: 'awesome-typescript-loader',
 					use: [
 						{
 							loader: 'ts-loader',
@@ -37,7 +29,7 @@ module.exports = (env, argv) => {
 							}
 						}
 					],
-					exclude: /node_modules/
+					exclude: [/node_modules/]
 				},
 				{
 					test: /\.scss$/,
@@ -71,11 +63,41 @@ module.exports = (env, argv) => {
 			extensions: ['.ts', '.tsx', '.js', '.json', '.scss', '.css']
 		},
 		optimization: {
-			minimize: false
+			minimize: false,
+			// splitChunks: {
+			// 	cacheGroups: {
+			// 		// default: {
+			// 		// 	name: true,
+			// 		// 	chunks: 'initial',
+			// 		// 	minSize: 0
+			// 		// },
+			// 		default: {
+			// 			chunks: 'initial',
+			// 			name: (module) => {
+			// 				const pathParts = module.resource.split('/');
+			// 				const fileName = pathParts[pathParts.length-1];
+			// 				const folderName = pathParts[pathParts.length-2];
+			//
+			// 				console.log(folderName, fileName);
+			//
+			// 				if(fileName === 'index.js' || fileName === 'style.scss'){
+			// 					return folderName;
+			// 				}else{
+			// 					return fileName.split('.')[0];
+			// 				}
+			// 			},
+			// 			minChunks: 2,
+			// 			minSize: 0,
+			// 			test: /src\/(inject|firestore|utils)/,
+			// 			reuseExistingChunk: true,
+			// 			// enforce: true
+			// 		}
+			// 	}
+			// }
 		},
 
 
-		devtool: "cheap-module-source-map",
+		devtool: isDev?'cheap-module-source-map':false,
 		devServer: {
 			watchOptions: {
 				watch: false
