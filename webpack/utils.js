@@ -21,6 +21,12 @@ module.exports.getReadableCssClassName = (loaderContext, localIdentName, localNa
 };
 
 
+const sessionUniqueId = loaderUtils.getHashDigest(Math.random().toString(), 'md5', 'base64', 3);
+
+
+module.exports.getUniqueCssClassName = (loaderContext, localIdentName, localName) => {
+	return 's' + sessionUniqueId + loaderUtils.getHashDigest(loaderContext.resourcePath + localName, 'md5', 'base64', 4);
+};
 
 
 

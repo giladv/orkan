@@ -6,9 +6,9 @@ Before we begin working with the admin, we need to setup 3 things:
 		1. On the Sign in method tab, configure the sign-in methods and click Save.
 	- Add the authentication providers to the [Provider](docs/Provider) component
 		```jsx
-		<OrkanProvider firebaseConfig={...} authProviders={['google', ...]}>
+		<Provider firebaseConfig={...} authProviders={['google', ...]}>
 			<App/>
-		</OrkanProvider>
+		</Provider>
 		```  
 	
 1. ### Firestore security rules

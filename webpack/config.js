@@ -1,6 +1,6 @@
 const nodeExternals = require('webpack-node-externals');
 
-const {getReadableCssClassName, getDistPath} = require('./utils');
+const {getUniqueCssClassName, getReadableCssClassName, getDistPath} = require('./utils');
 
 module.exports = (env, argv) => {
 	let isDev = argv.mode === 'development';
@@ -40,8 +40,7 @@ module.exports = (env, argv) => {
 							loader: 'css-loader',
 							options: {
 								modules: true,
-								localIdentName: '[hash:base64:5]',
-								getLocalIdent: isDev && getReadableCssClassName
+								getLocalIdent: isDev?getReadableCssClassName:getUniqueCssClassName
 							}
 						},
 						'sass-loader'

@@ -48,8 +48,7 @@ Finally lets integrate Orkan.js.
 First, we need to import the Orkan Provider and the Value components. 
 also, let's paste the configuration object we received from Firebase:
 ```jsx
-import OrkanProvider from 'orkan/provider';
-import Value from 'orkan/value';
+import {Provider, Value} from 'orkan';
 
 const firebaseConfig = {
 	apiKey: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
@@ -64,9 +63,9 @@ const firebaseConfig = {
 next, we wrap our App with the Provider
 ```jsx
 ReactDOM.render(
-	<OrkanProvider firebaseConfig={firebaseConfig}>
+	<Provider firebaseConfig={firebaseConfig}>
 		<App/>
-	</OrkanProvider>,
+	</Provider>,
 	document.getElementById('root')
 );
 ``` 
@@ -89,8 +88,7 @@ and all together:
 ```jsx
 import React, {PureComponent} from 'react';
 import ReactDOM from 'react-dom';
-import OrkanProvider from 'orkan/provider';
-import Value from 'orkan/value';
+import {Provider, Value} from 'orkan';
 
 const firebaseConfig = {
 	apiKey: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
@@ -112,9 +110,9 @@ class App extends React.Component {
 }
 
 ReactDOM.render(
-	<OrkanProvider firebaseConfig={firebaseConfig}>
+	<Provider firebaseConfig={firebaseConfig}>
 		<App/>
-	</OrkanProvider>,
+	</Provider>,
 	document.getElementById('root')
 );
 

@@ -18,9 +18,9 @@ import {
 	SUPPORTED_AUTH_PROVIDERS,
 } from '../constants';
 import Firestore from '../firestore';
+import inject from '../inject';
 import {keyboard} from '../utils/keyboard-utils';
 import Indicator from '../indicator/index';
-import inject from '../inject';
 
 import './style';
 
@@ -33,10 +33,11 @@ window.PropTypes = PropTypes;
 window.classNames = classNames;
 window.autobind = autobind;
 window.firebase = firebase;
-window.Firestore = Firestore;
-window.inject = inject;
-
-
+window.orkan = {
+	Provider,
+	inject,
+	Firestore
+};
 
 
 @observer

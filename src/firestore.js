@@ -23,6 +23,72 @@ const settablePathInvariant = path => {
 const collectionPathInvariant = path => invariant(path.split('/').length === 1, 'Invalid collection path. expected a path with one segment');
 
 
+
+/*
+	where: {
+		path: {operator: value},
+		...
+	}
+*/
+const applyWhereOptionsToQuery = (query, whereOptions = {}) => {
+	let finalQuery = query;
+	iterateWhereOptions(whereOptions, (path, optionOperator, optionValue) => finalQuery = finalQuery.where(path, optionOperator, optionValue))
+	return finalQuery;
+};
+
+const iterateWhereOptions = (whereOptions, cb) => {
+	forEach(whereOptions, (option, path) => {
+		forEach(option, (optionValue, optionOperator) => cb(path, optionOperator, optionValue))
+	});
+};
+
+const serializeQueryOptions = (options = {}) => {
+	const queryString = [];
+	iterateWhereOptions(options.where, (path, optionOperator, optionValue) => queryString.push(`where=${path}${optionOperator}${optionValue}`));
+
+	forEach(options.orderBy, (direction, path) => {
+		queryString.push(`orderBy:${path}|${direction}`);
+	});
+
+	return queryString.join('&');
+};
+
+
+export const serializeQuery = (path, options) => toQueryablePath(path) + '?' + serializeQueryOptions(options);
+
+
+/*
+	orderBy: {
+		path: 'asc'|'desc',
+		...
+	}
+*/
+const applyOrderByOptionsToQuery = (query, orderByOptions = {}) => {
+	let finalQuery = query;
+	forEach(orderByOptions, (direction, path) => {
+		finalQuery = finalQuery.orderBy(path, direction)
+	});
+	return finalQuery;
+};
+
+export const toDotPath = slashPath => slashPath.split('/').join('.');
+
+export const breakPath = path => {
+	const [collection, docPath, ...innerParts] = path.split('/');
+	return {collection, docPath, innerPath: innerParts.join('/')};
+};
+
+export const toQueryablePath = path => path.split('/').slice(0,2).join('/');
+
+
+const isCollectionPath = path => path.split('/').length === 1;
+
+
+
+
+
+
+
 /*
 	# how does it work?
 
@@ -64,6 +130,10 @@ const collectionPathInvariant = path => invariant(path.split('/').length === 1, 
 	store.remove('objects/home') => will remove objects/home
 */
 export default class Firestore{
+	static toDotPath = toDotPath;
+	static breakPath = breakPath;
+	static toQueryablePath = toQueryablePath;
+
 	api;
 
 	map = new ObservableNestedMap({});
@@ -295,174 +365,3 @@ export default class Firestore{
 		return snapshot instanceof this.config.QuerySnapshot;
 	}
 }
-
-
-
-/*
-	where: {
-		path: {operator: value},
-		...
-	}
-*/
-const applyWhereOptionsToQuery = (query, whereOptions = {}) => {
-		let finalQuery = query;
-		iterateWhereOptions(whereOptions, (path, optionOperator, optionValue) => finalQuery = finalQuery.where(path, optionOperator, optionValue))
-		return finalQuery;
-};
-
-const iterateWhereOptions = (whereOptions, cb) => {
-	forEach(whereOptions, (option, path) => {
-		forEach(option, (optionValue, optionOperator) => cb(path, optionOperator, optionValue))
-	});
-};
-
-const serializeQueryOptions = (options = {}) => {
-	const queryString = [];
-	iterateWhereOptions(options.where, (path, optionOperator, optionValue) => queryString.push(`where=${path}${optionOperator}${optionValue}`));
-
-	forEach(options.orderBy, (direction, path) => {
-		queryString.push(`orderBy:${path}|${direction}`);
-	});
-
-	return queryString.join('&');
-};
-
-
-export const serializeQuery = (path, options) => toQueryablePath(path) + '?' + serializeQueryOptions(options);
-
-
-/*
-	orderBy: {
-		path: 'asc'|'desc',
-		...
-	}
-*/
-const applyOrderByOptionsToQuery = (query, orderByOptions = {}) => {
-	let finalQuery = query;
-	forEach(orderByOptions, (direction, path) => {
-		finalQuery = finalQuery.orderBy(path, direction)
-	});
-	return finalQuery;
-};
-
-export const toDotPath = slashPath => slashPath.split('/').join('.');
-
-export const breakPath = path => {
-	const [collection, docPath, ...innerParts] = path.split('/');
-	return {collection, docPath, innerPath: innerParts.join('/')};
-};
-
-export const toQueryablePath = path => path.split('/').slice(0,2).join('/');
-
-
-const isCollectionPath = path => path.split('/').length === 1;
-
-
-
-/*
-
-	schema editor
-	- on root you can create collections and documents inside an object like collection named
-
-
-	Schema Editor        +  <-- adds a collection
-	- objects       ///  +  <-- adds a document inside the objects object like collection
-
-	- posts        [///] +  <-- adds a field to document
-		- title          +  <-- adds a field under title, set title as object
-		- tags     [///] +  <-- adds a field under tags, set tags as array
-
-
-{
-	objects: {
-		home:{
-			title: string
-		}
-	}
-	posts: [{
-		title: string,
-		tags: []
-	}]
-	orkanUsers: [{
-		avatar,
-		email,
-		editData,
-		editSchema,
-		editUsers
-	}],
-	orkanUsersRequests: [{
-		uid,
-		avatar,
-		email
-	}]
-	orkanObjects: {
-		schema: {}
-		schemaSettings: {}
-	}
-}
-
-
-
-store.listen('orkanUsers').value
-store.listen('orkanUsers').isLoading
-
-
-store.listen('orkanUsers')
-store.getValue('orkanUsers')
-store.getStatus('orkanUsers')
-
-
-
-
-
-
-
-store.listen('objects/home/hero/title') => listens to objects/home
-store.load('objects/home/hero/title') => loads objects/home, returns objects/home/hero/title
-store.getValue('objects/home/hero/title') => returns objects/home/hero/title
-
-store.listen('posts/12345/title') => listens to posts/12345
-store.load('posts/12345/title') => loads posts/12345, returns posts/12345/title
-store.getValue('posts/12345/title') => returns posts/12345/title
-
-store.listen('posts', {where.. orderBy..}) => listens to posts with options. on collections only
-store.load('posts', {where.. orderBy..}) => loads posts with options. on collections only
-store.get('posts', {where.. orderBy..}) => returns posts with options. on collections only
-
-
-
-
-
-*/
-// class Test{
-// 	v;
-// 	constructor(){
-// 		this.atom = createAtom('test', () => {
-// 			console.log('observed');
-// 			setInterval(() => {
-// 				this.v = Math.random();
-// 				this.atom.reportChanged();
-// 			}, 1000);
-// 		}, () => {
-// 			console.log('unobserved');
-// 		});
-//
-//
-// 	}
-//
-// 	get value(){
-// 		if(this.atom.reportObserved()){
-// 			return this.v;
-// 		}
-//
-// 		return 0;
-//
-// 	}
-// }
-//
-// window.t = new Test();
-//
-//
-// window.ob = () => autorun(() => {
-// 		console.log(t && t.value);
-// 	});
