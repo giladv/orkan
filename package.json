@@ -1,13 +1,13 @@
 {
   "name": "orkan",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "private": false,
   "scripts": {
     "test": "jest",
     "builddeploy": "yarn run build && yarn run deploy",
     "deploy": "yarn publish",
     "dev": "webpack-dev-server --mode development --config webpack/config.js",
-    "buid": "webpack --mode production --config webpack/config.js"
+    "build": "webpack --mode production --config webpack/config.js"
   },
   "files": [
     "dist"
