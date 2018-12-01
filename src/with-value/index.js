@@ -27,14 +27,14 @@ export default class WithValue extends Component{
 	};
 
 	@autobind
-	handleClick(e){
-		const {onClick, path, orkan} = this.props;
+	handleClick(e, originalHandler){
+		const {path, orkan} = this.props;
 		if(orkan.isEditMode()){
 			orkan.setActivePath(path);
 			e.preventDefault();
 			e.stopPropagation();
 		}else{
-			onClick && onClick(e);
+			originalHandler && originalHandler(e);
 		}
 	}
 
@@ -58,6 +58,6 @@ export default class WithValue extends Component{
 			}
 		});
 
-		return cloneElement(renderedValue, {className: s.root, onClick: this.handleClick});
+		return cloneElement(renderedValue, {className: s.root, onClick: e => this.handleClick(e, renderedValue.props.onClick)});
 	}
 }
