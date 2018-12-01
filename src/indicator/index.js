@@ -7,16 +7,22 @@ import style from './style.scss';
 
 export default class Indicator extends Component{
 	static propTypes = {
-		isBusy: PropTypes.bool
+		isBusy: PropTypes.bool,
+		color: PropTypes.oneOf(['default', 'dark'])
+	};
+
+	static defaultProps = {
+		color: 'default'
 	};
 
 	render(){
-		const {className, isBusy} = this.props;
+		const {className, isBusy, color} = this.props;
 
 		const s = createStyle(style, className, {
 			root: {
 				notBusy: !isBusy, // without this stupid thing, css animations wont stop!
-				busy: isBusy
+				busy: isBusy,
+				dark: color === 'dark'
 			}
 		});
 

@@ -30,7 +30,11 @@ let OrkanAdmin;
 export default class Provider extends Component{
 
 	static propTypes = {
-		allowGuests: PropTypes.bool,
+		adminConfig: PropTypes.shape({
+			color: PropTypes.oneOf(['default', 'dark']),
+			authProviders: PropTypes.arrayOf(PropTypes.oneOf(SUPPORTED_AUTH_PROVIDERS)),
+			allowGuests: PropTypes.bool
+		}),
 		firebaseConfig: PropTypes.shape({
 			apiKey: PropTypes.string,
 			authDomain: PropTypes.string,
@@ -39,11 +43,9 @@ export default class Provider extends Component{
 			storageBucket: PropTypes.string,
 			messagingSenderId: PropTypes.string
 		}).isRequired,
-		authProviders: PropTypes.arrayOf(PropTypes.oneOf(SUPPORTED_AUTH_PROVIDERS))
 	};
 
 	static defaultProps = {
-		authProviders: SUPPORTED_AUTH_PROVIDERS
 	};
 
 	static childContextTypes = {
@@ -81,15 +83,14 @@ export default class Provider extends Component{
 	}
 
 	componentWillMount(){
-		const {firebaseConfig, allowGuests} = this.props;
+		const {firebaseConfig, adminConfig} = this.props;
 		this.firebaseApp = firebase.initializeApp(firebaseConfig, FIREBASE_APP_NAME);
 		const nativeFirestore = firebase.firestore(this.firebaseApp);
 		nativeFirestore.settings({timestampsInSnapshots: true});
 		this.fireStore = new Firestore(nativeFirestore);
 
-		allowGuests && this.firebaseApp.auth().signInAnonymously();
 
-		keyboard.bind('hold:1000:' + ACTIVATION_EVENT_KEY, this.activateAdmin);
+		adminConfig && keyboard.bind('hold:1000:' + ACTIVATION_EVENT_KEY, this.activateAdmin);
 
 		document.addEventListener('keydown', this.handleKeyDown);
 		document.addEventListener('keyup', this.handleKeyUp);
@@ -103,6 +104,10 @@ export default class Provider extends Component{
 		if(this.obState.isActive){
 			return;
 		}
+
+		const {adminConfig} = this.props;
+
+		adminConfig.allowGuests && this.firebaseApp.auth().signInAnonymously();
 
 		this.obState.isBusy = true;
 		try{
@@ -167,13 +172,13 @@ export default class Provider extends Component{
 	}
 
 	render() {
-		const {children} = this.props;
+		const {children, adminConfig} = this.props;
 		const {isActive, isBusy} = this.obState;
 
 		return [
 			children,
-			(isActive || isBusy) && ReactDOM.createPortal(<Indicator isBusy={isBusy || (this.adminStore && this.adminStore.isInitializing)} />, document.body),
-			isActive && ReactDOM.createPortal(<OrkanAdmin dataStore={this.fireStore} onStoreReady={this.handleStoreReady} />, document.body)
+			(isActive || isBusy) && ReactDOM.createPortal(<Indicator color={adminConfig.color} isBusy={isBusy || (this.adminStore && this.adminStore.isInitializing)} />, document.body),
+			isActive && ReactDOM.createPortal(<OrkanAdmin config={adminConfig} dataStore={this.fireStore} onStoreReady={this.handleStoreReady} />, document.body)
 		];
 	}
 }

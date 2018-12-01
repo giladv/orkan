@@ -1,5 +1,7 @@
 @import '../globals';
 
+$negative: #1a1e2b;
+$negative2: #565e7b;
 
 .root{
 	z-index: 99999999999999;
@@ -33,6 +35,12 @@
 
 	&.notBusy:after{
 		animation-play-state: paused;
+	}
+}
+
+.dark{
+	&:after{
+		@include stripesBackground($negative, $negative2);
 	}
 }
 
