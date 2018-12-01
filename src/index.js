@@ -1,3 +1,5 @@
+import 'parse-prop-types';
+
 import inject from './inject';
 import Provider from './provider';
 import Value from './value';

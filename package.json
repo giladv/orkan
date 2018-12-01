@@ -27,6 +27,7 @@
     "invariant": "^2.2.4",
     "lodash": "^4.17.5",
     "observable-nested-map": "https://github.com/giladv/observable-nested-map.git",
+    "parse-prop-types": "^0.3.0",
     "prop-types": "^15.6.0",
     "react-addons-shallow-compare": "^15.6.2"
   },
