@@ -17,7 +17,7 @@ const validQueryInvariant = (path, options) => {
 };
 
 const settablePathInvariant = path => {
-	invariant(path.split('/').length <= 2, `Invalid query arguments. cannot use non collections paths with options`);
+	invariant(path.split('/').length <= 2, `Non queryable path ` + path);
 };
 
 const collectionPathInvariant = path => invariant(path.split('/').length === 1, 'Invalid collection path. expected a path with one segment');
@@ -193,6 +193,8 @@ export default class Firestore{
 
 		const query = this.createQuery(path);
 		const action = (query.add || query.set).bind(query);
+		this.map.set(toDotPath(path), value);
+
 		return await action(sanitizedValue);
 	}
 

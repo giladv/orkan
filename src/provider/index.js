@@ -107,9 +107,17 @@ export default class Provider extends Component{
 
 		const {adminConfig} = this.props;
 
-		adminConfig.allowGuests && this.firebaseApp.auth().signInAnonymously();
+		// guest login
+		if(adminConfig.allowGuests){
+			const dispose = this.firebaseApp.auth().onIdTokenChanged(firebaseUser => {
+				!firebaseUser && this.firebaseApp.auth().signInAnonymously();
+				dispose();
+			});
+		}
+
 
 		this.obState.isBusy = true;
+
 		try{
 			this.exposeDependencies();
 
