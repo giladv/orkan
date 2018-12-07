@@ -105,6 +105,7 @@ const isCollectionPath = path => path.split('/').length === 1;
 
 	## listening to collections
 	- don't use options on non collection paths
+	- collections data and order are cached even if not listened to anymore, to ensure fresh order on next listen - clear cache
 
 	store.listen('posts', {where.. orderBy..}) => listens to posts with options. on collections only
 	store.load('posts', {where.. orderBy..}) => loads posts with options. on collections only
@@ -198,7 +199,7 @@ export default class Firestore{
 		return await action(sanitizedValue);
 	}
 
-	addToCollection(serializedQuery, index, key){
+	@action addToCollection(serializedQuery, index, key){
 		validPathInvariant(serializedQuery);
 
 		let collection = this.collections.get(serializedQuery);
@@ -207,11 +208,10 @@ export default class Firestore{
 			this.collections.set(serializedQuery, collection);
 		}
 
-		collection.remove(key);
-		collection.splice(index, 0, key);
+		!collection.includes(key) && collection.splice(index, 0, key);
 	}
 
-	removeFromCollection(serializedQuery, key){
+	@action removeFromCollection(serializedQuery, key){
 		let collection = this.collections.get(serializedQuery);
 		collection.remove(key);
 	}
@@ -278,13 +278,15 @@ export default class Firestore{
 		}else if(this.isCollectionSnapshot(snapshot)){
 			// no need to sanitize path because only collection paths end up here
 			const serializedQuery = serializeQuery(path, options);
-
+			console.log('collection update', serializedQuery)
 			snapshot.docChanges().forEach(change => {
 				const docPath = nodePath.join(path, change.doc.id);
+				console.log('change', change.type, change.doc.id, change.newIndex, change.oldIndex)
 				switch(change.type){
 					case 'modified':
 						this.map.set(toDotPath(docPath), change.doc.data());
 						if(change.oldIndex > -1 && change.newIndex !== change.oldIndex){
+							this.removeFromCollection(serializedQuery, change.doc.id);
 							this.addToCollection(serializedQuery, change.newIndex, change.doc.id);
 						}
 						break;
