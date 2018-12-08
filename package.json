@@ -1,6 +1,8 @@
 {
   "name": "orkan",
-  "version": "0.0.10",
+  "version": "0.0.11",
+  "repository": "https://github.com/giladv/orkan",
+  "license": "GNU GPLv3",
   "private": false,
   "scripts": {
     "test": "jest",
