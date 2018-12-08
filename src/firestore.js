@@ -233,11 +233,12 @@ export default class Firestore{
 		}else{
 			this.setPathIsLoading(serializedQuery, true);
 			const query = this.createQuery(path, options);
+
 			const destroy = query.onSnapshot(action(snapshot => {
 				this.handleNewSnapShot(path, options, snapshot);
 				this.setPathIsLoading(serializedQuery, false);
 			}), err => {
-				console.error(err)
+				console.warn(`[${serializedQuery}]`, err);
 			});
 
 			listener = observable({

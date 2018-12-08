@@ -96,24 +96,31 @@ export default class Provider extends Component{
 		document.body.onblur = this.handleBlur;
 	}
 
+	guestLogin(){
+		return new Promise((resolve) => {
+			const {adminConfig} = this.props;
+
+			// guest login
+			if(adminConfig.allowGuests){
+				const dispose = this.firebaseApp.auth().onIdTokenChanged(async firebaseUser => {
+					dispose();
+					!firebaseUser && await this.firebaseApp.auth().signInAnonymously();
+					resolve();
+				});
+			}
+		});
+	}
+
 	@autobind
 	async activateAdmin(){
 		if(this.obState.isActive){
 			return;
 		}
 
-		const {adminConfig} = this.props;
-
-		// guest login
-		if(adminConfig.allowGuests){
-			const dispose = this.firebaseApp.auth().onIdTokenChanged(firebaseUser => {
-				!firebaseUser && this.firebaseApp.auth().signInAnonymously();
-				dispose();
-			});
-		}
-
 
 		this.obState.isBusy = true;
+
+		await this.guestLogin();
 
 		try{
 			this.exposeDependencies();
