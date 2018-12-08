@@ -278,10 +278,10 @@ export default class Firestore{
 		}else if(this.isCollectionSnapshot(snapshot)){
 			// no need to sanitize path because only collection paths end up here
 			const serializedQuery = serializeQuery(path, options);
-			console.log('collection update', serializedQuery)
+			// console.log('collection update', serializedQuery)
 			snapshot.docChanges().forEach(change => {
 				const docPath = nodePath.join(path, change.doc.id);
-				console.log('change', change.type, change.doc.id, change.newIndex, change.oldIndex)
+				// console.log('change', change.type, change.doc.id, change.newIndex, change.oldIndex)
 				switch(change.type){
 					case 'modified':
 						this.map.set(toDotPath(docPath), change.doc.data());

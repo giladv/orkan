@@ -75,10 +75,7 @@ export default class Provider extends Component{
 				const {isActive, isModifierKeyDown} = this.obState;
 				return isActive && !!this.adminStore && !!this.adminStore.isAdmin && !!isModifierKeyDown
 			},
-			isAdminOpen: () => this.adminStore && this.adminStore.activePath,
-
-			// is this making any sense??
-			openModal: (...props) => this.adminStore && this.adminStore.openModal(...props)
+			isAdminOpen: () => this.adminStore && this.adminStore.activePath
 		}};
 	}
 
