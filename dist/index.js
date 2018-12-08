@@ -846,6 +846,9 @@ module.exports = require("lodash/values");
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 
+// EXTERNAL MODULE: external "parse-prop-types"
+var external_parse_prop_types_ = __webpack_require__(41);
+
 // EXTERNAL MODULE: external "react"
 var external_react_ = __webpack_require__(1);
 var external_react_default = /*#__PURE__*/__webpack_require__.n(external_react_);
@@ -985,7 +988,7 @@ var firestore_validQueryInvariant = function (path, options) {
     external_invariant_default()(!options || path.split('/').length === 1, "Invalid query arguments. cannot query non collections with options");
 };
 var firestore_settablePathInvariant = function (path) {
-    external_invariant_default()(path.split('/').length <= 2, "Invalid query arguments. cannot use non collections paths with options");
+    external_invariant_default()(path.split('/').length <= 2, "Non queryable path " + path);
 };
 var firestore_collectionPathInvariant = function (path) { return external_invariant_default()(path.split('/').length === 1, 'Invalid collection path. expected a path with one segment'); };
 /*
@@ -1052,6 +1055,7 @@ var firestore_isCollectionPath = function (path) { return path.split('/').length
 
     ## listening to collections
     - don't use options on non collection paths
+    - collections data and order are cached even if not listened to anymore, to ensure fresh order on next listen - clear cache
 
     store.listen('posts', {where.. orderBy..}) => listens to posts with options. on collections only
     store.load('posts', {where.. orderBy..}) => loads posts with options. on collections only
@@ -1130,6 +1134,7 @@ var firestore_Firestore = /** @class */ (function () {
                         }
                         query = this.createQuery(path);
                         action = (query.add || query.set).bind(query);
+                        this.map.set(firestore_toDotPath(path), value);
                         return [4 /*yield*/, action(sanitizedValue)];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
@@ -1143,8 +1148,7 @@ var firestore_Firestore = /** @class */ (function () {
             collection = Object(external_mobx_["observable"])([]);
             this.collections.set(serializedQuery, collection);
         }
-        collection.remove(key);
-        collection.splice(index, 0, key);
+        !collection.includes(key) && collection.splice(index, 0, key);
     };
     Firestore.prototype.removeFromCollection = function (serializedQuery, key) {
         var collection = this.collections.get(serializedQuery);
@@ -1215,12 +1219,15 @@ var firestore_Firestore = /** @class */ (function () {
         else if (this.isCollectionSnapshot(snapshot)) {
             // no need to sanitize path because only collection paths end up here
             var serializedQuery_1 = firestore_serializeQuery(path, options);
+            // console.log('collection update', serializedQuery)
             snapshot.docChanges().forEach(function (change) {
                 var docPath = path_browserify_default.a.join(path, change.doc.id);
+                // console.log('change', change.type, change.doc.id, change.newIndex, change.oldIndex)
                 switch (change.type) {
                     case 'modified':
                         _this.map.set(firestore_toDotPath(docPath), change.doc.data());
                         if (change.oldIndex > -1 && change.newIndex !== change.oldIndex) {
+                            _this.removeFromCollection(serializedQuery_1, change.doc.id);
                             _this.addToCollection(serializedQuery_1, change.newIndex, change.doc.id);
                         }
                         break;
@@ -1289,6 +1296,12 @@ var firestore_Firestore = /** @class */ (function () {
     Firestore.toDotPath = firestore_toDotPath;
     Firestore.breakPath = firestore_breakPath;
     Firestore.toQueryablePath = firestore_toQueryablePath;
+    firestore_decorate([
+        external_mobx_["action"]
+    ], Firestore.prototype, "addToCollection", null);
+    firestore_decorate([
+        external_mobx_["action"]
+    ], Firestore.prototype, "removeFromCollection", null);
     firestore_decorate([
         external_mobx_["action"]
     ], Firestore.prototype, "load", null);
@@ -1585,17 +1598,22 @@ var indicator_Indicator = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     Indicator.prototype.render = function () {
-        var _a = this.props, className = _a.className, isBusy = _a.isBusy;
+        var _a = this.props, className = _a.className, isBusy = _a.isBusy, color = _a.color;
         var s = style_utils_createStyle(style_default.a, className, {
             root: {
                 notBusy: !isBusy,
-                busy: isBusy
+                busy: isBusy,
+                dark: color === 'dark'
             }
         });
         return external_react_default.a.createElement("div", { className: s.root });
     };
     Indicator.propTypes = {
-        isBusy: external_prop_types_default.a.bool
+        isBusy: external_prop_types_default.a.bool,
+        color: external_prop_types_default.a.oneOf(['default', 'dark'])
+    };
+    Indicator.defaultProps = {
+        color: 'default'
     };
     return Indicator;
 }(external_react_["Component"]));
@@ -1680,18 +1698,6 @@ var provider_a, provider_b;
 
 
 var provider_OrkanAdmin;
-window.mobx = external_mobx_;
-window.React = external_react_default.a;
-window.ReactDOM = external_react_dom_default.a;
-window.PropTypes = external_prop_types_default.a;
-window.classNames = external_classnames_default.a;
-window.autobind = external_autobind_decorator_default.a;
-window.firebase = app_default.a;
-window.orkan = {
-    Provider: provider_Provider,
-    inject: inject_inject,
-    Firestore: firestore
-};
 var provider_Provider = /** @class */ (function (_super) {
     provider_extends(Provider, _super);
     function Provider() {
@@ -1703,10 +1709,12 @@ var provider_Provider = /** @class */ (function (_super) {
         };
         return _this;
     }
+    Provider_1 = Provider;
     Provider.prototype.getChildContext = function () {
         var _this = this;
         var _a;
         return _a = {}, _a[REACT_CONTEXT_NAME] = {
+            activateAdmin: function () { return _this.activateAdmin(); },
             store: this.fireStore,
             getLiveValue: function () {
                 var args = [];
@@ -1714,7 +1722,7 @@ var provider_Provider = /** @class */ (function (_super) {
                     args[_i] = arguments[_i];
                 }
                 var _a;
-                return _this.adminStore && _this.adminStore.isAdmin && (_a = _this.adminStore).getLiveValue.apply(_a, args);
+                return !!_this.adminStore && !!_this.adminStore.isAdmin && (_a = _this.adminStore).getLiveValue.apply(_a, args);
             },
             setActivePath: function () {
                 var args = [];
@@ -1722,39 +1730,30 @@ var provider_Provider = /** @class */ (function (_super) {
                     args[_i] = arguments[_i];
                 }
                 var _a;
-                return _this.adminStore && _this.adminStore.isAdmin && (_a = _this.adminStore).setActivePath.apply(_a, args);
+                return !!_this.adminStore && (_a = _this.adminStore).setActivePathWhenPossible.apply(_a, args);
             },
             isEditMode: function () {
                 var _a = _this.obState, isActive = _a.isActive, isModifierKeyDown = _a.isModifierKeyDown;
-                return isActive && _this.adminStore && _this.adminStore.isAdmin && isModifierKeyDown;
+                return isActive && !!_this.adminStore && !!_this.adminStore.isAdmin && !!isModifierKeyDown;
             },
-            isAdminOpen: function () { return _this.adminStore && _this.adminStore.activePath; },
-            // is this making any sense??
-            openModal: function () {
-                var props = [];
-                for (var _i = 0; _i < arguments.length; _i++) {
-                    props[_i] = arguments[_i];
-                }
-                var _a;
-                return _this.adminStore && (_a = _this.adminStore).openModal.apply(_a, props);
-            }
+            isAdminOpen: function () { return _this.adminStore && _this.adminStore.activePath; }
         }, _a;
     };
     Provider.prototype.componentWillMount = function () {
-        var firebaseConfig = this.props.firebaseConfig;
+        var _a = this.props, firebaseConfig = _a.firebaseConfig, adminConfig = _a.adminConfig;
         this.firebaseApp = app_default.a.initializeApp(firebaseConfig, FIREBASE_APP_NAME);
         var nativeFirestore = app_default.a.firestore(this.firebaseApp);
         nativeFirestore.settings({ timestampsInSnapshots: true });
         this.fireStore = new firestore(nativeFirestore);
-        keyboard_utils_keyboard.bind('hold:1000:' + ACTIVATION_EVENT_KEY, this.activate);
+        adminConfig && keyboard_utils_keyboard.bind('hold:1000:' + ACTIVATION_EVENT_KEY, this.activateAdmin);
         document.addEventListener('keydown', this.handleKeyDown);
         document.addEventListener('keyup', this.handleKeyUp);
         // does not fire with normal api
         document.body.onblur = this.handleBlur;
     };
-    Provider.prototype.activate = function () {
+    Provider.prototype.activateAdmin = function () {
         return provider_awaiter(this, void 0, void 0, function () {
-            var fetchUrl, response, _a, err_1;
+            var adminConfig, dispose_1, fetchUrl, response, _a, err_1;
             var _this = this;
             return provider_generator(this, function (_b) {
                 switch (_b.label) {
@@ -1762,10 +1761,19 @@ var provider_Provider = /** @class */ (function (_super) {
                         if (this.obState.isActive) {
                             return [2 /*return*/];
                         }
+                        adminConfig = this.props.adminConfig;
+                        // guest login
+                        if (adminConfig.allowGuests) {
+                            dispose_1 = this.firebaseApp.auth().onIdTokenChanged(function (firebaseUser) {
+                                !firebaseUser && _this.firebaseApp.auth().signInAnonymously();
+                                dispose_1();
+                            });
+                        }
                         this.obState.isBusy = true;
                         _b.label = 1;
                     case 1:
                         _b.trys.push([1, 4, , 5]);
+                        this.exposeDependencies();
                         fetchUrl =  false
                             ? undefined
                             : 'https://orkan-admin.firebaseapp.com/admin.js';
@@ -1793,6 +1801,23 @@ var provider_Provider = /** @class */ (function (_super) {
             });
         });
     };
+    Provider.prototype.exposeDependencies = function () {
+        window.mobx = external_mobx_;
+        window.React = external_react_default.a;
+        window.ReactDOM = external_react_dom_default.a;
+        window.PropTypes = external_prop_types_default.a;
+        window.classNames = external_classnames_default.a;
+        window.autobind = external_autobind_decorator_default.a;
+        window.firebase = app_default.a;
+        window.orkan = {
+            Provider: Provider_1,
+            inject: inject_inject,
+            Firestore: firestore
+        };
+    };
+    Provider.prototype.handleStoreReady = function (store) {
+        this.adminStore = store;
+    };
     Provider.prototype.handleBlur = function (e) {
         this.obState.isModifierKeyDown = false;
     };
@@ -1807,16 +1832,21 @@ var provider_Provider = /** @class */ (function (_super) {
         }
     };
     Provider.prototype.render = function () {
-        var _this = this;
-        var children = this.props.children;
-        var _a = this.obState, isActive = _a.isActive, isBusy = _a.isBusy;
+        var _a = this.props, children = _a.children, adminConfig = _a.adminConfig;
+        var _b = this.obState, isActive = _b.isActive, isBusy = _b.isBusy;
         return [
             children,
-            (isActive || isBusy) && external_react_dom_default.a.createPortal(external_react_default.a.createElement(indicator, { isBusy: isBusy || (this.adminStore && this.adminStore.isInitializing) }), document.body),
-            isActive && external_react_dom_default.a.createPortal(external_react_default.a.createElement(provider_OrkanAdmin, { dataStore: this.fireStore, onStoreReady: function (store) { return _this.adminStore = store; } }), document.body)
+            (isActive || isBusy) && external_react_dom_default.a.createPortal(external_react_default.a.createElement(indicator, { color: adminConfig.color, isBusy: isBusy || (this.adminStore && this.adminStore.isInitializing) }), document.body),
+            isActive && external_react_dom_default.a.createPortal(external_react_default.a.createElement(provider_OrkanAdmin, { config: adminConfig, dataStore: this.fireStore, onStoreReady: this.handleStoreReady }), document.body)
         ];
     };
+    var Provider_1;
     Provider.propTypes = {
+        adminConfig: external_prop_types_default.a.shape({
+            color: external_prop_types_default.a.oneOf(['default', 'dark']),
+            authProviders: external_prop_types_default.a.arrayOf(external_prop_types_default.a.oneOf(SUPPORTED_AUTH_PROVIDERS)),
+            allowGuests: external_prop_types_default.a.bool
+        }),
         firebaseConfig: external_prop_types_default.a.shape({
             apiKey: external_prop_types_default.a.string,
             authDomain: external_prop_types_default.a.string,
@@ -1825,12 +1855,8 @@ var provider_Provider = /** @class */ (function (_super) {
             storageBucket: external_prop_types_default.a.string,
             messagingSenderId: external_prop_types_default.a.string
         }).isRequired,
-        authProviders: external_prop_types_default.a.arrayOf(external_prop_types_default.a.oneOf(SUPPORTED_AUTH_PROVIDERS))
     };
-    Provider.defaultProps = {
-        basePath: DEFAULT_BASE_PATH,
-        authProviders: SUPPORTED_AUTH_PROVIDERS
-    };
+    Provider.defaultProps = {};
     Provider.childContextTypes = (provider_a = {},
         provider_a[REACT_CONTEXT_NAME] = external_prop_types_default.a.object,
         provider_a);
@@ -1845,7 +1871,10 @@ var provider_Provider = /** @class */ (function (_super) {
     ], Provider.prototype, "adminStore", void 0);
     provider_decorate([
         external_autobind_decorator_default.a
-    ], Provider.prototype, "activate", null);
+    ], Provider.prototype, "activateAdmin", null);
+    provider_decorate([
+        external_autobind_decorator_default.a
+    ], Provider.prototype, "handleStoreReady", null);
     provider_decorate([
         external_autobind_decorator_default.a
     ], Provider.prototype, "handleBlur", null);
@@ -1855,7 +1884,7 @@ var provider_Provider = /** @class */ (function (_super) {
     provider_decorate([
         external_autobind_decorator_default.a
     ], Provider.prototype, "handleKeyUp", null);
-    Provider = provider_decorate([
+    Provider = Provider_1 = provider_decorate([
         external_mobx_react_["observer"]
     ], Provider);
     return Provider;
@@ -1986,18 +2015,19 @@ var with_value_WithValue = /** @class */ (function (_super) {
     function WithValue() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    WithValue.prototype.handleClick = function (e) {
-        var _a = this.props, onClick = _a.onClick, path = _a.path, orkan = _a.orkan;
+    WithValue.prototype.handleClick = function (e, originalHandler) {
+        var _a = this.props, path = _a.path, orkan = _a.orkan;
         if (orkan.isEditMode()) {
             orkan.setActivePath(path);
             e.preventDefault();
             e.stopPropagation();
         }
         else {
-            onClick && onClick(e);
+            originalHandler && originalHandler(e);
         }
     };
     WithValue.prototype.render = function () {
+        var _this = this;
         var _a = this.props, className = _a.className, value = _a.value, render = _a.render, orkan = _a.orkan, lightOverlay = _a.lightOverlay;
         if (!value) {
             return null;
@@ -2012,7 +2042,7 @@ var with_value_WithValue = /** @class */ (function (_super) {
                 lightOverlay: lightOverlay
             }
         });
-        return Object(external_react_["cloneElement"])(renderedValue, { className: s.root, onClick: this.handleClick });
+        return Object(external_react_["cloneElement"])(renderedValue, { className: s.root, onClick: function (e) { return _this.handleClick(e, renderedValue.props.onClick); } });
     };
     WithValue.propTypes = {
         path: external_prop_types_default.a.string.isRequired,
@@ -2258,6 +2288,7 @@ var collection_Collection = /** @class */ (function (_super) {
 
 
 
+
 /***/ }),
 /* 29 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -2267,12 +2298,12 @@ exports = module.exports = __webpack_require__(9)(false);
 
 
 // module
-exports.push([module.i, ".sr2GJfvR:hover {\n  position: relative; }\n  .sr2GJfvR:hover:after {\n    content: '';\n    position: absolute;\n    left: 0;\n    top: 0;\n    bottom: 0;\n    right: 0;\n    background: repeating-linear-gradient(45deg, rgba(250, 41, 73, 0.9), rgba(250, 41, 73, 0.9) 20px, rgba(250, 41, 73, 0.8) 20px, rgba(250, 41, 73, 0.8) 40px);\n    font-weight: 400 !important;\n    letter-spacing: normal;\n    text-transform: none;\n    cursor: pointer;\n    color: black;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    z-index: 100000000;\n    border: 2px solid #FA2949; }\n\n.sr2GJfvR.sr2G1fPO:hover {\n  position: relative; }\n  .sr2GJfvR.sr2G1fPO:hover:after {\n    content: '';\n    position: absolute;\n    left: 0;\n    top: 0;\n    bottom: 0;\n    right: 0;\n    background: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9) 20px, rgba(255, 255, 255, 0.8) 20px, rgba(255, 255, 255, 0.8) 40px);\n    font-weight: 400 !important;\n    letter-spacing: normal;\n    text-transform: none;\n    cursor: pointer;\n    color: black;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    z-index: 100000000;\n    border: 2px solid white; }\n", ""]);
+exports.push([module.i, ".s1EcJfvR:hover {\n  position: relative; }\n  .s1EcJfvR:hover:after {\n    content: '';\n    position: absolute;\n    left: 0;\n    top: 0;\n    bottom: 0;\n    right: 0;\n    background: repeating-linear-gradient(45deg, rgba(250, 41, 73, 0.9), rgba(250, 41, 73, 0.9) 20px, rgba(250, 41, 73, 0.8) 20px, rgba(250, 41, 73, 0.8) 40px);\n    font-weight: 400 !important;\n    letter-spacing: normal;\n    text-transform: none;\n    cursor: pointer;\n    color: black;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    z-index: 100000000;\n    border: 2px solid #FA2949; }\n\n.s1EcJfvR.s1Ec1fPO:hover {\n  position: relative; }\n  .s1EcJfvR.s1Ec1fPO:hover:after {\n    content: '';\n    position: absolute;\n    left: 0;\n    top: 0;\n    bottom: 0;\n    right: 0;\n    background: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9) 20px, rgba(255, 255, 255, 0.8) 20px, rgba(255, 255, 255, 0.8) 40px);\n    font-weight: 400 !important;\n    letter-spacing: normal;\n    text-transform: none;\n    cursor: pointer;\n    color: black;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    z-index: 100000000;\n    border: 2px solid white; }\n", ""]);
 
 // exports
 exports.locals = {
-	"editMode": "sr2GJfvR",
-	"lightOverlay": "sr2G1fPO"
+	"editMode": "s1EcJfvR",
+	"lightOverlay": "s1Ec1fPO"
 };
 
 /***/ }),
@@ -2284,12 +2315,12 @@ exports = module.exports = __webpack_require__(9)(false);
 
 
 // module
-exports.push([module.i, ".sr2G1cZi:hover {\n  position: relative; }\n  .sr2G1cZi:hover:after {\n    content: '';\n    position: absolute;\n    left: 0;\n    top: 0;\n    bottom: 0;\n    right: 0;\n    background: repeating-linear-gradient(45deg, rgba(250, 41, 73, 0.9), rgba(250, 41, 73, 0.9) 20px, rgba(250, 41, 73, 0.8) 20px, rgba(250, 41, 73, 0.8) 40px);\n    font-weight: 400 !important;\n    letter-spacing: normal;\n    text-transform: none;\n    cursor: pointer;\n    color: black;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    z-index: 100000000;\n    border: 2px solid #FA2949; }\n\n.sr2G1cZi.sr2G3fCo:hover {\n  position: relative; }\n  .sr2G1cZi.sr2G3fCo:hover:after {\n    content: '';\n    position: absolute;\n    left: 0;\n    top: 0;\n    bottom: 0;\n    right: 0;\n    background: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9) 20px, rgba(255, 255, 255, 0.8) 20px, rgba(255, 255, 255, 0.8) 40px);\n    font-weight: 400 !important;\n    letter-spacing: normal;\n    text-transform: none;\n    cursor: pointer;\n    color: black;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    z-index: 100000000;\n    border: 2px solid white; }\n", ""]);
+exports.push([module.i, ".s1Ec1cZi:hover {\n  position: relative; }\n  .s1Ec1cZi:hover:after {\n    content: '';\n    position: absolute;\n    left: 0;\n    top: 0;\n    bottom: 0;\n    right: 0;\n    background: repeating-linear-gradient(45deg, rgba(250, 41, 73, 0.9), rgba(250, 41, 73, 0.9) 20px, rgba(250, 41, 73, 0.8) 20px, rgba(250, 41, 73, 0.8) 40px);\n    font-weight: 400 !important;\n    letter-spacing: normal;\n    text-transform: none;\n    cursor: pointer;\n    color: black;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    z-index: 100000000;\n    border: 2px solid #FA2949; }\n\n.s1Ec1cZi.s1Ec3fCo:hover {\n  position: relative; }\n  .s1Ec1cZi.s1Ec3fCo:hover:after {\n    content: '';\n    position: absolute;\n    left: 0;\n    top: 0;\n    bottom: 0;\n    right: 0;\n    background: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9) 20px, rgba(255, 255, 255, 0.8) 20px, rgba(255, 255, 255, 0.8) 40px);\n    font-weight: 400 !important;\n    letter-spacing: normal;\n    text-transform: none;\n    cursor: pointer;\n    color: black;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    z-index: 100000000;\n    border: 2px solid white; }\n", ""]);
 
 // exports
 exports.locals = {
-	"editMode": "sr2G1cZi",
-	"lightOverlay": "sr2G3fCo"
+	"editMode": "s1Ec1cZi",
+	"lightOverlay": "s1Ec3fCo"
 };
 
 /***/ }),
@@ -2301,12 +2332,12 @@ exports = module.exports = __webpack_require__(9)(false);
 
 
 // module
-exports.push([module.i, ".sr2G2D0m:hover {\n  position: relative; }\n  .sr2G2D0m:hover:after {\n    content: '';\n    position: absolute;\n    left: 0;\n    top: 0;\n    bottom: 0;\n    right: 0;\n    background: repeating-linear-gradient(45deg, rgba(250, 41, 73, 0.9), rgba(250, 41, 73, 0.9) 20px, rgba(250, 41, 73, 0.8) 20px, rgba(250, 41, 73, 0.8) 40px);\n    font-weight: 400 !important;\n    letter-spacing: normal;\n    text-transform: none;\n    cursor: pointer;\n    color: black;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    z-index: 100000000;\n    border: 2px solid #FA2949; }\n\n.sr2G2D0m.sr2G2lU9:hover {\n  position: relative; }\n  .sr2G2D0m.sr2G2lU9:hover:after {\n    content: '';\n    position: absolute;\n    left: 0;\n    top: 0;\n    bottom: 0;\n    right: 0;\n    background: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9) 20px, rgba(255, 255, 255, 0.8) 20px, rgba(255, 255, 255, 0.8) 40px);\n    font-weight: 400 !important;\n    letter-spacing: normal;\n    text-transform: none;\n    cursor: pointer;\n    color: black;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    z-index: 100000000;\n    border: 2px solid white; }\n", ""]);
+exports.push([module.i, ".s1Ec2D0m:hover {\n  position: relative; }\n  .s1Ec2D0m:hover:after {\n    content: '';\n    position: absolute;\n    left: 0;\n    top: 0;\n    bottom: 0;\n    right: 0;\n    background: repeating-linear-gradient(45deg, rgba(250, 41, 73, 0.9), rgba(250, 41, 73, 0.9) 20px, rgba(250, 41, 73, 0.8) 20px, rgba(250, 41, 73, 0.8) 40px);\n    font-weight: 400 !important;\n    letter-spacing: normal;\n    text-transform: none;\n    cursor: pointer;\n    color: black;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    z-index: 100000000;\n    border: 2px solid #FA2949; }\n\n.s1Ec2D0m.s1Ec2lU9:hover {\n  position: relative; }\n  .s1Ec2D0m.s1Ec2lU9:hover:after {\n    content: '';\n    position: absolute;\n    left: 0;\n    top: 0;\n    bottom: 0;\n    right: 0;\n    background: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9) 20px, rgba(255, 255, 255, 0.8) 20px, rgba(255, 255, 255, 0.8) 40px);\n    font-weight: 400 !important;\n    letter-spacing: normal;\n    text-transform: none;\n    cursor: pointer;\n    color: black;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    z-index: 100000000;\n    border: 2px solid white; }\n", ""]);
 
 // exports
 exports.locals = {
-	"editMode": "sr2G2D0m",
-	"lightOverlay": "sr2G2lU9"
+	"editMode": "s1Ec2D0m",
+	"lightOverlay": "s1Ec2lU9"
 };
 
 /***/ }),
@@ -2318,13 +2349,13 @@ exports = module.exports = __webpack_require__(9)(false);
 
 
 // module
-exports.push([module.i, ".sr2G1qFI {\n  display: inline-block;\n  white-space: pre; }\n\n.sr2G-zMK:hover {\n  position: relative; }\n  .sr2G-zMK:hover:after {\n    content: '';\n    position: absolute;\n    left: 0;\n    top: 0;\n    bottom: 0;\n    right: 0;\n    background: repeating-linear-gradient(45deg, rgba(250, 41, 73, 0.9), rgba(250, 41, 73, 0.9) 20px, rgba(250, 41, 73, 0.8) 20px, rgba(250, 41, 73, 0.8) 40px);\n    font-weight: 400 !important;\n    letter-spacing: normal;\n    text-transform: none;\n    cursor: pointer;\n    color: black;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    z-index: 100000000;\n    border: 2px solid #FA2949; }\n\n.sr2G-zMK.sr2G3G3q:hover {\n  position: relative; }\n  .sr2G-zMK.sr2G3G3q:hover:after {\n    content: '';\n    position: absolute;\n    left: 0;\n    top: 0;\n    bottom: 0;\n    right: 0;\n    background: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9) 20px, rgba(255, 255, 255, 0.8) 20px, rgba(255, 255, 255, 0.8) 40px);\n    font-weight: 400 !important;\n    letter-spacing: normal;\n    text-transform: none;\n    cursor: pointer;\n    color: black;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    z-index: 100000000;\n    border: 2px solid white; }\n", ""]);
+exports.push([module.i, ".s1Ec1qFI {\n  display: inline-block;\n  white-space: pre; }\n\n.s1Ec-zMK:hover {\n  position: relative; }\n  .s1Ec-zMK:hover:after {\n    content: '';\n    position: absolute;\n    left: 0;\n    top: 0;\n    bottom: 0;\n    right: 0;\n    background: repeating-linear-gradient(45deg, rgba(250, 41, 73, 0.9), rgba(250, 41, 73, 0.9) 20px, rgba(250, 41, 73, 0.8) 20px, rgba(250, 41, 73, 0.8) 40px);\n    font-weight: 400 !important;\n    letter-spacing: normal;\n    text-transform: none;\n    cursor: pointer;\n    color: black;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    z-index: 100000000;\n    border: 2px solid #FA2949; }\n\n.s1Ec-zMK.s1Ec3G3q:hover {\n  position: relative; }\n  .s1Ec-zMK.s1Ec3G3q:hover:after {\n    content: '';\n    position: absolute;\n    left: 0;\n    top: 0;\n    bottom: 0;\n    right: 0;\n    background: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9) 20px, rgba(255, 255, 255, 0.8) 20px, rgba(255, 255, 255, 0.8) 40px);\n    font-weight: 400 !important;\n    letter-spacing: normal;\n    text-transform: none;\n    cursor: pointer;\n    color: black;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    z-index: 100000000;\n    border: 2px solid white; }\n", ""]);
 
 // exports
 exports.locals = {
-	"root": "sr2G1qFI",
-	"editMode": "sr2G-zMK",
-	"lightOverlay": "sr2G3G3q"
+	"root": "s1Ec1qFI",
+	"editMode": "s1Ec-zMK",
+	"lightOverlay": "s1Ec3G3q"
 };
 
 /***/ }),
@@ -2365,15 +2396,16 @@ exports = module.exports = __webpack_require__(9)(false);
 
 
 // module
-exports.push([module.i, ".sr2G2rgn {\n  z-index: 99999999999999;\n  animation: sr2G22BR;\n  animation-timing-function: ease-in-out;\n  animation-duration: .2s;\n  width: 100%;\n  height: 5px;\n  position: fixed;\n  top: 0;\n  left: 0; }\n  .sr2G2rgn:after {\n    animation-timing-function: linear !important;\n    animation: sr2G3mhh;\n    animation-duration: 1s;\n    animation-iteration-count: infinite;\n    animation-fill-mode: both;\n    transform: translate3d(0, 0, 0);\n    transition: transform 3s ease-in-out;\n    content: '';\n    position: absolute;\n    left: -68px;\n    top: 0;\n    right: 0;\n    bottom: 0;\n    background: repeating-linear-gradient(45deg, #FA2949, #FA2949 20px, #fc7489 20px, #fc7489 40px); }\n  .sr2G2rgn.sr2G3af-:after {\n    animation-play-state: running; }\n  .sr2G2rgn.sr2G3u3V:after {\n    animation-play-state: paused; }\n\n@keyframes sr2G3mhh {\n  from {\n    transform: translate3d(0, 0, 0); }\n  to {\n    transform: translate3d(58px, 0, 0); } }\n", ""]);
+exports.push([module.i, ".s1Ec2rgn {\n  z-index: 99999999999999;\n  animation: s1Ec22BR;\n  animation-timing-function: ease-in-out;\n  animation-duration: .2s;\n  width: 100%;\n  height: 5px;\n  position: fixed;\n  top: 0;\n  left: 0; }\n  .s1Ec2rgn:after {\n    animation-timing-function: linear !important;\n    animation: s1Ec3mhh;\n    animation-duration: 1s;\n    animation-iteration-count: infinite;\n    animation-fill-mode: both;\n    transform: translate3d(0, 0, 0);\n    transition: transform 3s ease-in-out;\n    content: '';\n    position: absolute;\n    left: -68px;\n    top: 0;\n    right: 0;\n    bottom: 0;\n    background: repeating-linear-gradient(45deg, #FA2949, #FA2949 20px, #fc7489 20px, #fc7489 40px); }\n  .s1Ec2rgn.s1Ec3af-:after {\n    animation-play-state: running; }\n  .s1Ec2rgn.s1Ec3u3V:after {\n    animation-play-state: paused; }\n\n.s1Ec2Cso:after {\n  background: repeating-linear-gradient(45deg, #1a1e2b, #1a1e2b 20px, #565e7b 20px, #565e7b 40px); }\n\n@keyframes s1Ec3mhh {\n  from {\n    transform: translate3d(0, 0, 0); }\n  to {\n    transform: translate3d(58px, 0, 0); } }\n", ""]);
 
 // exports
 exports.locals = {
-	"root": "sr2G2rgn",
-	"modalAnimation": "sr2G22BR",
-	"OrkanIndicatorBusyAnimation": "sr2G3mhh",
-	"busy": "sr2G3af-",
-	"notBusy": "sr2G3u3V"
+	"root": "s1Ec2rgn",
+	"modalAnimation": "s1Ec22BR",
+	"OrkanIndicatorBusyAnimation": "s1Ec3mhh",
+	"busy": "s1Ec3af-",
+	"notBusy": "s1Ec3u3V",
+	"dark": "s1Ec2Cso"
 };
 
 /***/ }),
@@ -2589,6 +2621,12 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
+
+/***/ }),
+/* 41 */
+/***/ (function(module, exports) {
+
+module.exports = require("parse-prop-types");
 
 /***/ })
 /******/ ]);
