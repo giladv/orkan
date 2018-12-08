@@ -1,6 +1,6 @@
 {
   "name": "orkan",
-  "version": "0.0.8",
+  "version": "0.0.10",
   "private": false,
   "scripts": {
     "test": "jest",
@@ -10,7 +10,8 @@
     "build": "webpack --mode production --config webpack/config.js"
   },
   "files": [
-    "dist"
+    "dist",
+    "Licence"
   ],
   "main": "./dist/index.js",
   "jest": {
