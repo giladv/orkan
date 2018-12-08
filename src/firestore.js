@@ -42,7 +42,7 @@ const iterateWhereOptions = (whereOptions, cb) => {
 	});
 };
 
-const serializeQueryOptions = (options = {}) => {
+const serializeQueryOptions = (options = {}, includeLimit = false) => {
 	const queryString = [];
 	iterateWhereOptions(options.where, (path, optionOperator, optionValue) => queryString.push(`where=${path}${optionOperator}${optionValue}`));
 
@@ -50,11 +50,13 @@ const serializeQueryOptions = (options = {}) => {
 		queryString.push(`orderBy:${path}|${direction}`);
 	});
 
+	includeLimit && options.limit !== undefined && queryString.push(`limit:${options.limit}`);
+
 	return queryString.join('&');
 };
 
 
-export const serializeQuery = (path, options) => toQueryablePath(path) + '?' + serializeQueryOptions(options);
+export const serializeQuery = (path, options, includeLimit) => toQueryablePath(path) + '?' + serializeQueryOptions(options, includeLimit);
 
 
 /*
@@ -70,6 +72,7 @@ const applyOrderByOptionsToQuery = (query, orderByOptions = {}) => {
 	});
 	return finalQuery;
 };
+
 
 export const toDotPath = slashPath => slashPath.split('/').join('.');
 
@@ -166,8 +169,9 @@ export default class Firestore{
 		if(isCollectionPath(path)){
 			const serializedPath = serializeQuery(path, options);
 			const collection = this.collections.get(serializedPath) || [];
+			const limit = (options && options.limit) || collection.length;
 
-			return collection.map(collectionKey => {
+			return collection.slice(0, limit).map(collectionKey => {
 				const value = this.map.get(toDotPath(nodePath.join(path, collectionKey)));
 
 				const raw = isObservable(value)?toJS(value):value;
@@ -220,7 +224,7 @@ export default class Firestore{
 
 	listen(path, options){
 		validPathInvariant(path);
-		const serializedQuery = serializeQuery(path, options);
+		const serializedQuery = serializeQuery(path, options, true);
 
 		let listener = this.listeners.get(serializedQuery);
 
@@ -350,6 +354,9 @@ export default class Firestore{
 
 		query = applyWhereOptionsToQuery(query, options.where);
 		query = applyOrderByOptionsToQuery(query, options.orderBy);
+		if(options.limit){
+			query = query.limit(options.limit);
+		}
 
 		return query;
 	}

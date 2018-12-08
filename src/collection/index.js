@@ -28,7 +28,8 @@ export default class Collection extends Component{
 				'>=': PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 				'<=': PropTypes.oneOfType([PropTypes.string, PropTypes.number])
 			})
-		)
+		),
+		limit: PropTypes.number
 	};
 
 	static defaultProps = {

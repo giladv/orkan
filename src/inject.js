@@ -4,7 +4,6 @@ import {observer} from 'mobx-react';
 import mapValues from 'lodash/mapValues';
 import values from 'lodash/values';
 import omitBy from 'lodash/omitBy';
-import omit from 'lodash/omit';
 import shallowCompare from 'react-addons-shallow-compare';
 
 import {REACT_CONTEXT_NAME} from './constants';
@@ -39,6 +38,12 @@ export default function inject(mapPropsToPaths = () => ({}), config) {
 					this.disposeAllListeners();
 					this.disposables = newDisposables;
 				}
+			}
+
+			componentWillReact(){
+				const newDisposables = this.listenToPaths(this.props);
+				this.disposeAllListeners();
+				this.disposables = newDisposables;
 			}
 
 			componentWillUnmount(){
@@ -135,7 +140,7 @@ const parseQuery = query => {
 	if(typeof query === 'string'){
 		return {path: query};
 	}else{
-		let pathOptions = omit(query, (value, key) => key === 'path' || !value);
+		let pathOptions = omitBy(query, (value, key) => key === 'path' || !value);
 		pathOptions = Object.keys(pathOptions).length?pathOptions:null;
 		return {path: query.path, pathOptions};
 	}
