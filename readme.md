@@ -1,4 +1,4 @@
-# Orkan [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0) [![npm](https://img.shields.io/npm/v/orkan.svg)](https://www.npmjs.com/package/orkan)
+# Orkan [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![npm](https://img.shields.io/npm/v/orkan.svg)](https://www.npmjs.com/package/orkan)
 
 __[Orkan](https://www.orkanjs.com) is a content management toolkit for building and managing dynamic React applications with ease.__
 
