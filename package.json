@@ -1,8 +1,8 @@
 {
   "name": "orkan",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "repository": "https://github.com/giladv/orkan",
-  "license": "GNU GPLv3",
+  "license": "MIT",
   "homepage": "https://www.orkanjs.com",
   "private": false,
   "scripts": {
