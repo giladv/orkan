@@ -300,7 +300,7 @@ export default class Firestore{
 						this.addToCollection(serializedQuery, change.newIndex, change.doc.id);
 						break;
 					case 'removed':
-						this.map.remove(toDotPath(docPath));
+						// not removing the document from this.map, it can be still used by another
 						this.removeFromCollection(serializedQuery, change.doc.id);
 						break;
 				}
