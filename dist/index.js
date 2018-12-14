@@ -1229,7 +1229,7 @@ var firestore_Firestore = /** @class */ (function () {
                         _this.addToCollection(serializedQuery_1, change.newIndex, change.doc.id);
                         break;
                     case 'removed':
-                        _this.map.remove(firestore_toDotPath(docPath));
+                        // not removing the document from this.map, it can be still used by another
                         _this.removeFromCollection(serializedQuery_1, change.doc.id);
                         break;
                 }
@@ -1457,7 +1457,7 @@ var inject_parseQuery = function (query) {
     }
     else {
         var pathOptions = omitBy_default()(query, function (value, key) { return key === 'path' || !value; });
-        pathOptions = Object.keys(pathOptions).length ? pathOptions : null;
+        pathOptions = Object.keys(pathOptions).length ? pathOptions : undefined;
         return { path: query.path, pathOptions: pathOptions };
     }
 };
@@ -2322,12 +2322,12 @@ exports = module.exports = __webpack_require__(9)(false);
 
 
 // module
-exports.push([module.i, ".s98kJfvR:hover {\n  position: relative; }\n  .s98kJfvR:hover:after {\n    content: '';\n    position: absolute;\n    left: 0;\n    top: 0;\n    bottom: 0;\n    right: 0;\n    background: repeating-linear-gradient(45deg, rgba(250, 41, 73, 0.9), rgba(250, 41, 73, 0.9) 20px, rgba(250, 41, 73, 0.8) 20px, rgba(250, 41, 73, 0.8) 40px);\n    font-weight: 400 !important;\n    letter-spacing: normal;\n    text-transform: none;\n    cursor: pointer;\n    color: black;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    z-index: 100000000;\n    border: 2px solid #FA2949; }\n\n.s98kJfvR.s98k1fPO:hover {\n  position: relative; }\n  .s98kJfvR.s98k1fPO:hover:after {\n    content: '';\n    position: absolute;\n    left: 0;\n    top: 0;\n    bottom: 0;\n    right: 0;\n    background: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9) 20px, rgba(255, 255, 255, 0.8) 20px, rgba(255, 255, 255, 0.8) 40px);\n    font-weight: 400 !important;\n    letter-spacing: normal;\n    text-transform: none;\n    cursor: pointer;\n    color: black;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    z-index: 100000000;\n    border: 2px solid white; }\n", ""]);
+exports.push([module.i, ".s2K6JfvR:hover {\n  position: relative; }\n  .s2K6JfvR:hover:after {\n    content: '';\n    position: absolute;\n    left: 0;\n    top: 0;\n    bottom: 0;\n    right: 0;\n    background: repeating-linear-gradient(45deg, rgba(250, 41, 73, 0.9), rgba(250, 41, 73, 0.9) 20px, rgba(250, 41, 73, 0.8) 20px, rgba(250, 41, 73, 0.8) 40px);\n    font-weight: 400 !important;\n    letter-spacing: normal;\n    text-transform: none;\n    cursor: pointer;\n    color: black;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    z-index: 100000000;\n    border: 2px solid #FA2949; }\n\n.s2K6JfvR.s2K61fPO:hover {\n  position: relative; }\n  .s2K6JfvR.s2K61fPO:hover:after {\n    content: '';\n    position: absolute;\n    left: 0;\n    top: 0;\n    bottom: 0;\n    right: 0;\n    background: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9) 20px, rgba(255, 255, 255, 0.8) 20px, rgba(255, 255, 255, 0.8) 40px);\n    font-weight: 400 !important;\n    letter-spacing: normal;\n    text-transform: none;\n    cursor: pointer;\n    color: black;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    z-index: 100000000;\n    border: 2px solid white; }\n", ""]);
 
 // exports
 exports.locals = {
-	"editMode": "s98kJfvR",
-	"lightOverlay": "s98k1fPO"
+	"editMode": "s2K6JfvR",
+	"lightOverlay": "s2K61fPO"
 };
 
 /***/ }),
@@ -2339,12 +2339,12 @@ exports = module.exports = __webpack_require__(9)(false);
 
 
 // module
-exports.push([module.i, ".s98k1cZi:hover {\n  position: relative; }\n  .s98k1cZi:hover:after {\n    content: '';\n    position: absolute;\n    left: 0;\n    top: 0;\n    bottom: 0;\n    right: 0;\n    background: repeating-linear-gradient(45deg, rgba(250, 41, 73, 0.9), rgba(250, 41, 73, 0.9) 20px, rgba(250, 41, 73, 0.8) 20px, rgba(250, 41, 73, 0.8) 40px);\n    font-weight: 400 !important;\n    letter-spacing: normal;\n    text-transform: none;\n    cursor: pointer;\n    color: black;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    z-index: 100000000;\n    border: 2px solid #FA2949; }\n\n.s98k1cZi.s98k3fCo:hover {\n  position: relative; }\n  .s98k1cZi.s98k3fCo:hover:after {\n    content: '';\n    position: absolute;\n    left: 0;\n    top: 0;\n    bottom: 0;\n    right: 0;\n    background: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9) 20px, rgba(255, 255, 255, 0.8) 20px, rgba(255, 255, 255, 0.8) 40px);\n    font-weight: 400 !important;\n    letter-spacing: normal;\n    text-transform: none;\n    cursor: pointer;\n    color: black;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    z-index: 100000000;\n    border: 2px solid white; }\n", ""]);
+exports.push([module.i, ".s2K61cZi:hover {\n  position: relative; }\n  .s2K61cZi:hover:after {\n    content: '';\n    position: absolute;\n    left: 0;\n    top: 0;\n    bottom: 0;\n    right: 0;\n    background: repeating-linear-gradient(45deg, rgba(250, 41, 73, 0.9), rgba(250, 41, 73, 0.9) 20px, rgba(250, 41, 73, 0.8) 20px, rgba(250, 41, 73, 0.8) 40px);\n    font-weight: 400 !important;\n    letter-spacing: normal;\n    text-transform: none;\n    cursor: pointer;\n    color: black;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    z-index: 100000000;\n    border: 2px solid #FA2949; }\n\n.s2K61cZi.s2K63fCo:hover {\n  position: relative; }\n  .s2K61cZi.s2K63fCo:hover:after {\n    content: '';\n    position: absolute;\n    left: 0;\n    top: 0;\n    bottom: 0;\n    right: 0;\n    background: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9) 20px, rgba(255, 255, 255, 0.8) 20px, rgba(255, 255, 255, 0.8) 40px);\n    font-weight: 400 !important;\n    letter-spacing: normal;\n    text-transform: none;\n    cursor: pointer;\n    color: black;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    z-index: 100000000;\n    border: 2px solid white; }\n", ""]);
 
 // exports
 exports.locals = {
-	"editMode": "s98k1cZi",
-	"lightOverlay": "s98k3fCo"
+	"editMode": "s2K61cZi",
+	"lightOverlay": "s2K63fCo"
 };
 
 /***/ }),
@@ -2356,12 +2356,12 @@ exports = module.exports = __webpack_require__(9)(false);
 
 
 // module
-exports.push([module.i, ".s98k2D0m:hover {\n  position: relative; }\n  .s98k2D0m:hover:after {\n    content: '';\n    position: absolute;\n    left: 0;\n    top: 0;\n    bottom: 0;\n    right: 0;\n    background: repeating-linear-gradient(45deg, rgba(250, 41, 73, 0.9), rgba(250, 41, 73, 0.9) 20px, rgba(250, 41, 73, 0.8) 20px, rgba(250, 41, 73, 0.8) 40px);\n    font-weight: 400 !important;\n    letter-spacing: normal;\n    text-transform: none;\n    cursor: pointer;\n    color: black;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    z-index: 100000000;\n    border: 2px solid #FA2949; }\n\n.s98k2D0m.s98k2lU9:hover {\n  position: relative; }\n  .s98k2D0m.s98k2lU9:hover:after {\n    content: '';\n    position: absolute;\n    left: 0;\n    top: 0;\n    bottom: 0;\n    right: 0;\n    background: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9) 20px, rgba(255, 255, 255, 0.8) 20px, rgba(255, 255, 255, 0.8) 40px);\n    font-weight: 400 !important;\n    letter-spacing: normal;\n    text-transform: none;\n    cursor: pointer;\n    color: black;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    z-index: 100000000;\n    border: 2px solid white; }\n", ""]);
+exports.push([module.i, ".s2K62D0m:hover {\n  position: relative; }\n  .s2K62D0m:hover:after {\n    content: '';\n    position: absolute;\n    left: 0;\n    top: 0;\n    bottom: 0;\n    right: 0;\n    background: repeating-linear-gradient(45deg, rgba(250, 41, 73, 0.9), rgba(250, 41, 73, 0.9) 20px, rgba(250, 41, 73, 0.8) 20px, rgba(250, 41, 73, 0.8) 40px);\n    font-weight: 400 !important;\n    letter-spacing: normal;\n    text-transform: none;\n    cursor: pointer;\n    color: black;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    z-index: 100000000;\n    border: 2px solid #FA2949; }\n\n.s2K62D0m.s2K62lU9:hover {\n  position: relative; }\n  .s2K62D0m.s2K62lU9:hover:after {\n    content: '';\n    position: absolute;\n    left: 0;\n    top: 0;\n    bottom: 0;\n    right: 0;\n    background: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9) 20px, rgba(255, 255, 255, 0.8) 20px, rgba(255, 255, 255, 0.8) 40px);\n    font-weight: 400 !important;\n    letter-spacing: normal;\n    text-transform: none;\n    cursor: pointer;\n    color: black;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    z-index: 100000000;\n    border: 2px solid white; }\n", ""]);
 
 // exports
 exports.locals = {
-	"editMode": "s98k2D0m",
-	"lightOverlay": "s98k2lU9"
+	"editMode": "s2K62D0m",
+	"lightOverlay": "s2K62lU9"
 };
 
 /***/ }),
@@ -2373,13 +2373,13 @@ exports = module.exports = __webpack_require__(9)(false);
 
 
 // module
-exports.push([module.i, ".s98k1qFI {\n  display: inline-block;\n  white-space: pre; }\n\n.s98k-zMK:hover {\n  position: relative; }\n  .s98k-zMK:hover:after {\n    content: '';\n    position: absolute;\n    left: 0;\n    top: 0;\n    bottom: 0;\n    right: 0;\n    background: repeating-linear-gradient(45deg, rgba(250, 41, 73, 0.9), rgba(250, 41, 73, 0.9) 20px, rgba(250, 41, 73, 0.8) 20px, rgba(250, 41, 73, 0.8) 40px);\n    font-weight: 400 !important;\n    letter-spacing: normal;\n    text-transform: none;\n    cursor: pointer;\n    color: black;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    z-index: 100000000;\n    border: 2px solid #FA2949; }\n\n.s98k-zMK.s98k3G3q:hover {\n  position: relative; }\n  .s98k-zMK.s98k3G3q:hover:after {\n    content: '';\n    position: absolute;\n    left: 0;\n    top: 0;\n    bottom: 0;\n    right: 0;\n    background: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9) 20px, rgba(255, 255, 255, 0.8) 20px, rgba(255, 255, 255, 0.8) 40px);\n    font-weight: 400 !important;\n    letter-spacing: normal;\n    text-transform: none;\n    cursor: pointer;\n    color: black;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    z-index: 100000000;\n    border: 2px solid white; }\n", ""]);
+exports.push([module.i, ".s2K61qFI {\n  display: inline-block;\n  white-space: pre; }\n\n.s2K6-zMK:hover {\n  position: relative; }\n  .s2K6-zMK:hover:after {\n    content: '';\n    position: absolute;\n    left: 0;\n    top: 0;\n    bottom: 0;\n    right: 0;\n    background: repeating-linear-gradient(45deg, rgba(250, 41, 73, 0.9), rgba(250, 41, 73, 0.9) 20px, rgba(250, 41, 73, 0.8) 20px, rgba(250, 41, 73, 0.8) 40px);\n    font-weight: 400 !important;\n    letter-spacing: normal;\n    text-transform: none;\n    cursor: pointer;\n    color: black;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    z-index: 100000000;\n    border: 2px solid #FA2949; }\n\n.s2K6-zMK.s2K63G3q:hover {\n  position: relative; }\n  .s2K6-zMK.s2K63G3q:hover:after {\n    content: '';\n    position: absolute;\n    left: 0;\n    top: 0;\n    bottom: 0;\n    right: 0;\n    background: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9) 20px, rgba(255, 255, 255, 0.8) 20px, rgba(255, 255, 255, 0.8) 40px);\n    font-weight: 400 !important;\n    letter-spacing: normal;\n    text-transform: none;\n    cursor: pointer;\n    color: black;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    z-index: 100000000;\n    border: 2px solid white; }\n", ""]);
 
 // exports
 exports.locals = {
-	"root": "s98k1qFI",
-	"editMode": "s98k-zMK",
-	"lightOverlay": "s98k3G3q"
+	"root": "s2K61qFI",
+	"editMode": "s2K6-zMK",
+	"lightOverlay": "s2K63G3q"
 };
 
 /***/ }),
@@ -2420,16 +2420,16 @@ exports = module.exports = __webpack_require__(9)(false);
 
 
 // module
-exports.push([module.i, ".s98k2rgn {\n  z-index: 99999999999999;\n  animation: s98k22BR;\n  animation-timing-function: ease-in-out;\n  animation-duration: .2s;\n  width: 100%;\n  height: 5px;\n  position: fixed;\n  top: 0;\n  left: 0; }\n  .s98k2rgn:after {\n    animation-timing-function: linear !important;\n    animation: s98k3mhh;\n    animation-duration: 1s;\n    animation-iteration-count: infinite;\n    animation-fill-mode: both;\n    transform: translate3d(0, 0, 0);\n    transition: transform 3s ease-in-out;\n    content: '';\n    position: absolute;\n    left: -68px;\n    top: 0;\n    right: 0;\n    bottom: 0;\n    background: repeating-linear-gradient(45deg, #FA2949, #FA2949 20px, #fc7489 20px, #fc7489 40px); }\n  .s98k2rgn.s98k3af-:after {\n    animation-play-state: running; }\n  .s98k2rgn.s98k3u3V:after {\n    animation-play-state: paused; }\n\n.s98k2Cso:after {\n  background: repeating-linear-gradient(45deg, #1a1e2b, #1a1e2b 20px, #565e7b 20px, #565e7b 40px); }\n\n@keyframes s98k3mhh {\n  from {\n    transform: translate3d(0, 0, 0); }\n  to {\n    transform: translate3d(58px, 0, 0); } }\n", ""]);
+exports.push([module.i, ".s2K62rgn {\n  z-index: 99999999999999;\n  animation: s2K622BR;\n  animation-timing-function: ease-in-out;\n  animation-duration: .2s;\n  width: 100%;\n  height: 5px;\n  position: fixed;\n  top: 0;\n  left: 0; }\n  .s2K62rgn:after {\n    animation-timing-function: linear !important;\n    animation: s2K63mhh;\n    animation-duration: 1s;\n    animation-iteration-count: infinite;\n    animation-fill-mode: both;\n    transform: translate3d(0, 0, 0);\n    transition: transform 3s ease-in-out;\n    content: '';\n    position: absolute;\n    left: -68px;\n    top: 0;\n    right: 0;\n    bottom: 0;\n    background: repeating-linear-gradient(45deg, #FA2949, #FA2949 20px, #fc7489 20px, #fc7489 40px); }\n  .s2K62rgn.s2K63af-:after {\n    animation-play-state: running; }\n  .s2K62rgn.s2K63u3V:after {\n    animation-play-state: paused; }\n\n.s2K62Cso:after {\n  background: repeating-linear-gradient(45deg, #1a1e2b, #1a1e2b 20px, #565e7b 20px, #565e7b 40px); }\n\n@keyframes s2K63mhh {\n  from {\n    transform: translate3d(0, 0, 0); }\n  to {\n    transform: translate3d(58px, 0, 0); } }\n", ""]);
 
 // exports
 exports.locals = {
-	"root": "s98k2rgn",
-	"modalAnimation": "s98k22BR",
-	"OrkanIndicatorBusyAnimation": "s98k3mhh",
-	"busy": "s98k3af-",
-	"notBusy": "s98k3u3V",
-	"dark": "s98k2Cso"
+	"root": "s2K62rgn",
+	"modalAnimation": "s2K622BR",
+	"OrkanIndicatorBusyAnimation": "s2K63mhh",
+	"busy": "s2K63af-",
+	"notBusy": "s2K63u3V",
+	"dark": "s2K62Cso"
 };
 
 /***/ }),

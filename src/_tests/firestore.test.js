@@ -24,23 +24,49 @@ const config = {
 const firebaseApp = firebase.initializeApp(config);
 
 const doc1 = {
-	title: 'title',
+	title: 'title1',
+	bool: true,
 	comments: [{name: 'name'}]
 };
 
+
 const doc2 = {
+	title: 'title2',
+	bool: true,
 	background: 'background',
 	features: [{link: 'link'}]
 };
 
+const doc3 = {
+	title: 'title3',
+	bool: false,
+	background: 'background',
+	features: [{link: 'link'}]
+};
+
+const withKey = (doc, $key) => ({...doc, $key});
 
 jest.setTimeout(10000);
 
 const firestoreInst = firebase.firestore(firebaseApp);
-firestoreInst.settings({timestampsInSnapshots: true})
-const firestore = new Firestore(firestoreInst);
+firestoreInst.settings({timestampsInSnapshots: true});
 
-test('loading', async () => {
+const createFirestore = () => new Firestore(firestoreInst, {
+	DocumentSnapshot: firebase.firestore.DocumentSnapshot,
+	QuerySnapshot: firebase.firestore.QuerySnapshot,
+	QueryDocumentSnapshot: firebase.firestore.QueryDocumentSnapshot
+});
+let firestore;
+
+beforeEach(async () => {
+	await firestoreInst.doc('test/doc1').delete();
+	await firestoreInst.doc('test/doc2').delete();
+	await firestoreInst.doc('test/doc3').delete();
+	firestore = createFirestore();
+});
+
+
+test('loading docs', async () => {
 	expect(await firestore.load('test/doc1')).toBe(undefined);
 	expect(await firestore.load('test/doc2')).toBe(undefined);
 	await firestoreInst.doc('test/doc1').set(doc1);
@@ -51,19 +77,103 @@ test('loading', async () => {
 	expect(await firestore.load('test/doc1')).toEqual(doc1);
 });
 
-test('reading and listening', async () => {
+test('reading and listening to docs', async () => {
 	const kill = firestore.listen('test/doc1');
-	expect(firestore.getLiveValue('test/doc1')).toBe(undefined);
-	expect(firestore.getLiveValue('test/doc2')).toBe(undefined);
+	expect(firestore.getValue('test/doc1')).toBe(undefined);
+	expect(firestore.getValue('test/doc2')).toBe(undefined);
 	await firestoreInst.doc('test/doc1').set(doc1);
-	await sleep(500);
-	expect(firestore.getLiveValue('test/doc1')).toEqual(doc1);
-	expect(firestore.getLiveValue('test/doc2')).toBe(undefined);
+	await sleep(1000);
+	expect(firestore.getValue('test/doc1')).toEqual(doc1);
+	expect(firestore.getValue('test/doc2')).toBe(undefined);
 	await firestoreInst.doc('test/doc1').delete();
 	await sleep(500);
-	expect(firestore.getLiveValue('test/doc1')).toBe(undefined);
-	expect(firestore.getLiveValue('test/doc2')).toBe(undefined);
+	expect(firestore.getValue('test/doc1')).toBe(undefined);
+	expect(firestore.getValue('test/doc2')).toBe(undefined);
 
+	kill();
+});
+
+test('reading and listening to simple collections', async () => {
+	const kill = firestore.listen('test');
+	expect(firestore.getValue('test')).toEqual([]);
+	await firestoreInst.doc('test/doc1').set(doc1);
+	await sleep(1000);
+	expect(firestore.getValue('test')).toEqual([withKey(doc1, 'doc1')]);
+	await firestoreInst.doc('test/doc2').set(doc2);
+	await sleep(1000);
+	expect(firestore.getValue('test')).toEqual([withKey(doc1, 'doc1'), withKey(doc2, 'doc2')]);
+	await firestoreInst.doc('test/doc2').delete();
+	await sleep(1000);
+	expect(firestore.getValue('test')).toEqual([withKey(doc1, 'doc1')]);
+	await firestoreInst.doc('test/doc1').delete();
+	expect(firestore.getValue('test')).toEqual([]);
+	kill();
+});
+
+
+test('reading and listening to collections with `where`', async () => {
+	const options = {where: {bool: {'==': true}}};
+	const kill = firestore.listen('test', options);
+
+	expect(firestore.getValue('test', options)).toEqual([]);
+
+	// adding a doc
+	await firestoreInst.doc('test/doc1').set(doc1);
+	await sleep(1000);
+	expect(firestore.getValue('test', options)).toEqual([withKey(doc1, 'doc1')]);
+
+	// adding a non matching doc
+	await firestoreInst.doc('test/doc3').set(doc3);
+	await sleep(1000);
+	expect(firestore.getValue('test', options)).toEqual([withKey(doc1, 'doc1')]);
+
+	// modifying the non matching doc to match
+	const newDoc3 = {...doc3, bool: true}
+	await firestoreInst.doc('test/doc3').set(newDoc3);
+	await sleep(1000);
+	expect(firestore.getValue('test', options)).toEqual([withKey(doc1, 'doc1'), withKey(newDoc3, 'doc3')]);
+
+	// reverting it back to normal
+	await firestoreInst.doc('test/doc3').set(doc3);
+	await sleep(1000);
+	expect(firestore.getValue('test', options)).toEqual([withKey(doc1, 'doc1')]);
+
+	// should it still be there? WIP
+	// expect(firestore.getValue('test/doc3')).toEqual(doc3);
+
+	// removing the original doc
+	await firestoreInst.doc('test/doc1').delete();
+	await sleep(1000);
+	expect(firestore.getValue('test', options)).toEqual([]);
+
+	kill();
+});
+
+test('reading and listening to collections with `limit`', async () => {
+	const options = {limit: 2};
+	const kill = firestore.listen('test', options);
+
+	expect(firestore.getValue('test', options)).toEqual([]);
+
+	// adding a doc
+	await firestoreInst.doc('test/doc1').set(doc1);
+	await sleep(1000);
+	expect(firestore.getValue('test', options)).toEqual([withKey(doc1, 'doc1')]);
+
+	// adding a second doc
+	await firestoreInst.doc('test/doc2').set(doc2);
+	await sleep(1000);
+	expect(firestore.getValue('test', options)).toEqual([withKey(doc1, 'doc1'), withKey(doc2, 'doc2')]);
+
+
+	// adding a third doc
+	await firestoreInst.doc('test/doc3').set(doc3);
+	await sleep(1000);
+	expect(firestore.getValue('test', options)).toEqual([withKey(doc1, 'doc1'), withKey(doc2, 'doc2')]);
+
+	await firestoreInst.doc('test/doc2').delete();
+	await sleep(1000);
+	expect(firestore.getValue('test', options)).toEqual([withKey(doc1, 'doc1'), withKey(doc3, 'doc3')]);
 	kill();
 });
 
@@ -78,11 +188,6 @@ test('removing', async () => {
 	await firestore.remove('test/doc2');
 	expect(await firestore.load('test/doc1')).toBe(undefined);
 	expect(await firestore.load('test/doc2')).toBe(undefined);
-});
-
-afterEach(async () => {
-	await firestore.remove('test/doc1');
-	await firestore.remove('test/doc2');
 });
 
 const sleep = msTime => new Promise(resolve => setTimeout(() => resolve(), msTime));

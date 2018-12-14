@@ -283,7 +283,7 @@ export default class Firestore{
 		}else if(this.isCollectionSnapshot(snapshot)){
 			// no need to sanitize path because only collection paths end up here
 			const serializedQuery = serializeQuery(path, options);
-			// console.log('collection update', serializedQuery)
+			// console.log('collection update', serializedQuery, serializeQuery(path, options, true))
 			snapshot.docChanges().forEach(change => {
 				const docPath = nodePath.join(path, change.doc.id);
 				// console.log('change', change.type, change.doc.id, change.newIndex, change.oldIndex)
@@ -368,12 +368,10 @@ export default class Firestore{
 	}
 
 	isDocumentSnapshot(snapshot){
-		return typeof snapshot.data == 'function';
 		return snapshot instanceof this.config.DocumentSnapshot || snapshot instanceof this.config.QueryDocumentSnapshot;
 	}
 
 	isCollectionSnapshot(snapshot){
-		return typeof snapshot.forEach == 'function';
 		return snapshot instanceof this.config.QuerySnapshot;
 	}
 }

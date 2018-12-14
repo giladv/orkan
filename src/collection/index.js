@@ -9,9 +9,9 @@ import inject from '../inject';
 import style from './style';
 import {createStyle} from '../utils/style-utils';
 
-@inject(({path, orderBy, where}) => {
+@inject(({path, orderBy, where, limit}) => {
 	return {
-		collection: {path, orderBy, where}
+		collection: {path, orderBy, where, limit}
 	};
 })
 @observer

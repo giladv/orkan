@@ -141,7 +141,7 @@ const parseQuery = query => {
 		return {path: query};
 	}else{
 		let pathOptions = omitBy(query, (value, key) => key === 'path' || !value);
-		pathOptions = Object.keys(pathOptions).length?pathOptions:null;
+		pathOptions = Object.keys(pathOptions).length?pathOptions:undefined;
 		return {path: query.path, pathOptions};
 	}
 };
