@@ -1,3 +1,5 @@
+const webpack = require('webpack');
+
 const nodeExternals = require('webpack-node-externals');
 
 const {getUniqueCssClassName, getReadableCssClassName, getDistPath} = require('./utils');
@@ -14,6 +16,7 @@ module.exports = (env, argv) => {
 			publicPath: '/', // this make the bundle.js to be served at root in dev-derver
 			filename: '[name].js',
 			library: 'orkan',
+			globalObject: 'typeof self !== \'undefined\' ? self : this',
 			libraryTarget: 'umd',
 			umdNamedDefine: true,
 		},
@@ -35,7 +38,7 @@ module.exports = (env, argv) => {
 					test: /\.scss$/,
 					exclude: /node_modules/,
 					use: [
-						'style-loader',
+						'style-loader/useable',
 						{
 							loader: 'css-loader',
 							options: {
@@ -94,7 +97,6 @@ module.exports = (env, argv) => {
 			// 	}
 			// }
 		},
-
 
 		devtool: isDev?'cheap-module-source-map':false,
 		devServer: {

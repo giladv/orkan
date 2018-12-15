@@ -9,7 +9,7 @@
     "test": "jest",
     "builddeploy": "yarn run build && yarn run deploy",
     "deploy": "yarn publish",
-    "dev": "webpack-dev-server --mode development --config webpack/config.js",
+    "dev": "webpack --mode development --config webpack/config.js --watch",
     "build": "webpack --mode production --config webpack/config.js"
   },
   "files": [

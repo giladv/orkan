@@ -1,4 +1,4 @@
-window.__VERSION__ = 0
+let __VERSION__ = 0
 import HumanInput from 'humaninput/lib/humaninput';
 export class Keyboard{
 	constructor(){

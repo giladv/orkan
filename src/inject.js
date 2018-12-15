@@ -9,6 +9,7 @@ import shallowCompare from 'react-addons-shallow-compare';
 import {REACT_CONTEXT_NAME} from './constants';
 import {serializeQuery} from './firestore';
 
+const isNode = new Function("try {return this===global;}catch(e){return false;}");
 
 export default function inject(mapPropsToPaths = () => ({}), config) {
 	const options = {
@@ -64,7 +65,12 @@ export default function inject(mapPropsToPaths = () => ({}), config) {
 				const mappedQueries = values(mapPropsToPaths(props)).filter(it => !!it);
 				return mappedQueries.map(query => {
 					const {path, pathOptions} = parseQuery(query);
-					return store.listen(path, pathOptions);
+					if(isNode()){
+						store.load(path, pathOptions);
+						return () => null;
+					}else{
+						return store.listen(path, pathOptions);
+					}
 				});
 			}
 
