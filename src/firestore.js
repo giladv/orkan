@@ -5,6 +5,7 @@ import find from 'lodash/find';
 import {observable, isObservable, toJS, action, when} from 'mobx';
 import ObservableNestedMap from 'observable-nested-map';
 import nodePath from 'path';
+import firebase from 'firebase/app';
 
 const validPathInvariant = path => {
 	invariant(!!path.length, 'Invalid path, expected a non empty string');
@@ -147,6 +148,9 @@ export default class Firestore{
 	collections = observable.map({});
 
 	config = {
+		DocumentSnapshot: firebase.firestore.DocumentSnapshot,
+		QuerySnapshot: firebase.firestore.QuerySnapshot,
+		QueryDocumentSnapshot: firebase.firestore.QueryDocumentSnapshot
 	};
 
 	constructor(api, initialState = {}, options = {}){

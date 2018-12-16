@@ -7,12 +7,10 @@ import autobind from 'autobind-decorator';
 import classNames from 'classnames';
 import * as mobx from 'mobx';
 
-// import * as firebaseAdmin from 'firebase-admin';
-// import firebase from 'firebase/app';
-// import 'firebase/database';
-// import 'firebase/firestore';
-// import 'firebase/auth'
-// import 'firebase/storage'
+import firebase from 'firebase/app';
+import 'firebase/firestore';
+import 'firebase/auth'
+import 'firebase/storage'
 
 import {
 	ACTIVATION_EVENT_KEY, DEFAULT_BASE_PATH, FIREBASE_APP_NAME, ORKAN_ADMIN_GLOBAL, REACT_CONTEXT_NAME,
@@ -34,7 +32,6 @@ let firestore;
 export default class Provider extends Component{
 
 	static propTypes = {
-		firebase: PropTypes.object.isRequired,
 		onStoreReady: PropTypes.func,
 		adminConfig: PropTypes.shape({
 			color: PropTypes.oneOf(['default', 'dark']),
@@ -87,7 +84,7 @@ export default class Provider extends Component{
 	}
 
 	async componentWillMount(){
-		const {firebaseConfig, onStoreReady, firebase, initialState} = this.props;
+		const {firebaseConfig, onStoreReady, initialState} = this.props;
 		if(!firebaseApp){
 			firebaseApp = firebase.initializeApp(firebaseConfig, FIREBASE_APP_NAME);
 			const nativeFirestore = firebase.firestore(firebaseApp);

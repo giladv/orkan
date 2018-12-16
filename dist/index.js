@@ -1211,6 +1211,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var observable_nested_map__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(observable_nested_map__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var path__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! path */ "./node_modules/path-browserify/index.js");
 /* harmony import */ var path__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(path__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var firebase_app__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! firebase/app */ "firebase/app");
+/* harmony import */ var firebase_app__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(firebase_app__WEBPACK_IMPORTED_MODULE_7__);
 var __assign = (undefined && undefined.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -1263,6 +1265,7 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+
 
 
 
@@ -1381,7 +1384,11 @@ var Firestore = /** @class */ (function () {
         this.pathsStatus = mobx__WEBPACK_IMPORTED_MODULE_4__["observable"].map({});
         this.listeners = mobx__WEBPACK_IMPORTED_MODULE_4__["observable"].map({});
         this.collections = mobx__WEBPACK_IMPORTED_MODULE_4__["observable"].map({});
-        this.config = {};
+        this.config = {
+            DocumentSnapshot: firebase_app__WEBPACK_IMPORTED_MODULE_7___default.a.firestore.DocumentSnapshot,
+            QuerySnapshot: firebase_app__WEBPACK_IMPORTED_MODULE_7___default.a.firestore.QuerySnapshot,
+            QueryDocumentSnapshot: firebase_app__WEBPACK_IMPORTED_MODULE_7___default.a.firestore.QueryDocumentSnapshot
+        };
         this.api = api;
         this.map.merge(initialState.map);
         this.collections.merge(initialState.collections);
@@ -1666,29 +1673,26 @@ var Firestore = /** @class */ (function () {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var parse_prop_types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! parse-prop-types */ "parse-prop-types");
-/* harmony import */ var parse_prop_types__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(parse_prop_types__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _inject__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./inject */ "./src/inject.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "inject", function() { return _inject__WEBPACK_IMPORTED_MODULE_1__["default"]; });
+/* harmony import */ var _inject__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./inject */ "./src/inject.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "inject", function() { return _inject__WEBPACK_IMPORTED_MODULE_0__["default"]; });
 
-/* harmony import */ var _provider__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./provider */ "./src/provider/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Provider", function() { return _provider__WEBPACK_IMPORTED_MODULE_2__["default"]; });
+/* harmony import */ var _provider__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./provider */ "./src/provider/index.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Provider", function() { return _provider__WEBPACK_IMPORTED_MODULE_1__["default"]; });
 
-/* harmony import */ var _value__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./value */ "./src/value/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Value", function() { return _value__WEBPACK_IMPORTED_MODULE_3__["default"]; });
+/* harmony import */ var _value__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./value */ "./src/value/index.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Value", function() { return _value__WEBPACK_IMPORTED_MODULE_2__["default"]; });
 
-/* harmony import */ var _with_value__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./with-value */ "./src/with-value/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "WithValue", function() { return _with_value__WEBPACK_IMPORTED_MODULE_4__["default"]; });
+/* harmony import */ var _with_value__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./with-value */ "./src/with-value/index.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "WithValue", function() { return _with_value__WEBPACK_IMPORTED_MODULE_3__["default"]; });
 
-/* harmony import */ var _list__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./list */ "./src/list/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "List", function() { return _list__WEBPACK_IMPORTED_MODULE_5__["default"]; });
+/* harmony import */ var _list__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./list */ "./src/list/index.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "List", function() { return _list__WEBPACK_IMPORTED_MODULE_4__["default"]; });
 
-/* harmony import */ var _collection__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./collection */ "./src/collection/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Collection", function() { return _collection__WEBPACK_IMPORTED_MODULE_6__["default"]; });
+/* harmony import */ var _collection__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./collection */ "./src/collection/index.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Collection", function() { return _collection__WEBPACK_IMPORTED_MODULE_5__["default"]; });
 
-/* harmony import */ var _firestore__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./firestore */ "./src/firestore.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Firestore", function() { return _firestore__WEBPACK_IMPORTED_MODULE_7__["default"]; });
-
+/* harmony import */ var _firestore__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./firestore */ "./src/firestore.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Firestore", function() { return _firestore__WEBPACK_IMPORTED_MODULE_6__["default"]; });
 
 
 
@@ -2152,12 +2156,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var autobind_decorator__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(autobind_decorator__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! classnames */ "classnames");
 /* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(classnames__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../constants */ "./src/constants.js");
-/* harmony import */ var _firestore__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../firestore */ "./src/firestore.js");
-/* harmony import */ var _inject__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../inject */ "./src/inject.js");
-/* harmony import */ var _indicator_index__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../indicator/index */ "./src/indicator/index.js");
-/* harmony import */ var _style__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./style */ "./src/provider/style.scss");
-/* harmony import */ var _style__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(_style__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var firebase_app__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! firebase/app */ "firebase/app");
+/* harmony import */ var firebase_app__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(firebase_app__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var firebase_firestore__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! firebase/firestore */ "firebase/firestore");
+/* harmony import */ var firebase_firestore__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(firebase_firestore__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var firebase_auth__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! firebase/auth */ "firebase/auth");
+/* harmony import */ var firebase_auth__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(firebase_auth__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var firebase_storage__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! firebase/storage */ "firebase/storage");
+/* harmony import */ var firebase_storage__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(firebase_storage__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../constants */ "./src/constants.js");
+/* harmony import */ var _firestore__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../firestore */ "./src/firestore.js");
+/* harmony import */ var _inject__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../inject */ "./src/inject.js");
+/* harmony import */ var _indicator_index__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../indicator/index */ "./src/indicator/index.js");
+/* harmony import */ var _style__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./style */ "./src/provider/style.scss");
+/* harmony import */ var _style__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(_style__WEBPACK_IMPORTED_MODULE_15__);
 var __extends = (undefined && undefined.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -2221,12 +2233,10 @@ var _a, _b;
 
 
 
-// import * as firebaseAdmin from 'firebase-admin';
-// import firebase from 'firebase/app';
-// import 'firebase/database';
-// import 'firebase/firestore';
-// import 'firebase/auth'
-// import 'firebase/storage'
+
+
+
+
 
 
 
@@ -2251,7 +2261,7 @@ var Provider = /** @class */ (function (_super) {
     Provider.prototype.getChildContext = function () {
         var _this = this;
         var _a;
-        return _a = {}, _a[_constants__WEBPACK_IMPORTED_MODULE_7__["REACT_CONTEXT_NAME"]] = {
+        return _a = {}, _a[_constants__WEBPACK_IMPORTED_MODULE_11__["REACT_CONTEXT_NAME"]] = {
             activateAdmin: function () { return _this.activateAdmin(); },
             store: firestore,
             getLiveValue: function () {
@@ -2279,17 +2289,17 @@ var Provider = /** @class */ (function (_super) {
     };
     Provider.prototype.componentWillMount = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, firebaseConfig, onStoreReady, firebase, initialState, nativeFirestore;
+            var _a, firebaseConfig, onStoreReady, initialState, nativeFirestore;
             return __generator(this, function (_b) {
-                _a = this.props, firebaseConfig = _a.firebaseConfig, onStoreReady = _a.onStoreReady, firebase = _a.firebase, initialState = _a.initialState;
+                _a = this.props, firebaseConfig = _a.firebaseConfig, onStoreReady = _a.onStoreReady, initialState = _a.initialState;
                 if (!firebaseApp) {
-                    firebaseApp = firebase.initializeApp(firebaseConfig, _constants__WEBPACK_IMPORTED_MODULE_7__["FIREBASE_APP_NAME"]);
-                    nativeFirestore = firebase.firestore(firebaseApp);
+                    firebaseApp = firebase_app__WEBPACK_IMPORTED_MODULE_7___default.a.initializeApp(firebaseConfig, _constants__WEBPACK_IMPORTED_MODULE_11__["FIREBASE_APP_NAME"]);
+                    nativeFirestore = firebase_app__WEBPACK_IMPORTED_MODULE_7___default.a.firestore(firebaseApp);
                     nativeFirestore.settings({ timestampsInSnapshots: true });
-                    firestore = new _firestore__WEBPACK_IMPORTED_MODULE_8__["default"](nativeFirestore, initialState, {
-                        DocumentSnapshot: firebase.firestore.DocumentSnapshot,
-                        QuerySnapshot: firebase.firestore.QuerySnapshot,
-                        QueryDocumentSnapshot: firebase.firestore.QueryDocumentSnapshot
+                    firestore = new _firestore__WEBPACK_IMPORTED_MODULE_12__["default"](nativeFirestore, initialState, {
+                        DocumentSnapshot: firebase_app__WEBPACK_IMPORTED_MODULE_7___default.a.firestore.DocumentSnapshot,
+                        QuerySnapshot: firebase_app__WEBPACK_IMPORTED_MODULE_7___default.a.firestore.QuerySnapshot,
+                        QueryDocumentSnapshot: firebase_app__WEBPACK_IMPORTED_MODULE_7___default.a.firestore.QueryDocumentSnapshot
                     });
                 }
                 onStoreReady(firestore);
@@ -2362,8 +2372,8 @@ var Provider = /** @class */ (function (_super) {
                         return [4 /*yield*/, response.text()];
                     case 4:
                         _a.apply(void 0, [_b.sent()]);
-                        OrkanAdmin = window[_constants__WEBPACK_IMPORTED_MODULE_7__["ORKAN_ADMIN_GLOBAL"]].default;
-                        delete window[_constants__WEBPACK_IMPORTED_MODULE_7__["ORKAN_ADMIN_GLOBAL"]];
+                        OrkanAdmin = window[_constants__WEBPACK_IMPORTED_MODULE_11__["ORKAN_ADMIN_GLOBAL"]].default;
+                        delete window[_constants__WEBPACK_IMPORTED_MODULE_11__["ORKAN_ADMIN_GLOBAL"]];
                         this.obState.isActive = true;
                         return [3 /*break*/, 6];
                     case 5:
@@ -2386,11 +2396,11 @@ var Provider = /** @class */ (function (_super) {
         window.PropTypes = prop_types__WEBPACK_IMPORTED_MODULE_2___default.a;
         window.classNames = classnames__WEBPACK_IMPORTED_MODULE_6___default.a;
         window.autobind = autobind_decorator__WEBPACK_IMPORTED_MODULE_5___default.a;
-        window.firebase = firebase;
+        window.firebase = firebase_app__WEBPACK_IMPORTED_MODULE_7___default.a;
         window.orkan = {
             Provider: Provider_1,
-            inject: _inject__WEBPACK_IMPORTED_MODULE_9__["default"],
-            Firestore: _firestore__WEBPACK_IMPORTED_MODULE_8__["default"]
+            inject: _inject__WEBPACK_IMPORTED_MODULE_13__["default"],
+            Firestore: _firestore__WEBPACK_IMPORTED_MODULE_12__["default"]
         };
     };
     Provider.prototype.handleStoreReady = function (store) {
@@ -2414,17 +2424,16 @@ var Provider = /** @class */ (function (_super) {
         var _b = this.obState, isActive = _b.isActive, isBusy = _b.isBusy;
         return [
             children,
-            (isActive || isBusy) && react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.createPortal(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_indicator_index__WEBPACK_IMPORTED_MODULE_10__["default"], { color: adminConfig.color, isBusy: isBusy || (this.adminStore && this.adminStore.isInitializing) }), document.body),
+            (isActive || isBusy) && react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.createPortal(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_indicator_index__WEBPACK_IMPORTED_MODULE_14__["default"], { color: adminConfig.color, isBusy: isBusy || (this.adminStore && this.adminStore.isInitializing) }), document.body),
             isActive && react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.createPortal(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(OrkanAdmin, { config: adminConfig, dataStore: firestore, onStoreReady: this.handleStoreReady }), document.body)
         ];
     };
     var Provider_1;
     Provider.propTypes = {
-        firebase: prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.object.isRequired,
         onStoreReady: prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.func,
         adminConfig: prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.shape({
             color: prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.oneOf(['default', 'dark']),
-            authProviders: prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.arrayOf(prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.oneOf(_constants__WEBPACK_IMPORTED_MODULE_7__["SUPPORTED_AUTH_PROVIDERS"])),
+            authProviders: prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.arrayOf(prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.oneOf(_constants__WEBPACK_IMPORTED_MODULE_11__["SUPPORTED_AUTH_PROVIDERS"])),
             allowGuests: prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.bool
         }),
         firebaseConfig: prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.shape({
@@ -2440,10 +2449,10 @@ var Provider = /** @class */ (function (_super) {
         onStoreReady: function () { return null; }
     };
     Provider.childContextTypes = (_a = {},
-        _a[_constants__WEBPACK_IMPORTED_MODULE_7__["REACT_CONTEXT_NAME"]] = prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.object,
+        _a[_constants__WEBPACK_IMPORTED_MODULE_11__["REACT_CONTEXT_NAME"]] = prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.object,
         _a);
     Provider.contextTypes = (_b = {},
-        _b[_constants__WEBPACK_IMPORTED_MODULE_7__["REACT_CONTEXT_NAME"]] = prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.object,
+        _b[_constants__WEBPACK_IMPORTED_MODULE_11__["REACT_CONTEXT_NAME"]] = prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.object,
         _b);
     __decorate([
         mobx__WEBPACK_IMPORTED_MODULE_4__["observable"].shallow
@@ -2846,6 +2855,50 @@ module.exports = require("classnames");
 
 /***/ }),
 
+/***/ "firebase/app":
+/*!*******************************!*\
+  !*** external "firebase/app" ***!
+  \*******************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("firebase/app");
+
+/***/ }),
+
+/***/ "firebase/auth":
+/*!********************************!*\
+  !*** external "firebase/auth" ***!
+  \********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("firebase/auth");
+
+/***/ }),
+
+/***/ "firebase/firestore":
+/*!*************************************!*\
+  !*** external "firebase/firestore" ***!
+  \*************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("firebase/firestore");
+
+/***/ }),
+
+/***/ "firebase/storage":
+/*!***********************************!*\
+  !*** external "firebase/storage" ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("firebase/storage");
+
+/***/ }),
+
 /***/ "invariant":
 /*!****************************!*\
   !*** external "invariant" ***!
@@ -2975,17 +3028,6 @@ module.exports = require("mobx-react");
 /***/ (function(module, exports) {
 
 module.exports = require("observable-nested-map");
-
-/***/ }),
-
-/***/ "parse-prop-types":
-/*!***********************************!*\
-  !*** external "parse-prop-types" ***!
-  \***********************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = require("parse-prop-types");
 
 /***/ }),
 
