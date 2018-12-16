@@ -13,7 +13,7 @@ import 'firebase/auth'
 import 'firebase/storage'
 
 
-console.log('?!?!?1', firebase, mobx);
+console.error('?!?!?1', firebase, mobx);
 
 import {
 	ACTIVATION_EVENT_KEY, DEFAULT_BASE_PATH, FIREBASE_APP_NAME, ORKAN_ADMIN_GLOBAL, REACT_CONTEXT_NAME,
