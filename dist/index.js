@@ -122,13 +122,13 @@ module.exports = require("autobind-decorator");
 /* 4 */
 /***/ (function(module, exports) {
 
-module.exports = require("firebase/app");
+module.exports = require("mobx-react");
 
 /***/ }),
 /* 5 */
 /***/ (function(module, exports) {
 
-module.exports = require("mobx-react");
+module.exports = require("firebase/app");
 
 /***/ }),
 /* 6 */
@@ -1105,16 +1105,16 @@ exports = module.exports = __webpack_require__(8)(false);
 
 
 // module
-exports.push([module.i, ".sfsF2rgn {\n  z-index: 99999999999999;\n  animation: sfsF22BR;\n  animation-timing-function: ease-in-out;\n  animation-duration: .2s;\n  width: 100%;\n  height: 5px;\n  position: fixed;\n  top: 0;\n  left: 0; }\n  .sfsF2rgn:after {\n    animation-timing-function: linear !important;\n    animation: sfsF3mhh;\n    animation-duration: 1s;\n    animation-iteration-count: infinite;\n    animation-fill-mode: both;\n    transform: translate3d(0, 0, 0);\n    transition: transform 3s ease-in-out;\n    content: '';\n    position: absolute;\n    left: -68px;\n    top: 0;\n    right: 0;\n    bottom: 0;\n    background: repeating-linear-gradient(45deg, #FA2949, #FA2949 20px, #fc7489 20px, #fc7489 40px); }\n  .sfsF2rgn.sfsF3af-:after {\n    animation-play-state: running; }\n  .sfsF2rgn.sfsF3u3V:after {\n    animation-play-state: paused; }\n\n.sfsF2Cso:after {\n  background: repeating-linear-gradient(45deg, #1a1e2b, #1a1e2b 20px, #565e7b 20px, #565e7b 40px); }\n\n@keyframes sfsF3mhh {\n  from {\n    transform: translate3d(0, 0, 0); }\n  to {\n    transform: translate3d(58px, 0, 0); } }\n", ""]);
+exports.push([module.i, ".s3mT2rgn {\n  z-index: 99999999999999;\n  animation: s3mT22BR;\n  animation-timing-function: ease-in-out;\n  animation-duration: .2s;\n  width: 100%;\n  height: 5px;\n  position: fixed;\n  top: 0;\n  left: 0; }\n  .s3mT2rgn:after {\n    animation-timing-function: linear !important;\n    animation: s3mT3mhh;\n    animation-duration: 1s;\n    animation-iteration-count: infinite;\n    animation-fill-mode: both;\n    transform: translate3d(0, 0, 0);\n    transition: transform 3s ease-in-out;\n    content: '';\n    position: absolute;\n    left: -68px;\n    top: 0;\n    right: 0;\n    bottom: 0;\n    background: repeating-linear-gradient(45deg, #FA2949, #FA2949 20px, #fc7489 20px, #fc7489 40px); }\n  .s3mT2rgn.s3mT3af-:after {\n    animation-play-state: running; }\n  .s3mT2rgn.s3mT3u3V:after {\n    animation-play-state: paused; }\n\n.s3mT2Cso:after {\n  background: repeating-linear-gradient(45deg, #1a1e2b, #1a1e2b 20px, #565e7b 20px, #565e7b 40px); }\n\n@keyframes s3mT3mhh {\n  from {\n    transform: translate3d(0, 0, 0); }\n  to {\n    transform: translate3d(58px, 0, 0); } }\n", ""]);
 
 // exports
 exports.locals = {
-	"root": "sfsF2rgn",
-	"modalAnimation": "sfsF22BR",
-	"OrkanIndicatorBusyAnimation": "sfsF3mhh",
-	"busy": "sfsF3af-",
-	"notBusy": "sfsF3u3V",
-	"dark": "sfsF2Cso"
+	"root": "s3mT2rgn",
+	"modalAnimation": "s3mT22BR",
+	"OrkanIndicatorBusyAnimation": "s3mT3mhh",
+	"busy": "s3mT3af-",
+	"notBusy": "s3mT3u3V",
+	"dark": "s3mT2Cso"
 };
 
 /***/ }),
@@ -1163,13 +1163,13 @@ exports = module.exports = __webpack_require__(8)(false);
 
 
 // module
-exports.push([module.i, ".sfsF1qFI {\n  display: inline-block;\n  white-space: pre; }\n\n.sfsF-zMK:hover {\n  position: relative; }\n  .sfsF-zMK:hover:after {\n    content: '';\n    position: absolute;\n    left: 0;\n    top: 0;\n    bottom: 0;\n    right: 0;\n    background: repeating-linear-gradient(45deg, rgba(250, 41, 73, 0.9), rgba(250, 41, 73, 0.9) 20px, rgba(250, 41, 73, 0.8) 20px, rgba(250, 41, 73, 0.8) 40px);\n    font-weight: 400 !important;\n    letter-spacing: normal;\n    text-transform: none;\n    cursor: pointer;\n    color: black;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    z-index: 100000000;\n    border: 2px solid #FA2949; }\n\n.sfsF-zMK.sfsF3G3q:hover {\n  position: relative; }\n  .sfsF-zMK.sfsF3G3q:hover:after {\n    content: '';\n    position: absolute;\n    left: 0;\n    top: 0;\n    bottom: 0;\n    right: 0;\n    background: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9) 20px, rgba(255, 255, 255, 0.8) 20px, rgba(255, 255, 255, 0.8) 40px);\n    font-weight: 400 !important;\n    letter-spacing: normal;\n    text-transform: none;\n    cursor: pointer;\n    color: black;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    z-index: 100000000;\n    border: 2px solid white; }\n", ""]);
+exports.push([module.i, ".s3mT1qFI {\n  display: inline-block;\n  white-space: pre; }\n\n.s3mT-zMK:hover {\n  position: relative; }\n  .s3mT-zMK:hover:after {\n    content: '';\n    position: absolute;\n    left: 0;\n    top: 0;\n    bottom: 0;\n    right: 0;\n    background: repeating-linear-gradient(45deg, rgba(250, 41, 73, 0.9), rgba(250, 41, 73, 0.9) 20px, rgba(250, 41, 73, 0.8) 20px, rgba(250, 41, 73, 0.8) 40px);\n    font-weight: 400 !important;\n    letter-spacing: normal;\n    text-transform: none;\n    cursor: pointer;\n    color: black;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    z-index: 100000000;\n    border: 2px solid #FA2949; }\n\n.s3mT-zMK.s3mT3G3q:hover {\n  position: relative; }\n  .s3mT-zMK.s3mT3G3q:hover:after {\n    content: '';\n    position: absolute;\n    left: 0;\n    top: 0;\n    bottom: 0;\n    right: 0;\n    background: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9) 20px, rgba(255, 255, 255, 0.8) 20px, rgba(255, 255, 255, 0.8) 40px);\n    font-weight: 400 !important;\n    letter-spacing: normal;\n    text-transform: none;\n    cursor: pointer;\n    color: black;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    z-index: 100000000;\n    border: 2px solid white; }\n", ""]);
 
 // exports
 exports.locals = {
-	"root": "sfsF1qFI",
-	"editMode": "sfsF-zMK",
-	"lightOverlay": "sfsF3G3q"
+	"root": "s3mT1qFI",
+	"editMode": "s3mT-zMK",
+	"lightOverlay": "s3mT3G3q"
 };
 
 /***/ }),
@@ -1181,12 +1181,12 @@ exports = module.exports = __webpack_require__(8)(false);
 
 
 // module
-exports.push([module.i, ".sfsF2D0m:hover {\n  position: relative; }\n  .sfsF2D0m:hover:after {\n    content: '';\n    position: absolute;\n    left: 0;\n    top: 0;\n    bottom: 0;\n    right: 0;\n    background: repeating-linear-gradient(45deg, rgba(250, 41, 73, 0.9), rgba(250, 41, 73, 0.9) 20px, rgba(250, 41, 73, 0.8) 20px, rgba(250, 41, 73, 0.8) 40px);\n    font-weight: 400 !important;\n    letter-spacing: normal;\n    text-transform: none;\n    cursor: pointer;\n    color: black;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    z-index: 100000000;\n    border: 2px solid #FA2949; }\n\n.sfsF2D0m.sfsF2lU9:hover {\n  position: relative; }\n  .sfsF2D0m.sfsF2lU9:hover:after {\n    content: '';\n    position: absolute;\n    left: 0;\n    top: 0;\n    bottom: 0;\n    right: 0;\n    background: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9) 20px, rgba(255, 255, 255, 0.8) 20px, rgba(255, 255, 255, 0.8) 40px);\n    font-weight: 400 !important;\n    letter-spacing: normal;\n    text-transform: none;\n    cursor: pointer;\n    color: black;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    z-index: 100000000;\n    border: 2px solid white; }\n", ""]);
+exports.push([module.i, ".s3mT2D0m:hover {\n  position: relative; }\n  .s3mT2D0m:hover:after {\n    content: '';\n    position: absolute;\n    left: 0;\n    top: 0;\n    bottom: 0;\n    right: 0;\n    background: repeating-linear-gradient(45deg, rgba(250, 41, 73, 0.9), rgba(250, 41, 73, 0.9) 20px, rgba(250, 41, 73, 0.8) 20px, rgba(250, 41, 73, 0.8) 40px);\n    font-weight: 400 !important;\n    letter-spacing: normal;\n    text-transform: none;\n    cursor: pointer;\n    color: black;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    z-index: 100000000;\n    border: 2px solid #FA2949; }\n\n.s3mT2D0m.s3mT2lU9:hover {\n  position: relative; }\n  .s3mT2D0m.s3mT2lU9:hover:after {\n    content: '';\n    position: absolute;\n    left: 0;\n    top: 0;\n    bottom: 0;\n    right: 0;\n    background: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9) 20px, rgba(255, 255, 255, 0.8) 20px, rgba(255, 255, 255, 0.8) 40px);\n    font-weight: 400 !important;\n    letter-spacing: normal;\n    text-transform: none;\n    cursor: pointer;\n    color: black;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    z-index: 100000000;\n    border: 2px solid white; }\n", ""]);
 
 // exports
 exports.locals = {
-	"editMode": "sfsF2D0m",
-	"lightOverlay": "sfsF2lU9"
+	"editMode": "s3mT2D0m",
+	"lightOverlay": "s3mT2lU9"
 };
 
 /***/ }),
@@ -1198,12 +1198,12 @@ exports = module.exports = __webpack_require__(8)(false);
 
 
 // module
-exports.push([module.i, ".sfsF1cZi:hover {\n  position: relative; }\n  .sfsF1cZi:hover:after {\n    content: '';\n    position: absolute;\n    left: 0;\n    top: 0;\n    bottom: 0;\n    right: 0;\n    background: repeating-linear-gradient(45deg, rgba(250, 41, 73, 0.9), rgba(250, 41, 73, 0.9) 20px, rgba(250, 41, 73, 0.8) 20px, rgba(250, 41, 73, 0.8) 40px);\n    font-weight: 400 !important;\n    letter-spacing: normal;\n    text-transform: none;\n    cursor: pointer;\n    color: black;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    z-index: 100000000;\n    border: 2px solid #FA2949; }\n\n.sfsF1cZi.sfsF3fCo:hover {\n  position: relative; }\n  .sfsF1cZi.sfsF3fCo:hover:after {\n    content: '';\n    position: absolute;\n    left: 0;\n    top: 0;\n    bottom: 0;\n    right: 0;\n    background: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9) 20px, rgba(255, 255, 255, 0.8) 20px, rgba(255, 255, 255, 0.8) 40px);\n    font-weight: 400 !important;\n    letter-spacing: normal;\n    text-transform: none;\n    cursor: pointer;\n    color: black;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    z-index: 100000000;\n    border: 2px solid white; }\n", ""]);
+exports.push([module.i, ".s3mT1cZi:hover {\n  position: relative; }\n  .s3mT1cZi:hover:after {\n    content: '';\n    position: absolute;\n    left: 0;\n    top: 0;\n    bottom: 0;\n    right: 0;\n    background: repeating-linear-gradient(45deg, rgba(250, 41, 73, 0.9), rgba(250, 41, 73, 0.9) 20px, rgba(250, 41, 73, 0.8) 20px, rgba(250, 41, 73, 0.8) 40px);\n    font-weight: 400 !important;\n    letter-spacing: normal;\n    text-transform: none;\n    cursor: pointer;\n    color: black;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    z-index: 100000000;\n    border: 2px solid #FA2949; }\n\n.s3mT1cZi.s3mT3fCo:hover {\n  position: relative; }\n  .s3mT1cZi.s3mT3fCo:hover:after {\n    content: '';\n    position: absolute;\n    left: 0;\n    top: 0;\n    bottom: 0;\n    right: 0;\n    background: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9) 20px, rgba(255, 255, 255, 0.8) 20px, rgba(255, 255, 255, 0.8) 40px);\n    font-weight: 400 !important;\n    letter-spacing: normal;\n    text-transform: none;\n    cursor: pointer;\n    color: black;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    z-index: 100000000;\n    border: 2px solid white; }\n", ""]);
 
 // exports
 exports.locals = {
-	"editMode": "sfsF1cZi",
-	"lightOverlay": "sfsF3fCo"
+	"editMode": "s3mT1cZi",
+	"lightOverlay": "s3mT3fCo"
 };
 
 /***/ }),
@@ -1215,12 +1215,12 @@ exports = module.exports = __webpack_require__(8)(false);
 
 
 // module
-exports.push([module.i, ".sfsFJfvR:hover {\n  position: relative; }\n  .sfsFJfvR:hover:after {\n    content: '';\n    position: absolute;\n    left: 0;\n    top: 0;\n    bottom: 0;\n    right: 0;\n    background: repeating-linear-gradient(45deg, rgba(250, 41, 73, 0.9), rgba(250, 41, 73, 0.9) 20px, rgba(250, 41, 73, 0.8) 20px, rgba(250, 41, 73, 0.8) 40px);\n    font-weight: 400 !important;\n    letter-spacing: normal;\n    text-transform: none;\n    cursor: pointer;\n    color: black;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    z-index: 100000000;\n    border: 2px solid #FA2949; }\n\n.sfsFJfvR.sfsF1fPO:hover {\n  position: relative; }\n  .sfsFJfvR.sfsF1fPO:hover:after {\n    content: '';\n    position: absolute;\n    left: 0;\n    top: 0;\n    bottom: 0;\n    right: 0;\n    background: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9) 20px, rgba(255, 255, 255, 0.8) 20px, rgba(255, 255, 255, 0.8) 40px);\n    font-weight: 400 !important;\n    letter-spacing: normal;\n    text-transform: none;\n    cursor: pointer;\n    color: black;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    z-index: 100000000;\n    border: 2px solid white; }\n", ""]);
+exports.push([module.i, ".s3mTJfvR:hover {\n  position: relative; }\n  .s3mTJfvR:hover:after {\n    content: '';\n    position: absolute;\n    left: 0;\n    top: 0;\n    bottom: 0;\n    right: 0;\n    background: repeating-linear-gradient(45deg, rgba(250, 41, 73, 0.9), rgba(250, 41, 73, 0.9) 20px, rgba(250, 41, 73, 0.8) 20px, rgba(250, 41, 73, 0.8) 40px);\n    font-weight: 400 !important;\n    letter-spacing: normal;\n    text-transform: none;\n    cursor: pointer;\n    color: black;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    z-index: 100000000;\n    border: 2px solid #FA2949; }\n\n.s3mTJfvR.s3mT1fPO:hover {\n  position: relative; }\n  .s3mTJfvR.s3mT1fPO:hover:after {\n    content: '';\n    position: absolute;\n    left: 0;\n    top: 0;\n    bottom: 0;\n    right: 0;\n    background: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9) 20px, rgba(255, 255, 255, 0.8) 20px, rgba(255, 255, 255, 0.8) 40px);\n    font-weight: 400 !important;\n    letter-spacing: normal;\n    text-transform: none;\n    cursor: pointer;\n    color: black;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    z-index: 100000000;\n    border: 2px solid white; }\n", ""]);
 
 // exports
 exports.locals = {
-	"editMode": "sfsFJfvR",
-	"lightOverlay": "sfsF1fPO"
+	"editMode": "s3mTJfvR",
+	"lightOverlay": "s3mT1fPO"
 };
 
 /***/ }),
@@ -1239,7 +1239,7 @@ var external_prop_types_ = __webpack_require__(0);
 var external_prop_types_default = /*#__PURE__*/__webpack_require__.n(external_prop_types_);
 
 // EXTERNAL MODULE: external "mobx-react"
-var external_mobx_react_ = __webpack_require__(5);
+var external_mobx_react_ = __webpack_require__(4);
 
 // EXTERNAL MODULE: external "lodash/mapValues"
 var mapValues_ = __webpack_require__(10);
@@ -1297,7 +1297,7 @@ var path_browserify = __webpack_require__(14);
 var path_browserify_default = /*#__PURE__*/__webpack_require__.n(path_browserify);
 
 // EXTERNAL MODULE: external "firebase/app"
-var app_ = __webpack_require__(4);
+var app_ = __webpack_require__(5);
 var app_default = /*#__PURE__*/__webpack_require__.n(app_);
 
 // CONCATENATED MODULE: ./src/firestore.js
@@ -2143,8 +2143,6 @@ var provider_Provider = /** @class */ (function (_super) {
         return provider_awaiter(this, void 0, void 0, function () {
             var _a, firebaseConfig, onStoreReady, initialState, nativeFirestore;
             return provider_generator(this, function (_b) {
-                console.log('?!?!?1', app_default.a, external_mobx_);
-                app_default.a.blavaa();
                 _a = this.props, firebaseConfig = _a.firebaseConfig, onStoreReady = _a.onStoreReady, initialState = _a.initialState;
                 if (!firebaseApp) {
                     firebaseApp = app_default.a.initializeApp(firebaseConfig, FIREBASE_APP_NAME);
