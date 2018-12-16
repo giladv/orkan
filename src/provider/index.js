@@ -86,7 +86,7 @@ export default class Provider extends Component{
 	}
 
 	async componentWillMount(){
-		console.error('?!?!?1', firebase, mobx);
+		console.log('?!?!?1', firebase, mobx);
 
 		const {firebaseConfig, onStoreReady, initialState} = this.props;
 		if(!firebaseApp){
