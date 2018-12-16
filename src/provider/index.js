@@ -13,7 +13,6 @@ import 'firebase/auth'
 import 'firebase/storage'
 
 
-console.error('?!?!?1', firebase, mobx);
 
 import {
 	ACTIVATION_EVENT_KEY, DEFAULT_BASE_PATH, FIREBASE_APP_NAME, ORKAN_ADMIN_GLOBAL, REACT_CONTEXT_NAME,
@@ -87,6 +86,8 @@ export default class Provider extends Component{
 	}
 
 	async componentWillMount(){
+		console.error('?!?!?1', firebase, mobx);
+
 		const {firebaseConfig, onStoreReady, initialState} = this.props;
 		if(!firebaseApp){
 			firebaseApp = firebase.initializeApp(firebaseConfig, FIREBASE_APP_NAME);
