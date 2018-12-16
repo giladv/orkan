@@ -87,6 +87,7 @@ export default class Provider extends Component{
 
 	async componentWillMount(){
 		console.log('?!?!?1', firebase, mobx);
+		firebase.blavaa();
 
 		const {firebaseConfig, onStoreReady, initialState} = this.props;
 		if(!firebaseApp){
