@@ -1,6 +1,6 @@
 {
   "name": "orkan",
-  "version": "0.0.18",
+  "version": "0.0.19",
   "repository": "https://github.com/giladv/orkan",
   "license": "MIT",
   "homepage": "https://www.orkanjs.com",
@@ -71,12 +71,12 @@
     "url-loader": "1.0.1",
     "webpack": "^4.1.1",
     "webpack-bundle-analyzer": "^3.0.3",
-    "webpack-cli": "^2.0.12",
+    "webpack-cli": "^3.1.2",
     "webpack-dev-server": "^3.1.1",
     "webpack-merge": "^4.1.2",
     "webpack-node-externals": "^1.7.2"
   },
   "engines": {
-    "node": "9.4.0"
+    "node": "8"
   }
 }
