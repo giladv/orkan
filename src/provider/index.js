@@ -29,6 +29,7 @@ let OrkanAdmin;
 let firebaseApp;
 let firestore;
 
+export const getStore = () => firestore;
 
 @observer
 export default class Provider extends Component{
