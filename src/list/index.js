@@ -4,6 +4,7 @@ import map from 'lodash/map';
 import autobind from 'autobind-decorator';
 import {observer} from 'mobx-react';
 import classNames from 'classnames'
+import withStyles from 'isomorphic-style-loader/lib/withStyles';
 
 import inject from '../inject';
 
@@ -15,6 +16,7 @@ import {createStyle} from '../utils/style-utils';
 		value: path
 	};
 })
+@withStyles(style)
 @observer
 export default class List extends Component{
 	static propTypes = {

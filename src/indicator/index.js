@@ -1,10 +1,12 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import withStyles from 'isomorphic-style-loader/lib/withStyles';
 
 import {createStyle} from '../utils/style-utils';
 
-import style from './style.scss';
+import style from './style';
 
+@withStyles(style)
 export default class Indicator extends Component{
 	static propTypes = {
 		isBusy: PropTypes.bool,

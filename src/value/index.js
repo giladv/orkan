@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import autobind from 'autobind-decorator';
 import {observer} from 'mobx-react';
+import withStyles from 'isomorphic-style-loader/lib/withStyles';
 
 import {createStyle} from '../utils/style-utils';
 import inject from '../inject';
@@ -13,6 +14,7 @@ import style from './style';
 		value: props.path
 	};
 })
+@withStyles(style)
 @observer
 export default class Value extends Component{
 	static propTypes = {

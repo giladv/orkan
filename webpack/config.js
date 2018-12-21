@@ -38,7 +38,7 @@ module.exports = (env, argv) => {
 					test: /\.scss$/,
 					exclude: /node_modules/,
 					use: [
-						'style-loader/useable',
+						'isomorphic-style-loader',
 						{
 							loader: 'css-loader',
 							options: {
@@ -66,36 +66,6 @@ module.exports = (env, argv) => {
 		},
 		optimization: {
 			minimize: false,
-			// splitChunks: {
-			// 	cacheGroups: {
-			// 		// default: {
-			// 		// 	name: true,
-			// 		// 	chunks: 'initial',
-			// 		// 	minSize: 0
-			// 		// },
-			// 		default: {
-			// 			chunks: 'initial',
-			// 			name: (module) => {
-			// 				const pathParts = module.resource.split('/');
-			// 				const fileName = pathParts[pathParts.length-1];
-			// 				const folderName = pathParts[pathParts.length-2];
-			//
-			// 				console.log(folderName, fileName);
-			//
-			// 				if(fileName === 'index.js' || fileName === 'style.scss'){
-			// 					return folderName;
-			// 				}else{
-			// 					return fileName.split('.')[0];
-			// 				}
-			// 			},
-			// 			minChunks: 2,
-			// 			minSize: 0,
-			// 			test: /src\/(inject|firestore|utils)/,
-			// 			reuseExistingChunk: true,
-			// 			// enforce: true
-			// 		}
-			// 	}
-			// }
 		},
 
 		devtool: isDev?'cheap-module-source-map':false,
@@ -107,8 +77,6 @@ module.exports = (env, argv) => {
 			compress: true,
 			historyApiFallback: {disableDotRule: true}
 		},
-
-
 		externals: [nodeExternals()],
 	};
 }

@@ -13,17 +13,13 @@ import 'firebase/auth'
 import 'firebase/storage'
 
 
-
-import {
-	ACTIVATION_EVENT_KEY, DEFAULT_BASE_PATH, FIREBASE_APP_NAME, ORKAN_ADMIN_GLOBAL, REACT_CONTEXT_NAME,
-	SUPPORTED_AUTH_PROVIDERS,
-} from '../constants';
+import {ACTIVATION_EVENT_KEY, FIREBASE_APP_NAME, ORKAN_ADMIN_GLOBAL, REACT_CONTEXT_NAME, SUPPORTED_AUTH_PROVIDERS} from '../constants';
 import Firestore from '../firestore';
 import inject from '../inject';
-// import {keyboard} from '../utils/keyboard-utils';
-import Indicator from '../indicator/index';
+import StyleProvider from '../style-provider';
+import {Keyboard} from '../utils/keyboard-utils';
+import Indicator from '../indicator';
 
-import './style';
 
 let OrkanAdmin;
 let firebaseApp;
@@ -104,15 +100,25 @@ export default class Provider extends Component{
 	}
 
 	async componentDidMount(){
-		const {firebaseConfig, adminConfig, onStoreReady, firebase} = this.props;
+		const {adminConfig} = this.props;
 
-		// adminConfig && keyboard.bind('hold:1000:' + ACTIVATION_EVENT_KEY, this.activateAdmin);
+		const keyboard = new Keyboard(document);
+
+		adminConfig && keyboard.onKeyHold(ACTIVATION_EVENT_KEY, 1000, this.activateAdmin);
+		keyboard.onKeyDown('meta', this.handleEditKeyDown);
+		keyboard.onKeyUp('meta', this.handleEditKeyUp);
+
+		// does not fire with normal api
+		document.body.onblur = this.handleBlur;
+
+
+		// adminConfig && this.keyboard.bind('hold:1000:' + ACTIVATION_EVENT_KEY, this.activateAdmin);
+
+		// console.log(keyboard)
 
 		// document.addEventListener('keydown', this.handleKeyDown);
 		// document.addEventListener('keyup', this.handleKeyUp);
 
-		// does not fire with normal api
-		// document.body.onblur = this.handleBlur;
 	}
 
 	guestLogin(){
@@ -132,6 +138,7 @@ export default class Provider extends Component{
 
 	@autobind
 	async activateAdmin(){
+		console.log('activate')
 		if(this.obState.isActive){
 			return;
 		}
@@ -189,17 +196,13 @@ export default class Provider extends Component{
 
 
 	@autobind
-	handleKeyDown(e){
-		if(e.key === 'Meta'){
-			this.obState.isModifierKeyDown = true;
-		}
+	handleEditKeyDown(e){
+		this.obState.isModifierKeyDown = true;
 	}
 
 	@autobind
-	handleKeyUp(e){
-		if(e.key === 'Meta'){
-			this.obState.isModifierKeyDown = false;
-		}
+	handleEditKeyUp(e){
+		this.obState.isModifierKeyDown = false;
 	}
 
 	render() {
@@ -208,8 +211,13 @@ export default class Provider extends Component{
 
 		return [
 			children,
-			(isActive || isBusy) && ReactDOM.createPortal(<Indicator color={adminConfig.color} isBusy={isBusy || (this.adminStore && this.adminStore.isInitializing)} />, document.body),
+			(isActive || isBusy) && ReactDOM.createPortal(
+				<StyleProvider>
+					<Indicator color={adminConfig.color} isBusy={isBusy || (this.adminStore && this.adminStore.isInitializing)} />
+				</StyleProvider>
+			, document.body),
 			isActive && ReactDOM.createPortal(<OrkanAdmin config={adminConfig} dataStore={firestore} onStoreReady={this.handleStoreReady} />, document.body)
 		];
 	}
 }
+

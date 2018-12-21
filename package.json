@@ -27,8 +27,8 @@
   "dependencies": {
     "autobind-decorator": "^1.4.3",
     "classnames": "^2.2.5",
-    "humaninput": "^1.1.15",
     "invariant": "^2.2.4",
+    "is-hotkey": "^0.1.4",
     "lodash": "^4.17.5",
     "observable-nested-map": "https://github.com/giladv/observable-nested-map.git",
     "parse-prop-types": "^0.3.0",
@@ -54,6 +54,7 @@
     "firebase": "5.0.0",
     "firebase-admin": "^6.1.0",
     "history": "^4.7.2",
+    "isomorphic-style-loader": "^4.0.0",
     "jest": "^23.6.0",
     "loader-utils": "^1.1.0",
     "mobx": "^4.6.0",
