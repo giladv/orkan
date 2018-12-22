@@ -13,12 +13,12 @@ import 'firebase/auth'
 import 'firebase/storage'
 
 
-import {ACTIVATION_EVENT_KEY, FIREBASE_APP_NAME, ORKAN_ADMIN_GLOBAL, REACT_CONTEXT_NAME, SUPPORTED_AUTH_PROVIDERS} from '../constants';
-import Firestore from '../firestore';
-import inject from '../inject';
-import StyleProvider from '../style-provider';
-import {Keyboard} from '../utils/keyboard-utils';
-import Indicator from '../indicator';
+import {ACTIVATION_EVENT_KEY, FIREBASE_APP_NAME, ORKAN_ADMIN_GLOBAL, SUPPORTED_AUTH_PROVIDERS} from '../../constants';
+import Firestore from '../../firestore';
+import inject from '../../inject';
+import StyleProvider from '../../style-provider';
+import {Keyboard} from '../../utils/keyboard-utils';
+import Indicator from '../indicator/index';
 
 
 let OrkanAdmin;
@@ -27,15 +27,25 @@ let firestore;
 
 export const getStore = () => firestore;
 
+/**
+ * The root of every Orkan app, provides a react contextual api to every other orkan component in the tree.
+*/
 @observer
 export default class Provider extends Component{
 
 	static propTypes = {
+		/**
+		 * a configuration object for the admin interface, leaving it undefined will disable the admin entirely.
+		 * supported auth providers: 'google', 'facebook', 'github'.
+		 */
 		adminConfig: PropTypes.shape({
 			color: PropTypes.oneOf(['default', 'dark']),
 			authProviders: PropTypes.arrayOf(PropTypes.oneOf(SUPPORTED_AUTH_PROVIDERS)),
 			allowGuests: PropTypes.bool
 		}),
+		/**
+		 * Firebase config object copied from the Firebase console.
+		 */
 		firebaseConfig: PropTypes.shape({
 			apiKey: PropTypes.string,
 			authDomain: PropTypes.string,
@@ -50,11 +60,7 @@ export default class Provider extends Component{
 	};
 
 	static childContextTypes = {
-		[REACT_CONTEXT_NAME]: PropTypes.object
-	};
-
-	static contextTypes = {
-		[REACT_CONTEXT_NAME]: PropTypes.object
+		OrkanContext: PropTypes.object
 	};
 
 	@observable.shallow obState = {
@@ -67,7 +73,7 @@ export default class Provider extends Component{
 
 	getChildContext() {
 
-		return {[REACT_CONTEXT_NAME]: {
+		return {OrkanContext: {
 			activateAdmin: () => this.activateAdmin(),
 			store: firestore,
 			getLiveValue: (...args) => !!this.adminStore && !!this.adminStore.isAdmin && this.adminStore.getLiveValue(...args),
@@ -134,7 +140,6 @@ export default class Provider extends Component{
 
 	@autobind
 	async activateAdmin(){
-		console.log('activate')
 		if(this.obState.isActive){
 			return;
 		}

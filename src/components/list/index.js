@@ -6,11 +6,15 @@ import {observer} from 'mobx-react';
 import classNames from 'classnames'
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 
-import inject from '../inject';
+import inject from '../../inject';
 
 import style from './style';
-import {createStyle} from '../utils/style-utils';
+import {createStyle} from '../../utils/style-utils';
 
+
+/**
+ * A component for rendering lists. expects a path and a render function. the render function receives the collection item as an argument.
+ */
 @inject(({path}) => {
 	return {
 		value: path
@@ -20,8 +24,17 @@ import {createStyle} from '../utils/style-utils';
 @observer
 export default class List extends Component{
 	static propTypes = {
+		/**
+		 * the path of the data in the database.
+		 */
 		path: PropTypes.string.isRequired,
+		/**
+		 * will be called when the data is available, expects it to return a renderable value. (collectionItem) => ReactNode
+		 */
 		renderItem: PropTypes.func,
+		/**
+		 * will render the edit overlay in alternate colors to support different color schemes.
+		 */
 		lightOverlay: PropTypes.bool,
 	};
 

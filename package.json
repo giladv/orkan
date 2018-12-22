@@ -10,7 +10,8 @@
     "builddeploy": "yarn run build && yarn run deploy",
     "deploy": "yarn publish",
     "dev": "webpack --mode development --config webpack/config.js --watch",
-    "build": "webpack --mode production --config webpack/config.js"
+    "build": "webpack --mode production --config webpack/config.js",
+    "generate-docs": "react-docgen src/components --out dist/docs.json --pretty --ignore indicator --ignore _tests --legacy-decorators"
   },
   "files": [
     "dist",
@@ -63,6 +64,7 @@
     "mock-cloud-firestore": "^0.8.2",
     "node-sass": "^4.7.2",
     "react": "^16.6.3",
+    "react-docgen": "^3.0.0-rc.2",
     "react-dom": "^16.6.3",
     "regenerator-runtime": "^0.12.1",
     "sass-loader": "^6.0.7",

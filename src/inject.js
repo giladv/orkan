@@ -6,7 +6,6 @@ import values from 'lodash/values';
 import omitBy from 'lodash/omitBy';
 import shallowCompare from 'react-addons-shallow-compare';
 
-import {REACT_CONTEXT_NAME} from './constants';
 import {serializeQuery} from './firestore';
 
 const isNode = new Function("try {return this===global;}catch(e){return false;}");
@@ -23,7 +22,7 @@ export default function inject(mapPropsToPaths = () => ({}), config) {
 				...(DecoratedComponent.propTypes || {})
 			};
 			static contextTypes = {
-				[REACT_CONTEXT_NAME]: PropTypes.object
+				OrkanContext: PropTypes.object
 			};
 
 			static decoratedComponent = DecoratedComponent;
@@ -52,7 +51,7 @@ export default function inject(mapPropsToPaths = () => ({}), config) {
 			}
 
 			getContext() {
-				return this.context[REACT_CONTEXT_NAME];
+				return this.context.OrkanContext;
 			}
 
 			disposeAllListeners(){
