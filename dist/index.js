@@ -2187,9 +2187,9 @@ var Provider = /** @class */ (function (_super) {
     };
     Provider.prototype.componentWillMount = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, firebaseConfig, onStoreReady, initialState, nativeFirestore;
+            var _a, firebaseConfig, initialState, nativeFirestore;
             return __generator(this, function (_b) {
-                _a = this.props, firebaseConfig = _a.firebaseConfig, onStoreReady = _a.onStoreReady, initialState = _a.initialState;
+                _a = this.props, firebaseConfig = _a.firebaseConfig, initialState = _a.initialState;
                 if (!firebaseApp) {
                     firebaseApp = firebase_app__WEBPACK_IMPORTED_MODULE_7___default.a.initializeApp(firebaseConfig, _constants__WEBPACK_IMPORTED_MODULE_11__["FIREBASE_APP_NAME"]);
                     nativeFirestore = firebase_app__WEBPACK_IMPORTED_MODULE_7___default.a.firestore(firebaseApp);
@@ -2200,7 +2200,6 @@ var Provider = /** @class */ (function (_super) {
                         QueryDocumentSnapshot: firebase_app__WEBPACK_IMPORTED_MODULE_7___default.a.firestore.QueryDocumentSnapshot
                     });
                 }
-                onStoreReady(firestore);
                 return [2 /*return*/];
             });
         });
@@ -2332,7 +2331,6 @@ var Provider = /** @class */ (function (_super) {
     };
     var Provider_1;
     Provider.propTypes = {
-        onStoreReady: prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.func,
         adminConfig: prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.shape({
             color: prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.oneOf(['default', 'dark']),
             authProviders: prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.arrayOf(prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.oneOf(_constants__WEBPACK_IMPORTED_MODULE_11__["SUPPORTED_AUTH_PROVIDERS"])),
@@ -2347,9 +2345,7 @@ var Provider = /** @class */ (function (_super) {
             messagingSenderId: prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.string
         }).isRequired,
     };
-    Provider.defaultProps = {
-        onStoreReady: function () { return null; }
-    };
+    Provider.defaultProps = {};
     Provider.childContextTypes = (_a = {},
         _a[_constants__WEBPACK_IMPORTED_MODULE_11__["REACT_CONTEXT_NAME"]] = prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.object,
         _a);

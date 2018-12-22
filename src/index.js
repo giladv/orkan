@@ -1,4 +1,3 @@
-
 import inject from './inject';
 import Provider, {getStore} from './provider';
 import Value from './value';

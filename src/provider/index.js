@@ -31,7 +31,6 @@ export const getStore = () => firestore;
 export default class Provider extends Component{
 
 	static propTypes = {
-		onStoreReady: PropTypes.func,
 		adminConfig: PropTypes.shape({
 			color: PropTypes.oneOf(['default', 'dark']),
 			authProviders: PropTypes.arrayOf(PropTypes.oneOf(SUPPORTED_AUTH_PROVIDERS)),
@@ -48,7 +47,6 @@ export default class Provider extends Component{
 	};
 
 	static defaultProps = {
-		onStoreReady: () => null
 	};
 
 	static childContextTypes = {
@@ -83,7 +81,7 @@ export default class Provider extends Component{
 	}
 
 	async componentWillMount(){
-		const {firebaseConfig, onStoreReady, initialState} = this.props;
+		const {firebaseConfig, initialState} = this.props;
 		if(!firebaseApp){
 			firebaseApp = firebase.initializeApp(firebaseConfig, FIREBASE_APP_NAME);
 			const nativeFirestore = firebase.firestore(firebaseApp);
@@ -95,8 +93,6 @@ export default class Provider extends Component{
 			});
 
 		}
-
-		onStoreReady(firestore);
 	}
 
 	async componentDidMount(){
