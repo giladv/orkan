@@ -27,6 +27,7 @@ export default function inject(mapPropsToPaths = () => ({}), config) {
 			static propTypes = {
 				...(DecoratedComponent.propTypes || {})
 			};
+
 			static contextTypes = {
 				OrkanContext: PropTypes.object
 			};
@@ -131,21 +132,6 @@ export default function inject(mapPropsToPaths = () => ({}), config) {
 		return injector;
 	}
 }
-
-// for documentation purposes only
-inject.propTypes = {
-	mapPropsToPaths: PropTypes.func,
-	options: PropTypes.shape({
-		liveEditedData: PropTypes.bool
-	})
-};
-
-inject.defaultProps = {
-	options: {
-		liveEditedData: true
-	}
-};
-
 
 const parseQuery = query => {
 	if(typeof query === 'string'){

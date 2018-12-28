@@ -187,7 +187,7 @@ export default class Firestore{
 	}
 
 	/**
-	 * synchronously returns an observable value from the local cache.
+	 * Synchronously returns an observable value from the local cache.
 	 * @param {string} path - the path of the data in the database
 	 * @param {object} [options] - an options object which accepts where, orderBy, limit
 	 * @returns {any}
@@ -218,7 +218,7 @@ export default class Firestore{
 	}
 
 	/**
-	 * writes into a path and updates local cache.
+	 * Writes into a path and updates local cache.
 	 * if the path is a collection path, a document with an auto generated id will be pushed
 	 * @param {string} path - the path of the data in the database
 	 * @param {any} value - the new value to write
@@ -263,7 +263,7 @@ export default class Firestore{
 
 
 	/**
-	 * register a path to listen to, updates will update th local cache automatically
+	 * Register a path to listen to, updates will update th local cache automatically
 	 * @param {string} path - the path of the data in the database
 	 * @param {object} [options] - an options object which accepts where, orderBy, limit
 	 * @returns {function} a destroy function for the listener
@@ -305,7 +305,7 @@ export default class Firestore{
 	}
 
 	/**
-	 * loads a value once from the database and update the local cache
+	 * Loads a value once from the database and update the local cache
 	 * @param {string} path - the path of the data in the database
 	 * @param {object} [options] - an options object which accepts where, orderBy, limit
 	 * @returns {promise} when resolved, will contain the loaded value
@@ -363,7 +363,7 @@ export default class Firestore{
 
 
 	/**
-	 * removes a path from the database and local cache
+	 * Removes a path from the database and local cache
 	 * @param {string} path - the path of the data in the database
 	 * @returns {promise}
 	 * */
