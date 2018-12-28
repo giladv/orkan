@@ -9,7 +9,13 @@ import shallowCompare from 'react-addons-shallow-compare';
 import {serializeQuery} from './firestore';
 
 const isNode = new Function("try {return this===global;}catch(e){return false;}");
-
+/**
+ * A react component decorator, returns a new component with the requested data injected as props
+ * @param {function} [mapPropsToPaths]  - a function which receives the props as arguments and returns an object of required resources to load.
+ * ```props => ({injectAs: pathStr | {path, [where], [orderBy], ..} }```
+ * @param {object} [config] - a config object. supports: liveEditedData[bool]
+ * @returns {ReactComponent} a new higher order component
+ * */
 export default function inject(mapPropsToPaths = () => ({}), config) {
 	const options = {
 		liveEditedData: true,

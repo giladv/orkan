@@ -134,6 +134,18 @@ const isCollectionPath = path => path.split('/').length === 1;
 	store.remove('posts/1234') => will remove posts/1234
 	store.remove('objects/home') => will remove objects/home
 */
+
+/** @module */
+
+
+
+
+/**
+ * A thin observable wrapper around Firestore's SDK
+ * @param {firebae.firestore} api - A Firebase SDK Firestore instance
+ * @param {object} [initialState] - the initial state of the store, perfect for server rendering hydration process
+ * @param {object} [options] - an options object which accepts DocumentSnapshot, QuerySnapshot and QueryDocumentSnapshot
+ * */
 export default class Firestore{
 	static toDotPath = toDotPath;
 	static breakPath = breakPath;
@@ -147,7 +159,7 @@ export default class Firestore{
 	listeners = observable.map({});
 	collections = observable.map({});
 
-	config = {
+	options = {
 		DocumentSnapshot: firebase.firestore.DocumentSnapshot,
 		QuerySnapshot: firebase.firestore.QuerySnapshot,
 		QueryDocumentSnapshot: firebase.firestore.QueryDocumentSnapshot
@@ -161,12 +173,10 @@ export default class Firestore{
 		this.pathsStatus.merge(initialState.pathsStatus);
 		this.listeners.merge(initialState.listeners);
 
-		this.config = {
-			...this.config,
+		this.options = {
+			...this.options,
 			...options
 		};
-
-		// window.a = () => console.log(this.map.toJS(), toJS(this.collections), toJS(this.listeners), toJS(this.pathsStatus))
 	}
 
 	getBusyPromise(){
@@ -176,6 +186,12 @@ export default class Firestore{
 		}
 	}
 
+	/**
+	 * synchronously returns an observable value from the local cache.
+	 * @param {string} path - the path of the data in the database
+	 * @param {object} [options] - an options object which accepts where, orderBy, limit
+	 * @returns {any}
+	 * */
 	getValue(path, options){
 		validPathInvariant(path);
 		validQueryInvariant(path, options);
@@ -201,6 +217,13 @@ export default class Firestore{
 		}
 	}
 
+	/**
+	 * writes into a path and updates local cache.
+	 * if the path is a collection path, a document with an auto generated id will be pushed
+	 * @param {string} path - the path of the data in the database
+	 * @param {any} value - the new value to write
+	 * @returns {promise}
+	 * */
 	async setValue(path, value){
 		validPathInvariant(path);
 		settablePathInvariant(path);
@@ -239,6 +262,12 @@ export default class Firestore{
 	}
 
 
+	/**
+	 * register a path to listen to, updates will update th local cache automatically
+	 * @param {string} path - the path of the data in the database
+	 * @param {object} [options] - an options object which accepts where, orderBy, limit
+	 * @returns {function} a destroy function for the listener
+	 * */
 	listen(path, options){
 		validPathInvariant(path);
 		const serializedQuery = serializeQuery(path, options, true);
@@ -275,7 +304,12 @@ export default class Firestore{
 		}
 	}
 
-
+	/**
+	 * loads a value once from the database and update the local cache
+	 * @param {string} path - the path of the data in the database
+	 * @param {object} [options] - an options object which accepts where, orderBy, limit
+	 * @returns {promise} when resolved, will contain the loaded value
+	 * */
 	@action async load(path, options){
 		validPathInvariant(path);
 		const serializedQuery = serializeQuery(path, options);
@@ -328,7 +362,11 @@ export default class Firestore{
 	}
 
 
-
+	/**
+	 * removes a path from the database and local cache
+	 * @param {string} path - the path of the data in the database
+	 * @returns {promise}
+	 * */
 	remove(path){
 		validPathInvariant(path);
 		settablePathInvariant(path);
@@ -403,11 +441,11 @@ export default class Firestore{
 	}
 
 	isDocumentSnapshot(snapshot){
-		return snapshot instanceof this.config.DocumentSnapshot || snapshot instanceof this.config.QueryDocumentSnapshot;
+		return snapshot instanceof this.options.DocumentSnapshot || snapshot instanceof this.options.QueryDocumentSnapshot;
 	}
 
 	isCollectionSnapshot(snapshot){
-		return snapshot instanceof this.config.QuerySnapshot;
+		return snapshot instanceof this.options.QuerySnapshot;
 	}
 
 	toJS(){

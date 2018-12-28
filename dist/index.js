@@ -2201,6 +2201,13 @@ var isCollectionPath = function (path) { return path.split('/').length === 1; };
     store.remove('posts/1234') => will remove posts/1234
     store.remove('objects/home') => will remove objects/home
 */
+/** @module */
+/**
+ * A thin observable wrapper around Firestore's SDK
+ * @param {firebae.firestore} api - A Firebase SDK Firestore instance
+ * @param {object} [initialState] - the initial state of the store, perfect for server rendering hydration process
+ * @param {object} [options] - an options object which accepts DocumentSnapshot, QuerySnapshot and QueryDocumentSnapshot
+ * */
 var Firestore = /** @class */ (function () {
     function Firestore(api, initialState, options) {
         if (initialState === void 0) { initialState = {}; }
@@ -2209,7 +2216,7 @@ var Firestore = /** @class */ (function () {
         this.pathsStatus = mobx__WEBPACK_IMPORTED_MODULE_4__["observable"].map({});
         this.listeners = mobx__WEBPACK_IMPORTED_MODULE_4__["observable"].map({});
         this.collections = mobx__WEBPACK_IMPORTED_MODULE_4__["observable"].map({});
-        this.config = {
+        this.options = {
             DocumentSnapshot: firebase_app__WEBPACK_IMPORTED_MODULE_7___default.a.firestore.DocumentSnapshot,
             QuerySnapshot: firebase_app__WEBPACK_IMPORTED_MODULE_7___default.a.firestore.QuerySnapshot,
             QueryDocumentSnapshot: firebase_app__WEBPACK_IMPORTED_MODULE_7___default.a.firestore.QueryDocumentSnapshot
@@ -2219,8 +2226,7 @@ var Firestore = /** @class */ (function () {
         this.collections.merge(initialState.collections);
         this.pathsStatus.merge(initialState.pathsStatus);
         this.listeners.merge(initialState.listeners);
-        this.config = __assign({}, this.config, options);
-        // window.a = () => console.log(this.map.toJS(), toJS(this.collections), toJS(this.listeners), toJS(this.pathsStatus))
+        this.options = __assign({}, this.options, options);
     }
     Firestore.prototype.getBusyPromise = function () {
         var _this = this;
@@ -2229,6 +2235,12 @@ var Firestore = /** @class */ (function () {
             return Object(mobx__WEBPACK_IMPORTED_MODULE_4__["when"])(function () { return !isBusy(); });
         }
     };
+    /**
+     * synchronously returns an observable value from the local cache.
+     * @param {string} path - the path of the data in the database
+     * @param {object} [options] - an options object which accepts where, orderBy, limit
+     * @returns {any}
+     * */
     Firestore.prototype.getValue = function (path, options) {
         var _this = this;
         validPathInvariant(path);
@@ -2253,6 +2265,13 @@ var Firestore = /** @class */ (function () {
             return Object(mobx__WEBPACK_IMPORTED_MODULE_4__["isObservable"])(value) ? Object(mobx__WEBPACK_IMPORTED_MODULE_4__["toJS"])(value) : value;
         }
     };
+    /**
+     * writes into a path and updates local cache.
+     * if the path is a collection path, a document with an auto generated id will be pushed
+     * @param {string} path - the path of the data in the database
+     * @param {any} value - the new value to write
+     * @returns {promise}
+     * */
     Firestore.prototype.setValue = function (path, value) {
         return __awaiter(this, void 0, void 0, function () {
             var sanitizedValue, query, action;
@@ -2290,6 +2309,12 @@ var Firestore = /** @class */ (function () {
     Firestore.prototype.removeCollection = function (serializedQuery) {
         this.collections.delete(serializedQuery);
     };
+    /**
+     * register a path to listen to, updates will update th local cache automatically
+     * @param {string} path - the path of the data in the database
+     * @param {object} [options] - an options object which accepts where, orderBy, limit
+     * @returns {function} a destroy function for the listener
+     * */
     Firestore.prototype.listen = function (path, options) {
         var _this = this;
         validPathInvariant(path);
@@ -2321,6 +2346,12 @@ var Firestore = /** @class */ (function () {
             }
         };
     };
+    /**
+     * loads a value once from the database and update the local cache
+     * @param {string} path - the path of the data in the database
+     * @param {object} [options] - an options object which accepts where, orderBy, limit
+     * @returns {promise} when resolved, will contain the loaded value
+     * */
     Firestore.prototype.load = function (path, options) {
         return __awaiter(this, void 0, void 0, function () {
             var serializedQuery, query, snapshot;
@@ -2379,6 +2410,11 @@ var Firestore = /** @class */ (function () {
             });
         }
     };
+    /**
+     * removes a path from the database and local cache
+     * @param {string} path - the path of the data in the database
+     * @returns {promise}
+     * */
     Firestore.prototype.remove = function (path) {
         validPathInvariant(path);
         settablePathInvariant(path);
@@ -2439,10 +2475,10 @@ var Firestore = /** @class */ (function () {
         return this.api.collection(path).doc().id;
     };
     Firestore.prototype.isDocumentSnapshot = function (snapshot) {
-        return snapshot instanceof this.config.DocumentSnapshot || snapshot instanceof this.config.QueryDocumentSnapshot;
+        return snapshot instanceof this.options.DocumentSnapshot || snapshot instanceof this.options.QueryDocumentSnapshot;
     };
     Firestore.prototype.isCollectionSnapshot = function (snapshot) {
-        return snapshot instanceof this.config.QuerySnapshot;
+        return snapshot instanceof this.options.QuerySnapshot;
     };
     Firestore.prototype.toJS = function () {
         return {
@@ -2597,6 +2633,13 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 
 
 var isNode = new Function("try {return this===global;}catch(e){return false;}");
+/**
+ * A react component decorator, returns a new component with the requested data injected as props
+ * @param {function} [mapPropsToPaths]  - a function which receives the props as arguments and returns an object of required resources to load.
+ * ```props => ({injectAs: pathStr | {path, [where], [orderBy], ..} }```
+ * @param {object} [config] - a config object. supports: liveEditedData[bool]
+ * @returns {ReactComponent} a new higher order component
+ * */
 function inject(mapPropsToPaths, config) {
     if (mapPropsToPaths === void 0) { mapPropsToPaths = function () { return ({}); }; }
     var options = __assign({ liveEditedData: true }, config);

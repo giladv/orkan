@@ -7,11 +7,11 @@
   "private": false,
   "scripts": {
     "test": "jest",
-    "builddeploy": "yarn run build && yarn run deploy",
+    "build-deploy": "yarn run build && yarn run deploy",
     "deploy": "yarn publish",
     "dev": "webpack --mode development --config webpack/config.js --watch",
     "build": "webpack --mode production --config webpack/config.js",
-    "generate-docs": "react-docgen src/components --out dist/docs.json --pretty --ignore indicator --ignore _tests --legacy-decorators"
+    "generate-api": "node ./scripts/generate-api-json"
   },
   "files": [
     "dist",
@@ -51,6 +51,7 @@
     "babel-preset-stage-0": "^6.24.1",
     "copy-webpack-plugin": "^4.3.1",
     "css-loader": "^0.28.1",
+    "documentation": "^9.1.1",
     "file-loader": "1.1.11",
     "firebase": "5.0.0",
     "firebase-admin": "^6.1.0",
