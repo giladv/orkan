@@ -51,7 +51,7 @@ jest.setTimeout(10000);
 const firestoreInst = firebase.firestore(firebaseApp);
 firestoreInst.settings({timestampsInSnapshots: true});
 
-const createFirestore = () => new Firestore(firestoreInst, {
+const createFirestore = () => new Firestore(firestoreInst, {}, {
 	DocumentSnapshot: firebase.firestore.DocumentSnapshot,
 	QuerySnapshot: firebase.firestore.QuerySnapshot,
 	QueryDocumentSnapshot: firebase.firestore.QueryDocumentSnapshot
@@ -181,6 +181,8 @@ test('reading and listening to collections with `limit`', async () => {
 test('removing', async () => {
 	await firestoreInst.doc('test/doc1').set(doc1);
 	await firestoreInst.doc('test/doc2').set(doc2);
+	expect(await firestore.load('test/doc1')).toEqual(doc1);
+	expect(await firestore.load('test/doc2')).toEqual(doc2);
 
 	await firestore.remove('test/doc1');
 	expect(await firestore.load('test/doc1')).toBe(undefined);

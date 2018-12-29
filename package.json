@@ -1,16 +1,17 @@
 {
   "name": "orkan",
-  "version": "0.0.18",
+  "version": "0.0.22",
   "repository": "https://github.com/giladv/orkan",
   "license": "MIT",
   "homepage": "https://www.orkanjs.com",
   "private": false,
   "scripts": {
     "test": "jest",
-    "builddeploy": "yarn run build && yarn run deploy",
+    "build-deploy": "yarn run build && yarn run deploy",
     "deploy": "yarn publish",
-    "dev": "webpack-dev-server --mode development --config webpack/config.js",
-    "build": "webpack --mode production --config webpack/config.js"
+    "dev": "webpack --mode development --config webpack/config.js --watch",
+    "build": "webpack --mode production --config webpack/config.js",
+    "generate-api": "node ./scripts/generate-api-json"
   },
   "files": [
     "dist",
@@ -27,8 +28,8 @@
   "dependencies": {
     "autobind-decorator": "^1.4.3",
     "classnames": "^2.2.5",
-    "humaninput": "^1.1.15",
     "invariant": "^2.2.4",
+    "is-hotkey": "^0.1.4",
     "lodash": "^4.17.5",
     "observable-nested-map": "https://github.com/giladv/observable-nested-map.git",
     "parse-prop-types": "^0.3.0",
@@ -50,10 +51,12 @@
     "babel-preset-stage-0": "^6.24.1",
     "copy-webpack-plugin": "^4.3.1",
     "css-loader": "^0.28.1",
+    "documentation": "^9.1.1",
     "file-loader": "1.1.11",
     "firebase": "5.0.0",
     "firebase-admin": "^6.1.0",
     "history": "^4.7.2",
+    "isomorphic-style-loader": "^4.0.0",
     "jest": "^23.6.0",
     "loader-utils": "^1.1.0",
     "mobx": "^4.6.0",
@@ -62,6 +65,7 @@
     "mock-cloud-firestore": "^0.8.2",
     "node-sass": "^4.7.2",
     "react": "^16.6.3",
+    "react-docgen": "^3.0.0-rc.2",
     "react-dom": "^16.6.3",
     "regenerator-runtime": "^0.12.1",
     "sass-loader": "^6.0.7",
@@ -71,9 +75,12 @@
     "url-loader": "1.0.1",
     "webpack": "^4.1.1",
     "webpack-bundle-analyzer": "^3.0.3",
-    "webpack-cli": "^2.0.12",
+    "webpack-cli": "^3.1.2",
     "webpack-dev-server": "^3.1.1",
     "webpack-merge": "^4.1.2",
     "webpack-node-externals": "^1.7.2"
+  },
+  "engines": {
+    "node": "8"
   }
 }

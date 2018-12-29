@@ -1,10 +1,11 @@
-import firebase from 'firebase/app';
 import invariant from 'invariant';
 import omitBy from 'lodash/omitBy';
 import forEach from 'lodash/forEach';
-import {observable, isObservable, toJS, action} from 'mobx';
+import find from 'lodash/find';
+import {observable, isObservable, toJS, action, when} from 'mobx';
 import ObservableNestedMap from 'observable-nested-map';
 import nodePath from 'path';
+import firebase from 'firebase/app';
 
 const validPathInvariant = path => {
 	invariant(!!path.length, 'Invalid path, expected a non empty string');
@@ -133,6 +134,18 @@ const isCollectionPath = path => path.split('/').length === 1;
 	store.remove('posts/1234') => will remove posts/1234
 	store.remove('objects/home') => will remove objects/home
 */
+
+/** @module */
+
+
+
+
+/**
+ * A thin observable wrapper around Firestore's SDK
+ * @param {firebae.firestore} api - A Firebase SDK Firestore instance
+ * @param {object} [initialState] - the initial state of the store, perfect for server rendering hydration process
+ * @param {object} [options] - an options object which accepts DocumentSnapshot, QuerySnapshot and QueryDocumentSnapshot
+ * */
 export default class Firestore{
 	static toDotPath = toDotPath;
 	static breakPath = breakPath;
@@ -146,22 +159,39 @@ export default class Firestore{
 	listeners = observable.map({});
 	collections = observable.map({});
 
-	config = {
+	options = {
 		DocumentSnapshot: firebase.firestore.DocumentSnapshot,
 		QuerySnapshot: firebase.firestore.QuerySnapshot,
-		QueryDocumentSnapshot: firebase.firestore.QueryDocumentSnapshot,
+		QueryDocumentSnapshot: firebase.firestore.QueryDocumentSnapshot
 	};
 
-	constructor(api, options = {}){
+	constructor(api, initialState = {}, options = {}){
 		this.api = api;
-		this.config = {
-			...this.config,
+
+		this.map.merge(initialState.map);
+		this.collections.merge(initialState.collections);
+		this.pathsStatus.merge(initialState.pathsStatus);
+		this.listeners.merge(initialState.listeners);
+
+		this.options = {
+			...this.options,
 			...options
 		};
-
-		window.a = () => console.log(this.map.toJS(), toJS(this.collections), toJS(this.listeners), toJS(this.pathsStatus))
 	}
 
+	getBusyPromise(){
+		const isBusy = () => !!find(toJS(this.pathsStatus), path => path.isLoading);
+		if(isBusy()){
+			return when(() => !isBusy());
+		}
+	}
+
+	/**
+	 * Synchronously returns an observable value from the local cache.
+	 * @param {string} path - the path of the data in the database
+	 * @param {object} [options] - an options object which accepts where, orderBy, limit
+	 * @returns {any}
+	 * */
 	getValue(path, options){
 		validPathInvariant(path);
 		validQueryInvariant(path, options);
@@ -187,6 +217,13 @@ export default class Firestore{
 		}
 	}
 
+	/**
+	 * Writes into a path and updates local cache.
+	 * if the path is a collection path, a document with an auto generated id will be pushed
+	 * @param {string} path - the path of the data in the database
+	 * @param {any} value - the new value to write
+	 * @returns {promise}
+	 * */
 	async setValue(path, value){
 		validPathInvariant(path);
 		settablePathInvariant(path);
@@ -220,8 +257,17 @@ export default class Firestore{
 		collection.remove(key);
 	}
 
+	@action removeCollection(serializedQuery){
+		this.collections.delete(serializedQuery);
+	}
 
 
+	/**
+	 * Register a path to listen to, updates will update th local cache automatically
+	 * @param {string} path - the path of the data in the database
+	 * @param {object} [options] - an options object which accepts where, orderBy, limit
+	 * @returns {function} a destroy function for the listener
+	 * */
 	listen(path, options){
 		validPathInvariant(path);
 		const serializedQuery = serializeQuery(path, options, true);
@@ -258,7 +304,12 @@ export default class Firestore{
 		}
 	}
 
-
+	/**
+	 * Loads a value once from the database and update the local cache
+	 * @param {string} path - the path of the data in the database
+	 * @param {object} [options] - an options object which accepts where, orderBy, limit
+	 * @returns {promise} when resolved, will contain the loaded value
+	 * */
 	@action async load(path, options){
 		validPathInvariant(path);
 		const serializedQuery = serializeQuery(path, options);
@@ -268,6 +319,7 @@ export default class Firestore{
 		const snapshot = await query.get();
 		this.handleNewSnapShot(path, options, snapshot);
 		this.setPathIsLoading(serializedQuery, false);
+
 		return this.getValue(path, options);
 	}
 
@@ -284,7 +336,8 @@ export default class Firestore{
 			// no need to sanitize path because only collection paths end up here
 			const serializedQuery = serializeQuery(path, options);
 			// console.log('collection update', serializedQuery, serializeQuery(path, options, true))
-			snapshot.docChanges().forEach(change => {
+
+			typeof snapshot.docChanges === 'function' && snapshot.docChanges().forEach(change => {
 				const docPath = nodePath.join(path, change.doc.id);
 				// console.log('change', change.type, change.doc.id, change.newIndex, change.oldIndex)
 				switch(change.type){
@@ -309,7 +362,11 @@ export default class Firestore{
 	}
 
 
-
+	/**
+	 * Removes a path from the database and local cache
+	 * @param {string} path - the path of the data in the database
+	 * @returns {promise}
+	 * */
 	remove(path){
 		validPathInvariant(path);
 		settablePathInvariant(path);
@@ -318,19 +375,35 @@ export default class Firestore{
 	}
 
 
-	clearCache(path){
+	clearCache(path, options){
 		validPathInvariant(path);
+		const serializedQuery = serializeQuery(path, options);
+		const serializedQueryWithLimit = serializeQuery(path, options, true);
 		this.map.remove(toDotPath(path));
+		this.removeCollection(serializedQuery);
+		this.removePathStatus(serializedQuery);
 	}
 
-	setPathStatus(serializedQuery, status){
+	@action clearAll(){
+		this.map.clear();
+		this.pathsStatus.clear();
+		this.collections.clear();
+		this.listeners.clear();
+	}
+
+	@action removePathStatus(serializedQuery){
+		validPathInvariant(serializedQuery);
+		this.pathsStatus.delete(serializedQuery);
+	}
+
+	@action setPathStatus(serializedQuery, status){
 		validPathInvariant(serializedQuery);
 
 		const currentStatus = this.pathsStatus.get(serializedQuery) || {};
 		this.pathsStatus.set(serializedQuery, {...currentStatus, ...status});
 	}
 
-	setPathIsLoading(serializedQuery, state){
+	@action setPathIsLoading(serializedQuery, state){
 		validPathInvariant(serializedQuery);
 
 		const currentStatus = this.pathsStatus.get(serializedQuery);
@@ -368,10 +441,19 @@ export default class Firestore{
 	}
 
 	isDocumentSnapshot(snapshot){
-		return snapshot instanceof this.config.DocumentSnapshot || snapshot instanceof this.config.QueryDocumentSnapshot;
+		return snapshot instanceof this.options.DocumentSnapshot || snapshot instanceof this.options.QueryDocumentSnapshot;
 	}
 
 	isCollectionSnapshot(snapshot){
-		return snapshot instanceof this.config.QuerySnapshot;
+		return snapshot instanceof this.options.QuerySnapshot;
+	}
+
+	toJS(){
+		return {
+			map: this.map.toJS(),
+			collections: toJS(this.collections),
+			pathsStatus: toJS(this.pathsStatus),
+			listeners: toJS(this.listeners)
+		};
 	}
 }

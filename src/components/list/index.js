@@ -1,35 +1,41 @@
 import React, {Component, cloneElement} from 'react';
 import PropTypes from 'prop-types';
+import map from 'lodash/map';
 import autobind from 'autobind-decorator';
 import {observer} from 'mobx-react';
 import classNames from 'classnames'
+import withStyles from 'isomorphic-style-loader/lib/withStyles';
 
-import inject from '../inject';
+import inject from '../../inject';
 
 import style from './style';
-import {createStyle} from '../utils/style-utils';
+import {createStyle} from '../../utils/style-utils';
 
-@inject(({path, orderBy, where, limit}) => {
+
+/**
+ * A component for rendering lists. expects a path and a render function. the render function receives the collection item as an argument.
+ */
+@inject(({path}) => {
 	return {
-		collection: {path, orderBy, where, limit}
+		value: path
 	};
 })
+@withStyles(style)
 @observer
-export default class Collection extends Component{
+export default class List extends Component{
 	static propTypes = {
+		/**
+		 * the path of the data in the database.
+		 */
 		path: PropTypes.string.isRequired,
+		/**
+		 * will be called when the data is available, expects it to return a renderable value. (collectionItem) => ReactNode
+		 */
 		renderItem: PropTypes.func,
+		/**
+		 * will render the edit overlay in alternate colors to support different color schemes.
+		 */
 		lightOverlay: PropTypes.bool,
-		orderBy: PropTypes.objectOf(PropTypes.oneOf(['asc', 'desc'])),
-		where: PropTypes.objectOf(
-			PropTypes.shape({
-				'==': PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-				'!=': PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-				'>=': PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-				'<=': PropTypes.oneOfType([PropTypes.string, PropTypes.number])
-			})
-		),
-		limit: PropTypes.number
 	};
 
 	static defaultProps = {
@@ -51,7 +57,7 @@ export default class Collection extends Component{
 	}
 
 	render(){
-		const {className, classes, renderItem, collection, orkan, lightOverlay} = this.props;
+		const {className, classes, renderItem, value, orkan, lightOverlay} = this.props;
 
 		const s = createStyle(style, className, classes, {
 			item: {
@@ -60,18 +66,16 @@ export default class Collection extends Component{
 			}
 		});
 
-		const cleanCollection = collection.filter(it => !!it);
-
 		return (
 			<div className={s.root}>
-				{cleanCollection.map(item => {
+				{map(value, (item, i) => {
 					const renderedItem = renderItem(item, item.$key);
 					if(!renderedItem){
 						return null;
 					}
 
 					if(typeof renderedItem === 'object'){
-						return cloneElement(renderedItem, {key: item.$key, className: classNames(s.item, renderedItem.props.className), onClick: e => this.handleClick(e, item.$key)});
+						return cloneElement(renderedItem, {key: i, className: classNames(s.item, renderedItem.props.className), onClick: e => this.handleClick(e, i)});
 					}else{
 						return renderedItem;
 					}

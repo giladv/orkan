@@ -6,10 +6,16 @@ import values from 'lodash/values';
 import omitBy from 'lodash/omitBy';
 import shallowCompare from 'react-addons-shallow-compare';
 
-import {REACT_CONTEXT_NAME} from './constants';
 import {serializeQuery} from './firestore';
 
-
+const isNode = new Function("try {return this===global;}catch(e){return false;}");
+/**
+ * A react component decorator, returns a new component with the requested data injected as props
+ * @param {function} [mapPropsToPaths]  - a function which receives the props as arguments and returns an object of required resources to load.
+ * ```props => ({injectAs: pathStr | {path, [where], [orderBy], ..} }```
+ * @param {object} [config] - a config object. supports: liveEditedData[bool]
+ * @returns {ReactComponent} a new higher order component
+ * */
 export default function inject(mapPropsToPaths = () => ({}), config) {
 	const options = {
 		liveEditedData: true,
@@ -21,8 +27,9 @@ export default function inject(mapPropsToPaths = () => ({}), config) {
 			static propTypes = {
 				...(DecoratedComponent.propTypes || {})
 			};
+
 			static contextTypes = {
-				[REACT_CONTEXT_NAME]: PropTypes.object
+				OrkanContext: PropTypes.object
 			};
 
 			static decoratedComponent = DecoratedComponent;
@@ -51,7 +58,7 @@ export default function inject(mapPropsToPaths = () => ({}), config) {
 			}
 
 			getContext() {
-				return this.context[REACT_CONTEXT_NAME];
+				return this.context.OrkanContext;
 			}
 
 			disposeAllListeners(){
@@ -64,7 +71,12 @@ export default function inject(mapPropsToPaths = () => ({}), config) {
 				const mappedQueries = values(mapPropsToPaths(props)).filter(it => !!it);
 				return mappedQueries.map(query => {
 					const {path, pathOptions} = parseQuery(query);
-					return store.listen(path, pathOptions);
+					if(isNode()){
+						store.load(path, pathOptions);
+						return () => null;
+					}else{
+						return store.listen(path, pathOptions);
+					}
 				});
 			}
 
@@ -120,21 +132,6 @@ export default function inject(mapPropsToPaths = () => ({}), config) {
 		return injector;
 	}
 }
-
-// for documentation purposes only
-inject.propTypes = {
-	mapPropsToPaths: PropTypes.func,
-	options: PropTypes.shape({
-		liveEditedData: PropTypes.bool
-	})
-};
-
-inject.defaultProps = {
-	options: {
-		liveEditedData: true
-	}
-};
-
 
 const parseQuery = query => {
 	if(typeof query === 'string'){

@@ -2,23 +2,36 @@ import React, {Component, cloneElement} from 'react';
 import PropTypes from 'prop-types';
 import autobind from 'autobind-decorator';
 import {observer} from 'mobx-react';
+import withStyles from 'isomorphic-style-loader/lib/withStyles';
 
-import inject from '../inject';
-import {createStyle} from '../utils/style-utils';
+import inject from '../../inject';
+import {createStyle} from '../../utils/style-utils';
 
 import style from './style';
 
-
+/**
+ * A components for rendering any value, expects a path and a render function. the render function receives the value as an argument.
+ */
 @inject(props => {
 	return {
 		value: props.path
 	};
 })
+@withStyles(style)
 @observer
 export default class WithValue extends Component{
 	static propTypes = {
+		/**
+		 * the path of the data in the database.
+		 */
 		path: PropTypes.string.isRequired,
+		/**
+		 * will render the edit overlay in alternate colors to support different color schemes.
+		 */
 		lightOverlay: PropTypes.bool,
+		/**
+		 * will be called when the data is available, expects it to return a renderable value. (value) => ReactNode
+		 */
 		render: PropTypes.func
 	};
 

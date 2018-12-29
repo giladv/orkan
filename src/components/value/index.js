@@ -2,22 +2,37 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import autobind from 'autobind-decorator';
 import {observer} from 'mobx-react';
+import withStyles from 'isomorphic-style-loader/lib/withStyles';
 
-import {createStyle} from '../utils/style-utils';
-import inject from '../inject';
+import {createStyle} from '../../utils/style-utils';
+import inject from '../../inject';
 
 import style from './style';
 
+
+/**
+ * A component for rendering simple values by their path.
+ */
 @inject(props => {
 	return {
 		value: props.path
 	};
 })
+@withStyles(style)
 @observer
 export default class Value extends Component{
 	static propTypes = {
+		/**
+		 * the path of the data in the database.
+		 */
 		path: PropTypes.string.isRequired,
+		/**
+		 * if set to true, will render the value as html, perfect for WYSIWYG purposes.
+		 */
 		html: PropTypes.bool,
+		/**
+		 * will render the edit overlay in alternate colors to support different color schemes.
+		 */
 		lightOverlay: PropTypes.bool,
 	};
 
