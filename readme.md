@@ -2,7 +2,7 @@
 
 __[Orkan](https://www.orkanjs.com) is a content management toolkit for building and managing dynamic React applications with ease.__
 
-It uses Firebase Firestore, Authentication and Storage as a secure and scalable turn key back-end solution.
+It uses [Firebase](https://firebase.google.com) Firestore, Authentication and Storage as a secure and scalable turn key back-end solution.
 
 Orkan differ from other CMS solutions by the fact that it's embedded into your app and not the other way around. Why it's a plus?
 - Truly painless integration into existing React projects. 
@@ -19,6 +19,8 @@ Orkan differ from other CMS solutions by the fact that it's embedded into your a
 The admin interface is a completely optional but extremely powerful tool. 
 Customize it to suit your specific product in minutes, or disable it completely. 
 Either way It loads asyncronousely only when it's needed so it wont effect your app's load time at all.
+
+![admin animation](https://media.giphy.com/media/2yrXFig5t0327dDnDp/giphy.gif)
 
 sounds good? [click here to get started](https://www.orkanjs.com/docs/getting-started).
 
