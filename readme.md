@@ -20,7 +20,7 @@ The admin interface is a completely optional but extremely powerful tool.
 Customize it to suit your specific product in minutes, or disable it completely. 
 Either way It loads asyncronousely only when it's needed so it wont effect your app's load time at all.
 
-![admin animation](https://media.giphy.com/media/2yrXFig5t0327dDnDp/giphy.gif)
+![admin animation](https://firebasestorage.googleapis.com/v0/b/orkan-site.appspot.com/o/orkan.gif?alt=media&token=0f93e6af-45e3-4071-b06d-db6135682357)
 
 sounds good? [click here to get started](https://www.orkanjs.com/docs/getting-started).
 
