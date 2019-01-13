@@ -938,7 +938,10 @@ var Collection = /** @class */ (function (_super) {
     };
     Collection.prototype.render = function () {
         var _this = this;
-        var _a = this.props, className = _a.className, classes = _a.classes, renderItem = _a.renderItem, collection = _a.collection, orkan = _a.orkan, lightOverlay = _a.lightOverlay;
+        var _a = this.props, className = _a.className, classes = _a.classes, renderItem = _a.renderItem, collection = _a.collection, orkan = _a.orkan, lightOverlay = _a.lightOverlay, isPathLoading = _a.isPathLoading;
+        if (isPathLoading.value) {
+            return null;
+        }
         var s = Object(_utils_style_utils__WEBPACK_IMPORTED_MODULE_8__["createStyle"])(_style__WEBPACK_IMPORTED_MODULE_7___default.a, className, classes, {
             item: {
                 editMode: orkan.isEditMode(),
@@ -1222,7 +1225,10 @@ var List = /** @class */ (function (_super) {
     };
     List.prototype.render = function () {
         var _this = this;
-        var _a = this.props, className = _a.className, classes = _a.classes, renderItem = _a.renderItem, value = _a.value, orkan = _a.orkan, lightOverlay = _a.lightOverlay;
+        var _a = this.props, className = _a.className, classes = _a.classes, renderItem = _a.renderItem, value = _a.value, orkan = _a.orkan, lightOverlay = _a.lightOverlay, isPathLoading = _a.isPathLoading;
+        if (isPathLoading.value) {
+            return null;
+        }
         var s = Object(_utils_style_utils__WEBPACK_IMPORTED_MODULE_9__["createStyle"])(_style__WEBPACK_IMPORTED_MODULE_8___default.a, className, classes, {
             item: {
                 editMode: orkan.isEditMode(),
@@ -1419,6 +1425,7 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
 
 
 var OrkanAdmin;
+// singleton instances
 var firebaseApp;
 var firestore;
 var getStore = function () { return firestore; };
@@ -1466,23 +1473,17 @@ var Provider = /** @class */ (function (_super) {
             } };
     };
     Provider.prototype.componentWillMount = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var _a, firebaseConfig, initialState, nativeFirestore;
-            return __generator(this, function (_b) {
-                _a = this.props, firebaseConfig = _a.firebaseConfig, initialState = _a.initialState;
-                if (!firebaseApp) {
-                    firebaseApp = firebase_app__WEBPACK_IMPORTED_MODULE_7___default.a.initializeApp(firebaseConfig, _constants__WEBPACK_IMPORTED_MODULE_11__["FIREBASE_APP_NAME"]);
-                    nativeFirestore = firebase_app__WEBPACK_IMPORTED_MODULE_7___default.a.firestore(firebaseApp);
-                    nativeFirestore.settings({ timestampsInSnapshots: true });
-                    firestore = new _firestore__WEBPACK_IMPORTED_MODULE_12__["default"](nativeFirestore, initialState, {
-                        DocumentSnapshot: firebase_app__WEBPACK_IMPORTED_MODULE_7___default.a.firestore.DocumentSnapshot,
-                        QuerySnapshot: firebase_app__WEBPACK_IMPORTED_MODULE_7___default.a.firestore.QuerySnapshot,
-                        QueryDocumentSnapshot: firebase_app__WEBPACK_IMPORTED_MODULE_7___default.a.firestore.QueryDocumentSnapshot
-                    });
-                }
-                return [2 /*return*/];
+        var _a = this.props, firebaseConfig = _a.firebaseConfig, initialState = _a.initialState;
+        if (!firebaseApp) {
+            firebaseApp = firebase_app__WEBPACK_IMPORTED_MODULE_7___default.a.initializeApp(firebaseConfig, _constants__WEBPACK_IMPORTED_MODULE_11__["FIREBASE_APP_NAME"]);
+            var nativeFirestore = firebase_app__WEBPACK_IMPORTED_MODULE_7___default.a.firestore(firebaseApp);
+            nativeFirestore.settings({ timestampsInSnapshots: true });
+            firestore = new _firestore__WEBPACK_IMPORTED_MODULE_12__["default"](nativeFirestore, initialState, {
+                DocumentSnapshot: firebase_app__WEBPACK_IMPORTED_MODULE_7___default.a.firestore.DocumentSnapshot,
+                QuerySnapshot: firebase_app__WEBPACK_IMPORTED_MODULE_7___default.a.firestore.QuerySnapshot,
+                QueryDocumentSnapshot: firebase_app__WEBPACK_IMPORTED_MODULE_7___default.a.firestore.QueryDocumentSnapshot
             });
-        });
+        }
     };
     Provider.prototype.componentDidMount = function () {
         return __awaiter(this, void 0, void 0, function () {
@@ -1493,8 +1494,7 @@ var Provider = /** @class */ (function (_super) {
                 adminConfig && keyboard.onKeyHold(_constants__WEBPACK_IMPORTED_MODULE_11__["ACTIVATION_EVENT_KEY"], 1000, this.activateAdmin);
                 keyboard.onKeyDown('meta', this.handleEditKeyDown);
                 keyboard.onKeyUp('meta', this.handleEditKeyUp);
-                // does not fire with normal api
-                document.body.onblur = this.handleBlur;
+                window.addEventListener('blur', this.handleBlur);
                 return [2 /*return*/];
             });
         });
@@ -1590,6 +1590,7 @@ var Provider = /** @class */ (function (_super) {
         this.adminStore = store;
     };
     Provider.prototype.handleBlur = function (e) {
+        console.log('blur man');
         this.obState.isModifierKeyDown = false;
     };
     Provider.prototype.handleEditKeyDown = function (e) {
@@ -1738,7 +1739,7 @@ var Value = /** @class */ (function (_super) {
     Value.prototype.render = function () {
         var _a = this.props, className = _a.className, value = _a.value, children = _a.children, orkan = _a.orkan, isPathLoading = _a.isPathLoading, html = _a.html, lightOverlay = _a.lightOverlay;
         if (isPathLoading.value) {
-            return '...';
+            return null;
         }
         var s = Object(_utils_style_utils__WEBPACK_IMPORTED_MODULE_5__["createStyle"])(_style__WEBPACK_IMPORTED_MODULE_7___default.a, className, {
             root: {
@@ -2235,6 +2236,13 @@ var Firestore = /** @class */ (function () {
             return Object(mobx__WEBPACK_IMPORTED_MODULE_4__["when"])(function () { return !isBusy(); });
         }
     };
+    Object.defineProperty(Firestore.prototype, "isLoadingAnything", {
+        get: function () {
+            return !!lodash_find__WEBPACK_IMPORTED_MODULE_3___default()(Object(mobx__WEBPACK_IMPORTED_MODULE_4__["toJS"])(this.pathsStatus), function (path) { return path.isLoading; });
+        },
+        enumerable: true,
+        configurable: true
+    });
     /**
      * Synchronously returns an observable value from the local cache.
      * @param {string} path - the path of the data in the database
@@ -2386,10 +2394,8 @@ var Firestore = /** @class */ (function () {
         else if (this.isCollectionSnapshot(snapshot)) {
             // no need to sanitize path because only collection paths end up here
             var serializedQuery_1 = serializeQuery(path, options);
-            // console.log('collection update', serializedQuery, serializeQuery(path, options, true))
             typeof snapshot.docChanges === 'function' && snapshot.docChanges().forEach(function (change) {
                 var docPath = path__WEBPACK_IMPORTED_MODULE_6___default.a.join(path, change.doc.id);
-                // console.log('change', change.type, change.doc.id, change.newIndex, change.oldIndex)
                 switch (change.type) {
                     case 'modified':
                         _this.map.set(toDotPath(docPath), change.doc.data());
@@ -2456,6 +2462,9 @@ var Firestore = /** @class */ (function () {
         var currentStatus = this.pathsStatus.get(serializedQuery);
         return currentStatus && currentStatus.isLoading;
     };
+    Firestore.prototype.isPathLoading = function (path, options) {
+        return this.isLoading(serializeQuery(path, options));
+    };
     Firestore.prototype.createQuery = function (path, options) {
         if (options === void 0) { options = {}; }
         var _a = breakPath(path), collection = _a.collection, docPath = _a.docPath;
@@ -2491,6 +2500,9 @@ var Firestore = /** @class */ (function () {
     Firestore.toDotPath = toDotPath;
     Firestore.breakPath = breakPath;
     Firestore.toQueryablePath = toQueryablePath;
+    __decorate([
+        mobx__WEBPACK_IMPORTED_MODULE_4__["computed"]
+    ], Firestore.prototype, "isLoadingAnything", null);
     __decorate([
         mobx__WEBPACK_IMPORTED_MODULE_4__["action"]
     ], Firestore.prototype, "addToCollection", null);
@@ -2837,6 +2849,7 @@ __webpack_require__.r(__webpack_exports__);
 // humaninput, keyboardjs - does not support server
 // ComboKeys, mousetrap - does not support multiple listeners to same key
 
+console.log('?!');
 var Keyboard = /** @class */ (function () {
     function Keyboard(context) {
         var _this = this;
@@ -2844,7 +2857,9 @@ var Keyboard = /** @class */ (function () {
         this.context = context;
         this.bind('keydown', null, function (e) { return _this.handleNativeEvent(e); });
         this.bind('keyup', null, function (e) { return _this.handleNativeEvent(e); });
-        document.body.onblur = function () { return _this.downKeys = []; };
+        window.addEventListener('blur', function () {
+            _this.downKeys = [];
+        });
     }
     Keyboard.prototype.handleNativeEvent = function (e) {
         var sanitizedKey = Object(is_hotkey__WEBPACK_IMPORTED_MODULE_0__["toKeyName"])(e.key);

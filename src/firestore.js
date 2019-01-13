@@ -2,7 +2,7 @@ import invariant from 'invariant';
 import omitBy from 'lodash/omitBy';
 import forEach from 'lodash/forEach';
 import find from 'lodash/find';
-import {observable, isObservable, toJS, action, when} from 'mobx';
+import {observable, isObservable, toJS, action, when, computed} from 'mobx';
 import ObservableNestedMap from 'observable-nested-map';
 import nodePath from 'path';
 import firebase from 'firebase/app';
@@ -177,6 +177,7 @@ export default class Firestore{
 			...this.options,
 			...options
 		};
+
 	}
 
 	getBusyPromise(){
@@ -335,11 +336,10 @@ export default class Firestore{
 		}else if(this.isCollectionSnapshot(snapshot)){
 			// no need to sanitize path because only collection paths end up here
 			const serializedQuery = serializeQuery(path, options);
-			// console.log('collection update', serializedQuery, serializeQuery(path, options, true))
 
 			typeof snapshot.docChanges === 'function' && snapshot.docChanges().forEach(change => {
 				const docPath = nodePath.join(path, change.doc.id);
-				// console.log('change', change.type, change.doc.id, change.newIndex, change.oldIndex)
+
 				switch(change.type){
 					case 'modified':
 						this.map.set(toDotPath(docPath), change.doc.data());
@@ -407,6 +407,7 @@ export default class Firestore{
 		validPathInvariant(serializedQuery);
 
 		const currentStatus = this.pathsStatus.get(serializedQuery);
+
 		if(!currentStatus || !state){
 			this.setPathStatus(serializedQuery, {isLoading: state});
 		}
@@ -416,6 +417,10 @@ export default class Firestore{
 		validPathInvariant(serializedQuery);
 		const currentStatus = this.pathsStatus.get(serializedQuery);
 		return currentStatus && currentStatus.isLoading;
+	}
+
+	isPathLoading(path, options){
+		return this.isLoading(serializeQuery(path, options));
 	}
 
 	createQuery(path, options = {}){
