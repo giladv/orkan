@@ -57,7 +57,7 @@ export default class Value extends Component{
 
 
 		if(isPathLoading.value){
-			return '...';
+			return null;
 		}
 
 		const s = createStyle(style, className, {

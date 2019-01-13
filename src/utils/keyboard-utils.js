@@ -13,7 +13,9 @@ export class Keyboard{
 		this.bind('keydown', null, e => this.handleNativeEvent(e));
 		this.bind('keyup', null, e => this.handleNativeEvent(e));
 
-		document.body.onblur = () => this.downKeys = [];
+		window.addEventListener('blur', () => {
+			this.downKeys = []
+		});
 	}
 
 	handleNativeEvent(e){

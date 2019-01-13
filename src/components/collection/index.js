@@ -75,7 +75,11 @@ export default class Collection extends Component{
 	}
 
 	render(){
-		const {className, classes, renderItem, collection, orkan, lightOverlay} = this.props;
+		const {className, classes, renderItem, collection, orkan, lightOverlay, isPathLoading} = this.props;
+
+		if(isPathLoading.value){
+			return null;
+		}
 
 		const s = createStyle(style, className, classes, {
 			item: {

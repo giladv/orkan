@@ -22,6 +22,8 @@ import Indicator from '../indicator/index';
 
 
 let OrkanAdmin;
+
+// singleton instances
 let firebaseApp;
 let firestore;
 
@@ -72,7 +74,6 @@ export default class Provider extends Component{
 	@observable.ref adminStore;
 
 	getChildContext() {
-
 		return {OrkanContext: {
 			activateAdmin: () => this.activateAdmin(),
 			store: firestore,
@@ -86,7 +87,7 @@ export default class Provider extends Component{
 		}};
 	}
 
-	async componentWillMount(){
+	componentWillMount(){
 		const {firebaseConfig, initialState} = this.props;
 		if(!firebaseApp){
 			firebaseApp = firebase.initializeApp(firebaseConfig, FIREBASE_APP_NAME);
@@ -97,7 +98,6 @@ export default class Provider extends Component{
 				QuerySnapshot: firebase.firestore.QuerySnapshot,
 				QueryDocumentSnapshot: firebase.firestore.QueryDocumentSnapshot
 			});
-
 		}
 	}
 
@@ -109,17 +109,7 @@ export default class Provider extends Component{
 		adminConfig && keyboard.onKeyHold(ACTIVATION_EVENT_KEY, 1000, this.activateAdmin);
 		keyboard.onKeyDown('meta', this.handleEditKeyDown);
 		keyboard.onKeyUp('meta', this.handleEditKeyUp);
-
-		// does not fire with normal api
-		document.body.onblur = this.handleBlur;
-
-
-		// adminConfig && this.keyboard.bind('hold:1000:' + ACTIVATION_EVENT_KEY, this.activateAdmin);
-
-		// console.log(keyboard)
-
-		// document.addEventListener('keydown', this.handleKeyDown);
-		// document.addEventListener('keyup', this.handleKeyUp);
+		window.addEventListener('blur', this.handleBlur);
 
 	}
 
